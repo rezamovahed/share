@@ -81,7 +81,6 @@ app.use(csrf());
 // error handlers
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
-
   // handle CSRF token errors here
   res.status(403)
   res.json({
@@ -117,9 +116,13 @@ app.disable('x-powered-by');
 
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
+// const apiRoutes = require('./routes/api');
 
 app.use(indexRoutes);
 app.use(authRoutes);
+app.use('/admin', adminRoutes);
+
 
 // Mongoose Setup
 mongoose.set('useFindAndModify', false);

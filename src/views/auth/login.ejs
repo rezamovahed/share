@@ -22,17 +22,18 @@
 <body class="auth mb-0">
   <div class="form-auth">
     <img class="mx-auto d-block mb-4" src="/images/logo_text.png" width="220">
-    <form action="/auth/login" method="POST">
-      <% if (error && error.length > 0){ %>
-      <div class="alert alert-danger" role="alert">
-        <%= error %>
-      </div>
-      <% } %>
-      <% if (success && success.length > 0){ %>
-      <div class="alert alert-success" role="alert">
-        <%= success %>
-      </div>
-      <% } %>
+    <% if (error && error.length > 0){ %>
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+    <% } %>
+    <% if (success && success.length > 0){ %>
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+    <% } %>
+    <form action="/login" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div class="form-group">
         <label for="email">Email</label>
         <input name="email" type="email" class="form-control <% if(error && error.length > 0){ %>is-invalid <% } %>"
