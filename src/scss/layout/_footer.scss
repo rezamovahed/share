@@ -1,0 +1,38 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the footer of the site/application.
+// -----------------------------------------------------------------------------
+
+footer {
+    background-color: $footer-background;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    p {
+        font-size: 1.15em;
+        color: $footer-color;
+        padding: 10px 0;
+        margin-bottom: 0;
+
+        a {
+            color: $footer-color_link;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: lighten($footer-color_link, 15%);
+            text-decoration: none;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    footer {
+        p {
+            text-align: center;
+        }
+
+        p span {
+            display: none;
+        }
+    }
+}

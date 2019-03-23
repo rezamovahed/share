@@ -4,7 +4,10 @@
   "description": "Simple file sharing site for me.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "web": "node src/index.js",
+    "dev-web": "nodemon src/index.js",
+    "scss": "sass --watch src/scss:src/public/css --style compressed",
+    "dev": "concurrently -n \"Web,SASS\" \"npm run dev-web\" \"npm run scss\""
   },
   "repository": {
     "type": "git",
@@ -17,10 +20,12 @@
   },
   "homepage": "https://github.com/MrDemonWolf/files.mrdemonwolf.me#readme",
   "dependencies": {
+    "async": "^2.6.2",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
     "consola": "^2.5.7",
     "cookie-parser": "^1.4.4",
+    "crypto": "^1.0.1",
     "csurf": "^1.9.0",
     "dotenv": "^7.0.0",
     "ejs": "^2.6.1",
@@ -31,13 +36,17 @@
     "file-exists": "^5.0.1",
     "gravatar": "^1.8.0",
     "method-override": "^3.0.0",
+    "mjml": "^4.4.0-beta.1",
     "moment": "^2.24.0",
     "mongoose": "^5.4.19",
     "morgan": "^1.9.1",
     "nanoid": "^2.0.1",
+    "nodemailer": "^5.1.1",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
-    "sass": "^1.17.3"
+    "sass": "^1.17.3",
+    "validator": "^10.11.0"
   }
 }
