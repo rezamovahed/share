@@ -1,29 +1,11 @@
-<!doctype html>
-<html class="h-100" lang="en">
-
-<head>
-  <title>
-    <%= title %> | <%= siteTitle %>
-  </title>
-  <!-- Basic Meta -->
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Frameworks -->
-  <!-- Font Awsome-->
-  <link rel="stylesheet" type="text/css" href="/lib/font-awesome/css/all.min.css">
-  <!--Bootstrap -->
-  <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.min.css">
-  <!-- Custom -->
-  <link rel="stylesheet" type="text/css" href="/css/main.css">
-</head>
+<% include ./partials/header %>
+<% errors = error && error.length > 0 %>
 
 <body class="auth mb-0">
   <div class="form-auth">
-    <img class="mx-auto d-block mb-4" src="/images/logo_text.png" width="320">
+    <a href="/"><img class="mx-auto d-block mb-4" src="/images/logo_text.png" width="320"></a>
     <h3 class="text-center">Create account</h3>
-    <% if (error && error.length > 0 && error[0].alreadyAccount){ %>
+    <% if (errors && error[0].alreadyAccount){ %>
     <div class="alert alert-danger" role="alert">
       <%= error[0].alreadyAccount %>
     </div>
@@ -38,9 +20,9 @@
       <div class="form-group">
         <label for="username">Username</label>
         <input type="text" name="username"
-          class="form-control <% if(error && error.length > 0 && error[0].username){ %>is-invalid <% } %>" id="username"
-          placeholder="Enter username">
-        <% if (error && error.length > 0 && error[0].username) { %>
+          class="form-control <% if( errors && error[0].username){ %>is-invalid <% } %>" id="username"
+          placeholder="Enter username" <% if(error && username) { %> value="<%= username %>" <% } %>>
+        <% if (errors && error[0].username) { %>
         <small class="invalid-feedback">
           <%= error[0].username %>
         </small>
@@ -50,8 +32,8 @@
         <label for="email">Email</label>
         <input type="email" name="email"
           class="form-control <% if(error && error.length > 0 && error[0].email){ %>is-invalid <% } %>" id="email"
-          placeholder="Email">
-        <% if (error && error.length > 0 && error[0].email) { %>
+          placeholder="Email" <% if(error && email) { %> value="<%= email %>" <% } %>>
+        <% if (errors && error[0].email) { %>
         <small class="invalid-feedback">
           <%= error[0].email %>
         </small>
@@ -60,9 +42,9 @@
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" name="password"
-          class="form-control <% if(error && error.length > 0 && error[0].password){ %>is-invalid <% } %>" id="password"
+          class="form-control <% if(errors && error[0].password){ %>is-invalid <% } %>" id="password"
           placeholder="Password">
-        <% if (error && error.length > 0 && error[0].password) { %>
+        <% if (errors && error[0].password) { %>
         <small class="invalid-feedback">
           <%= error[0].password %>
         </small>
@@ -73,9 +55,9 @@
         <input type="password" name="confirmPassword"
           class="form-control <% if(error && error.length > 0 && error[0].confirmPassword){ %>is-invalid <% } %>"
           id="confirmPassword" placeholder="Confirm your password">
-        <% if (error && error.length > 0 && error[0].comfirmPassword) { %>
+        <% if (error && error.length > 0 && error[0].confirmPassword) { %>
         <small class="invalid-feedback">
-          <%= error[0].comfirmPassword %>
+          <%= error[0].confirmPassword %>
         </small>
         <% } %>
       </div>

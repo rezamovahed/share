@@ -1,0 +1,132 @@
+const express = require("express");
+const mjml = require('mjml');
+const crypto = require("crypto");
+const async = require("async");
+const User = require('../models/user');
+const middleware = require('../middleware');
+const router = express.Router();
+const nodemailerSendGrid = require('../config/sendgrid.js');
+
+router.get('/activation/resend', (req, res) => {
+  res.render('user/activation/resend', {
+    title: 'Resend Account Activation',
+  });
+});
+
+router.post('/activation/resend', (req, res) => {
+  User.findOne({
+    email: req.body.email
+  }, (err, user) => {
+    if (!user) {
+      req.flash('error', 'User does not exist');
+      res.redirect('/user/activation/resend');
+      return;
+    }
+    if (!user.accountActivated) {
+      async.waterfall([
+        function (done) {
+          crypto.randomBytes(16, function (err, buf) {
+            var token = buf.toString('hex');
+            var tokenExpire = Date.now() + 3600000;
+            done(err, token, tokenExpire)
+          });
+        },
+        function (token, tokenExpire, done) {
+          User.findOne({
+            email: req.body.email
+          }, function (err, user) {
+            user.accountActvationToken = token;
+            user.accountActvationExpire = tokenExpire;
+            user.save(function (err) {
+              done(err, token);
+            });
+          });
+        },
+        function (token, done) {
+          const htmlOuput = mjml(`<mjml>
+        <mj-body background-color="#ffffff" font-size="13px">
+          <mj-section>
+            <mj-column>
+              <mj-text font-style="bold" font-size="24px" color="#626262" align="center">
+                Your account details
+              </mj-text>
+            </mj-column>
+          </mj-section>
+          <mj-divider border-color="#4f92ff" />
+          <mj-wrapper padding-top="0">
+            <mj-section padding-top="0">
+              <mj-column>
+                <mj-text>
+                  You are receiving this because you (or someone else) created a account ${process.env.SITE_NAME}.
+                </mj-text>
+              </mj-column>
+            </mj-section>
+            <mj-section>
+              <mj-column>
+                <mj-text>Please click activate to finalize your account creation.</mj-text>
+                <mj-text>If you did not request this account to be made or want your data removed. Please click the delete button.</mj-text>
+              </mj-column>
+            </mj-section>
+            <mj-section>
+              <mj-column>
+                <mj-button href="http://${req.headers.host}/user/actovaye/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+                  Activate
+                </mj-button>
+              </mj-column>
+              <mj-column>
+                <mj-button href="http://${req.headers.host}/user/delete/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+                  Delete Account
+                </mj-button>
+              </mj-column>
+            </mj-section>
+          </mj-wrapper>
+        </mj-body>
+      </mjml>
+      `)
+          const accountActvationEmail = {
+            to: req.body.email,
+            from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
+            subject: ` Your Account | ${process.env.TITLE}`,
+            html: htmlOuput.html
+          };
+          nodemailerSendGrid.sendMail(accountActvationEmail, function (err) {
+            req.flash('success', 'Your account activation email has been resent');
+            res.redirect("/");
+            done(err, 'done');
+          });
+        }
+      ]);
+      return;
+    }
+    req.flash('success', 'Your account is already activated');
+    res.redirect("/");
+  });
+});
+
+router.get('/activate/:token', (req, res) => {
+  function activationError() {
+    req.flash('error', 'Error your token is invaid or your account is already activated.')
+    res.redirect('/user/activation/resend');
+  }
+  async.waterfall([
+    function (done) {
+      User.findOne({
+        accountActvationToken: req.params.token,
+        accountActvationExpire: {
+          $gt: Date.now()
+        }
+      }, function (err, user) {
+        if (!user) {
+          return activationError();
+        }
+        user.accountActvationToken = undefined;
+        user.accountActvationExpire = undefined;
+        user.accountActivated = true;
+        user.save();
+        req.flash('success', 'Your account is now activated.  You may login.');
+        res.redirect('/auth/login');
+        done(err, 'done');
+      });
+    }
+  ]);
+});

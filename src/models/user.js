@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
-  accountDeleteToken: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   accountActvationToken: String,

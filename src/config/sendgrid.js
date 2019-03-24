@@ -1,13 +1,9 @@
-const sg = require('nodemailer-sendgrid-transport');
 const nodemailer = require('nodemailer');
+const nodemailerSendgrid = require('nodemailer-sendgrid');
 
-// Setup SendGrid Auth
-const sgAuth = {
-  auth: {
-    api_user: process.env.SENDGRID_USERNAME,
-    api_key: process.env.SENDGRID_PASSWORD
-  }
-}
+module.exports =  nodemailer.createTransport(
+  nodemailerSendgrid({
+    apiKey: process.env.SENDGRID_API_KEY
+  })
+);
 
-const nodemailerSendGrid = nodemailer.createTransport(sg(sgAuth));
-module.exports = nodemailerSendGrid;

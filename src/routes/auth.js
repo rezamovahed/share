@@ -1,12 +1,12 @@
 const express = require('express');
 const passport = require('passport');
 const gravatar = require('gravatar');
-// const mjml = require('mjml');
+const mjml = require('mjml');
 const validator = require('validator');
-// const crypto = require('crypto');
-// const async = require('async');
+const crypto = require('crypto');
+const async = require('async');
 const middleware = require('../middleware');
-// const nodemailerSendGrid = require('../config/sendgrid.js');
+const nodemailerSendGrid = require('../config/sendgrid');
 const User = require('../models/user')
 const router = express.Router();
 
@@ -49,6 +49,8 @@ router.get("/signup", (req, res) => {
   // }
   res.render("auth/signup", {
     title: "Signup",
+    username: null,
+    email: null
   });
 });
 
@@ -90,33 +92,34 @@ router.post("/signup", (req, res) => {
     error.password = 'Password must be at least 8 characters long. '
   }
   if (password !== confirmPassword) { error.confirmPassword = 'Both passowrds must match.' }
-
-  if (error === {}) {
+  if (JSON.stringify(error) === '{}') {
     let newUser = {
       username,
       email,
       avatar,
     }
     User.register(newUser, password, (err, user) => {
-      switch (err.name) {
-        case ('UserExistsError'):
-          error.alreadyAccount = 'A user with the given username is already registered'
-          break;
-      }
+      if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
       if (JSON.stringify(error) !== '{}') {
-        req.flash("error", error)
-        res.redirect('/signup');
+        req.flash('error', error);
+        res.render('auth/signup', {
+          title: 'Signup',
+          username: req.body.username,
+          email: req.body.email
+        });
         return;
       }
       async.waterfall([
         function (done) {
-          crypto.randomBytes(16, function (err, buf) {
+          // Creates token
+          crypto.randomBytes(8, function (err, buf) {
             var token = buf.toString('hex');
             var tokenExpire = Date.now() + 3600000;
             done(err, token, tokenExpire)
           });
         },
         function (token, tokenExpire, done) {
+          // Finds and adds the token to user with a expire date
           User.findOne({
             email: req.body.email
           }, function (err, user) {
@@ -149,18 +152,17 @@ router.post("/signup", (req, res) => {
             <mj-section>
               <mj-column>
                 <mj-text>Please click activate to finalize your account creation.</mj-text>
-                <mj-text>If the link below does not work you can always go to <mj-raw><a href="http://${req.headers.host}/user/activation">http://${req.headers.host}/user/activation</a></mj-raw> and paste this code: ${token}</mj-text>
                 <mj-text>If you did not request this account to be made or want your data removed. Please click the delete button.</mj-text>
               </mj-column>
             </mj-section>
             <mj-section>
               <mj-column>
-                <mj-button href="http://${req.headers.host}/user/activation/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+                <mj-button href="http://${req.headers.host}/user/activate/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
                   Activate
                 </mj-button>
               </mj-column>
               <mj-column>
-                <mj-button href="http://${req.headers.host}/user/delete" font-family="Helvetica" background-color="#4f92ff" color="white">
+                <mj-button href="http://${req.headers.host}/user/delete/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
                   Delete Account
                 </mj-button>
               </mj-column>
@@ -168,19 +170,34 @@ router.post("/signup", (req, res) => {
           </mj-wrapper>
         </mj-body>
       </mjml>`)
-          var accountActvationEmail = {
+          const accountActvationEmail = {
             to: req.body.email,
-            from: `${process.env.SITE_TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
-            subject: `Account actvation  | ${process.env.SITE_TITLE}`,
+            from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
+            subject: `Activate Your Account  | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
-          nodemailerSendGrid.sendMail(accountActvationEmail, function (err) {
+          nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
+            console.log(process.env.SENDGRID_USERNAME)
+            console.log(process.env.SENDGRID_PASSWORD)
+            if (err) {
+              console.log(err);
+            }
+            else {
+              console.log('Message sent: ' + info.response);
+            }
             req.flash('success', success)
             res.redirect('/login');
             done(err, 'done');
           })
         }
       ])
+    });
+  } else {
+    req.flash('error', error);
+    res.render('auth/signup', {
+      title: 'Signup',
+      username: req.body.username,
+      email: req.body.email
     });
   }
 });
