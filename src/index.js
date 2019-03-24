@@ -116,11 +116,15 @@ app.disable('x-powered-by');
 
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const meRoutes = require('./routes/me');
 const adminRoutes = require('./routes/admin');
 // const apiRoutes = require('./routes/api');
 
 app.use(indexRoutes);
 app.use(authRoutes);
+app.use('/user', userRoutes);
+app.use('/me', meRoutes);
 app.use('/admin', adminRoutes);
 
 

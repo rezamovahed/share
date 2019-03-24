@@ -7,19 +7,31 @@ const middleware = require('../middleware');
 const router = express.Router();
 const nodemailerSendGrid = require('../config/sendgrid.js');
 
-router.get('/activation/resend', (req, res) => {
-  res.render('user/activation/resend', {
+/**
+ * @route /user/activate/resend
+ * @method GET
+ * @description Enter the email to resend activate
+ * @access Public
+*/
+router.get('/activate/resend', (req, res) => {
+  res.render('user/activate/resend', {
     title: 'Resend Account Activation',
   });
 });
 
-router.post('/activation/resend', (req, res) => {
+/**
+ * @route /user/activate/resend
+ * @method POST
+ * @description Takes the email and checks it and resends.
+ * @access Public
+*/
+router.post('/activate/resend', (req, res) => {
   User.findOne({
     email: req.body.email
   }, (err, user) => {
     if (!user) {
       req.flash('error', 'User does not exist');
-      res.redirect('/user/activation/resend');
+      res.redirect('/user/activate/resend');
       return;
     }
     if (!user.accountActivated) {
@@ -69,7 +81,7 @@ router.post('/activation/resend', (req, res) => {
             </mj-section>
             <mj-section>
               <mj-column>
-                <mj-button href="http://${req.headers.host}/user/actovaye/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+                <mj-button href="http://${req.headers.host}/user/activate/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
                   Activate
                 </mj-button>
               </mj-column>
@@ -103,10 +115,16 @@ router.post('/activation/resend', (req, res) => {
   });
 });
 
+/**
+ * @route /user/activate/:token
+ * @method GET
+ * @description ACtivates account if token is vaid
+ * @access Public
+*/
 router.get('/activate/:token', (req, res) => {
   function activationError() {
-    req.flash('error', 'Error your token is invaid or your account is already activated.')
-    res.redirect('/user/activation/resend');
+    req.flash('error', 'Your token is invaid or your account is already activated.')
+    res.redirect('/user/activate/resend');
   }
   async.waterfall([
     function (done) {
@@ -124,9 +142,11 @@ router.get('/activate/:token', (req, res) => {
         user.accountActivated = true;
         user.save();
         req.flash('success', 'Your account is now activated.  You may login.');
-        res.redirect('/auth/login');
+        res.redirect('/login');
         done(err, 'done');
       });
     }
   ]);
 });
+
+module.exports = router;

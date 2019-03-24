@@ -7,8 +7,21 @@ const crypto = require('crypto');
 const async = require('async');
 const middleware = require('../middleware');
 const nodemailerSendGrid = require('../config/sendgrid');
-const User = require('../models/user')
+const User = require('../models/user');
 const router = express.Router();
+
+// Passport config
+passport.use(User.createStrategy());
+
+// Passport needed stuff
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(null, user);
+  });
+});
 
 /**
  * @route /login
@@ -28,12 +41,12 @@ router.get("/login", (req, res) => {
  * @description Login post
  * @access Public
 */
-router.post("/login", passport.authenticate("local", {
-  failureRedirect: "/auth/login",
+router.post('/login', passport.authenticate('local', {
+  failureRedirect: "/login",
   failureFlash: true
 }), (req, res) => {
   req.flash("success", `Welcome back ${req.user.username}`)
-  res.redirect("/profile")
+  res.redirect('/me')
 });
 
 /**
