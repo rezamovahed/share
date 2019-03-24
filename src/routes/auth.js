@@ -10,28 +10,15 @@ const nodemailerSendGrid = require('../config/sendgrid');
 const User = require('../models/user');
 const router = express.Router();
 
-// Passport config
-passport.use(User.createStrategy());
-
-// Passport needed stuff
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(null, user);
-  });
-});
-
 /**
  * @route /login
  * @method GET
  * @description Displays Login form
  * @access Public
 */
-router.get("/login", (req, res) => {
-  res.render("auth/login", {
-    title: "login"
+router.get('/login', middleware.isAlreadyLoggedIn, middleware.isActvation, (req, res) => {
+  res.render('auth/login', {
+    title: 'Login'
   });
 });
 
@@ -41,7 +28,7 @@ router.get("/login", (req, res) => {
  * @description Login post
  * @access Public
 */
-router.post('/login', passport.authenticate('local', {
+router.post('/login', middleware.isAlreadyLoggedIn, middleware.isActvation, passport.authenticate('local', {
   failureRedirect: "/login",
   failureFlash: true
 }), (req, res) => {
@@ -55,7 +42,7 @@ router.post('/login', passport.authenticate('local', {
  * @description Displays signup form
  * @access Public
 */
-router.get("/signup", (req, res) => {
+router.get("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (req, res) => {
   // if (!process.env.SIGNUP) {
   //   res.redirect('/', 403)
   //   return;
@@ -73,7 +60,7 @@ router.get("/signup", (req, res) => {
  * @description Gets data from body and signs the user up
  * @access Public
 */
-router.post("/signup", (req, res) => {
+router.post("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (req, res) => {
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
   const username = req.body.username.toLowerCase();
@@ -190,14 +177,6 @@ router.post("/signup", (req, res) => {
             html: htmlOuput.html
           };
           nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
-            console.log(process.env.SENDGRID_USERNAME)
-            console.log(process.env.SENDGRID_PASSWORD)
-            if (err) {
-              console.log(err);
-            }
-            else {
-              console.log('Message sent: ' + info.response);
-            }
             req.flash('success', success)
             res.redirect('/login');
             done(err, 'done');
@@ -213,6 +192,17 @@ router.post("/signup", (req, res) => {
       email: req.body.email
     });
   }
+});
+
+/**
+ * @route /logout
+ * @method GET
+ * @description Signs out the user
+ * @access Public
+*/
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
 });
 
 module.exports = router;

@@ -9,7 +9,8 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
-// const middleware = require('./middleware');
+const middleware = require('./middleware');
+const User = require('./models/user');
 const csrf = require('csurf');
 
 // Load enviroment variables from .env file
@@ -64,6 +65,19 @@ app.use(session(sess));
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Passport config
+passport.use(User.createStrategy());
+
+// Passport needed stuff
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(null, user);
+  });
+});
 
 // Express Flash
 app.use(flash());
@@ -123,9 +137,9 @@ const adminRoutes = require('./routes/admin');
 
 app.use(indexRoutes);
 app.use(authRoutes);
-app.use('/user', userRoutes);
-app.use('/me', meRoutes);
-app.use('/admin', adminRoutes);
+app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
+app.use('/me', middleware.isLoggedIn, meRoutes);
+app.use('/admin', middleware.isAdmin, adminRoutes);
 
 
 // Mongoose Setup
