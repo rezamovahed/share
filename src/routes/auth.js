@@ -176,21 +176,17 @@ router.post("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (re
             subject: `Activate Your Account  | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
-          nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
-            req.flash('success', success)
-            res.redirect('/login');
-            done(err, 'done');
-          })
+          // nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
+          req.flash('success', success)
+          res.redirect('/login');
+          done(err, 'done');
+          // })
         }
       ])
     });
   } else {
-    req.flash('error', error);
-    res.render('auth/signup', {
-      title: 'Signup',
-      username: req.body.username,
-      email: req.body.email
-    });
+    req.flash('error', error)
+    res.redirect('auth/signup');
   }
 });
 

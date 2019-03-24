@@ -1,5 +1,6 @@
 <% include ./partials/header %>
-<% errors = error && error.length > 0 %>
+<%= errors = error & error.length > 0 %>
+<%= error[0] %>
 
 <body class="auth mb-0">
   <div class="form-auth">
@@ -15,6 +16,7 @@
       <%= success %>
     </div>
     <% } %>
+
     <form action="/signup" method="POST" novalidate>
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div class="form-group">
