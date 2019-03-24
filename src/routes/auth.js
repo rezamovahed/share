@@ -186,7 +186,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (re
     });
   } else {
     req.flash('error', error)
-    res.redirect('auth/signup');
+    res.redirect('/signup');
   }
 });
 
