@@ -145,7 +145,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
             <mj-section padding-top="0">
               <mj-column>
                 <mj-text>
-                  You are receiving this because you (or someone else) created a account ${process.env.SITE_TITLE}.
+                  You are receiving this because you (or someone else) created a account ${process.env.TITLE}.
                 </mj-text>
               </mj-column>
             </mj-section>
@@ -173,7 +173,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
           const accountActvationEmail = {
             to: req.body.email,
             from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
-            subject: `Activate Your Account  | ${process.env.TITLE}`,
+            subject: `Activate Your Account | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
           nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
