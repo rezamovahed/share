@@ -149,4 +149,151 @@ router.get('/activate/:token', (req, res) => {
   ]);
 });
 
+/**
+ * @route /user/forgot
+ * @method GET
+ * @description Shows a form to enter email
+ * @access Public
+*/
+router.get('/forgot', (req, res) => {
+  res.render('user/forgot/index', {
+    title: 'Forgot Password',
+  });
+});
+
+/**
+ * @route /user/forgot
+ * @method POST
+ * @description Takes the email and sends a reset token
+ * @access Public
+*/
+router.post('/forgot', middleware.isActvation, (req, res) => {
+  function forgotAccountNotFoundError() {
+    req.flash('error', 'No account could be found.');
+    res.redirect('/user/forgot');
+  }
+  async.waterfall([
+    function (done) {
+      crypto.randomBytes(8, function (err, buf) {
+        var token = buf.toString('hex');
+        done(err, token)
+      });
+    },
+    function (token, done) {
+      User.findOne({
+        email: req.body.email
+      }, function (err, user) {
+        if (!user) {
+          return forgotAccountNotFoundError();
+        } else {
+          user.resetPasswordToken = token;
+          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+          user.save(function (err) {
+            done(err, token, user);
+          });
+        }
+      });
+    },
+    function (token, user, done) {
+      const htmlOuput = mjml(`
+      <mjml>
+  <mj-body background-color="#ffffff" font-size="13px">
+    <mj-section>
+      <mj-column>
+        <mj-text font-style="bold" font-size="24px" color="#626262" align="center">
+          Password Reset
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-divider border-color="#4f92ff" />
+    <mj-wrapper padding-top="0">
+      <mj-section>
+        <mj-column>
+          <mj-text>You are receiving this because you (or someone else) have requested the reset of the password for your account</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section>
+        <mj-column>
+        <mj-text>Please click on the following link to complete the process:</mj-text>
+          <mj-button href="http://${req.headers.host}/user/forgot/reset/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+            Reset Password
+          </mj-button>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+  </mj-body>
+</mjml>
+`)
+      var forgotPasswordEmail = {
+        to: user.email,
+        from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
+        subject: `Password reset  | ${process.env.TITLE}`,
+        html: htmlOuput.html
+      };
+      nodemailerSendGrid.sendMail(forgotPasswordEmail, function (err) {
+        req.flash('success', 'Password reset email has been sent.');
+        res.redirect('/user/forgot')
+        done(err, 'done');
+      })
+    },
+  ])
+});
+
+/**
+ * @route /user/forgot
+ * @method POST
+ * @description Takes the email and sends a reset token
+ * @access Public
+*/
+router.get('/forgot/reset/:token', (req, res) => {
+  User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: {
+      $gt: Date.now()
+    }
+  }, function (err, user) {
+    if (!user) {
+      return res.redirect('/user/forgot');
+    }
+    res.render('user/forgot/reset', {
+      title: "Reset Password",
+      token: req.params.token
+    });
+  });
+});
+
+router.post('/forgot/reset/:token', (req, res) => {
+  User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: {
+      $gt: Date.now()
+    }
+  }, (err, user) => {
+    if (!user) {
+      return res.redirect('/user/forgot');
+    }
+    if (req.body.password !== req.body.passwordConfirm) {
+      return res.redirect('/user/forgot');
+    }
+    user.setPassword(req.body.password, function (err) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+      user.save();
+      const forgotResetPasswordEmail = {
+        to: user.email,
+        from: `noreply@${process.env.EMAIL_DOMAIN}`,
+        subject: 'Your password has been changed',
+        text: 'Hello,\n\n' +
+          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+      };
+      nodemailerSendGrid.sendMail(forgotResetPasswordEmail, function (err) {
+        res.redirect('/login')
+        doe(err, 'done');
+      })
+    });
+  });
+
+})
+
+
 module.exports = router;

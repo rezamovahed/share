@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const gravatar = require('gravatar');
 const validator = require('validator');
+const passportLocalMongoose = require('passport-local-mongoose')
 
 /**
  * @route /me
@@ -24,11 +25,10 @@ router.get('/', (req, res) => {
 */
 router.put('/', (req, res) => {
   let error = {};
-  const username = req.body.username.toLowerCase();
+  const username = req.body.username;
   const email = req.body.email.toLowerCase();
-  const newPassword = req.body.newPassword
-  const oldPassword = req.body.oldPassword
-  const password = req.body.password;
+  const newPassword = req.body.newPassword;
+  const oldPassword = req.body.oldPassword;
   const confirmNewPassword = req.body.confirmNewPassword;
   const avatar = gravatar.url(req.body.email, {
     s: '100',
@@ -53,29 +53,31 @@ router.put('/', (req, res) => {
       error.password = 'Password must be at least 8 characters long. '
     }
     if (newPassword !== confirmNewPassword) { error.confirmNewPassword = 'Both passowrds must match.' }
-    if (newPassword === oldPassword) { return error.newPassword = "Can't be the same as the old password" }
+    if (newPassword === oldPassword) { error.oldPassword = "Can't be the same as the old password" }
   }
   // Check if passoword and comfirm password are the same.
   // Check password length
   if (JSON.stringify(error) === '{}') {
-    if (newPassword) {
-      User.findByIdAndUpdate(req.user.id, (err, user) => {
-        user.changedPassword(oldPassword, newPassword, (err, changedPassword) => {
-          req.logout();
-          res.redirect('/login')
-        });
-      });
-    } else {
-      let updatedUser = {
-        username,
-        email,
-        avatar
-      }
-      User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
-      })
-      req.flash('success', 'Your account has been succesfuly updated.');
-      res.redirect('/me');
+    let updatedUser = {
+      username,
+      email,
+      avatar
     }
+    User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
+      function changePassword() {
+        req.logOut();
+        req.flash('error', 'Your password has been changed.  Please relogin.')
+        res.redirect('/login')
+      }
+      if (newPassword) {
+        user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
+          return changePassword();
+        });
+      } else {
+        req.flash('success', 'Your account has been succesfuly updated.');
+        res.redirect('/me');
+      }
+    })
   } else {
     req.flash('error', error);
     res.redirect('/me')

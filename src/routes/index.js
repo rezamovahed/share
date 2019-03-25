@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const middleware = require('../middleware')
 
 /**
  * @route /
@@ -7,7 +8,7 @@ const router = express.Router();
  * @description Displays a not allowed message
  * @access Public
 */
-router.get('/', (req, res) => {
+router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
   // res.render('index', {
   //   title: 'Home'
   // });

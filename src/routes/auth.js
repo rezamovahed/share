@@ -16,7 +16,7 @@ const router = express.Router();
  * @description Displays Login form
  * @access Public
 */
-router.get('/login', middleware.isAlreadyLoggedIn, middleware.isActvation, (req, res) => {
+router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
   res.render('auth/login', {
     title: 'Login'
   });
@@ -28,7 +28,7 @@ router.get('/login', middleware.isAlreadyLoggedIn, middleware.isActvation, (req,
  * @description Login post
  * @access Public
 */
-router.post('/login', middleware.isAlreadyLoggedIn, middleware.isActvation, passport.authenticate('local', {
+router.post('/login', middleware.isAlreadyLoggedIn, passport.authenticate('local', {
   failureRedirect: "/login",
   failureFlash: true
 }), (req, res) => {
@@ -42,7 +42,7 @@ router.post('/login', middleware.isAlreadyLoggedIn, middleware.isActvation, pass
  * @description Displays signup form
  * @access Public
 */
-router.get("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (req, res) => {
+router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   // if (!process.env.SIGNUP) {
   //   res.redirect('/', 403)
   //   return;
@@ -60,10 +60,10 @@ router.get("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (req
  * @description Gets data from body and signs the user up
  * @access Public
 */
-router.post("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (req, res) => {
+router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
-  const username = req.body.username.toLowerCase();
+  const username = req.body.username;
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -176,11 +176,11 @@ router.post("/signup", middleware.isAlreadyLoggedIn, middleware.isActvation, (re
             subject: `Activate Your Account  | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
-          // nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
+          nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
           req.flash('success', success)
           res.redirect('/login');
           done(err, 'done');
-          // })
+          })
         }
       ])
     });
