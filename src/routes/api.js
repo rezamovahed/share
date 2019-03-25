@@ -12,6 +12,7 @@ const fileExists = require('file-exists');
 const fileUpload = require('express-fileupload');
 const jwt = require('jsonwebtoken');
 const fileExtensionCheck = require('../config/extensions')
+const fileMinetypeCheck = require('../config/mineTypes')
 const Upload = require('../models/upload');
 
 router.use(fileUpload({
@@ -116,6 +117,7 @@ router.get('/delete', (req, res) => {
 router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
   const file = req.files.file;
   const fileExtension = path.extname(file.name);
+  const fileMineType = file.mimetype;
   const newFileName = generate(alphabet, 16) + fileExtension;
   const uploadPath = `${path.join(__dirname, '../public')}/u/i/${newFileName}`;
   const buf = crypto.randomBytes(16);
@@ -133,7 +135,16 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
     });
     return;
   }
-  if (process.env.EXTENSION_CHECK && fileExtensionCheck.images.indexOf(fileExtension) == -1) {
+  if (process.env.FILE_CHECK && fileExtensionCheck.images.indexOf(fileExtension) == -1) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'Invaid File Extension uploaded.'
+      }
+    });
+    return;
+  }
+  if (process.env.FILE_CHECK && fileMinetypeCheck.images.indexOf(fileMineType) == -1) {
     res.status(400).json({
       success: false,
       error: {
