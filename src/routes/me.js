@@ -83,6 +83,13 @@ router.put('/', (req, res) => {
   }
 });
 
+/**
+ * @route /me/keys
+ * @method GET
+ * @description Diplays API Keys
+ * @access Private
+*/
+
 // Here's where the content you upload will be stored.
 /**
  * @route /me/uploads/i

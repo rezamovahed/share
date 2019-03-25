@@ -90,8 +90,6 @@ app.use(bodyParser.urlencoded({
 // Cookie Parser
 app.use(cookieParser(process.env.COOKIE_SECRET))
 
-app.use(csrf());
-
 // error handlers
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
@@ -121,7 +119,6 @@ app.use((req, res, next) => {
   // Other
   res.locals.host = req.headers.host;
   res.locals.currentYear = new Date().getFullYear();
-  res.locals.csrfToken = req.csrfToken();
   next();
 });
 
@@ -133,8 +130,18 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const meRoutes = require('./routes/me');
 const adminRoutes = require('./routes/admin');
-// const apiRoutes = require('./routes/api');
 
+// API
+const apiRoutes = require('./routes/api');
+app.use('/api', apiRoutes)
+
+// CSRF for routes beblow
+app.use(csrf)
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+// CSRF Routes
 app.use(indexRoutes);
 app.use(authRoutes);
 app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
@@ -143,7 +150,6 @@ app.use('/admin', middleware.isAdmin, adminRoutes);
 app.get('*', function (req, res) {
   res.status(404).render('errors/404');
 });
-
 
 // Mongoose Setup
 mongoose.set('useFindAndModify', false);
