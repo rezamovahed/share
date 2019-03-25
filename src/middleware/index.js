@@ -1,5 +1,7 @@
 var middlewareObj = {};
 const User = require('../models/user');
+const Key = require('../models/key');
+const md5 = require('js-md5');
 
 middlewareObj.isAdmin = (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -41,7 +43,26 @@ middlewareObj.isLoggedIn = (req, res, next) => {
 
 // Uplaoder
 middlewareObj.isAPIKeyVaild = (req, res, next) => {
-  next();
+  let token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: {
+        message: 'No API Key provided.'
+      }
+    });
+  }
+  let rawToken = token.split(" ").slice(1).toString();
+  let tokenHash = md5(rawToken);
+  Key.findOne({ hash: tokenHash }, (err, key) => {
+    if (key === null) return res.status(401).json({
+      success: false,
+      error: {
+        message: 'Invaid Key provided.'
+      }
+    });
+    next();
+  })
 };
 
 module.exports = middlewareObj;

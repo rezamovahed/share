@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const Key = require('../models/key');
 const gravatar = require('gravatar');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const md5 = require('js-md5');
 
 /**
  * @route /me
@@ -12,7 +15,8 @@ const validator = require('validator');
 */
 router.get('/', (req, res) => {
   res.render('me/index', {
-    title: 'Edit account'
+    title: 'Edit account',
+    csrfToken: req.csrfToken()
   });
 });
 
@@ -89,6 +93,53 @@ router.put('/', (req, res) => {
  * @description Diplays API Keys
  * @access Private
 */
+router.get('/keys', (req, res) => {
+  Key.find({ 'user': { id: req.user._id } }, (err, keys) => {
+    res.render('me/keys', {
+      title: 'My Keys',
+      keys,
+      csrfToken: req.csrfToken()
+    });
+
+  });
+});
+
+/**
+ * @route /me/keys
+ * @method POST
+ * @description Diplays API Keys
+ * @access Private
+*/
+router.get('/keys/create', (req, res) => {
+  let token = jwt.sign({
+  }, process.env.API_SECRET, {
+      issuer: process.env.TITLE,
+      subject: req.user._id.toString()
+    });
+  let tokenHash = md5(token);
+  const newKey = {
+    user: {
+      id: req.user.id
+    },
+    hash: tokenHash,
+  }
+  Key.create(newKey, (err, key) => {
+    req.flash('info', token);
+    res.redirect('/me/keys')
+  });
+});
+/**
+ * @route /me/keys
+ * @method POST
+ * @description Diplays API Keys
+ * @access Private
+*/
+router.delete('/keys/:key', (req, res) => {
+  Key.findByIdAndRemove(req.params.key, (err, key) => {
+    req.flash('success', 'API Key removed');
+    res.redirect('/me/keys')
+  });
+});
 
 // Here's where the content you upload will be stored.
 /**

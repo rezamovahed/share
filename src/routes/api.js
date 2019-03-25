@@ -1,14 +1,18 @@
 const express = require('express');
 const middleware = require('../middleware');
 const nanoid = require('nanoid');
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const generate = require('nanoid/generate')
 const crypto = require('crypto')
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const fileExists = require('file-exists');
 const fileUpload = require('express-fileupload');
+const jwt = require('jsonwebtoken');
 const fileExtensionCheck = require('../config/extensions')
+const Upload = require('../models/upload');
 
 router.use(fileUpload({
   safeFileNames: true,
@@ -20,6 +24,25 @@ router.use(fileUpload({
   },
   abortOnLimit: true
 }));
+
+
+
+function humanFileSize(bytes, si) {
+  var thresh = si ? 1000 : 1024;
+  if (Math.abs(bytes) < thresh) {
+    return bytes + ' B';
+  }
+  var units = si
+    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  var u = -1;
+  do {
+    bytes /= thresh;
+    ++u;
+  } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+  return bytes.toFixed(1) + ' ' + units[u];
+}
+
 /**
  * @route /api/delete/?fileName=%{filename}&key=${key}
  * @method GET
@@ -93,11 +116,14 @@ router.get('/delete', (req, res) => {
 router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
   const file = req.files.file;
   const fileExtension = path.extname(file.name);
-  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  const newFileName = generate(alphabet, 12) + fileExtension;
+  const newFileName = generate(alphabet, 16) + fileExtension;
   const uploadPath = `${path.join(__dirname, '../public')}/u/i/${newFileName}`;
   const buf = crypto.randomBytes(16);
   const key = buf.toString('hex')
+  const token = req.headers['authorization'];
+  const rawToken = token.split(" ").slice(1).toString();
+  const decoded = jwt.decode(rawToken, { complete: true });
+  const auth = decoded.payload.sub;
   if (!req.files) {
     res.status(400).json({
       success: false,
@@ -116,16 +142,30 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
     });
     return;
   }
-  file.mv(uploadPath, err => {
-    if (err) { return res.status(500).send('Error in uploading') }
-    res.json({
-      success: true,
-      file: {
-        url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/i/${newFileName}`,
-        delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
-      }
+  const size = humanFileSize(file.size)
+  const fileHash = file.md5
+  const newFile = {
+    uploader: { id: auth },
+    fileName: newFileName,
+    fileHash,
+    isImage: true,
+    size
+  }
+  Upload.create(newFile, (err, uploadedFile) => {
+    if (err) { return res.status(500).send('Error in uploading') };
+    file.mv(uploadPath, err => {
+      if (err) { return res.status(500).send('Error in uploading') }
+      res.json({
+        success: true,
+        file: {
+          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/i/${newFileName}`,
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
+        }
+      });
     });
   });
 });
-
+router.get('*', function (req, res) {
+  res.status(404).render('errors/404');
+});
 module.exports = router;

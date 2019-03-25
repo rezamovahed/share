@@ -88,18 +88,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 // Cookie Parser
-app.use(cookieParser(process.env.COOKIE_SECRET))
-
-// error handlers
-app.use(function (err, req, res, next) {
-  if (err.code !== 'EBADCSRFTOKEN') return next(err)
-  // handle CSRF token errors here
-  res.status(403)
-  res.json({
-    message: 'CODE RED - NO CSRF TOKEN',
-    error: {}
-  })
-})
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Express Locals
 app.use((req, res, next) => {
@@ -125,28 +114,37 @@ app.use((req, res, next) => {
 // Disables the powered by so it does not show express
 app.disable('x-powered-by');
 
+const csrfExclusion = ['/api/upload', '/api/upload/image']
+app.use(function (req, res, next) {
+  if (csrfExclusion.indexOf(req.path) !== -1) {
+    next();
+  }
+  else {
+    csrf()(req, res, next);
+  }
+});
+
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const meRoutes = require('./routes/me');
 const adminRoutes = require('./routes/admin');
-
-// API
 const apiRoutes = require('./routes/api');
-app.use('/api', apiRoutes)
-
-// CSRF for routes beblow
-app.use(csrf)
-app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
-// CSRF Routes
 app.use(indexRoutes);
 app.use(authRoutes);
 app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
 app.use('/me', middleware.isLoggedIn, meRoutes);
 app.use('/admin', middleware.isAdmin, adminRoutes);
+app.use('/api', apiRoutes)
+app.use(function (err, req, res, next) {
+  if (err.code !== 'EBADCSRFTOKEN') return next(err)
+  // handle CSRF token errors here
+  res.status(403)
+  res.json({
+    message: 'NO CSRF TOKEN',
+    error: {}
+  });
+});
 app.get('*', function (req, res) {
   res.status(404).render('errors/404');
 });
