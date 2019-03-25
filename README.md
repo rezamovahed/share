@@ -9,6 +9,8 @@
 ## Description
 This a simple ShareX server so I can upload images,files, and text files on my own domain/server.  This can be used for anyone but its not supported as much.
 
+This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
+
 ## Download and Installation
 
 To begin using this template, choose one of the following options to get started:
@@ -45,4 +47,4 @@ Have a bug or an issue with this bot? [Open a new issue](https://github.com/MrDe
 
 ## Copyright and License
 
-Copyright 2019 DemonWolfDev. Code released under the [MIT](https://github.com/MrDemonWolf/files-mrdemonwolf-me/blob/master/LICENSE) license.
+Copyright 2019 MrDemonWolf. Code released under the [MIT](https://github.com/MrDemonWolf/files-mrdemonwolf-me/blob/master/LICENSE) license.
