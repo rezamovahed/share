@@ -7,13 +7,7 @@
 [![devDependencies Status](https://david-dm.org/MrDemonWolf/files-mrdemonwolf-me/dev-status.svg)](https://david-dm.org/MrDemonWolf/files-mrdemonwolf-me?type=dev)
 
 ## Description
-This is the [DemonWolfDev](https://www.demonwolfdev.com) Offical comunnity bot which manges the community for MrDemonWolf (Founder)
-
-This was meant to help him out and be able to ofter more the community as a whole
-
-This is the server of the bot which is meant to be run on a server in the cloud but like anything can be run localy as you can just run the command.  And then set the env api URL to localhost:port.
-
-[Nathan Henniges](https://www.github.com/nathanhenniges) made this bot 100% open source and is licensed under MIT so others may use it and also help out with programming. Feel free to fork.
+This a simple ShareX server so I can upload images,files, and text files on my own domain/server.  This can be used for anyone but its not supported as much.
 
 ## Download and Installation
 
@@ -34,47 +28,16 @@ nano .env
 npm install
 ```
 
-#### Start bot
-```sh
-npm run bot
-```
-#### Start data (Note this must be run for some functions to work.  This is a service to grab data from twitch and other services to cache in the database.)
-```sh
-npm run data
-```
-#### Start the API (This must be running for the [client](https://www.github.com/demonwolfdev/community-bot-client))
-```sh
-npm run api
-```
-
 #### Start web server
 ```sh
 npm run web
 ```
 
-If you want to start everything at once you can do
-
-You will need PM2 installed to use the 2nd command.
-```sh
-npm install -g pm2
-```
-```sh
-pm2 start process.yml
-```
-### Want help develop the community bot server?
+### Want help develop?
 You can use this command to start up with nodemon so you can work on it and test.
 
 ```sh
-npm run dev-bot
-```
-```sh
-npm run dev-data
-```
-```sh
 npm run dev-web
-```
-```sh
-npm run dev-api
 ```
 
 ### Issues
