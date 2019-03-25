@@ -1,24 +1,23 @@
 <% include ../../partials/header %>
-<% include ../../partials/nav %>
-<div class="forgotIndex">
-  <div class="container">
-    <% if (error && error.length > 0){ %>
-    <div class="alert alert-danger" role="alert">
-      <%= error %>
-    </div>
-    <% } %>
-    <% if (success && success.length > 0){ %>
-    <div class="alert alert-success" role="alert">
-      <%= success %>
-    </div>
-    <% } %>
-    <form action="/user/actovaye/resend" method="POST">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input name="email" type="email" class="form-control" id="email" placeholder="Enter Email">
-      </div>
-      <button type="submit " class="btn btn-primary ">Resend Activation Email</button>
-    </form>
+<% include ../../partials/navbar %>
+<div class="container w-50 pt-5">
+  <% if (error && error.length > 0){ %>
+  <div class="alert alert-danger" role="alert">
+    <%= error %>
   </div>
+  <% } %>
+  <% if (success && success.length > 0){ %>
+  <div class="alert alert-success" role="alert">
+    <%= success %>
+  </div>
+  <% } %>
+  <div class="display-4">Resend your activation email</div>
+  <form action="/user/actovaye/resend" method="POST">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input name="email" type="email" class="form-control" id="email" placeholder="Enter Email">
+    </div>
+    <button type="submit " class="btn btn-primary ">Resend Activation Email</button>
+  </form>
 </div>
 <% include ../../partials/footer %>

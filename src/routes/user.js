@@ -287,6 +287,7 @@ router.post('/forgot/reset/:token', (req, res) => {
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
       nodemailerSendGrid.sendMail(forgotResetPasswordEmail, function (err) {
+        req.flash('error', 'Your password has been changed.  You should be able to relogin with the new password')
         res.redirect('/login')
         doe(err, 'done');
       })

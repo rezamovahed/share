@@ -14,8 +14,8 @@ middlewareObj.isActvation = (req, res, next) => {
     email: req.body.email
   }, function (err, user) {
     if (user && !user.accountActivated) {
-      req.flash('error', `Your account needs to be activated still.  If you need to resend the activation email click <a href="/user/activation/resend">here</a>`)
-      res.redirect('/')
+      req.flash('error', `Your account needs to be activated still.  If you need to resend the activation email click <a href="/user/activate/resend">here</a>`)
+      res.redirect('/login')
       return;
     }
     next();

@@ -28,7 +28,7 @@ router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
  * @description Login post
  * @access Public
 */
-router.post('/login', middleware.isAlreadyLoggedIn, passport.authenticate('local', {
+router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, passport.authenticate('local', {
   failureRedirect: "/login",
   failureFlash: true
 }), (req, res) => {
@@ -177,9 +177,9 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
             html: htmlOuput.html
           };
           nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
-          req.flash('success', success)
-          res.redirect('/login');
-          done(err, 'done');
+            req.flash('success', success)
+            res.redirect('/login');
+            done(err, 'done');
           })
         }
       ])
