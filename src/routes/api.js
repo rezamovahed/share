@@ -115,17 +115,17 @@ router.get('/delete', (req, res) => {
  * @access Private
 */
 router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
-  const file = req.files.file;
-  const fileExtension = path.extname(file.name);
-  const fileMineType = file.mimetype;
-  const newFileName = generate(alphabet, 16) + fileExtension;
-  const uploadPath = `${path.join(__dirname, '../public')}/u/i/${newFileName}`;
-  const buf = crypto.randomBytes(16);
-  const key = buf.toString('hex')
-  const token = req.headers['authorization'];
-  const rawToken = token.split(" ").slice(1).toString();
-  const decoded = jwt.decode(rawToken, { complete: true });
-  const auth = decoded.payload.sub;
+  let file = req.files.file;
+  let fileExtension = path.extname(file.name);
+  let fileMineType = file.mimetype;
+  let newFileName = generate(alphabet, 16) + fileExtension;
+  let uploadPath = `${path.join(__dirname, '../public')}/u/i/${newFileName}`;
+  let buf = crypto.randomBytes(16);
+  let key = buf.toString('hex')
+  let token = req.headers['authorization'];
+  let rawToken = token.split(" ").slice(1).toString();
+  let decoded = jwt.decode(rawToken, { complete: true });
+  let auth = decoded.payload.sub;
   if (!req.files) {
     res.status(400).json({
       success: false,
@@ -135,27 +135,18 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
     });
     return;
   }
-  if (process.env.FILE_CHECK && fileExtensionCheck.images.indexOf(fileExtension) == -1) {
+  if (process.env.FILE_CHECK && fileExtensionCheck.images.indexOf(fileExtension) == -1 || fileMinetypeCheck.images.indexOf(fileMineType) == -1) {
     res.status(400).json({
       success: false,
       error: {
-        message: 'Invaid File Extension uploaded.'
+        message: 'Invaid File uploaded. Must be a image on this route.'
       }
     });
     return;
   }
-  if (process.env.FILE_CHECK && fileMinetypeCheck.images.indexOf(fileMineType) == -1) {
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'Invaid File Extension uploaded.'
-      }
-    });
-    return;
-  }
-  const size = humanFileSize(file.size)
-  const fileHash = file.md5
-  const newFile = {
+  let size = humanFileSize(file.size)
+  let fileHash = file.md5
+  let newFile = {
     uploader: { id: auth },
     fileName: newFileName,
     fileHash,
@@ -176,6 +167,127 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
     });
   });
 });
+
+/**
+ * @route /api/upload/text
+ * @method POST
+ * @description Upload text
+ * @access Private
+*/
+router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
+  let file = req.files.file;
+  let fileExtension = path.extname(file.name);
+  let fileMineType = file.mimetype;
+  let newFileName = generate(alphabet, 16) + fileExtension;
+  let uploadPath = `${path.join(__dirname, '../public')}/u/t/${newFileName}`;
+  let buf = crypto.randomBytes(16);
+  let key = buf.toString('hex')
+  let token = req.headers['authorization'];
+  let rawToken = token.split(" ").slice(1).toString();
+  let decoded = jwt.decode(rawToken, { complete: true });
+  let auth = decoded.payload.sub;
+  if (!req.files) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'No text was provided.'
+      }
+    });
+    return;
+  }
+  if (process.env.FILE_CHECK && fileExtensionCheck.text.indexOf(fileExtension) == -1 || fileMinetypeCheck.text.indexOf(fileMineType) == -1) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'Invaid text uploaded. Must be a text on this route.'
+      }
+    });
+    return;
+  }
+  let size = humanFileSize(file.size)
+  let fileHash = file.md5
+  let newFile = {
+    uploader: { id: auth },
+    fileName: newFileName,
+    fileHash,
+    isImage: true,
+    size
+  }
+  Upload.create(newFile, (err, uploadedFile) => {
+    if (err) { return res.status(500).send('Error in uploading') };
+    file.mv(uploadPath, err => {
+      if (err) { return res.status(500).send('Error in uploading') }
+      res.json({
+        success: true,
+        file: {
+          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/t/${newFileName}`,
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
+        }
+      });
+    });
+  });
+});
+
+/**
+ * @route /api/upload/file
+ * @method POST
+ * @description Upload file
+ * @access Private
+*/
+router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
+  let file = req.files.file;
+  let fileExtension = path.extname(file.name);
+  let fileMineType = file.mimetype;
+  let newFileName = generate(alphabet, 16) + fileExtension;
+  let uploadPath = `${path.join(__dirname, '../public')}/u/f/${newFileName}`;
+  let buf = crypto.randomBytes(16);
+  let key = buf.toString('hex')
+  let token = req.headers['authorization'];
+  let rawToken = token.split(" ").slice(1).toString();
+  let decoded = jwt.decode(rawToken, { complete: true });
+  let auth = decoded.payload.sub;
+  if (!req.files) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'No text was provided.'
+      }
+    });
+    return;
+  }
+  if (process.env.FILE_CHECK && fileExtensionCheck.files.indexOf(fileExtension) == -1 || fileMinetypeCheck.files.indexOf(fileMineType) == -1) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'Invaid file uploaded. Must be a file on this route.'
+      }
+    });
+    return;
+  }
+  let size = humanFileSize(file.size)
+  let fileHash = file.md5
+  let newFile = {
+    uploader: { id: auth },
+    fileName: newFileName,
+    fileHash,
+    isImage: true,
+    size
+  }
+  Upload.create(newFile, (err, uploadedFile) => {
+    if (err) { return res.status(500).send('Error in uploading') };
+    file.mv(uploadPath, err => {
+      if (err) { return res.status(500).send('Error in uploading') }
+      res.json({
+        success: true,
+        file: {
+          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/f/${newFileName}`,
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
+        }
+      });
+    });
+  });
+});
+
 router.get('*', function (req, res) {
   res.status(404).render('errors/404');
 });
