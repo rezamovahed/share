@@ -1,10 +1,10 @@
-# [DemonWolfDev Community Bot Server](https://github.com/DemonWolfDev/community-bot-server)
+# [MrDemonWolf Share Server](https://github.com/MrDemonWolf/files-mrdemonwolf-me)
 
 ## Status
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/DemonWolfDev/community-bot-serverr/master/LICENSE)
-[![dependencies Status](https://david-dm.org/DemonWolfDev/community-bot-server/status.svg)](https://david-dm.org/DemonWolfDev/community-bot-server)
-[![devDependencies Status](https://david-dm.org/DemonWolfDev/community-bot-server/dev-status.svg)](https://david-dm.org/DemonWolfDev/community-bot-server?type=dev)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MrDemonWolf/files-mrdemonwolf-mer/master/LICENSE)
+[![dependencies Status](https://david-dm.org/MrDemonWolf/files-mrdemonwolf-me/status.svg)](https://david-dm.org/MrDemonWolf/files-mrdemonwolf-me)
+[![devDependencies Status](https://david-dm.org/MrDemonWolf/files-mrdemonwolf-me/dev-status.svg)](https://david-dm.org/MrDemonWolf/files-mrdemonwolf-me?type=dev)
 
 ## Description
 This is the [DemonWolfDev](https://www.demonwolfdev.com) Offical comunnity bot which manges the community for MrDemonWolf (Founder)
@@ -18,8 +18,8 @@ This is the server of the bot which is meant to be run on a server in the cloud 
 ## Download and Installation
 
 To begin using this template, choose one of the following options to get started:
-* Clone the repo: `git clone https://github.com/DemonWolfDev/community-bot-server.git`
-* [Fork, Clone, or Download on GitHub](https://github.com/DemonWolfDev/community-bot-server)
+* Clone the repo: `git clone https://github.com/MrDemonWolf/files-mrdemonwolf-me.git`
+* [Fork, Clone, or Download on GitHub](https://github.com/MrDemonWolf/files-mrdemonwolf-me)
 
 ### Basic Usage
 #### Edit the .env.example with basic config
@@ -78,8 +78,8 @@ npm run dev-api
 ```
 
 ### Issues
-Have a bug or an issue with this bot? [Open a new issue](https://github.com/DemonWolfDev/community-bot-server/issues) here on GitHub.
+Have a bug or an issue with this bot? [Open a new issue](https://github.com/MrDemonWolf/files-mrdemonwolf-me/issues) here on GitHub.
 
 ## Copyright and License
 
-Copyright 2019 DemonWolfDev. Code released under the [MIT](https://github.com/DemonWolfDev/community-bot-server/blob/master/LICENSE) license.
+Copyright 2019 DemonWolfDev. Code released under the [MIT](https://github.com/MrDemonWolf/files-mrdemonwolf-me/blob/master/LICENSE) license.
