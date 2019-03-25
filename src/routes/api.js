@@ -97,13 +97,15 @@ router.get('/delete', (req, res) => {
         }
       });
     }
-    fs.unlink(filePath, err => {
-      if (err) { return res.status(500).send('Error in deleteing') }
-      res.json({
-        success: true,
-        message: "Deleted file " + fileName
+    Upload.findOneAndDelete({ fileName }, (err, upload) => {
+      fs.unlink(filePath, err => {
+        if (err) { return res.status(500).send('Error in deleteing') }
+        res.json({
+          success: true,
+          message: "Deleted file " + fileName
+        });
       });
-    });
+    })
   });
 });
 
