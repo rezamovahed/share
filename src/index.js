@@ -140,6 +140,9 @@ app.use(authRoutes);
 app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
 app.use('/me', middleware.isLoggedIn, meRoutes);
 app.use('/admin', middleware.isAdmin, adminRoutes);
+app.get('*', function (req, res) {
+  res.status(404).render('errors/404');
+});
 
 
 // Mongoose Setup

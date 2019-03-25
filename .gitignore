@@ -1,7 +1,12 @@
+# MacOS
 .DS_Store
+# NodejS
 node_modules/
 npm-debug.log*
-.env
 package-lock.json
+# Env
+.env
+# sass
 .sass-cache
-README.md
+# Removes local uploads
+public/u/*

@@ -1,6 +1,6 @@
 {
   "name": "files.mrdemonwolf.me",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Simple file sharing site for me.",
   "main": "index.js",
   "scripts": {

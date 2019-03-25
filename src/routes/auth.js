@@ -43,10 +43,10 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
  * @access Public
 */
 router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
-  // if (!process.env.SIGNUP) {
-  //   res.redirect('/', 403)
-  //   return;
-  // }
+  if (!process.env.SIGNUP) {
+    res.status(403).redirect('/')
+    return;
+  }
   res.render("auth/signup", {
     title: "Signup",
     username: null,
@@ -61,6 +61,10 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
  * @access Public
 */
 router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
+  if (!process.env.SIGNUP) {
+    res.redirect('/', 403)
+    return;
+  }
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
   const username = req.body.username;

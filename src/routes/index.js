@@ -9,9 +9,6 @@ const middleware = require('../middleware')
  * @access Public
 */
 router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
-  // res.render('index', {
-  //   title: 'Home'
-  // });
   res.status(403).render('index')
 });
 
