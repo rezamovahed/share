@@ -18,7 +18,8 @@ const router = express.Router();
 */
 router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
   res.render('auth/login', {
-    title: 'Login'
+    title: 'Login',
+    csrfToken: req.csrfToken()
   });
 });
 
@@ -43,14 +44,15 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
  * @access Public
 */
 router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
-  if (!process.env.SIGNUP) {
+  if (!process.env.SIGNUPS) {
     res.status(403).redirect('/')
     return;
   }
   res.render("auth/signup", {
     title: "Signup",
     username: null,
-    email: null
+    email: null,
+    csrfToken: req.csrfToken()
   });
 });
 
@@ -61,10 +63,10 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
  * @access Public
 */
 router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
-  if (!process.env.SIGNUP) {
-    res.redirect('/', 403)
-    return;
+  if (!process.env.SIGNUPS) {
+    return res.redirect('/', 403)
   }
+  if (req.body.email !== process.env.EMAIL) { return res.redirect('/', 403) }
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
   const username = req.body.username;
