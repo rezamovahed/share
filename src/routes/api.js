@@ -21,6 +21,70 @@ router.use(fileUpload({
   abortOnLimit: true
 }));
 /**
+ * @route /api/delete/?fileName=%{filename}&key=${key}
+ * @method GET
+ * @description Upload a Image
+ * @param ${filename} ${key}
+ * @access Private
+*/
+router.get('/delete', (req, res) => {
+  const fileName = req.query.fileName;
+  const key = req.query.key;
+  const filePath = `${path.join(__dirname, '../public')}/u/i/${fileName}`;
+  if (req.query && !fileName && !key) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        message: 'No filename or key provided'
+      }
+    });
+  }
+  if (!req.query.fileName) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        message: 'No filename provided'
+      }
+    });
+  }
+
+  if (!req.query.key) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        message: 'No key provided'
+      }
+    });
+  }
+  fileExists(filePath, (err, exists) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: {
+          message: 'Error'
+        }
+      });
+    }
+    if (!exists) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'No such file exists.'
+        }
+      });
+    }
+    fs.unlink(filePath, err => {
+      if (err) { return res.status(500).send('Error in deleteing') }
+      res.json({
+        success: true,
+        message: "Deleted file " + fileName
+      });
+    });
+  });
+});
+
+
+/**
  * @route /api/upload/image
  * @method POST
  * @description Upload a Image
@@ -29,7 +93,7 @@ router.use(fileUpload({
 router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
   const file = req.files.file;
   const fileExtension = path.extname(file.name);
-  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
+  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   const newFileName = generate(alphabet, 12) + fileExtension;
   const uploadPath = `${path.join(__dirname, '../public')}/u/i/${newFileName}`;
   const buf = crypto.randomBytes(16);
@@ -52,18 +116,16 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
     });
     return;
   }
-  // if(file)
-  res.send(file)
-  // file.mv(uploadPath, err => {
-  // if (err) { return res.status(500).send('Error in uploading') }
-  // res.json({
-  // success: true,
-  // file: {
-  // url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/i/${newFileName}`,
-  // delete_url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/delete?fileName=${newFileName}&key=${key}`
-  // }
-  // });
-  // });
+  file.mv(uploadPath, err => {
+    if (err) { return res.status(500).send('Error in uploading') }
+    res.json({
+      success: true,
+      file: {
+        url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/i/${newFileName}`,
+        delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
+      }
+    });
+  });
 });
 
 module.exports = router;

@@ -9,4 +9,4 @@ package-lock.json
 # sass
 .sass-cache
 # Removes local uploads
-public/u/*
+src/public/u/*
