@@ -39,5 +39,9 @@ middlewareObj.isLoggedIn = (req, res, next) => {
   next();
 };
 
+// Uplaoder
+middlewareObj.isAPIKeyVaild = (req, res, next) => {
+  next();
+};
 
 module.exports = middlewareObj;

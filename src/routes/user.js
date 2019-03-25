@@ -69,7 +69,7 @@ router.post('/activate/resend', (req, res) => {
             <mj-section padding-top="0">
               <mj-column>
                 <mj-text>
-                  You are receiving this because you (or someone else) created a account ${process.env.SITE_NAME}.
+                  You are receiving this because you (or someone else) created a account ${process.env.TITLE}.
                 </mj-text>
               </mj-column>
             </mj-section>
@@ -98,12 +98,12 @@ router.post('/activate/resend', (req, res) => {
           const accountActvationEmail = {
             to: req.body.email,
             from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
-            subject: ` Your Account | ${process.env.TITLE}`,
+            subject: `Activate Your Account | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
           nodemailerSendGrid.sendMail(accountActvationEmail, function (err) {
             req.flash('success', 'Your account activation email has been resent');
-            res.redirect("/");
+            res.redirect('/login');
             done(err, 'done');
           });
         }

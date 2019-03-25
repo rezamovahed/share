@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require('../models/user');
 const gravatar = require('gravatar');
 const validator = require('validator');
-const passportLocalMongoose = require('passport-local-mongoose')
 
 /**
  * @route /me
@@ -84,11 +83,18 @@ router.put('/', (req, res) => {
   }
 });
 
+/**
+ * @route /me/keys
+ * @method GET
+ * @description Diplays API Keys
+ * @access Private
+*/
+
 // Here's where the content you upload will be stored.
 /**
- * @route /me/upload
+ * @route /me/uploads/i
  * @method GET
- * @description Displays images uploaded
+ * @description Displays uploaded stuff
  * @access Private
 */
 

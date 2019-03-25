@@ -12,7 +12,8 @@
   </div>
   <% } %>
   <div class="display-4">Resend your activation email</div>
-  <form action="/user/actovaye/resend" method="POST">
+  <form action="/user/activate/resend" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <div class="form-group">
       <label for="email">Email</label>
       <input name="email" type="email" class="form-control" id="email" placeholder="Enter Email">
