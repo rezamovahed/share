@@ -21,27 +21,29 @@
 
 <body class="auth mb-0">
   <div class="form-auth">
-    <img class="mx-auto d-block mb-4" src="/images/logo_text.png" width="220">
-    <form action="/auth/login" method="POST">
-      <% if (error && error.length > 0){ %>
-      <div class="alert alert-danger" role="alert">
-        <%= error %>
-      </div>
-      <% } %>
-      <% if (success && success.length > 0){ %>
-      <div class="alert alert-success" role="alert">
-        <%= success %>
-      </div>
-      <% } %>
+    <img class="mx-auto d-block mb-4" src="/images/logo_text.png" width="320">
+    <% errors = error && error.length > 0 %>
+    <% if (errors){ %>
+    <div class="alert alert-danger" role="alert">
+      <%- error %>
+    </div>
+    <% } %>
+    <% if (success && success.length > 0){ %>
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+    <% } %>
+    <form action="/login" method="POST" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <div class="form-group">
         <label for="email">Email</label>
-        <input name="email" type="email" class="form-control <% if(error && error.length > 0){ %>is-invalid <% } %>"
+        <input name="email" type="email" class="form-control <% if(errors){ %>is-invalid <% } %>"
           id="email" placeholder="Enter email">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
         <input name="password" type="password"
-          class="form-control <% if(error && error.length > 0){ %>is-invalid <% } %>" id="password"
+          class="form-control <% if(errors){ %>is-invalid <% } %>" id="password"
           placeholder="Password">
       </div>
       <button type="submit" class="btn btn-login btn-primary btn-block">login</button>
@@ -53,7 +55,7 @@
       <a href="/user/activation/resend">
         <small class=" info text">Resend account activation token</small>
       </a>
-      <a href="/auth/signup">
+      <a href="/signup">
         <small class="info text">Create a account</small>
       </a>
     </div>

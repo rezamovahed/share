@@ -1,0 +1,100 @@
+<% include ../partials/header %>
+<% include ../partials/navbar %>
+<% errors = error && error.length > 0 %>
+<div class="container w-50 pt-5">
+  <form action="/me?_method=PUT" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <% if (success && success.length > 0){ %>
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+    <% } %>
+    <h1 class="display-4">Edit account</h1>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input name="username" type="text" class="form-control" id="username" value="<%= currentUser.username %>"
+        autocomplete="off" data-lpignore="true" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>"
+        id="email" value="<%= currentUser.email %>" required>
+    </div>
+    <% if(errors && error[0].email) { %>
+    <small class="form-text text-danger">
+      <%= error[0].email %></small>
+    <% } %>
+    <h1 class="display-4">Edit security</h1>
+    <div class="form-group">
+      <label for="oldPassword">Current Password</label>
+      <div class="input-group" id="show_hide_password_1">
+        <input name="oldPassword" type="password"
+          class="form-control <% if(errors && error[0].oldPassword) { %> is-invalid <% } %>" id="oldPassword">
+        <div class="input-group-append">
+          <a class="btn bg-light" role="button" id="button-addon1">
+            <i class="fa fa-eye-slash" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+      <% if(errors && error[0].oldPassword) { %>
+      <small class="form-text text-danger">
+        <%= error[0].oldPassword %></small>
+      <% } %>
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <div class="input-group" id="show_hide_password_2">
+          <input name="newPassword" type="password"
+            class="form-control <% if(errors && error[0].newPassword | error[0].confirmNewPassword === 'Both passowrds must match.') { %> is-invalid <% } %>"
+            id="newPassword">
+          <div class="input-group-append">
+            <a class="btn bg-light" role="button" id="button-addon2">
+              <i class="fa fa-eye-slash" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <% if(errors && error[0].newPassword) { %>
+        <small class="form-text text-danger">
+          <%= error[0].newPassword %></small>
+        <% } %>
+        <label for="conformNewPassword">Confirm New Password</label>
+        <div class="input-group" id="show_hide_password_3">
+          <input name="confirmNewPassword" type="password"
+            class="form-control <% if(errors && error[0].confirmNewPassword) { %> is-invalid <% } %>"
+            id="confirmNewPassword">
+          <div class="input-group-append">
+            <a class="btn bg-light" role="button" id="button-addon3">
+              <i class="fa fa-eye-slash" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <% if(errors && error[0].confirmNewPassword) { %>
+        <small class="form-text text-danger">
+          <%= error[0].confirmNewPassword %></small>
+        <% } %>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Account</button>
+      <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Account Deletion</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to delete your account, this procedure is irreversible.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <a href="/me/delete" class="btn btn-danger btn-ok" style="color: #ffff;">Delete my account</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
+        style="color: #ffff;">Delete
+        account</a>
+  </form>
+</div>
+</div>
+<% include ../partials/footer %>

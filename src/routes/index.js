@@ -8,11 +8,11 @@ const middleware = require('../middleware')
  * @description Displays a not allowed message
  * @access Public
 */
-router.get('/', (req, res) => {
+router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
   // res.render('index', {
   //   title: 'Home'
   // });
-  res.status(403).send('YOUR NOT ALLOWED TO BE HERE')
+  res.status(403).render('index')
 });
 
 module.exports = router;

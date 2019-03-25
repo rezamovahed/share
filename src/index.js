@@ -9,7 +9,8 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
-// const middleware = require('./middleware');
+const middleware = require('./middleware');
+const User = require('./models/user');
 const csrf = require('csurf');
 
 // Load enviroment variables from .env file
@@ -65,6 +66,19 @@ app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Passport config
+passport.use(User.createStrategy());
+
+// Passport needed stuff
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(null, user);
+  });
+});
+
 // Express Flash
 app.use(flash());
 
@@ -81,7 +95,6 @@ app.use(csrf());
 // error handlers
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
-
   // handle CSRF token errors here
   res.status(403)
   res.json({
@@ -117,9 +130,17 @@ app.disable('x-powered-by');
 
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const meRoutes = require('./routes/me');
+const adminRoutes = require('./routes/admin');
+// const apiRoutes = require('./routes/api');
 
 app.use(indexRoutes);
 app.use(authRoutes);
+app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
+app.use('/me', middleware.isLoggedIn, meRoutes);
+app.use('/admin', middleware.isAdmin, adminRoutes);
+
 
 // Mongoose Setup
 mongoose.set('useFindAndModify', false);
