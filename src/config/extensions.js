@@ -5,13 +5,21 @@ module.exports = {
     ".jpeg",
     ".gif"
   ],
+  "text": [
+    '.txt'
+  ],
   "files": [
     ".zip",
+    '.txt',
     ".tar",
     ".rar",
     ".mov",
     ".mp4",
     ".mp3",
-    ".sh"
+    ".sh",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif"
   ]
 };
