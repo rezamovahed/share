@@ -3,10 +3,8 @@ const mongoose = require('mongoose');
 // Schema Setup
 const uploadSchema = new mongoose.Schema({
   uploader: {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
+    type: mongoose.Types.ObjectId,
+    ref: "User"
   },
   fileName: {
     type: String,
