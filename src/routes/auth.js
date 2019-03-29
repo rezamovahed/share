@@ -9,7 +9,7 @@ const middleware = require('../middleware');
 const nodemailerSendGrid = require('../config/sendgrid');
 const User = require('../models/user');
 const router = express.Router();
-
+const requestIp = require('request-ip');
 /**
  * @route /login
  * @method GET
@@ -33,6 +33,12 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
   failureRedirect: "/login",
   failureFlash: true
 }), (req, res) => {
+
+  User.findById(req.user.id, (err, user) => {
+    user.lastLoginIP = requestIp.getClientIp(req);
+    user.lastLog = Date.now();
+    user.save();
+  });
   req.flash("success", `Welcome back ${req.user.username}`)
   res.redirect('/me')
 });
@@ -45,9 +51,9 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
 */
 router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   if (!process.env.SIGNUPS) {
-    res.status(403).redirect('/')
-    return;
+    return res.status(403).redirect('/')
   }
+  console.log(process.env.SIGNUPS)
   res.render("auth/signup", {
     title: "Signup",
     username: null,
@@ -64,9 +70,9 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
 */
 router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   if (!process.env.SIGNUPS) {
-    return res.redirect('/', 403)
+    if (req.body.email !== process.env.EMAIL) { return res.redirect('/', 403) }
+    res.status(403).redirect('/')
   }
-  if (req.body.email !== process.env.EMAIL) { return res.redirect('/', 403) }
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
   const username = req.body.username;

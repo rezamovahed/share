@@ -97,16 +97,17 @@ router.get('/delete', (req, res) => {
         }
       });
     }
-    fs.unlink(filePath, err => {
-      if (err) { return res.status(500).send('Error in deleteing') }
-      res.json({
-        success: true,
-        message: "Deleted file " + fileName
+    Upload.findOneAndDelete({ fileName }, (err, upload) => {
+      fs.unlink(filePath, err => {
+        if (err) { return res.status(500).send('Error in deleteing') }
+        res.json({
+          success: true,
+          message: "Deleted file " + fileName
+        });
       });
-    });
+    })
   });
 });
-
 
 /**
  * @route /api/upload/image
@@ -149,7 +150,9 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
   let newFile = {
     uploader: { id: auth },
     fileName: newFileName,
+    fileExtension,
     fileHash,
+    key,
     isImage: true,
     size
   }
@@ -209,8 +212,10 @@ router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
   let newFile = {
     uploader: { id: auth },
     fileName: newFileName,
+    fileExtension,
     fileHash,
-    isImage: true,
+    key,
+    isText: true,
     size
   }
   Upload.create(newFile, (err, uploadedFile) => {
@@ -250,7 +255,7 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
     res.status(400).json({
       success: false,
       error: {
-        message: 'No text was provided.'
+        message: 'No file was provided.'
       }
     });
     return;
@@ -269,8 +274,10 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
   let newFile = {
     uploader: { id: auth },
     fileName: newFileName,
+    fileExtension,
     fileHash,
-    isImage: true,
+    key,
+    isFile: true,
     size
   }
   Upload.create(newFile, (err, uploadedFile) => {

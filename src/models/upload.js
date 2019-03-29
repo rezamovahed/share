@@ -12,7 +12,11 @@ const uploadSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  fileHash: {
+  fileName: {
+    type: String,
+    required: true
+  },
+  fileExtension: {
     type: String,
     required: true
   },
@@ -28,7 +32,10 @@ const uploadSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-
+  key: {
+    type: String,
+    required: true
+  },
   size: {
     type: String,
     required: true

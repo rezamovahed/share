@@ -114,7 +114,8 @@ app.use((req, res, next) => {
 // Disables the powered by so it does not show express
 app.disable('x-powered-by');
 
-const csrfExclusion = ['/api/upload', '/api/upload/image', '/api/upload/text', '/api/upload/file']
+const csrfExclusion = ['/api/upload', '/api/upload/image', '/api/upload/text', '/api/upload/file'];
+
 app.use(function (req, res, next) {
   if (csrfExclusion.indexOf(req.path) !== -1) {
     next();
