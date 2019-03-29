@@ -218,6 +218,74 @@ router.delete('/uploads/:id', (req, res) => {
   });
 });
 
+function deleteByUploadFileType(type, file) {
+  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
+  Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
+    fs.unlink(filePath, err => {
+      if (err) { return res.status(500) }
+    });
+  });
+}
+
+/**
+ * @route /me/delete
+ * @method GET
+ * @description Delete Account
+ * @access Private
+*/
+router.get('/delete', (req, res) => {
+  let images = [];
+  let files = [];
+  let texts = [];
+  let error;
+  Upload.find({ 'uploader': { id: req.user._id } }, (err, file) => {
+    file.map(file => {
+      if (file.isImage) {
+        return images.push({
+          fileType: 'image',
+          fileName: file.fileName
+        });
+      }
+      if (file.isFile) {
+        return files.push({
+          fileType: 'file',
+          fileName: file.fileName
+        });
+      }
+      if (file.isText) {
+        return texts.push({
+          fileType: 'text',
+          fileName: file.fileName
+        });
+      }
+    });
+    if (images) {
+      images.map(image => {
+        deleteByUploadFileType(image.fileType, image.fileName);
+      });
+    }
+    if (files) {
+      files.map(file => {
+        deleteByUploadFileType(file.fileType, file.fileName);
+      });
+    }
+    if (texts) {
+      texts.map(text => {
+        deleteByUploadFileType(text.fileType, text.fileName);
+      });
+    }
+  });
+  Key.find({ 'user': { id: req.user._id } }, (err, keys) => {
+    keys.map(key => {
+      Key.findByIdAndDelete(key.id, (err, removedKey) => {
+      });
+    });
+  });
+  User.findByIdAndDelete(req.user.id, (err, removedUser) => {
+    res.redirect('/')
+  });
+});
+
 /**
  * @route /me/uploads/delete/all
  * @method GET
@@ -250,14 +318,6 @@ router.get('/uploads/delete/all', (req, res) => {
         });
       }
     });
-    function deleteByUploadFileType(type, file) {
-      let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
-      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-        fs.unlink(filePath, err => {
-          if (err) { return res.status(500) }
-        });
-      })
-    }
     if (!images && !files && !texts) {
       req.flash('error', 'You must upload before you can delete.')
       res.redirect('/me/uploads')
@@ -265,19 +325,16 @@ router.get('/uploads/delete/all', (req, res) => {
     }
     if (images) {
       images.map(image => {
-        console.log(images)
         deleteByUploadFileType(image.fileType, image.fileName);
       });
     }
     if (files) {
       files.map(file => {
-        console.log(files)
         deleteByUploadFileType(file.fileType, file.fileName);
       });
     }
     if (texts) {
       texts.map(text => {
-        console.log(text)
         deleteByUploadFileType(text.fileType, text.fileName);
       });
     }

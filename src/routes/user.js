@@ -151,6 +151,35 @@ router.get('/activate/:token', (req, res) => {
 });
 
 /**
+ * @route /user/delete/:token
+ * @method GET
+ * @description ACtivates account if token is vaid
+ * @access Public
+*/
+router.get('/delete/:token', (req, res) => {
+  function activationError() {
+    req.flash('error', 'Your token is invaid or your account is already activated.')
+    res.redirect('/login');
+  }
+  async.waterfall([
+    function (done) {
+      User.findOneAndDelete({
+        accountActvationToken: req.params.token,
+        accountActvationExpire: {
+          $gt: Date.now()
+        }
+      }, function (err, user) {
+        if (!user) {
+          return activationError();
+        }
+        req.flash('success', 'Your account has been removed');
+        res.redirect('/');
+        done(err, 'done');
+      });
+    }
+  ]);
+});
+/**
  * @route /user/forgot
  * @method GET
  * @description Shows a form to enter email
