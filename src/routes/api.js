@@ -81,33 +81,45 @@ router.get('/delete', (req, res) => {
       }
     });
   }
-  fileExists(filePath, (err, exists) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        error: {
-          message: 'Error'
-        }
-      });
-    }
-    if (!exists) {
+  Upload.findOne({ key: req.query.key }, (err, upload) => {
+    if (upload === null) {
       return res.status(400).json({
         success: false,
         error: {
-          message: 'No such file exists.'
+          message: 'Invaid key provided'
         }
       });
-    }
-    Upload.findOneAndDelete({ fileName }, (err, upload) => {
-      fs.unlink(filePath, err => {
-        if (err) { return res.status(500).send('Error in deleteing') }
-        res.json({
-          success: true,
-          message: "Deleted file " + fileName
-        });
+    } else {
+      fileExists(filePath, (err, exists) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            error: {
+              message: 'Error'
+            }
+          });
+        }
+        if (!exists) {
+          return res.status(400).json({
+            success: false,
+            error: {
+              message: 'No such file exists.'
+            }
+          });
+        }
+        Upload.findOneAndDelete({ fileName }, (err, upload) => {
+          fs.unlink(filePath, err => {
+            if (err) { return res.status(500).send('Error in deleteing') }
+            res.json({
+              success: true,
+              message: "Deleted file " + fileName
+            });
+          });
+        })
       });
-    })
+    }
   });
+
 });
 
 /**

@@ -9,7 +9,6 @@ const middleware = require('../middleware');
 const nodemailerSendGrid = require('../config/sendgrid');
 const User = require('../models/user');
 const router = express.Router();
-const requestIp = require('request-ip');
 /**
  * @route /login
  * @method GET
@@ -35,7 +34,6 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
 }), (req, res) => {
 
   User.findById(req.user.id, (err, user) => {
-    user.lastLoginIP = requestIp.getClientIp(req);
     user.lastLog = Date.now();
     user.save();
   });

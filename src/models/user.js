@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema({
     default: false
   },
   isAdmin: String,
-  lastLoginIP: String,
   lastLog: Date,
 }, {
     timestamps: true
