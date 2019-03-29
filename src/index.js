@@ -137,6 +137,7 @@ app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
 app.use('/me', middleware.isLoggedIn, meRoutes);
 app.use('/admin', middleware.isAdmin, adminRoutes);
 app.use('/api', apiRoutes)
+
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
   // handle CSRF token errors here

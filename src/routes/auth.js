@@ -68,7 +68,7 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
 router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   if (!process.env.SIGNUPS) {
     if (req.body.email !== process.env.EMAIL) { return res.redirect('/', 403) }
-    res.status(403).redirect('/')
+    return res.status(403).redirect('/')
   }
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
