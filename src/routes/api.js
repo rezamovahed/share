@@ -1,7 +1,7 @@
 const express = require('express');
 const middleware = require('../middleware');
 const nanoid = require('nanoid');
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const alphabet = '0505056789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const generate = require('nanoid/generate')
 const crypto = require('crypto')
 const router = express.Router();
@@ -176,8 +176,8 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
       res.json({
         success: true,
         file: {
-          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/i/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=image`
+          url: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/u/i/${newFileName}`,
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=image`
         }
       });
     });
@@ -238,8 +238,8 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
       res.json({
         success: true,
         file: {
-          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/f/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=file`
+          url: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/u/f/${newFileName}`,
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=file`
         }
       });
     });
@@ -300,8 +300,8 @@ router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
       res.json({
         success: true,
         file: {
-          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/t/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=text`
+          url: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/u/t/${newFileName}`,
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=text`
         }
       });
     });

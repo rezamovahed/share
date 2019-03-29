@@ -27,7 +27,7 @@ router.get('/activate/resend', (req, res) => {
  * @access Public
 */
 router.post('/activate/resend', (req, res) => {
-  User.findOne({
+    User.findOne({
     email: req.body.email
   }, (err, user) => {
     if (!user) {
