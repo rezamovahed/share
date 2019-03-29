@@ -1,7 +1,16 @@
 {
-  "name": "files.mrdemonwolf.me",
-  "version": "0.0.1",
-  "description": "Simple file sharing site for me.",
+  "name": "share-mrdemonwolf-me",
+  "version": "1.0.0",
+  "description": "This a simple ShareX server so I can upload images,files, and text files on my own domain/server. This can be used for anyone but its not supported as much.",
+  "keywords": [
+    "sharex",
+    "custom-uploader",
+    "uploader",
+    "files",
+    "images",
+    "text",
+    "custom"
+  ],
   "main": "index.js",
   "scripts": {
     "web": "node src/index.js",
