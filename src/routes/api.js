@@ -149,7 +149,7 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
   let size = humanFileSize(file.size)
   let fileHash = file.md5
   let newFile = {
-    uploader: { id: auth },
+    uploader: auth,
     fileName: newFileName,
     fileExtension,
     fileHash,
@@ -211,7 +211,7 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
   let size = humanFileSize(file.size)
   let fileHash = file.md5
   let newFile = {
-    uploader: { id: auth },
+    uploader: auth,
     fileName: newFileName,
     fileExtension,
     fileHash,
@@ -273,7 +273,7 @@ router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
   let size = humanFileSize(file.size)
   let fileHash = file.md5
   let newFile = {
-    uploader: { id: auth },
+    uploader: auth,
     fileName: newFileName,
     fileExtension,
     fileHash,

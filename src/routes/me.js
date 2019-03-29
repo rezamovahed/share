@@ -150,11 +150,11 @@ router.delete('/keys/:key', (req, res) => {
 const uploadLimitPerPage = 10
 function commandListing(req, res, page) {
   Upload
-    .find({ 'uploader': { id: req.user._id } })
+    .find({ 'uploader':  req.user._id })
     .skip((uploadLimitPerPage * page) - uploadLimitPerPage)
     .limit(uploadLimitPerPage)
     .exec((err, uploads) => {
-      Upload.find({ 'uploader': { id: req.user._id } }).countDocuments().exec((err, count) => {
+      Upload.find({ 'uploader': req.user._id }).countDocuments().exec((err, count) => {
         res.render('me/uploads', {
           title: `My Uploads`,
           uploads,
@@ -237,7 +237,7 @@ router.get('/delete', (req, res) => {
   let files = [];
   let texts = [];
   let error;
-  Upload.find({ 'uploader': { id: req.user._id } }, (err, file) => {
+  Upload.find({ 'uploader': req.user._id }, (err, file) => {
     file.map(file => {
       if (file.isImage) {
         return images.push({
@@ -296,7 +296,7 @@ router.get('/uploads/delete/all', (req, res) => {
   let files = [];
   let texts = [];
   let error;
-  Upload.find({ 'uploader': { id: req.user._id } }, (err, file) => {
+  Upload.find({ 'uploader': req.user._id }, (err, file) => {
     file.map(file => {
       if (file.isImage) {
         return images.push({

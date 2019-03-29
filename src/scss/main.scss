@@ -21,7 +21,8 @@
 // 5. Components
 @import "components/auth";
 @import "components/tableList";
+@import "components/cards";
 
 // 6. Page-specific styles
 @import "pages/me";
-// @import "pages/admin";
+@import "pages/admin";
