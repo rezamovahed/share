@@ -45,7 +45,7 @@ function humanFileSize(bytes, si) {
 }
 
 /**
- * @route /api/delete/?fileName=%{filename}&key=${key}
+ * @route /api/delete/?fileName=%{filename}&fileType={fileType}&key=${key}
  * @method GET
  * @description Upload a Image
  * @param ${filename} ${key}
@@ -53,8 +53,9 @@ function humanFileSize(bytes, si) {
 */
 router.get('/delete', (req, res) => {
   const fileName = req.query.fileName;
+  const fileType = req.query.fileType;
   const key = req.query.key;
-  const filePath = `${path.join(__dirname, '../public')}/u/i/${fileName}`;
+  const filePath = `${path.join(__dirname, '../public')}/u/${fileType === 'image' ? 'i' : fileType === 'file' ? 'f' : 't'}/${fileName}`;
   if (req.query && !fileName && !key) {
     return res.status(400).json({
       success: false,
@@ -164,69 +165,7 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
         success: true,
         file: {
           url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/i/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
-        }
-      });
-    });
-  });
-});
-
-/**
- * @route /api/upload/text
- * @method POST
- * @description Upload text
- * @access Private
-*/
-router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
-  let file = req.files.file;
-  let fileExtension = path.extname(file.name);
-  let fileMineType = file.mimetype;
-  let newFileName = generate(alphabet, 16) + fileExtension;
-  let uploadPath = `${path.join(__dirname, '../public')}/u/t/${newFileName}`;
-  let buf = crypto.randomBytes(16);
-  let key = buf.toString('hex')
-  let token = req.headers['authorization'];
-  let rawToken = token.split(" ").slice(1).toString();
-  let decoded = jwt.decode(rawToken, { complete: true });
-  let auth = decoded.payload.sub;
-  if (!req.files) {
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'No text was provided.'
-      }
-    });
-    return;
-  }
-  if (process.env.FILE_CHECK && fileExtensionCheck.text.indexOf(fileExtension) == -1 || fileMinetypeCheck.text.indexOf(fileMineType) == -1) {
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'Invaid text uploaded. Must be a text on this route.'
-      }
-    });
-    return;
-  }
-  let size = humanFileSize(file.size)
-  let fileHash = file.md5
-  let newFile = {
-    uploader: { id: auth },
-    fileName: newFileName,
-    fileExtension,
-    fileHash,
-    key,
-    isText: true,
-    size
-  }
-  Upload.create(newFile, (err, uploadedFile) => {
-    if (err) { return res.status(500).send('Error in uploading') };
-    file.mv(uploadPath, err => {
-      if (err) { return res.status(500).send('Error in uploading') }
-      res.json({
-        success: true,
-        file: {
-          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/t/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=image`
         }
       });
     });
@@ -288,7 +227,69 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
         success: true,
         file: {
           url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/f/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}`
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=file`
+        }
+      });
+    });
+  });
+});
+
+/**
+ * @route /api/upload/text
+ * @method POST
+ * @description Upload text
+ * @access Private
+*/
+router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
+  let file = req.files.file;
+  let fileExtension = path.extname(file.name);
+  let fileMineType = file.mimetype;
+  let newFileName = generate(alphabet, 16) + fileExtension;
+  let uploadPath = `${path.join(__dirname, '../public')}/u/t/${newFileName}`;
+  let buf = crypto.randomBytes(16);
+  let key = buf.toString('hex')
+  let token = req.headers['authorization'];
+  let rawToken = token.split(" ").slice(1).toString();
+  let decoded = jwt.decode(rawToken, { complete: true });
+  let auth = decoded.payload.sub;
+  if (!req.files) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'No text was provided.'
+      }
+    });
+    return;
+  }
+  if (process.env.FILE_CHECK && fileExtensionCheck.text.indexOf(fileExtension) == -1 || fileMinetypeCheck.text.indexOf(fileMineType) == -1) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: 'Invaid text uploaded. Must be a text on this route.'
+      }
+    });
+    return;
+  }
+  let size = humanFileSize(file.size)
+  let fileHash = file.md5
+  let newFile = {
+    uploader: { id: auth },
+    fileName: newFileName,
+    fileExtension,
+    fileHash,
+    key,
+    isText: true,
+    size
+  }
+  Upload.create(newFile, (err, uploadedFile) => {
+    if (err) { return res.status(500).send('Error in uploading') };
+    file.mv(uploadPath, err => {
+      if (err) { return res.status(500).send('Error in uploading') }
+      res.json({
+        success: true,
+        file: {
+          url: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/u/t/${newFileName}`,
+          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 1234}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=text`
         }
       });
     });

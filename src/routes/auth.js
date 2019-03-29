@@ -53,7 +53,6 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   if (!process.env.SIGNUPS) {
     return res.status(403).redirect('/')
   }
-  console.log(process.env.SIGNUPS)
   res.render("auth/signup", {
     title: "Signup",
     username: null,
