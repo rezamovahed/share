@@ -152,6 +152,7 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
     fileName: newFileName,
     fileExtension,
     fileHash,
+    key,
     isImage: true,
     size
   }
@@ -213,6 +214,7 @@ router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
     fileName: newFileName,
     fileExtension,
     fileHash,
+    key,
     isText: true,
     size
   }
@@ -274,6 +276,7 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
     fileName: newFileName,
     fileExtension,
     fileHash,
+    key,
     isFile: true,
     size
   }

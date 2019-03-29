@@ -251,7 +251,7 @@ router.get('/uploads/delete/all', (req, res) => {
       }
     });
     function deleteByUploadFileType(type, file) {
-      let filePath = `${path.join(__dirname, '../public')}/u/${type ? 'i' : type ? 'f' : 't'}/${file}`;
+      let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
       Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
         fs.unlink(filePath, err => {
           if (err) { return res.status(500) }
@@ -265,16 +265,19 @@ router.get('/uploads/delete/all', (req, res) => {
     }
     if (images) {
       images.map(image => {
+        console.log(images)
         deleteByUploadFileType(image.fileType, image.fileName);
       });
     }
     if (files) {
-      files.map(files => {
-        deleteByUploadFileType(files.fileType, files.fileName);
+      files.map(file => {
+        console.log(files)
+        deleteByUploadFileType(file.fileType, file.fileName);
       });
     }
     if (texts) {
       texts.map(text => {
+        console.log(text)
         deleteByUploadFileType(text.fileType, text.fileName);
       });
     }
