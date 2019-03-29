@@ -205,7 +205,6 @@ router.delete('/uploads/:id', (req, res) => {
     }
     const fileName = req.query.name
     const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : fileType.file ? 'f' : 't'}/${fileName}`;
-    console.log(filePath)
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');

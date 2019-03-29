@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 <% include ../partials/navbar %>
-<div class="container me_api w-50 pt-2">
+<div class="container me_api w-75 pt-2">
   <div class="table-wrapper">
     <div class="table-title">
       <div class="row">
@@ -33,7 +33,6 @@
         event.preventDefault();
         if (event.clipboardData) {
           event.clipboardData.setData("text/plain", span.textContent);
-          console.log(event.clipboardData.getData("text"))
         }
       });
     });
