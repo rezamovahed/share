@@ -1,0 +1,136 @@
+<% include ../partials/header %>
+<% include ../partials/navbar %>
+<div class="container w-75 pt-2">
+  <% if (success && success.length > 0){ %>
+  <div class="container">
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+  </div>
+  <% } %>
+  <% if (error && error.length > 0){ %>
+  <div class="container">
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+  </div>
+  <% } %>
+  <div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="col-6">
+          <h2>Your <strong>Uploads</strong></b>
+          </h2>
+        </div>
+        <div class="col-12 col-sm-6">
+          <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger float-right">Delete
+            All</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Share</th>
+          <th scope="col">Type</th>
+          <th scope="col">Size</th>
+          <th scope="col">Created</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% let uploadsLength = uploads.length; %>
+        <% if (uploadsLength === 0) { %>
+        <tr class="text-center">
+          <td colspan=5">No uploads found</td>
+        </tr>
+        <% } else { %>
+
+        <% for(i = 0; i < uploadsLength; i++) { %>
+        <tr>
+          <td>
+            <a
+              href="/u/<%- uploads[i].isImage ? 'i' : uploads[i].isFile ? 'f' : 't' %>/<%= uploads[i].fileName %>"><%= uploads[i].fileName %></a>
+          </td>
+          <td>
+            <%- uploads[i].isImage ? 'Image' : uploads[i].isFile ? 'File' : 'Text' %>
+          </td>
+          <td>
+            <%= uploads[i].size %>
+          </td>
+          <td>
+            <%= moment(uploads[i].createdAt).format('MMM Do YYYY hh:mm A') %>
+          </td>
+          <td>
+            <form class=" d-inline"
+              action="/me/uploads/<%= uploads[i].id %>?_method=DELETE&type=<%- uploads[i].isImage ? 'image' : uploads[i].isFile ? 'file' : 'text' %>&name=<%= uploads[i].fileName %>"
+              method="POST">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="delete" title="Delete" data-toggle="tooltip">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        <% } %>
+        <% } %>
+      </tbody>
+    </table>
+    <% if (pages > 1) { %>
+    <ul class="pagination justify-content-center float-none">
+      <% if (current == 1) { %>
+      <li class="page-item disabled"><a class="page-link" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Previous</span>
+        </a>
+      </li>
+      <% } else { %>
+      <li class="page-item"><a class="page-link" href="/me/uploads/1">First</a></li>
+      <% } %>
+      <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+      <% if (i !== 1) { %>
+      <li class="page-item disabled"><a class="page-link">...</a></li>
+      <% } %>
+      <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+      <% if (i == current) { %>
+      <li class="page-item active"><a class="page-link"><%= i %></a></li>
+      <% } else { %>
+      <li><a class="page-link" href="/me/uploads/<%= i %>"><%= i %></a></li>
+      <% } %>
+      <% if (i == Number(current) + 4 && i < pages) { %>
+      <li class="page-item disabled"><a class="page-link">...</a></li>
+      <% } %>
+      <% } %>
+      <% if (current == pages) { %>
+      <li class="page-item disabled"><a class="page-link">Last</a></li>
+      <% } else { %>
+      <li class="page-item"><a class="page-link" href="/me/uploads/<%= pages %>">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">Next</span></a></li>
+      <% } %>
+    </ul>
+    <% } %>
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Remove all uploads</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete all of your uploads account, this procedure is irreversible.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <a href="/me/uploads/delete/all" class="btn btn-danger btn-ok">Delete uploads</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<% include ../partials/footer %>

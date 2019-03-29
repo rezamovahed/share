@@ -23,7 +23,7 @@
     font-size: 24px;
 }
 
-.table-title .btn {
+.table-title .btn-custom {
     color: #566787;
     float: right;
     font-size: 13px;
@@ -36,13 +36,13 @@
     margin-left: 10px;
 }
 
-.table-title .btn:hover,
-.table-title .btn:focus {
+.table-title .btn-custom:hover,
+.table-title .btn-custom:focus {
     color: #566787;
     background: #f2f2f2;
 }
 
-.table-title .btn i {
+.table-title .btn-custom i {
     float: left;
     font-size: 21px;
     margin-right: 5px;

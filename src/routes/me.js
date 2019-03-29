@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
-const Key = require('../models/key');
 const gravatar = require('gravatar');
-const validator = require('validator');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const fileExists = require('file-exists');
+const validator = require('validator');
 const md5 = require('js-md5');
+const path = require('path');
+const Key = require('../models/key');
+const User = require('../models/user');
+const Upload = require('../models/upload');
+const middleware = require('../middleware')
 
 /**
  * @route /me
@@ -142,11 +147,140 @@ router.delete('/keys/:key', (req, res) => {
 });
 
 // Here's where the content you upload will be stored.
+const uploadLimitPerPage = 10
+function commandListing(req, res, page) {
+  Upload
+    .find({ 'uploader': { id: req.user._id } })
+    .skip((uploadLimitPerPage * page) - uploadLimitPerPage)
+    .limit(uploadLimitPerPage)
+    .exec((err, uploads) => {
+      Upload.find({ 'uploader': { id: req.user._id } }).countDocuments().exec((err, count) => {
+        res.render('me/uploads', {
+          title: `My Uploads`,
+          uploads,
+          current: page,
+          pages: Math.ceil(count / uploadLimitPerPage),
+          csrfToken: req.csrfToken()
+        });
+      });
+    });
+}
+
 /**
- * @route /me/uploads/i
+ * @route /me/uploads
  * @method GET
  * @description Displays uploaded stuff
  * @access Private
 */
+router.get('/uploads', (req, res) => {
+  let page = 1;
+  commandListing(req, res, page);
+});
+
+router.get('/uploads/:page', (req, res) => {
+  let page = req.params.page || 1;
+  if (page === '0') { return res.redirect('/me/uploads') }
+  commandListing(req, res, page);
+});
+
+/**
+ * @route /me/uploads/id
+ * @method delete
+ * @description Upload a Image
+ * @access Private
+*/
+router.delete('/uploads/:id', (req, res) => {
+  Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
+    let fileType = {};
+    switch (req.query.type) {
+      case ('image'):
+        fileType.image = true
+        break;
+      case ('file'):
+        fileType.file = true
+        break;
+      case ('text'):
+        fileType.text = true
+        break;
+    }
+    const fileName = req.query.name
+    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : fileType.file ? 'f' : 't'}/${fileName}`;
+    console.log(filePath)
+    fs.unlink(filePath, err => {
+      if (err) {
+        req.flash('error', 'Error in deleteing');
+        res.redirect('/me/uploads');
+        return;
+      }
+      req.flash('success', `Deleted ${fileName}`);
+      res.redirect('/me/uploads');
+    })
+  });
+});
+
+/**
+ * @route /me/uploads/delete/all
+ * @method GET
+ * @description Remove all images
+ * @access Private
+*/
+router.get('/uploads/delete/all', (req, res) => {
+  let images = [];
+  let files = [];
+  let texts = [];
+  let error;
+  Upload.find({ 'uploader': { id: req.user._id } }, (err, file) => {
+    file.map(file => {
+      if (file.isImage) {
+        return images.push({
+          fileType: 'image',
+          fileName: file.fileName
+        });
+      }
+      if (file.isFile) {
+        return files.push({
+          fileType: 'file',
+          fileName: file.fileName
+        });
+      }
+      if (file.isText) {
+        return texts.push({
+          fileType: 'text',
+          fileName: file.fileName
+        });
+      }
+    });
+    function deleteByUploadFileType(type, file) {
+      let filePath = `${path.join(__dirname, '../public')}/u/${type ? 'i' : type ? 'f' : 't'}/${file}`;
+      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
+        fs.unlink(filePath, err => {
+          if (err) { return res.status(500) }
+        });
+      })
+    }
+    if (!images && !files && !texts) {
+      req.flash('error', 'You must upload before you can delete.')
+      res.redirect('/me/uploads')
+
+    }
+    if (images) {
+      images.map(image => {
+        deleteByUploadFileType(image.fileType, image.fileName);
+      });
+    }
+    if (files) {
+      files.map(files => {
+        deleteByUploadFileType(files.fileType, files.fileName);
+      });
+    }
+    if (texts) {
+      texts.map(text => {
+        deleteByUploadFileType(text.fileType, text.fileName);
+      });
+    }
+    req.flash('success', 'All your uploads has been deleted.')
+    res.redirect('/me/uploads')
+  });
+});
 
 module.exports = router;
