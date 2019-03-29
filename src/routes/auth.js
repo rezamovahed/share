@@ -66,8 +66,6 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
  * @access Public
 */
 router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
-  console.log(!process.env.SIGNUPS)
-  console.log(req.body.email !== process.env.EMAIL)
   if (!process.env.SIGNUPS) {
     if (req.body.email !== process.env.EMAIL) { return res.redirect('/', 403); }
     res.redirect('/', 403);

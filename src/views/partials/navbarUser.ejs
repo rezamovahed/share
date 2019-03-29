@@ -18,8 +18,12 @@
     <a class="dropdown-item" href="/logout">Logout</a>
   </div>
 </li>
+<% } else if(signups) { %>
+<li class="nav-item">
+  <a class="nav-link" href="/signup">Signup</a>
+</li>
 <% } else { %>
 <li class="nav-item">
-  <a class="nav-link" href="/login">Login/Signup</a>
+  <a class="nav-link" href="/login">Login</a>
 </li>
 <% } %>

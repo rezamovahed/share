@@ -9,9 +9,10 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
+const csrf = require('csurf');
+const rateLimit = require('express-rate-limit');
 const middleware = require('./middleware');
 const User = require('./models/user');
-const csrf = require('csurf');
 
 // Load enviroment variables from .env file
 require('dotenv').config()
@@ -20,7 +21,15 @@ require('dotenv').config()
 const app = express();
 // Set host and port
 app.set('host', process.env.IP || '0.0.0.0');
-app.set('port', process.env.PORT || 1234);
+app.set('port', process.env.PORT || 5050);
+
+// True Proxy
+if (process.env.PROXY) { app.enable("trust proxy") }
+
+const limiter = rateLimit({
+  windowMs: 1000 * 60 * 15, // 15 minutes
+  max: 50
+});
 
 // Load Assets from Public folder
 app.use(express.static(__dirname + '/public'));
@@ -101,6 +110,7 @@ app.use((req, res, next) => {
   res.locals.siteTitle = process.env.TITLE;
   res.locals.footerTitle = process.env.FOOTER_TITLE;
   res.locals.siteWebmasterEmail = process.env.EMAIL;
+  res.locals.signups = process.env.SIGNUPS;
   // Pass flash to locals
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
@@ -133,10 +143,10 @@ const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
 app.use(indexRoutes);
 app.use(authRoutes);
-app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
+app.use('/user', limiter, middleware.isAlreadyLoggedIn, userRoutes);
 app.use('/me', middleware.isLoggedIn, meRoutes);
 app.use('/admin', middleware.isAdmin, adminRoutes);
-app.use('/api', apiRoutes)
+app.use('/api', limiter, apiRoutes)
 
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
