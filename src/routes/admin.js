@@ -3,6 +3,8 @@ const middleware = require('../middleware');
 const router = express.Router();
 const Upload = require('../models/upload');
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * @route /admin
@@ -59,10 +61,9 @@ function usersListingPerPage(req, res, page, model, limit, render, title) {
           pages: Math.ceil(count / limit),
           csrfToken: req.csrfToken(),
         });
-      })
-    })
+      });
+    });
 }
-
 
 /**
  * @route /admin/uploads
@@ -84,6 +85,50 @@ router.get('/uploads/:page', (req, res) => {
   uploaderListingPerPage(req, res, req.params.page, Upload, 10, 'admin/uploads', 'Upload Management')
 });
 
+/**
+ * @route /admin/uploads/:id
+ * @method DELETE
+ * @description Show Admin Dashboard
+ * @access Private
+*/
+router.delete('/uploads/:id', (req, res) => {
+  Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
+    let fileType = {};
+    switch (req.query.type) {
+      case ('image'):
+        fileType.image = true
+        break;
+      case ('file'):
+        fileType.file = true
+        break;
+      case ('text'):
+        fileType.text = true
+        break;
+    }
+    const fileName = req.query.name
+    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : fileType.file ? 'f' : 't'}/${fileName}`;
+    fs.unlink(filePath, err => {
+      if (err) {
+        req.flash('error', 'Error in deleteing');
+        res.redirect('/admin/uploads');
+        return;
+      }
+      req.flash('success', `Deleted ${fileName}`);
+      res.redirect('/admin/uploads');
+    })
+  });
+});
+
+
+/**
+ * @route /admin/uploads/delete/all
+ * @method GET
+ * @description Show Admin Dashboard
+ * @access Private
+*/
+// router.get('/uploads/delete/all', (req, res) => {
+//   uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Upload Management')
+// });
 
 /**
  * @route /admin/users
@@ -92,9 +137,17 @@ router.get('/uploads/:page', (req, res) => {
  * @access Private
 */
 router.get('/users', (req, res) => {
-  res.render('admin/users', {
-    title: 'User Management'
-  });
+  usersListingPerPage(req, res, 1, User, 10, 'admin/users/index', 'User Management')
+});
+
+/**
+ * @route /admin/users/:page
+ * @method GET
+ * @description Show Admin Dashboard
+ * @access Private
+*/
+router.get('/users', (req, res) => {
+  usersListingPerPage(req, res, req.params.page, User, 10, 'admin/users/index', 'User Management')
 });
 
 module.exports = router;

@@ -1,5 +1,6 @@
 var middlewareObj = {};
 const User = require('../models/user');
+const Upload = require('../models/upload');
 const Key = require('../models/key');
 const md5 = require('js-md5');
 

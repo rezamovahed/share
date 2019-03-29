@@ -187,6 +187,7 @@ router.get('/uploads/:page', (req, res) => {
  * @route /me/uploads/id
  * @method delete
  * @description Upload a Image
+ * @param type name
  * @access Private
 */
 router.delete('/uploads/:id', (req, res) => {
