@@ -110,11 +110,11 @@ router.delete('/uploads/:id', (req, res) => {
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');
-        res.redirect('/admin/uploads');
+        res.redirect('back');
         return;
       }
       req.flash('success', `Deleted ${fileName}`);
-      res.redirect('/admin/uploads');
+      res.redirect('back');
     })
   });
 });
