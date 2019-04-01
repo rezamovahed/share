@@ -16,7 +16,7 @@
     "web": "node src/index.js",
     "dev-web": "nodemon src/index.js",
     "scss": "sass --watch src/scss:src/public/css --style compressed",
-    "dev": "concurrently -n \"Web,SASS\" \"npm run dev-web\" \"npm run scss\""
+    "dev": "concurrently -n \"Web,Scss\" \"npm run dev-web\" \"npm run scss\""
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
   "dependencies": {
     "async": "^2.6.2",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "connect-mongo": "^2.0.3",
     "consola": "^2.5.7",
     "cookie-parser": "^1.4.4",

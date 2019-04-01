@@ -110,25 +110,33 @@ router.delete('/uploads/:id', (req, res) => {
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');
-        res.redirect('/admin/uploads');
+        res.redirect('back');
         return;
       }
       req.flash('success', `Deleted ${fileName}`);
-      res.redirect('/admin/uploads');
+      res.redirect('back');
     })
   });
 });
 
-
 /**
- * @route /admin/uploads/delete/all
+ * @route /admin/gallery
  * @method GET
- * @description Show Admin Dashboard
+ * @description Admin image gallery
  * @access Private
 */
-// router.get('/uploads/delete/all', (req, res) => {
-//   uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Upload Management')
-// });
+router.get('/gallery', (req, res) => {
+  Upload
+    .find({ 'isImage': true })
+    .exec((err, gallery) => {
+      console.log(gallery)
+      res.render('admin/gallery', {
+        title: 'Image Gallery',
+        gallery,
+        csrfToken: req.csrfToken()
+      });
+    })
+});
 
 /**
  * @route /admin/users

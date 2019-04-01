@@ -145,7 +145,7 @@ app.use(indexRoutes);
 app.use(authRoutes);
 app.use('/user', limiter, middleware.isAlreadyLoggedIn, userRoutes);
 app.use('/me', middleware.isLoggedIn, meRoutes);
-app.use('/admin', middleware.isAdmin, adminRoutes);
+app.use('/admin', middleware.isLoggedIn, middleware.isAdmin, adminRoutes);
 app.use('/api', limiter, apiRoutes)
 
 app.use(function (err, req, res, next) {
