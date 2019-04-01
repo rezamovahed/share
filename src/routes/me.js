@@ -150,7 +150,7 @@ router.delete('/keys/:key', (req, res) => {
 const uploadLimitPerPage = 10
 function commandListing(req, res, page) {
   Upload
-    .find({ 'uploader':  req.user._id })
+    .find({ 'uploader': req.user._id })
     .skip((uploadLimitPerPage * page) - uploadLimitPerPage)
     .limit(uploadLimitPerPage)
     .exec((err, uploads) => {
@@ -209,11 +209,11 @@ router.delete('/uploads/:id', (req, res) => {
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');
-        res.redirect('/me/uploads');
+        res.redirect('back');
         return;
       }
       req.flash('success', `Deleted ${fileName}`);
-      res.redirect('/me/uploads');
+      res.redirect('back');
     })
   });
 });
@@ -226,6 +226,26 @@ function deleteByUploadFileType(type, file) {
     });
   });
 }
+
+/**
+ * @route /me/gallery
+ * @method GET
+ * @description Displays images in a gallery fomate
+ * @access Private
+*/
+router.get('/gallery', (req, res) => {
+  Upload
+    .find({ 'uploader': req.user._id, 'isImage': true })
+    .exec((err, gallery) => {
+      console.log(gallery)
+      res.render('me/gallery', {
+        title: 'Image Gallery',
+        gallery,
+        csrfToken: req.csrfToken()
+      });
+    })
+
+});
 
 /**
  * @route /me/delete

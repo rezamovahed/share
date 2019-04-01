@@ -1,0 +1,26 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the gallery component
+// -----------------------------------------------------------------------------
+.gallery {
+    margin: 1.1em;
+    img {
+        padding: 25px;
+    }
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+        background-color: #0916344a;
+        transition-duration: 200ms;
+
+        .btn {
+            opacity: 1;
+        }
+    }
+    .btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 0.75em;
+        opacity: 0;
+    }
+}

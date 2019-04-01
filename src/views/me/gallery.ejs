@@ -1,0 +1,42 @@
+<% include ../partials/header %>
+<% include ../partials/navbar %>
+<div class="container">
+  <div class="display-4 pt-2 pb-2 text-center">Your image gallery</div>
+</div>
+<div class="container">
+  <% if (success && success.length > 0){ %>
+  <div class="container">
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+  </div>
+  <% } %>
+  <% if (error && error.length > 0){ %>
+  <div class="container">
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+  </div>
+  <% } %>
+</div>
+<div class="container">
+  <% if(gallery.length > 0) { %>
+  <% gallery.map((image, index) =>{ %>
+  <%- index % 6 == 0 ? "<div class='row'>" : "" %>
+  <div class="col-md-2 col-xs-12 gallery">
+    <img class="img-thumbnail" src="/u/i/<%= image.fileName %>">
+    <form action="/me/uploads/<%= image.id %>?_method=DELETE&type=image&name=<%= image.fileName %>" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <button class="btn btn-danger position-absolute" title="Delete" data-toggle="tooltip">
+        <i class="fas fa-trash"></i>
+      </button>
+    </form>
+  </div>
+  <%- index % 6 == 5 ? "</div>" : "" %>
+  <% }) %>
+</div>
+<% } else { %>
+<p class="font-weight-bold  text-center">No images found</p>
+<% } %>
+</div>
+<% include ../partials/footer %>
