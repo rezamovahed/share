@@ -236,8 +236,6 @@ router.get('/users/:id', (req, res) => {
  * @access Private
 */
 router.put('/users/:id', (req, res) => {
-  console.log(req.body)
-  let error = {};
   const id = req.params.id;
   const username = req.body.username;
   const email = req.body.email.toLowerCase();
@@ -249,6 +247,7 @@ router.put('/users/:id', (req, res) => {
     r: 'x',
     d: 'retro'
   }, true);
+  let error = {};
 
   // Check if empty
   // Username
@@ -259,22 +258,31 @@ router.put('/users/:id', (req, res) => {
   if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
 
   // Password
-  if (password) {
-    if (!validator.isLength(password, {
-      minimum: 8
-    })) {
-      error.password = 'Password must be at least 8 characters long. '
-    }
+  if (password && validator.isLength(password, {
+    minimum: 8
+  })) {
+    error.password = 'Password must be at least 8 characters long.'
   }
-  let updatedUser = {
-    username,
-    email,
-    accountActivated,
-    isAdmin,
-    avatar
-  }
+
   if (JSON.stringify(error) === '{}') {
+    let updatedUser = {
+      username,
+      email,
+      accountActivated,
+      isAdmin,
+      avatar
+    }
     User.findByIdAndUpdate(id, updatedUser, (err, user) => {
+
+      if (err) {
+        if (err.code === 11000) {
+          error.username = 'Username may be already in use.'
+          error.email = 'EMail may be already in use.'
+        }
+        req.flash('error', error);
+        res.redirect(`/admin/users/${id}`);
+        return;
+      }
       if (password) {
         user.setPassword(password, (err, newPassword) => {
         });
@@ -282,9 +290,12 @@ router.put('/users/:id', (req, res) => {
       // Add user password change.
       req.flash('success', 'User has been updated');
       res.redirect('/admin/users');
+      return;
     });
-  };
-
+  } else {
+    req.flash('error', error);
+    res.redirect(`/admin/users/${id}`);
+  }
 });
 
 /**
