@@ -138,6 +138,7 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
   let rawToken = token.split(" ").slice(1).toString();
   let decoded = jwt.decode(rawToken, { complete: true });
   let auth = decoded.payload.sub;
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
   if (!req.files) {
     res.status(400).json({
       success: false,
@@ -174,8 +175,8 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
       res.json({
         success: true,
         file: {
-          url: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/u/i/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=image`
+          url: `${fullUrl}/u/i/${newFileName}`,
+          delete: `${fullUrl}/api/delete?fileName=${newFileName}&key=${key}&fileType=image`
         }
       });
     });
@@ -200,6 +201,7 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
   let rawToken = token.split(" ").slice(1).toString();
   let decoded = jwt.decode(rawToken, { complete: true });
   let auth = decoded.payload.sub;
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
   if (!req.files) {
     res.status(400).json({
       success: false,
@@ -236,8 +238,8 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
       res.json({
         success: true,
         file: {
-          url: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/u/f/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=file`
+          url: `${fullUrl}/u/f/${newFileName}`,
+          delete: `${fullUrl}/api/delete?fileName=${newFileName}&key=${key}&fileType=file`
         }
       });
     });
@@ -262,6 +264,7 @@ router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
   let rawToken = token.split(" ").slice(1).toString();
   let decoded = jwt.decode(rawToken, { complete: true });
   let auth = decoded.payload.sub;
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
   if (!req.files) {
     res.status(400).json({
       success: false,
@@ -298,8 +301,8 @@ router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
       res.json({
         success: true,
         file: {
-          url: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/u/t/${newFileName}`,
-          delete: `${process.env.URL || `http://localhost:${process.env.PORT || 5050}`}/api/delete?fileName=${newFileName}&key=${key}&fileType=text`
+          url: `${fullUrl}/u/t/${newFileName}`,
+          delete: `${fullUrl}/api/delete?fileName=${newFileName}&key=${key}&fileType=text`
         }
       });
     });
