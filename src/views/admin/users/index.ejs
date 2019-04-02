@@ -71,7 +71,7 @@
             <%= moment(users[i].createdAt).format('MMM Do YYYY hh:mm A') %>
           </td>
           <td>
-            <a href="/admin/users/<%= users[i].name%>/edit" class="edit" title="Edit" data-toggle="tooltip">
+            <a href="/admin/users/<%= users[i].id %>" class="edit" title="Edit" data-toggle="tooltip">
               <i class="fas fa-edit"></i>
             </a>
 
