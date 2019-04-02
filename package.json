@@ -1,6 +1,6 @@
 {
   "name": "share-mrdemonwolf-me",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This a simple ShareX server so I can upload images,files, and text files on my own domain/server. This can be used for anyone but its not supported as much.",
   "keywords": [
     "sharex",
@@ -44,6 +44,7 @@
     "express-rate-limit": "^3.4.0",
     "express-session": "^1.15.6",
     "file-exists": "^5.0.1",
+    "generate-password": "^1.4.1",
     "gravatar": "^1.8.0",
     "js-md5": "^0.7.3",
     "jsonwebtoken": "^8.5.1",

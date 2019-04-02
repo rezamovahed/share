@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*!
  * Bootstrap-select v1.13.2 (https://developer.snapappointments.com/bootstrap-select)
  *
@@ -5,6 +6,15 @@
  * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
  */
 
+=======
+/*!
+ * Bootstrap-select v1.13.2 (https://developer.snapappointments.com/bootstrap-select)
+ *
+ * Copyright 2012-2018 SnapAppointments, LLC
+ * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
+ */
+
+>>>>>>> master
 select.bs-select-hidden,
 .bootstrap-select > select.bs-select-hidden,
 select.selectpicker {
