@@ -3,8 +3,12 @@ const middleware = require('../middleware');
 const router = express.Router();
 const Upload = require('../models/upload');
 const User = require('../models/user');
+const Key = require('../models/key');
 const fs = require('fs');
 const path = require('path');
+const password = require('generate-password');
+const gravatar = require('gravatar');
+const validator = require('validator')
 
 /**
  * @route /admin
@@ -119,6 +123,67 @@ router.delete('/uploads/:id', (req, res) => {
   });
 });
 
+function deleteByUploadFileType(type, file) {
+  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
+  Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
+    fs.unlink(filePath, err => {
+      if (err) { return res.status(500) }
+    });
+  });
+}
+
+/**
+ * @route /admin/uploads/delete/all
+ * @method GET
+ * @description Delete Account
+ * @access Private
+*/
+router.get('/uploads/delete/all', (req, res) => {
+  let images = [];
+  let files = [];
+  let texts = [];
+  let error;
+  Upload.find({}, (err, file) => {
+    file.map(file => {
+      if (file.isImage) {
+        return images.push({
+          fileType: 'image',
+          fileName: file.fileName
+        });
+      }
+      if (file.isFile) {
+        return files.push({
+          fileType: 'file',
+          fileName: file.fileName
+        });
+      }
+      if (file.isText) {
+        return texts.push({
+          fileType: 'text',
+          fileName: file.fileName
+        });
+      }
+    });
+    if (images) {
+      images.map(image => {
+        deleteByUploadFileType(image.fileType, image.fileName);
+      });
+    }
+    if (files) {
+      files.map(file => {
+        deleteByUploadFileType(file.fileType, file.fileName);
+      });
+    }
+    if (texts) {
+      texts.map(text => {
+        deleteByUploadFileType(text.fileType, text.fileName);
+      });
+    }
+  });
+  res.redirect('back')
+});
+
+
 /**
  * @route /admin/gallery
  * @method GET
@@ -139,6 +204,161 @@ router.get('/gallery', (req, res) => {
 });
 
 /**
+ * @route /admin/users/NEW
+ * @method GET
+ * @description Shows create user
+ * @access Private
+*/
+router.get('/users/new', (req, res) => {
+  let generatePassword = password.generate({
+    length: 10,
+    numbers: true
+  });
+  res.render('admin/users/new', {
+    title: 'Create new user',
+    csrfToken: req.csrfToken(),
+    password: generatePassword,
+  });
+});
+
+/**
+ * @route /admin/users/:id
+ * @method DELETE
+ * @description Shows create user
+ * @access Private
+*/
+router.delete('/users/:id', (req, res) => {
+  if (req.user.id === req.params.id) {
+    req.flash('error', "You can't remove your own user")
+    res.redirect('back')
+    return;
+  }
+  let images = [];
+  let files = [];
+  let texts = [];
+  let error;
+  Upload.find({ 'uploader': req.params.id }, (err, file) => {
+    file.map(file => {
+      if (file.isImage) {
+        return images.push({
+          fileType: 'image',
+          fileName: file.fileName
+        });
+      }
+      if (file.isFile) {
+        return files.push({
+          fileType: 'file',
+          fileName: file.fileName
+        });
+      }
+      if (file.isText) {
+        return texts.push({
+          fileType: 'text',
+          fileName: file.fileName
+        });
+      }
+    });
+    if (images) {
+      images.map(image => {
+        deleteByUploadFileType(image.fileType, image.fileName);
+      });
+    }
+    if (files) {
+      files.map(file => {
+        deleteByUploadFileType(file.fileType, file.fileName);
+      });
+    }
+    if (texts) {
+      texts.map(text => {
+        deleteByUploadFileType(text.fileType, text.fileName);
+      });
+    }
+  });
+  Key.find({ 'user': { id: req.params.id } }, (err, keys) => {
+    keys.map(key => {
+      Key.findByIdAndDelete(key.id, (err, removedKey) => {
+      });
+    });
+  });
+  User.findByIdAndDelete(req.params.id, (err, removedUser) => {
+    req.flash('success', `${removedUser.username} has been removed.`)
+    res.redirect('back')
+  });
+});
+
+
+/**
+ * @route /admin/users/new
+ * @method POST
+ * @description Shows create user
+ * @access Private
+*/
+router.post('/users/new', (req, res) => {
+  console.log(req.body)
+  let error = {};
+  const username = req.body.username;
+  const email = req.body.email.toLowerCase();
+  const password = req.body.password;
+  const avatar = gravatar.url(req.body.email, {
+    s: '100',
+    r: 'x',
+    d: 'retro'
+  }, true);
+
+  // Check if empty
+  // Username
+  if (!username) { error.username = 'Please enter your username.' }
+  // Email
+  if (!email) { error.email = 'Please enter your email.' }
+  // Password
+  if (!password) { error.password = 'Must have a pssword' }
+
+  // Check if email is vaid
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
+  // Check if passoword and comfirm password are the same.
+  // Check password length
+  if (!validator.isLength(password, {
+    minimum: 8
+  })) {
+    error.password = 'Password must be at least 8 characters long. '
+  }
+  if (JSON.stringify(error) === '{}') {
+    let newUser = {
+      username,
+      email,
+      avatar,
+    }
+    if (req.body.activate) { newUser.accountActivated = true }
+    if (req.body.admin) { newUser.isAdmin = true }
+    User.register(newUser, password, (err, user) => {
+      if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
+      if (JSON.stringify(error) !== '{}') {
+        req.flash('error', error);
+        res.render('admin/users/new', {
+          title: 'Create new user',
+          username,
+          email: email,
+          password: password,
+          csrfToken: req.csrfToken()
+        });
+        return;
+      }
+      req.flash('success', `${username} has been created`)
+      res.redirect('/admin/users')
+    })
+  } else {
+    req.flash('error', error)
+    res.render('admin/users/new', {
+      title: 'Create new user',
+      username: username,
+      email: email,
+      password: password,
+      csrfToken: req.csrfToken()
+    });
+  }
+});
+
+/**
  * @route /admin/users
  * @method GET
  * @description Show Admin Dashboard
@@ -154,7 +374,7 @@ router.get('/users', (req, res) => {
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/users', (req, res) => {
+router.get('/users/:pages', (req, res) => {
   usersListingPerPage(req, res, req.params.page, User, 10, 'admin/users/index', 'User Management')
 });
 
