@@ -55,7 +55,7 @@ router.put('/', (req, res) => {
   if (newPassword) {
     if (!newPassword) { error.newPassword = 'Must have a password' }
     if (!confirmNewPassword) { error.confirmNewPassword = 'Must comfirm password' }
-    if (!validator.isLength(newPassword, {
+    if (validator.isLength(newPassword, {
       minimum: 8
     })) {
       error.password = 'Password must be at least 8 characters long. '

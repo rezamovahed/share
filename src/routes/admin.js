@@ -204,7 +204,102 @@ router.get('/gallery', (req, res) => {
 });
 
 /**
- * @route /admin/users/NEW
+ * @route /admin/users/:id
+ * @method GET
+ * @description Shows a edit form for the user
+ * @access Private
+*/
+router.get('/users/:id', (req, res) => {
+  let id = req.params.id;
+  User.findById(id, (err, user) => {
+    let username = user.username;
+    let email = user.email;
+    let accountActivated = user.accountActivated;
+    let isAdmin = user.isAdmin;
+    // Add user password change.
+    res.render('admin/users/edit', {
+      title: `Edit ${username}`,
+      csrfToken: req.csrfToken(),
+      username,
+      email,
+      accountActivated,
+      isAdmin,
+      id
+    });
+  });
+});
+
+/**
+ * @route /admin/users/:id
+ * @method PUT
+ * @description Shows a edit form for the user
+ * @access Private
+*/
+router.put('/users/:id', (req, res) => {
+  const id = req.params.id;
+  const username = req.body.username;
+  const email = req.body.email.toLowerCase();
+  const password = req.body.password;
+  const accountActivated = req.body.activate;
+  const isAdmin = req.body.admin;
+  const avatar = gravatar.url(req.body.email, {
+    s: '100',
+    r: 'x',
+    d: 'retro'
+  }, true);
+  let error = {};
+
+  // Check if empty
+  // Username
+  if (!username) { error.username = 'Please enter your username.' }
+  // Email
+  // Check if email is vaid
+  if (!email) { error.email = 'Please enter your email.' }
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
+
+  // Password
+  if (password && validator.isLength(password, {
+    minimum: 8
+  })) {
+    error.password = 'Password must be at least 8 characters long.'
+  }
+
+  if (JSON.stringify(error) === '{}') {
+    let updatedUser = {
+      username,
+      email,
+      accountActivated,
+      isAdmin,
+      avatar
+    }
+    User.findByIdAndUpdate(id, updatedUser, (err, user) => {
+
+      if (err) {
+        if (err.code === 11000) {
+          error.username = 'Username may be already in use.'
+          error.email = 'EMail may be already in use.'
+        }
+        req.flash('error', error);
+        res.redirect(`/admin/users/${id}`);
+        return;
+      }
+      if (password) {
+        user.setPassword(password, (err, newPassword) => {
+        });
+      };
+      // Add user password change.
+      req.flash('success', 'User has been updated');
+      res.redirect('/admin/users');
+      return;
+    });
+  } else {
+    req.flash('error', error);
+    res.redirect(`/admin/users/${id}`);
+  }
+});
+
+/**
+ * @route /admin/users/new
  * @method GET
  * @description Shows create user
  * @access Private

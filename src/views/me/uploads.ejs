@@ -52,7 +52,7 @@
         <tr>
           <td>
             <a
-              href="/u/<%- uploads[i].isImage ? 'i' : uploads[i].isFile ? 'f' : 't' %>/<%= uploads[i].fileName %>"><%= uploads[i].fileName %></a>
+              href="/view/<%- uploads[i].isImage ? 'i' : uploads[i].isFile ? 'f' : 't' %>/<%= uploads[i].fileName %>"><%= uploads[i].fileName %></a>
           </td>
           <td>
             <%- uploads[i].isImage ? 'Image' : uploads[i].isFile ? 'File' : 'Text' %>

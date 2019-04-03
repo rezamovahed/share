@@ -114,7 +114,10 @@ app.use((req, res, next) => {
   res.locals.siteTitle = process.env.TITLE;
   res.locals.footerTitle = process.env.FOOTER_TITLE;
   res.locals.siteWebmasterEmail = process.env.EMAIL;
+  res.locals.siteDesc = process.env.DESC;
+  res.locals.sitePowered = `ShareX uploader Powered by ${process.env.TITLE}`;
   res.locals.signups = process.env.SIGNUPS;
+
   // Pass flash to locals
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
@@ -142,12 +145,18 @@ app.use(function (req, res, next) {
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const viewImagesRoutes = require('./routes/view/image');
+// const viewFilesRoutes = require('./routes/view/file');
+// const viewTextsRoutes = require('./routes/view/text');
 const meRoutes = require('./routes/me');
 const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
 app.use(indexRoutes);
 app.use(authRoutes);
 app.use('/user', limiter, middleware.isAlreadyLoggedIn, userRoutes);
+app.use('/view/i', limiter, viewImagesRoutes);
+// app.use('/view/f', limiter, viewFilesRoutes);
+// app.use('/view/t', limiter, viewTextsRoutes);
 app.use('/me', middleware.isLoggedIn, meRoutes);
 app.use('/admin', middleware.isLoggedIn, middleware.isAdmin, adminRoutes);
 app.use('/api', limiter, apiRoutes)
