@@ -237,7 +237,6 @@ router.get('/gallery', (req, res) => {
   Upload
     .find({ 'uploader': req.user._id, 'isImage': true })
     .exec((err, gallery) => {
-      console.log(gallery)
       res.render('me/gallery', {
         title: 'Image Gallery',
         gallery,

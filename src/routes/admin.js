@@ -194,7 +194,6 @@ router.get('/gallery', (req, res) => {
   Upload
     .find({ 'isImage': true })
     .exec((err, gallery) => {
-      console.log(gallery)
       res.render('admin/gallery', {
         title: 'Image Gallery',
         gallery,
@@ -389,7 +388,6 @@ router.delete('/users/:id', (req, res) => {
  * @access Private
 */
 router.post('/users/new', (req, res) => {
-  console.log(req.body)
   let error = {};
   const username = req.body.username;
   const email = req.body.email.toLowerCase();

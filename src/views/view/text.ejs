@@ -1,0 +1,38 @@
+<% include ../partials/header %>
+<% include ../partials/image_meta %>
+<% include ../partials/navbar %>
+
+<div class="container w-75 pt-5 view_images text-center">
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item"
+      src="/u/t/<%= file.name %>" allowfullscreen></iframe>
+  </div>
+</div>
+<div class="container w-75 fixed-bottom pb-5 mb-5">
+  <div class="row">
+    <div class="col-md-6">
+      File Type: <strong><%= file.fileType %></strong>
+    </div>
+    <div class="col-md-6">
+      Uploaded: <i><%=  moment(file.createdAt).format('MMM Do YYYY hh:mm A') %></i>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      File Size: <strong><%= file.size %></strong>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-primary text-white | float-right"
+        href="/u/t/<%= file.name %>" target="_blank"
+        role="button">View File</a>
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-primary text-white"
+        href="/u/t/<%= file.name %>" download="<%= file.name %>"
+        role="button">Download File</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<% include ../partials/footer %>
