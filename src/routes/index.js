@@ -9,7 +9,7 @@ const middleware = require('../middleware')
  * @access Public
 */
 router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
-  res.status(403).render('index')
+  res.render('index')
 });
 
 module.exports = router;
