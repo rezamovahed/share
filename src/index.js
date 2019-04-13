@@ -66,12 +66,8 @@ let sess = {
 }
 
 if (app.get('env') === 'production') {
-  sess.cookie.proxy = true // serve secure cookies
-  sess.cookie.secure = true // serve secure cookies
-}
-
-if (app.get('env') === 'production') {
   app.set('trust proxy', 1)
+  sess.cookie.secure = true // serve secure cookies
 }
 
 // Session store
