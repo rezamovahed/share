@@ -49,11 +49,11 @@ Once done we move on the next step.
 
 #### Here's the sharex config templates for you
 
-[Image Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/template/File.sxcu)
+[Image Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/File.sxcu)
 
-[File Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/template/Image.sxcu)
+[File Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/Image.sxcu)
 
-[Text Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/template/Text.sxcu)
+[Text Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/Text.sxcu)
 
 Just edit the domain to fit your needs and imput into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
 After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
