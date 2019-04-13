@@ -45,7 +45,6 @@ function uploaderListingPerPage(req, res, page, model, limit, render, title) {
           data,
           current: page,
           pages: Math.ceil(count / limit),
-          csrfToken: req.csrfToken(),
         });
       })
     })
@@ -62,8 +61,7 @@ function usersListingPerPage(req, res, page, model, limit, render, title) {
           title,
           data,
           current: page,
-          pages: Math.ceil(count / limit),
-          csrfToken: req.csrfToken(),
+          pages: Math.ceil(count / limit)
         });
       });
     });
@@ -197,7 +195,6 @@ router.get('/gallery', (req, res) => {
       res.render('admin/gallery', {
         title: 'Image Gallery',
         gallery,
-        csrfToken: req.csrfToken()
       });
     })
 });
@@ -218,7 +215,6 @@ router.get('/users/:id', (req, res) => {
     // Add user password change.
     res.render('admin/users/edit', {
       title: `Edit ${username}`,
-      csrfToken: req.csrfToken(),
       username,
       email,
       accountActivated,
@@ -310,7 +306,6 @@ router.get('/users/new', (req, res) => {
   });
   res.render('admin/users/new', {
     title: 'Create new user',
-    csrfToken: req.csrfToken(),
     password: generatePassword,
   });
 });
@@ -432,7 +427,7 @@ router.post('/users/new', (req, res) => {
           username,
           email: email,
           password: password,
-          csrfToken: req.csrfToken()
+
         });
         return;
       }
@@ -446,7 +441,7 @@ router.post('/users/new', (req, res) => {
       username: username,
       email: email,
       password: password,
-      csrfToken: req.csrfToken()
+
     });
   }
 });

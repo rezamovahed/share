@@ -17,8 +17,7 @@ const router = express.Router();
 */
 router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
   res.render('auth/login', {
-    title: 'Login',
-    csrfToken: req.csrfToken()
+    title: 'Login'
   });
 });
 
@@ -54,8 +53,7 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   res.render("auth/signup", {
     title: "Signup",
     username: null,
-    email: null,
-    csrfToken: req.csrfToken()
+    email: null
   });
 });
 

@@ -16,7 +16,7 @@ const nodemailerSendGrid = require('../config/sendgrid.js');
 router.get('/activate/resend', (req, res) => {
   res.render('user/activate/resend', {
     title: 'Resend Account Activation',
-    csrfToken: req.csrfToken()
+
   });
 });
 
@@ -188,7 +188,7 @@ router.get('/delete/:token', (req, res) => {
 router.get('/forgot', (req, res) => {
   res.render('user/forgot/index', {
     title: 'Forgot Password',
-    csrfToken: req.csrfToken()
+
   });
 });
 
@@ -289,7 +289,7 @@ router.get('/forgot/reset/:token', (req, res) => {
     res.render('user/forgot/reset', {
       title: "Reset Password",
       token: req.params.token,
-      csrfToken: req.csrfToken()
+
     });
   });
 });

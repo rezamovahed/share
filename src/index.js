@@ -126,22 +126,21 @@ app.use((req, res, next) => {
   res.locals.host = req.headers.host;
   res.locals.currentYear = new Date().getFullYear();
   next();
-});
+});;
 
 // Disables the powered by so it does not show express
 app.disable('x-powered-by');
 
-const csrfExclusion = ['/api/upload', '/api/upload/image', '/api/upload/text', '/api/upload/file'];
+const apiRoutes = require('./routes/api');
 
-app.use(function (req, res, next) {
-  if (csrfExclusion.indexOf(req.path) !== -1) {
-    next();
-  }
-  else {
-    csrf()(req, res, next);
-  }
-});
+app.use('/api', limiter, apiRoutes)
 
+const csrfMiddleware = csrf()
+let csrfLocals = (req, res, next) => {
+  // Csrf
+  res.locals.csrfToken = req.csrfToken() || null;
+  next()
+}
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
@@ -150,23 +149,22 @@ const viewFilesRoutes = require('./routes/view/file');
 const viewTextsRoutes = require('./routes/view/text');
 const meRoutes = require('./routes/me');
 const adminRoutes = require('./routes/admin');
-const apiRoutes = require('./routes/api');
-app.use(indexRoutes);
-app.use(authRoutes);
-app.use('/user', limiter, middleware.isAlreadyLoggedIn, userRoutes);
-app.use('/view/i', limiter, viewImagesRoutes);
-app.use('/view/f', limiter, viewFilesRoutes);
-app.use('/view/t', limiter, viewTextsRoutes);
-app.use('/me', middleware.isLoggedIn, meRoutes);
-app.use('/admin', middleware.isLoggedIn, middleware.isAdmin, adminRoutes);
-app.use('/api', limiter, apiRoutes)
+
+app.use(csrfMiddleware, csrfLocals, indexRoutes);
+app.use(csrfMiddleware, csrfLocals, authRoutes);
+app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, userRoutes);
+app.use('/view/i', csrfMiddleware, csrfLocals, limiter, viewImagesRoutes);
+app.use('/view/f', csrfMiddleware, csrfLocals, limiter, viewFilesRoutes);
+app.use('/view/t', csrfMiddleware, csrfLocals, limiter, viewTextsRoutes);
+app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, meRoutes);
+app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isAdmin, adminRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
   // handle CSRF token errors here
   res.status(403)
   res.json({
-    message: 'NO CSRF TOKEN',
+    message: 'Error in CSRF Token',
     error: {}
   });
 });
@@ -220,3 +218,9 @@ process.on('SIGINT', function () {
     process.exit(0);
   });
 });
+
+const used = process.memoryUsage().heapUsed / 1024 / 1024;
+setInterval(() => {
+  console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
+
+}, 1)
