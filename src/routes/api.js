@@ -12,7 +12,6 @@ const jwt = require('jsonwebtoken');
 const fileExtensionCheck = require('../config/extensions')
 const fileMinetypeCheck = require('../config/mineTypes')
 const Upload = require('../models/upload');
-const protocol = (process.env.NODE_ENV === 'production') ? 'https' : 'http'
 
 router.use(fileUpload({
   safeFileNames: true,
@@ -139,7 +138,7 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
   let rawToken = token.split(" ").slice(1).toString();
   let decoded = jwt.decode(rawToken, { complete: true });
   let auth = decoded.payload.sub;
-  let fullUrl = protocol + '://' + req.get('host')
+  let fullUrl = req.protocol + '://' + req.get('host')
   if (!req.files) {
     res.status(400).json({
       success: false,
@@ -202,7 +201,7 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
   let rawToken = token.split(" ").slice(1).toString();
   let decoded = jwt.decode(rawToken, { complete: true });
   let auth = decoded.payload.sub;
-  let fullUrl = protocol + '://' + req.get('host')
+  let fullUrl = req.protocol + '://' + req.get('host')
   if (!req.files) {
     res.status(400).json({
       success: false,
@@ -265,7 +264,7 @@ router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
   let rawToken = token.split(" ").slice(1).toString();
   let decoded = jwt.decode(rawToken, { complete: true });
   let auth = decoded.payload.sub;
-  let fullUrl = protocol + '://' + req.get('host')
+  let fullUrl = req.protocol + '://' + req.get('host')
   if (!req.files) {
     res.status(400).json({
       success: false,
