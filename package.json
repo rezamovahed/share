@@ -13,7 +13,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "web": "node src/index.js",
+    "start": "node src/index.js",
     "dev-web": "nodemon src/index.js",
     "scss": "sass --watch src/scss:src/public/css --style compressed",
     "dev": "concurrently -n \"Web,Scss\" \"npm run dev-web\" \"npm run scss\""
