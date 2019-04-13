@@ -55,7 +55,9 @@ let sess = {
   saveUninitialized: false,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    maxAge: 120960000
+    maxAge: 120960000,
+    httpOnly: true
+
   }, // Two weeks in milliseconds
   name: process.env.COOKIE_NAME,
   store: new MongoStore({

@@ -13,7 +13,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "web": "node src/index.js",
+    "start": "node src/index.js",
     "dev-web": "nodemon src/index.js",
     "scss": "sass --watch src/scss:src/public/css --style compressed",
     "dev": "concurrently -n \"Web,Scss\" \"npm run dev-web\" \"npm run scss\""
@@ -34,7 +34,6 @@
     "concurrently": "^4.1.0",
     "connect-mongo": "^2.0.3",
     "consola": "^2.5.7",
-    "cookie-parser": "^1.4.4",
     "csurf": "^1.9.0",
     "dotenv": "^7.0.0",
     "ejs": "^2.6.1",
