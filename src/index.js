@@ -218,9 +218,3 @@ process.on('SIGINT', function () {
     process.exit(0);
   });
 });
-
-const used = process.memoryUsage().heapUsed / 1024 / 1024;
-setInterval(() => {
-  console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
-
-}, 1)
