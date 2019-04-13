@@ -21,7 +21,7 @@ const middleware = require('../middleware')
 router.get('/', (req, res) => {
   res.render('me/index', {
     title: 'Edit account',
-    csrfToken: req.csrfToken()
+
   });
 });
 
@@ -103,7 +103,7 @@ router.get('/keys', (req, res) => {
     res.render('me/keys', {
       title: 'My Keys',
       keys,
-      csrfToken: req.csrfToken()
+
     });
 
   });
@@ -160,7 +160,7 @@ function commandListing(req, res, page) {
           uploads,
           current: page,
           pages: Math.ceil(count / uploadLimitPerPage),
-          csrfToken: req.csrfToken()
+
         });
       });
     });
@@ -240,7 +240,7 @@ router.get('/gallery', (req, res) => {
       res.render('me/gallery', {
         title: 'Image Gallery',
         gallery,
-        csrfToken: req.csrfToken()
+
       });
     })
 
