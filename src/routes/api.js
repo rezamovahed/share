@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken');
 const fileExtensionCheck = require('../config/extensions')
 const fileMinetypeCheck = require('../config/mineTypes')
 const Upload = require('../models/upload');
-const protocol = (process.env.NODE_ENV === production) ? 'https' : 'http'
+const protocol = (process.env.NODE_ENV === 'production') ? 'https' : 'http'
 
 router.use(fileUpload({
   safeFileNames: true,
