@@ -4,7 +4,6 @@ const passport = require('passport');
 const logger = require('morgan');
 const consola = require('consola');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
@@ -101,9 +100,6 @@ app.use(flash());
 app.use(bodyParser.urlencoded({
   extended: true
 }))
-
-// Cookie Parser
-app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Express Locals
 app.use((req, res, next) => {
