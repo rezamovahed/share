@@ -23,7 +23,7 @@
   <% if(gallery.length > 0) { %>
   <% gallery.map((image, index) =>{ %>
   <%- index % 6 == 0 ? "<div class='row'>" : "" %>
-  <div class="col-md-2 col-xs-12 gallery">
+  <div class="col-md-3 col-xs-12 gallery">
     <a href="/view/i/<%= image.fileName %>">
       <img class="img-thumbnail" src="/u/i/<%= image.fileName %>">
     </a>

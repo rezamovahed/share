@@ -19,10 +19,14 @@
   </div>
   <% } %>
 </div>
-<div class="container">
+<div class="container-fluid mt-2">
   <% if(gallery.length > 0) { %>
+  <% let rowCount = 0 %>
   <% gallery.map((image, index) =>{ %>
-  <%- index % 6 == 0 ? "<div class='row'>" : "" %>
+  <% if(index % 4 === 0) { rowCount +=1} %>
+  <% let lastRow = Math.round(gallery.length / 4) === rowCount %>
+  <%- (lastRow &&index % 4 == 0) ? `<div class="row ml-2 mr-2">`: "" %>
+  <%- (!lastRow && index % 4 == 0) ? `<div class="row ml-2 mr-2 justify-content-center">`: "" %>
   <div class="col-md-2 col-xs-12 gallery">
     <a href="/view/i/<%= image.fileName %>">
       <img class="img-thumbnail" src="/u/i/<%= image.fileName %>">
@@ -34,11 +38,11 @@
       </button>
     </form>
   </div>
-  <%- index % 6 == 5 ? "</div>" : "" %>
+  <%- index % 4 == 3 ? "</div>" : "" %>
   <% }) %>
+  <% } else { %>
+  <p class="font-weight-bold  text-center">No images found</p>
+  <% } %>
 </div>
-<% } else { %>
-<p class="font-weight-bold  text-center">No images found</p>
-<% } %>
 </div>
 <% include ../partials/footer %>

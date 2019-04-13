@@ -16,10 +16,12 @@ module.exports = {
     ".mov",
     ".mp4",
     ".mp3",
-    ".sh",
-    ".png",
+    ".psd",
+    ".doc",
+    ".docx",
+    ".xls",
+    ".xlsx",
     ".jpg",
     ".jpeg",
-    ".gif"
   ]
 };

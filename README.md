@@ -5,9 +5,9 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MrDemonWolf/share-mrdemonwolf-mer/master/LICENSE)
 [![dependencies Status](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me/status.svg)](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me)
 [![devDependencies Status](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me/dev-status.svg)](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me?type=dev)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/MrDemonWolf/share-mrdemonwolf-me.svg)](http://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](http://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](http://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
+[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Average time to resolve an issue")
+[![Percentage of issues still open](https://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
+[![Percentage of issues still open](https://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
 
 ## Description
 This a simple ShareX server so I can upload images,files, and text files on my own domain/server.  This can be used for anyone but its not supported as much.
@@ -22,7 +22,7 @@ To begin using this choose one of the following options to get started:
 * Clone the repo: `git clone https://github.com/MrDemonWolf/share-mrdemonwolf-me.git`
 * [Fork, Clone, or Download on GitHub](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
 
-### Basic Usage
+### Usage
 #### Edit the .env.example with basic config
 ```sh
 cp .env.example .env
@@ -30,6 +30,7 @@ cp .env.example .env
 ```sh
 nano .env
 ```
+Add what you want to the __.env__.
 #### Install node packages
 ```sh
 npm install
@@ -39,6 +40,23 @@ npm install
 ```sh
 npm run web
 ```
+### Setup Account and ShareX
+And go to your localhost:5050 or yourdomainproxy.com either works and click login then create a account.
+
+You should be be able to if you disable signups as you put your email in the __.env__ .
+
+Once done we move on the next step.
+
+#### Here's the sharex config templates for you
+
+[Image Imput]()
+
+[File Imput]()
+
+[Text Imput]()
+
+Just edit the domain to fit your needs and imput into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
+
 
 ### Want help develop?
 You can use this command to start up with nodemon so you can work on it and test.
@@ -48,6 +66,20 @@ npm run dev-web
 ```
 
 ### Changelog
+3.0.0
+* Better Gallery
+* Added support for proxy more
+* Now the upload link will add https based on the proxy and even the domain of the server
+* Fixed login bug with tokens via the proxy trust
+* Updated env template
+* Added psd, doc, docx, xls, xlsx file support.
+* Added better ZIP upload support
+
+2.0.0
+* Many changes
+* Better upload URLs
+* View pages for files,images, and text
+
 1.0.0
 * First public build.
 
