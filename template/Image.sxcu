@@ -1,0 +1,14 @@
+﻿{
+  "Version": "12.4.1",
+  "Name": "MrDemonWolf - Image",
+  "DestinationType": "ImageUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://yourdomain/api/upload/image",
+  "Headers": {
+    "Authorization": "Bearer "
+  },
+  "Body": "MultipartFormData",
+  "FileFormName": "file",
+  "URL": "$json:file.url$",
+  "DeletionURL": "$json:file.delete$"
+}

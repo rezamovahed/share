@@ -16,7 +16,7 @@ This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
 ## Download and Installation
 
-You can now download the release [here](https://github.com/MrDemonWolf/share-mrdemonwolf-me/eleases/latest/download/asset-name.zip)
+You can now download the release [here](https://github.com/MrDemonWolf/share-mrdemonwolf-me/releases/latest/download.zip)
 
 To begin using this choose one of the following options to get started:
 * Clone the repo: `git clone https://github.com/MrDemonWolf/share-mrdemonwolf-me.git`
@@ -36,9 +36,9 @@ Add what you want to the __.env__.
 npm install
 ```
 
-#### Start web server
+#### Start server
 ```sh
-npm run web
+npm start
 ```
 ### Setup Account and ShareX
 And go to your localhost:5050 or yourdomainproxy.com either works and click login then create a account.
@@ -49,13 +49,14 @@ Once done we move on the next step.
 
 #### Here's the sharex config templates for you
 
-[Image Imput]()
+[Image Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/template/File.sxcu)
 
-[File Imput]()
+[File Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/template/Image.sxcu)
 
-[Text Imput]()
+[Text Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/template/Text.sxcu)
 
 Just edit the domain to fit your needs and imput into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
+After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
 
 
 ### Want help develop?
@@ -74,6 +75,9 @@ npm run dev-web
 * Updated env template
 * Added psd, doc, docx, xls, xlsx file support.
 * Added better ZIP upload support
+* Changed to npm start from npm run web
+* Added templates for sharex imput (All you have to do is replace the name and add your API key)
+* Added robots.txt.
 
 2.0.0
 * Many changes

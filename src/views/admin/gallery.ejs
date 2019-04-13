@@ -21,12 +21,8 @@
 </div>
 <div class="container-fluid mt-2">
   <% if(gallery.length > 0) { %>
-  <% let rowCount = 0 %>
   <% gallery.map((image, index) =>{ %>
-  <% if(index % 4 === 0) { rowCount +=1} %>
-  <% let lastRow = Math.round(gallery.length / 4) === rowCount %>
-  <%- (lastRow &&index % 4 == 0) ? `<div class="row ml-2 mr-2">`: "" %>
-  <%- (!lastRow && index % 4 == 0) ? `<div class="row ml-2 mr-2 justify-content-center">`: "" %>
+  <%- (index % 4 == 0) ? `<div class="row ml-2 mr-2 justify-content-center">`: "" %>
   <div class="col-md-2 col-xs-12 gallery">
     <a href="/view/i/<%= image.fileName %>">
       <img class="img-thumbnail" src="/u/i/<%= image.fileName %>">
