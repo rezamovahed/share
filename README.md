@@ -7,10 +7,9 @@
 [![devDependencies Status](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me/dev-status.svg)](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me?type=dev)
 [![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Average time to resolve an issue")
 [![Percentage of issues still open](https://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
-[![Percentage of issues still open](https://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
 
 ## Description
-This a simple ShareX server so I can upload images,files, and text files on my own domain/server.  This can be used for anyone but its not supported as much.
+This a simple ShareX server so I can upload images,files, and text files on my own domain/server.  This is fully open source and free to use by anyone.
 
 This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
