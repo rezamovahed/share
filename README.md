@@ -67,6 +67,9 @@ npm run dev-web
 ```
 
 ### Changelog
+3.0.1
+* Added Dec to image and files
+
 3.0.0
 * Better Gallery
 * Added support for proxy more
