@@ -1,5 +1,4 @@
 const express = require('express');
-const middleware = require('../middleware');
 const router = express.Router();
 const Upload = require('../models/upload');
 const User = require('../models/user');
@@ -37,6 +36,7 @@ function uploaderListingPerPage(req, res, page, model, limit, render, title) {
     .find({})
     .skip((limit * page) - limit)
     .limit(limit)
+    .sort({ createdAt: -1 })
     .populate('uploader')
     .exec((err, data) => {
       model.countDocuments().exec((err, count) => {
@@ -55,6 +55,7 @@ function usersListingPerPage(req, res, page, model, limit, render, title) {
     .find({})
     .skip((limit * page) - limit)
     .limit(limit)
+    .sort({ createdAt: -1 })
     .exec((err, data) => {
       model.countDocuments().exec((err, count) => {
         res.render(render, {
@@ -191,6 +192,7 @@ router.get('/uploads/delete/all', (req, res) => {
 router.get('/gallery', (req, res) => {
   Upload
     .find({ 'isImage': true })
+    .sort({ createdAt: -1 })
     .exec((err, gallery) => {
       res.render('admin/gallery', {
         title: 'Image Gallery',

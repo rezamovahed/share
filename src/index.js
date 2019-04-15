@@ -22,6 +22,14 @@ const app = express();
 app.set('host', process.env.IP || '0.0.0.0');
 app.set('port', process.env.PORT || 5050);
 
+// True Proxy
+if (process.env.PROXY) { app.enable("trust proxy") }
+
+const limiter = rateLimit({
+  windowMs: 1000 * 60 * 15, // 15 minutes
+  max: 50
+});
+
 // Load Assets from Public folder
 app.use(express.static(__dirname + '/public'));
 
@@ -58,8 +66,8 @@ let sess = {
 }
 
 if (app.get('env') === 'production') {
-  app.set('trust proxy', 1);
-  sess.cookie.secure = true;
+  app.set('trust proxy', 1)
+  sess.cookie.secure = true // serve secure cookies
 }
 
 // Session store
@@ -118,24 +126,16 @@ app.use((req, res, next) => {
 // Disables the powered by so it does not show express
 app.disable('x-powered-by');
 
-// Rate Limiter
-const limiter = rateLimit({
-  windowMs: 1000 * 60 * 15, // 15 minutes
-  max: 50
-});
-
-// API Routes
 const apiRoutes = require('./routes/api');
+
 app.use('/api', limiter, apiRoutes)
 
-
-// Csrf
 const csrfMiddleware = csrf()
 let csrfLocals = (req, res, next) => {
+  // Csrf
   res.locals.csrfToken = req.csrfToken() || null;
   next()
 }
-
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
@@ -148,7 +148,6 @@ const adminRoutes = require('./routes/admin');
 app.use(csrfMiddleware, csrfLocals, indexRoutes);
 app.use(csrfMiddleware, csrfLocals, authRoutes);
 app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, userRoutes);
-// Image View Routes
 app.use('/view/i', csrfMiddleware, csrfLocals, limiter, viewImagesRoutes);
 app.use('/view/f', csrfMiddleware, csrfLocals, limiter, viewFilesRoutes);
 app.use('/view/t', csrfMiddleware, csrfLocals, limiter, viewTextsRoutes);
@@ -160,7 +159,7 @@ app.use(function (err, req, res, next) {
   // handle CSRF token errors here
   res.status(403)
   res.json({
-    message: 'Please try again',
+    message: 'Error in CSRF Token',
     error: {}
   });
 });
@@ -177,7 +176,9 @@ mongoose.connect(process.env.DATABASE_URI, {
   useNewUrlParser: true,
   autoReconnect: true
 })
+
 const db = mongoose.connection;
+
 
 // MongoDB Error
 db.on('error', () => {
@@ -198,7 +199,6 @@ db.once('open', () => {
     });
     // Log infomation after everything is started.
     consola.log('----------------------------------------')
-    consola.info('MrDemonWolf ShareX Server')
     consola.info(`Environment: ${app.get('env')}`)
     consola.info(`Base URL: http://localhost:${app.get('port')}`)
     consola.info('Press CTRL-C to stop\n');

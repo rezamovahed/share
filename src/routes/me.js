@@ -153,6 +153,7 @@ function commandListing(req, res, page) {
     .find({ 'uploader': req.user._id })
     .skip((uploadLimitPerPage * page) - uploadLimitPerPage)
     .limit(uploadLimitPerPage)
+    .sort({ createdAt: -1 })
     .exec((err, uploads) => {
       Upload.find({ 'uploader': req.user._id }).countDocuments().exec((err, count) => {
         res.render('me/uploads', {
@@ -236,6 +237,7 @@ function deleteByUploadFileType(type, file) {
 router.get('/gallery', (req, res) => {
   Upload
     .find({ 'uploader': req.user._id, 'isImage': true })
+    .sort({ createdAt: -1 })
     .exec((err, gallery) => {
       res.render('me/gallery', {
         title: 'Image Gallery',
