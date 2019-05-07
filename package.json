@@ -14,9 +14,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev-web": "nodemon src/index.js",
+    "dev-start": "nodemon src/index.js",
     "scss": "sass --watch src/scss:src/public/css --style compressed",
-    "dev": "concurrently -n \"Web,Scss\" \"npm run dev-web\" \"npm run scss\""
+    "dev": "concurrently -n \"Client,Scss\" \"npm run dev-client\" \"npm run scss\""
   },
   "repository": {
     "type": "git",
