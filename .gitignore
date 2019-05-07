@@ -1,1 +1,15 @@
-node_modules
+# MacOS	node_modules
+.DS_Store
+# NodejS
+node_modules/
+npm-debug.log*
+package-lock.json
+# Env
+.env
+# sass
+.sass-cache
+# Removes local uploads
+!src/public/u/f/.gitkeep
+!src/public/u/i/.gitkeep
+!src/public/u/t/.gitkeep
+src/public/u/*
