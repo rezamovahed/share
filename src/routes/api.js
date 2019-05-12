@@ -246,69 +246,6 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
   });
 });
 
-/**
- * @route /api/upload/text
- * @method POST
- * @description Upload text
- * @access Private
-*/
-router.post('/upload/text', middleware.isAPIKeyVaild, (req, res) => {
-  let file = req.files.file;
-  let fileExtension = path.extname(file.name);
-  let fileMineType = file.mimetype;
-  let newFileName = generate(alphabet, 16) + fileExtension;
-  let uploadPath = `${path.join(__dirname, '../public')}/u/t/${newFileName}`;
-  let buf = crypto.randomBytes(16);
-  let key = buf.toString('hex')
-  let token = req.headers['authorization'];
-  let rawToken = token.split(" ").slice(1).toString();
-  let decoded = jwt.decode(rawToken, { complete: true });
-  let auth = decoded.payload.sub;
-  let fullUrl = req.protocol + '://' + req.hostname
-  if (!req.files) {
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'No text was provided.'
-      }
-    });
-    return;
-  }
-  if (process.env.FILE_CHECK && fileExtensionCheck.text.indexOf(fileExtension) == -1 || fileMinetypeCheck.text.indexOf(fileMineType) == -1) {
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'Invaid text uploaded. Must be a text on this route.'
-      }
-    });
-    return;
-  }
-  let size = humanFileSize(file.size)
-  let fileHash = file.md5
-  let newFile = {
-    uploader: auth,
-    fileName: newFileName,
-    fileExtension,
-    fileHash,
-    key,
-    isText: true,
-    size
-  }
-  Upload.create(newFile, (err, uploadedFile) => {
-    if (err) { return res.status(500).send('Error in uploading') };
-    file.mv(uploadPath, err => {
-      if (err) { return res.status(500).send('Error in uploading') }
-      res.json({
-        success: true,
-        file: {
-          url: `${fullUrl}/u/t/${newFileName}`,
-          delete: `${fullUrl}/api/delete?fileName=${newFileName}&key=${key}&fileType=text`
-        }
-      });
-    });
-  });
-});
-
 router.get('*', function (req, res) {
   res.status(404).render('errors/404');
 });

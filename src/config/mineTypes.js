@@ -4,9 +4,6 @@ module.exports = {
     "image/jpeg",
     "image/gif"
   ],
-  "text": [
-    "text/plain",
-  ],
   "files": [
     "text/plain",
     "application/zip",

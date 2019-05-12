@@ -139,18 +139,14 @@ let csrfLocals = (req, res, next) => {
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-const viewImagesRoutes = require('./routes/view/image');
-const viewFilesRoutes = require('./routes/view/file');
-const viewTextsRoutes = require('./routes/view/text');
+const viewRoutes = require('./routes/view');
 const meRoutes = require('./routes/me');
 const adminRoutes = require('./routes/admin');
 
 app.use(csrfMiddleware, csrfLocals, indexRoutes);
 app.use(csrfMiddleware, csrfLocals, authRoutes);
 app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, userRoutes);
-app.use('/view/i', csrfMiddleware, csrfLocals, limiter, viewImagesRoutes);
-app.use('/view/f', csrfMiddleware, csrfLocals, limiter, viewFilesRoutes);
-app.use('/view/t', csrfMiddleware, csrfLocals, limiter, viewTextsRoutes);
+app.use('/view', csrfMiddleware, csrfLocals, limiter, viewRoutes);
 app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, meRoutes);
 app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isAdmin, adminRoutes);
 

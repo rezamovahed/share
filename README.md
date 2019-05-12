@@ -52,8 +52,6 @@ Once done we move on the next step.
 
 [File Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/Image.sxcu)
 
-[Text Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/Text.sxcu)
-
 Just edit the domain to fit your needs and imput into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
 After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
 
@@ -66,6 +64,10 @@ npm run dev-web
 ```
 
 ### Changelog
+3.1.0
+* Removed File and Text views
+* Removed Removed text support due to others being better. (You should use github gists if anything.)
+
 3.0.1
 * Added Dec to image and files
 
