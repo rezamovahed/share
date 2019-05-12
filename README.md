@@ -64,6 +64,9 @@ npm run dev-web
 ```
 
 ### Changelog
+3.1.1
+* Fixed bug with middleware
+
 3.1.0
 * Removed File and Text views
 * Removed Removed text support due to others being better. (You should use github gists if anything.)

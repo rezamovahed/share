@@ -1,7 +1,6 @@
 const express = require('express');
-const middleware = require('../../middleware');
 const router = express.Router();
-const Upload = require('../../models/upload');
+const Upload = require('../models/upload');
 
 /**
  * @route /view/i/:fileName
