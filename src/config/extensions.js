@@ -5,9 +5,6 @@ module.exports = {
     ".jpeg",
     ".gif"
   ],
-  "text": [
-    '.txt'
-  ],
   "files": [
     ".zip",
     '.txt',
