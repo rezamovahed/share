@@ -10,7 +10,7 @@ const Upload = require('../../models/upload');
  * @access Private
 */
 
-router.get('/:fileName', (req, res) => {
+router.get('/view/i/:fileName', (req, res) => {
   let fullUrl = req.protocol + '://' + req.get('host')
   Upload.findOne({ 'fileName': req.params.fileName }, (err, uploaded) => {
     const file = {
@@ -19,8 +19,8 @@ router.get('/:fileName', (req, res) => {
       createdAt: uploaded.createdAt,
       fileType: uploaded.isImage ? 'image' : uploaded.isFile ? 'file' : 'text'
     }
-    res.render('view/file', {
-      title: `Viewing File`,
+    res.render('view/image', {
+      title: `Viewing Image`,
       file,
       fullUrl
     });
