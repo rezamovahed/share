@@ -40,7 +40,7 @@ npm install
 npm start
 ```
 ### Setup Account and ShareX
-And go to your localhost:5050 or yourdomainproxy.com either works and click login then create a account.
+And go to your localhost:5050 or yourdomain.com either works and click login then create a account.
 
 You should be be able to if you disable signups as you put your email in the __.env__ .
 
@@ -64,8 +64,14 @@ npm run dev-web
 ```
 
 ### Changelog
-3.1.1
-* Fixed bug with middleware
+4.0.0
+<!-- * You can now ban and suspend users and there API keys -->
+<!-- * You can also ban or suspend users for perm or 24 hours , a week, and even a month. -->
+* Changed terms on users manger page.  Admin is not role which will display there role either admin or user
+* Changed the term for account status.  Now there is status of the account which can be active inactive or banned and even suspended
+* Removed a few cols in the user table
+* Fixed the link in the admin nav gallery.  Now it links to the gallery
+* Fixed the navbar in admin gallery as it was linking the wrong one.
 
 3.1.0
 * Removed File and Text views

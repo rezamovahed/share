@@ -202,6 +202,23 @@ router.get('/gallery', (req, res) => {
 });
 
 /**
+ * @route /admin/users/new
+ * @method GET
+ * @description Shows create user
+ * @access Private
+*/
+router.get('/users/new', (req, res) => {
+  let generatePassword = password.generate({
+    length: 16,
+    numbers: true
+  });
+  res.render('admin/users/new', {
+    title: 'Create new user',
+    password: generatePassword,
+  });
+});
+
+/**
  * @route /admin/users/:id
  * @method GET
  * @description Shows a edit form for the user
@@ -293,23 +310,6 @@ router.put('/users/:id', (req, res) => {
     req.flash('error', error);
     res.redirect(`/admin/users/${id}`);
   }
-});
-
-/**
- * @route /admin/users/new
- * @method GET
- * @description Shows create user
- * @access Private
-*/
-router.get('/users/new', (req, res) => {
-  let generatePassword = password.generate({
-    length: 10,
-    numbers: true
-  });
-  res.render('admin/users/new', {
-    title: 'Create new user',
-    password: generatePassword,
-  });
 });
 
 /**
