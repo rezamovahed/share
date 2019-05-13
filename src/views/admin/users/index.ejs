@@ -35,7 +35,7 @@
           <th scope="col">Username</th>
           <th scope="col">Role</th>
           <th scope="col">Status</th>
-          <th scope="col">Last Log</th>
+          <th scope="col">Last Login</th>
           <th scope="col">Created</th>
           <th scope="col">Actions</th>
         </tr>
@@ -58,7 +58,7 @@
             <%- users[i].isAdmin ? 'Admin' : 'User' %>
           </td>
           <td>
-            <%- users[i].accountActivated ? 'Active' : !users[i].accountActivated ? 'Inactive' : users[i].isBanned ? 'Banned' : 'Suspended' %>
+            <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? 'Suspended' : users[i].accountActivated ? 'Active' : 'Unactivated' %>
           </td>
           <td>
             <% if(users[i].lastLog) {%>
