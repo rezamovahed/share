@@ -17,11 +17,11 @@
             <i class="fas fa-fw fa-file-alt"></i>
           </div>
           <div class="mr-5">
-            <%= uploads %> Upload<% if(uploads > 2){ %>s<% }%>
+            <%= uploads %> Upload<%if(uploads >= 2){%>s<%}%>
           </div>
         </div>
         <a class="card-footer text-white clearfix small z-1" href="/admin/uploads">
-          <span class="float-left">View Uploads</span>
+          <span class="float-left">View Upload<%if(uploads >= 2){%>s<%}%></span>
           <span class="float-right">
             <i class="fas fa-angle-right"></i>
           </span>
@@ -35,11 +35,11 @@
             <i class="fas fa-fw fa-users"></i>
           </div>
           <div class="mr-5">
-            <%= users %> User <% if(users > 2){ %>s<% }%>
+            <%= users %> User<%if(users >= 2){%>s<%}%>
           </div>
         </div>
         <a class="card-footer text-white clearfix small z-1" href="/admin/users">
-          <span class="float-left">View Users</span>
+          <span class="float-left">View User<%if(users >= 2){%>s<%}%></span>
           <span class="float-right">
             <i class="fas fa-angle-right"></i>
           </span>

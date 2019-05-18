@@ -54,7 +54,7 @@
         <tr>
           <td>
             <a
-              href="/view/<%- uploads[i].isImage ? 'i' : uploads[i].isFile ? 'f' : 't' %>/<%= uploads[i].fileName %>"><%= uploads[i].fileName %></a>
+              href="<%- uploads[i].isImage ? `/view/${uploads[i].fileName}` : `/u/f/${uploads[i].fileName}` %>"><%= uploads[i].fileName %></a>
           </td>
           <td>
             <%- uploads[i].isImage ? 'Image' : uploads[i].isFile ? 'File' : 'Text' %>
