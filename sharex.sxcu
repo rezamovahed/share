@@ -1,0 +1,14 @@
+{
+  "Version": "12.4.1",
+  "Name": "MrdemonWolf Custom Uploader",
+  "DestinationType": "FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://www.example.com/api/upload/",
+  "Headers": {
+    "Authorization": "Bearer "
+  },
+  "Body": "MultipartFormData",
+  "FileFormName": "file",
+  "URL": "$json:file.url$",
+  "DeletionURL": "$json:file.delete$"
+}
