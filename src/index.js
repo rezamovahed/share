@@ -107,10 +107,11 @@ app.use((req, res, next) => {
   res.locals.currentPath = req.path;
   // Custom ENV
   res.locals.siteTitle = process.env.TITLE;
+  res.locals.credit = process.env.CREDIT;
   res.locals.footerTitle = process.env.FOOTER_TITLE;
   res.locals.siteWebmasterEmail = process.env.EMAIL;
   res.locals.siteDesc = process.env.DESC;
-  res.locals.sitePowered = `ShareX uploader Powered by ${process.env.TITLE}`;
+  res.locals.sitePowered = `Uploader Powered by ${process.env.TITLE}`;
   res.locals.signups = process.env.SIGNUPS;
 
   // Pass flash to locals
