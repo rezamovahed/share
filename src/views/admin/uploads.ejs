@@ -15,6 +15,8 @@
     </div>
   </div>
   <% } %>
+  <% let uploadsLength = data.length; %>
+
   <div class="table-wrapper">
     <div class="table-title">
       <div class="row">
@@ -22,10 +24,12 @@
           <h2>Manage <strong>Uploads</strong></b>
           </h2>
         </div>
+        <% if(uploadsLength > 0 ) { %>
         <div class="col-12 col-sm-6">
           <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger float-right">Delete
             All</a>
         </div>
+        <% } %>
       </div>
     </div>
   </div>
@@ -42,7 +46,6 @@
         </tr>
       </thead>
       <tbody>
-        <% let uploadsLength = data.length; %>
         <% let uploads = data; %>
         <% if (uploadsLength === 0) { %>
         <tr class="text-center">
