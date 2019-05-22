@@ -101,7 +101,7 @@ router.put('/', (req, res) => {
 router.get('/keys', (req, res) => {
   Key.find({ 'user': { id: req.user._id } }, (err, keys) => {
     res.render('me/keys', {
-      title: 'My Keys',
+      title: 'Manage Keys',
       keys,
 
     });
@@ -112,7 +112,7 @@ router.get('/keys', (req, res) => {
 /**
  * @route /me/keys
  * @method POST
- * @description Diplays API Keys
+ * @description Creates a API Key
  * @access Private
 */
 router.get('/keys/create', (req, res) => {
@@ -136,7 +136,7 @@ router.get('/keys/create', (req, res) => {
 /**
  * @route /me/keys
  * @method POST
- * @description Diplays API Keys
+ * @description Removes API Key
  * @access Private
 */
 router.delete('/keys/:key', (req, res) => {
@@ -157,7 +157,7 @@ function commandListing(req, res, page) {
     .exec((err, uploads) => {
       Upload.find({ 'uploader': req.user._id }).countDocuments().exec((err, count) => {
         res.render('me/uploads', {
-          title: `My Uploads`,
+          title: `Manage Uploads`,
           uploads,
           current: page,
           pages: Math.ceil(count / uploadLimitPerPage),
@@ -187,7 +187,7 @@ router.get('/uploads/:page', (req, res) => {
 /**
  * @route /me/uploads/id
  * @method delete
- * @description Upload a Image
+ * @description Remove uploaded file
  * @param type name
  * @access Private
 */
@@ -198,15 +198,12 @@ router.delete('/uploads/:id', (req, res) => {
       case ('image'):
         fileType.image = true
         break;
-      case ('file'):
+      default:
         fileType.file = true
-        break;
-      case ('text'):
-        fileType.text = true
         break;
     }
     const fileName = req.query.name
-    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : fileType.file ? 'f' : 't'}/${fileName}`;
+    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : 'f'}`;
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');
@@ -220,7 +217,7 @@ router.delete('/uploads/:id', (req, res) => {
 });
 
 function deleteByUploadFileType(type, file) {
-  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
+  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : 'file'}`;
   Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
     fs.unlink(filePath, err => {
       if (err) { return res.status(500) }
@@ -257,7 +254,6 @@ router.get('/gallery', (req, res) => {
 router.get('/delete', (req, res) => {
   let images = [];
   let files = [];
-  let texts = [];
   let error;
   Upload.find({ 'uploader': req.user._id }, (err, file) => {
     file.map(file => {
@@ -273,21 +269,10 @@ router.get('/delete', (req, res) => {
           fileName: file.fileName
         });
       }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
-        });
-      }
     });
     if (images) {
       images.map(image => {
         deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
       });
     }
     if (texts) {
@@ -316,7 +301,6 @@ router.get('/delete', (req, res) => {
 router.get('/uploads/delete/all', (req, res) => {
   let images = [];
   let files = [];
-  let texts = [];
   let error;
   Upload.find({ 'uploader': req.user._id }, (err, file) => {
     file.map(file => {
@@ -332,14 +316,8 @@ router.get('/uploads/delete/all', (req, res) => {
           fileName: file.fileName
         });
       }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
-        });
-      }
     });
-    if (!images && !files && !texts) {
+    if (!images && !files) {
       req.flash('error', 'You must upload before you can delete.')
       res.redirect('/me/uploads')
 
@@ -352,11 +330,6 @@ router.get('/uploads/delete/all', (req, res) => {
     if (files) {
       files.map(file => {
         deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
       });
     }
     req.flash('success', 'All your uploads has been deleted.')
