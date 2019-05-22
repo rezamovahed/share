@@ -1,4 +1,4 @@
-# [MrDemonWolf Share Server](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
+# [MrDemonWolf Share](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
 
 ## Status
 
@@ -9,7 +9,7 @@
 [![Percentage of issues still open](https://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
 
 ## Description
-This a simple ShareX server so I can upload images,files, and text files on my own domain/server.  This is fully open source and free to use by anyone.
+This a simple uploader site with sharex support for upload of files and or imagegs.  This is open source and free to use.
 
 This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
@@ -48,9 +48,8 @@ Once done we move on the next step.
 
 #### Here's the sharex config templates for you
 
-[Image Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/File.sxcu)
+[ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
 
-[File Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/Image.sxcu)
 
 Just edit the domain to fit your needs and imput into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
 After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
@@ -65,11 +64,18 @@ npm run dev-web
 
 ### Changelog
 4.0.0
-<!-- * You can now ban and suspend users and there API keys -->
+<!-- * You can now upload files via your account on the website. -->
+<!-- * You can now limit the size of each upload -->
+<!-- * You can now ban and suspend user -->
 <!-- * You can also ban or suspend users for perm or 24 hours , a week, and even a month. -->
+<!-- Added API docs markdown -->
+<!-- API has changed file and image route to just be as one. -->
+* Fixed dashboard so it will add a 's' when there is more the one user or upload
 * Changed terms on users manger page.  Admin is not role which will display there role either admin or user
-* Changed the term for account status.  Now there is status of the account which can be active inactive or banned and even suspended
-* Removed a few cols in the user table
+* Changed 'Activated' to 'Role' and 'Admin' to 'Status'
+* Added Bannned or Suspended and Activate and Unactivated to status.
+* Removed last login from both database and user manger.
+* Changed text from 'Create user' to 'Create new user' in admin users.
 * Fixed the link in the admin nav gallery.  Now it links to the gallery
 * Fixed the navbar in admin gallery as it was linking the wrong one.
 
