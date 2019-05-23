@@ -24,8 +24,6 @@ router.use(fileUpload({
   abortOnLimit: true
 }));
 
-
-
 function humanFileSize(bytes, si) {
   var thresh = si ? 1000 : 1024;
   if (Math.abs(bytes) < thresh) {
@@ -43,7 +41,7 @@ function humanFileSize(bytes, si) {
 }
 
 /**
- * @route /api/delete/?fileName=%{filename}&fileType={fileType}&key=${key}
+ * @route /api/delete/?fileName=%{filename}&key=${key}
  * @method GET
  * @description Upload a Image
  * @param ${filename} ${key}
@@ -121,7 +119,7 @@ router.get('/delete', (req, res) => {
 /**
  * @route /api/upload
  * @method POST
- * @description Upload a Image
+ * @description Upload a Image or file etc.
  * @access Private
 */
 router.post('/upload', middleware.isAPIKeyVaild, (req, res) => {

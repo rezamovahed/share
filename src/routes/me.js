@@ -103,9 +103,7 @@ router.get('/keys', (req, res) => {
     res.render('me/keys', {
       title: 'Manage Keys',
       keys,
-
     });
-
   });
 });
 
@@ -161,7 +159,6 @@ function commandListing(req, res, page) {
           uploads,
           current: page,
           pages: Math.ceil(count / uploadLimitPerPage),
-
         });
       });
     });
@@ -193,17 +190,8 @@ router.get('/uploads/:page', (req, res) => {
 */
 router.delete('/uploads/:id', (req, res) => {
   Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
-    let fileType = {};
-    switch (req.query.type) {
-      case ('image'):
-        fileType.image = true
-        break;
-      default:
-        fileType.file = true
-        break;
-    }
     const fileName = req.query.name
-    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : 'f'}`;
+    const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');
@@ -215,15 +203,6 @@ router.delete('/uploads/:id', (req, res) => {
     })
   });
 });
-
-function deleteByUploadFileType(type, file) {
-  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : 'file'}`;
-  Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-    fs.unlink(filePath, err => {
-      if (err) { return res.status(500) }
-    });
-  });
-}
 
 /**
  * @route /me/gallery
@@ -250,8 +229,6 @@ router.get('/gallery', (req, res) => {
  * @access Private
 */
 router.get('/delete', (req, res) => {
-  let images = [];
-  let files = [];
   let error;
   Upload.find({ 'uploader': req.user._id }, (err, file) => {
     file.map(file => {
