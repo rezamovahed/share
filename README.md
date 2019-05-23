@@ -8,8 +8,8 @@
 [![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Average time to resolve an issue")
 [![Percentage of issues still open](https://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
 
-## Description
-This a simple uploader site with sharex support for upload of files and or imagegs.  This is open source and free to use.
+## Desrciption
+Simple uploader site with sharex support for uploading files,images, and text files.  This is open source and free to use.
 
 This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
@@ -46,12 +46,12 @@ You should be be able to if you disable signups as you put your email in the __.
 
 Once done we move on the next step.
 
-#### Here's the sharex config templates for you
+Here's the sharex config templates for you
 
 [ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
 
 
-Just edit the domain to fit your needs and imput into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
+Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
 After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
 
 
@@ -65,11 +65,11 @@ npm run dev-web
 ### Changelog
 4.0.0
 <!-- * You can now upload files via your account on the website. -->
-<!-- * You can now limit the size of each upload -->
 <!-- * You can now ban and suspend user -->
 <!-- * You can also ban or suspend users for perm or 24 hours , a week, and even a month. -->
 <!-- Added API docs markdown -->
 <!-- API has changed file and image route to just be as one. -->
+* You can now limit the size of each upload by default its 100M
 * Fixed dashboard so it will add a 's' when there is more the one user or upload
 * Changed terms on users manger page.  Admin is not role which will display there role either admin or user
 * Changed 'Activated' to 'Role' and 'Admin' to 'Status'
