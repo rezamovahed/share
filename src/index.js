@@ -113,7 +113,6 @@ app.use((req, res, next) => {
   res.locals.siteDesc = process.env.DESC;
   res.locals.sitePowered = `Uploader Powered by ${process.env.TITLE}`;
   res.locals.signups = process.env.SIGNUPS;
-
   // Pass flash to locals
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
@@ -127,8 +126,8 @@ app.use((req, res, next) => {
 // Disables the powered by so it does not show express
 app.disable('x-powered-by');
 
-const apiRoutes = require('./routes/api');
 
+const apiRoutes = require('./routes/api');
 app.use('/api', limiter, apiRoutes)
 
 const csrfMiddleware = csrf()
@@ -137,6 +136,7 @@ let csrfLocals = (req, res, next) => {
   res.locals.csrfToken = req.csrfToken() || null;
   next()
 }
+
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
@@ -175,7 +175,6 @@ mongoose.connect(process.env.DATABASE_URI, {
 })
 
 const db = mongoose.connection;
-
 
 // MongoDB Error
 db.on('error', () => {

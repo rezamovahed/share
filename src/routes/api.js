@@ -51,9 +51,8 @@ function humanFileSize(bytes, si) {
 */
 router.get('/delete', (req, res) => {
   const fileName = req.query.fileName;
-  const fileType = req.query.fileType;
   const key = req.query.key;
-  const filePath = `${path.join(__dirname, '../public')}/u/${fileType === 'image' ? 'i' : fileType === 'file' ? 'f' : 't'}/${fileName}`;
+  const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
   if (req.query && !fileName && !key) {
     return res.status(400).json({
       success: false,
@@ -117,21 +116,20 @@ router.get('/delete', (req, res) => {
       });
     }
   });
-
 });
 
 /**
- * @route /api/upload/image
+ * @route /api/upload
  * @method POST
  * @description Upload a Image
  * @access Private
 */
-router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
+router.post('/upload', middleware.isAPIKeyVaild, (req, res) => {
   let file = req.files.file;
   let fileExtension = path.extname(file.name);
   let fileMineType = file.mimetype;
   let newFileName = generate(alphabet, 16) + fileExtension;
-  let uploadPath = `${path.join(__dirname, '../public')}/u/i/${newFileName}`;
+  let uploadPath = `${path.join(__dirname, '../public')}/u/${newFileName}`;
   let buf = crypto.randomBytes(16);
   let key = buf.toString('hex')
   let token = req.headers['authorization'];
@@ -157,80 +155,20 @@ router.post('/upload/image', middleware.isAPIKeyVaild, (req, res) => {
     });
     return;
   }
-  let size = humanFileSize(file.size)
-  let fileHash = file.md5
+  const size = humanFileSize(file.size)
+  const fileHash = file.md5
   let newFile = {
     uploader: auth,
     fileName: newFileName,
     fileExtension,
     fileHash,
     key,
-    isImage: true,
     size
   }
-  Upload.create(newFile, (err, uploadedFile) => {
-    if (err) { return res.status(500).send('Error in uploading') };
-    file.mv(uploadPath, err => {
-      if (err) { return res.status(500).send('Error in uploading') }
-      res.json({
-        success: true,
-        file: {
-          url: `${fullUrl}/u/i/${newFileName}`,
-          delete: `${fullUrl}/api/delete?fileName=${newFileName}&key=${key}&fileType=image`
-        }
-      });
-    });
-  });
-});
+  if (fileExtensionCheck.images.indexOf(fileExtension) === 0 || fileMinetypeCheck.images.indexOf(fileMineType) === 0) {
+    newFile.isImage = true
+  }
 
-/**
- * @route /api/upload/file
- * @method POST
- * @description Upload file
- * @access Private
-*/
-router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
-  let file = req.files.file;
-  let fileExtension = path.extname(file.name);
-  let fileMineType = file.mimetype;
-  let newFileName = generate(alphabet, 16) + fileExtension;
-  let uploadPath = `${path.join(__dirname, '../public')}/u/f/${newFileName}`;
-  let buf = crypto.randomBytes(16);
-  let key = buf.toString('hex')
-  let token = req.headers['authorization'];
-  let rawToken = token.split(" ").slice(1).toString();
-  let decoded = jwt.decode(rawToken, { complete: true });
-  let auth = decoded.payload.sub;
-  let fullUrl = req.protocol + '://' + req.hostname
-  if (!req.files) {
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'No file was provided.'
-      }
-    });
-    return;
-  }
-  if (process.env.FILE_CHECK && fileExtensionCheck.files.indexOf(fileExtension) == -1 || fileMinetypeCheck.files.indexOf(fileMineType) == -1) {
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'Invaid file uploaded. Must be a file on this route.'
-      }
-    });
-    return;
-  }
-  let size = humanFileSize(file.size)
-  let fileHash = file.md5
-  let newFile = {
-    uploader: auth,
-    fileName: newFileName,
-    fileExtension,
-    fileHash,
-    key,
-    isFile: true,
-    size
-  }
   Upload.create(newFile, (err, uploadedFile) => {
     if (err) { return res.status(500).send('Error in uploading') };
     file.mv(uploadPath, err => {
@@ -238,8 +176,8 @@ router.post('/upload/file', middleware.isAPIKeyVaild, (req, res) => {
       res.json({
         success: true,
         file: {
-          url: `${fullUrl}/u/f/${newFileName}`,
-          delete: `${fullUrl}/api/delete?fileName=${newFileName}&key=${key}&fileType=file`
+          url: `${fullUrl}/u/${newFileName}`,
+          delete: `${fullUrl}/api/delete?fileName=${newFileName}&key=${key}`
         }
       });
     });

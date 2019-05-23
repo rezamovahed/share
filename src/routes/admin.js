@@ -75,7 +75,7 @@ function usersListingPerPage(req, res, page, model, limit, render, title) {
  * @access Private
 */
 router.get('/uploads', (req, res) => {
-  uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Upload Management')
+  uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Uploads Management')
 });
 
 /**
@@ -85,7 +85,7 @@ router.get('/uploads', (req, res) => {
  * @access Private
 */
 router.get('/uploads/:page', (req, res) => {
-  uploaderListingPerPage(req, res, req.params.page, Upload, 10, 'admin/uploads', 'Upload Management')
+  uploaderListingPerPage(req, res, req.params.page, Upload, 10, 'admin/uploads', 'Uploads Management')
 });
 
 /**
@@ -97,19 +97,8 @@ router.get('/uploads/:page', (req, res) => {
 router.delete('/uploads/:id', (req, res) => {
   Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
     let fileType = {};
-    switch (req.query.type) {
-      case ('image'):
-        fileType.image = true
-        break;
-      case ('file'):
-        fileType.file = true
-        break;
-      case ('text'):
-        fileType.text = true
-        break;
-    }
     const fileName = req.query.name
-    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : fileType.file ? 'f' : 't'}/${fileName}`;
+    const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');
@@ -122,15 +111,6 @@ router.delete('/uploads/:id', (req, res) => {
   });
 });
 
-function deleteByUploadFileType(type, file) {
-  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
-  Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-    fs.unlink(filePath, err => {
-      if (err) { return res.status(500) }
-    });
-  });
-}
-
 /**
  * @route /admin/uploads/delete/all
  * @method GET
@@ -138,46 +118,16 @@ function deleteByUploadFileType(type, file) {
  * @access Private
 */
 router.get('/uploads/delete/all', (req, res) => {
-  let images = [];
-  let files = [];
-  let texts = [];
   let error;
   Upload.find({}, (err, file) => {
     file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
+      const filePath = `${path.join(__dirname, '../public')}/u/${file}`;
+      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
+        fs.unlink(filePath, err => {
+          if (err) { return res.status(500) }
         });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
-        });
-      }
+      });
     });
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
-      });
-    }
   });
   res.redirect('back')
 });
@@ -324,46 +274,16 @@ router.delete('/users/:id', (req, res) => {
     res.redirect('back')
     return;
   }
-  let images = [];
-  let files = [];
-  let texts = [];
   let error;
   Upload.find({ 'uploader': req.params.id }, (err, file) => {
     file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
+      const filePath = `${path.join(__dirname, '../public')}/u/${file}`;
+      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
+        fs.unlink(filePath, err => {
+          if (err) { return res.status(500) }
         });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
-        });
-      }
+      });
     });
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
-      });
-    }
   });
   Key.find({ 'user': { id: req.params.id } }, (err, keys) => {
     keys.map(key => {

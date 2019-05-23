@@ -239,10 +239,8 @@ router.get('/gallery', (req, res) => {
       res.render('me/gallery', {
         title: 'Image Gallery',
         gallery,
-
       });
     })
-
 });
 
 /**

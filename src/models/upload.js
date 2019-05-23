@@ -10,26 +10,11 @@ const uploadSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  fileName: {
-    type: String,
-    required: true
-  },
   fileExtension: {
     type: String,
     required: true
   },
-  isImage: {
-    type: Boolean,
-    default: false
-  },
-  isFile: {
-    type: Boolean,
-    default: false
-  },
-  isText: {
-    type: Boolean,
-    default: false
-  },
+  isImage: Boolean,
   key: {
     type: String,
     required: true
