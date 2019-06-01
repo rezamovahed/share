@@ -3,14 +3,12 @@ const router = express.Router();
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const fileExists = require('file-exists');
 const validator = require('validator');
 const md5 = require('js-md5');
 const path = require('path');
 const Key = require('../models/key');
 const User = require('../models/user');
 const Upload = require('../models/upload');
-const middleware = require('../middleware')
 
 /**
  * @route /me
@@ -21,7 +19,6 @@ const middleware = require('../middleware')
 router.get('/', (req, res) => {
   res.render('me/index', {
     title: 'Edit account',
-
   });
 });
 
@@ -33,12 +30,12 @@ router.get('/', (req, res) => {
 */
 router.put('/', (req, res) => {
   let error = {};
-  const username = req.body.username;
+  const username = req.body.username.toString();
   const email = req.body.email.toLowerCase();
-  const newPassword = req.body.newPassword;
-  const oldPassword = req.body.oldPassword;
-  const confirmNewPassword = req.body.confirmNewPassword;
-  const avatar = gravatar.url(req.body.email, {
+  const newPassword = req.body.newPassword.toString();
+  const oldPassword = req.body.oldPassword.toString();
+  const confirmNewPassword = req.body.confirmNewPassword.toString();
+  const avatar = gravatar.url(email, {
     s: '100',
     r: 'x',
     d: 'retro'
@@ -81,10 +78,9 @@ router.put('/', (req, res) => {
         user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
           return changePassword();
         });
-      } else {
-        req.flash('success', 'Your account has been succesfuly updated.');
-        res.redirect('/me');
       }
+      req.flash('success', 'Your account has been succesfuly updated.');
+      res.redirect('/me');
     })
   } else {
     req.flash('error', error);
@@ -139,12 +135,17 @@ router.get('/keys/create', (req, res) => {
 */
 router.delete('/keys/:key', (req, res) => {
   Key.findByIdAndRemove(req.params.key, (err, key) => {
+    if (err) {
+      req.flash('error', 'Error in removing API Key');
+      return res.redirect('/me/keys')
+    }
     req.flash('success', 'API Key removed');
     res.redirect('/me/keys')
   });
 });
 
 // Here's where the content you upload will be stored.
+// Can convert this function to be async.
 const uploadLimitPerPage = 10
 function commandListing(req, res, page) {
   Upload
@@ -162,7 +163,7 @@ function commandListing(req, res, page) {
         });
       });
     });
-}
+};
 
 /**
  * @route /me/uploads
@@ -229,42 +230,17 @@ router.get('/gallery', (req, res) => {
  * @access Private
 */
 router.get('/delete', (req, res) => {
-  let error;
-  Upload.find({ 'uploader': req.user._id }, (err, file) => {
+  const baseFilePath = `${path.join(__dirname, '../public')}/u/`;
+  Upload.find({ 'uploader': req.user.id }, (err, file) => {
     file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
-        });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-    });
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
-      });
-    }
-  });
-  Key.find({ 'user': { id: req.user._id } }, (err, keys) => {
-    keys.map(key => {
-      Key.findByIdAndDelete(key.id, (err, removedKey) => {
+      Upload.findOneAndDelete({ fileName: file.fileName }, (err, removed) => {
+        fs.unlink(baseFilePath + file.fileName);
       });
     });
   });
-  User.findByIdAndDelete(req.user.id, (err, removedUser) => {
-    res.redirect('/')
-  });
+  Key.deleteMany({ 'user': { id: req.user.id } });
+  User.findByIdAndDelete(req.user.id);
+  res.redirect('/')
 });
 
 /**
@@ -274,41 +250,21 @@ router.get('/delete', (req, res) => {
  * @access Private
 */
 router.get('/uploads/delete/all', (req, res) => {
-  let images = [];
-  let files = [];
-  let error;
-  Upload.find({ 'uploader': req.user._id }, (err, file) => {
-    file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
-        });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-    });
-    if (!images && !files) {
-      req.flash('error', 'You must upload before you can delete.')
-      res.redirect('/me/uploads')
+  // Find all uploads by the user
+  Upload.find({ 'uploader': req.user.id }, (err, file) => {
+    // If no uploads are found then show a error message
+    if (file.length === 0) {
+      req.flash('error', 'You must upload before you can delete.');
+      res.redirect('/me/uploads');
+      return;
+    };
+    // Loop though all the uploads and remove from database then remove from the FS
 
-    }
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    req.flash('success', 'All your uploads has been deleted.')
-    res.redirect('/me/uploads')
+    file.map(file => {
+    });
+    // All uploads has been removed
+    req.flash('success', 'All your uploads has been deleted.');
+    res.redirect('/me/uploads');
   });
 });
 

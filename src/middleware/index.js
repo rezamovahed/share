@@ -1,6 +1,5 @@
 var middlewareObj = {};
 const User = require('../models/user');
-const Upload = require('../models/upload');
 const Key = require('../models/key');
 const md5 = require('js-md5');
 
@@ -12,6 +11,7 @@ middlewareObj.isAdmin = (req, res, next) => {
   }
   next();
 }
+
 middlewareObj.isActvation = (req, res, next) => {
   User.findOne({
     email: req.body.email
@@ -47,9 +47,10 @@ middlewareObj.isAPIKeyVaild = (req, res, next) => {
   let token = req.headers['authorization'];
   if (!token) {
     return res.status(401).json({
+      auth: false,
       success: false,
       error: {
-        message: 'No API Key provided.'
+        authorization: 'No authorization provided.'
       }
     });
   }
@@ -57,9 +58,10 @@ middlewareObj.isAPIKeyVaild = (req, res, next) => {
   let tokenHash = md5(rawToken);
   Key.findOne({ hash: tokenHash }, (err, key) => {
     if (key === null) return res.status(401).json({
+      auth: false,
       success: false,
       error: {
-        message: 'Invaid Key provided.'
+        authorization: 'Invaid api key provided.'
       }
     });
     next();

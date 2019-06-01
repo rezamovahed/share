@@ -123,20 +123,19 @@ router.get('/delete', (req, res) => {
  * @access Private
 */
 router.post('/upload', middleware.isAPIKeyVaild, (req, res) => {
-  let file = req.files.file;
-  let fileExtension = path.extname(file.name);
-  let fileMineType = file.mimetype;
-  let newFileName = generate(alphabet, 16) + fileExtension;
-  let uploadPath = `${path.join(__dirname, '../public')}/u/${newFileName}`;
-  let buf = crypto.randomBytes(16);
-  let key = buf.toString('hex')
-  let token = req.headers['authorization'];
-  let rawToken = token.split(" ").slice(1).toString();
-  let decoded = jwt.decode(rawToken, { complete: true });
-  let auth = decoded.payload.sub;
-  let fullUrl = req.protocol + '://' + req.hostname
+  const file = req.files.file;
+  const fileExtension = path.extname(file.name);
+  const fileMineType = file.mimetype;
+  const newFileName = generate(alphabet, 16) + fileExtension;
+  const uploadPath = `${path.join(__dirname, '../public')}/u/${newFileName}`;
+  const key = crypto.randomBytes(16).toString('hex')
+  const rawToken = req.headers['authorization'].split(" ").slice(1).toString();
+  const decoded = jwt.decode(rawToken, { complete: true });
+  const auth = decoded.payload.sub;
+  const fullUrl = req.protocol + '://' + req.hostname
   if (!req.files) {
     res.status(400).json({
+      auth: true,
       success: false,
       error: {
         message: 'No file was provided.'
@@ -144,11 +143,14 @@ router.post('/upload', middleware.isAPIKeyVaild, (req, res) => {
     });
     return;
   }
-  if (process.env.FILE_CHECK && fileExtensionCheck.images.indexOf(fileExtension) == -1 || fileMinetypeCheck.images.indexOf(fileMineType) == -1) {
+  const imageCheck = fileExtensionCheck.images.indexOf(fileExtension) == -1 || fileMinetypeCheck.images.indexOf(fileMineType) == -1;
+  const fileCheck = fileExtensionCheck.files.indexOf(fileExtension) == -1 || fileMinetypeCheck.files.indexOf(fileMineType) == -1;
+  if (process.env.FILE_CHECK && imageCheck && fileCheck) {
     res.status(400).json({
+      auth: true,
       success: false,
       error: {
-        message: 'Invaid File uploaded. Must be a image on this route.'
+        message: 'Invaid File uploaded.'
       }
     });
     return;
@@ -183,6 +185,7 @@ router.post('/upload', middleware.isAPIKeyVaild, (req, res) => {
 });
 
 router.get('*', function (req, res) {
-  res.status(404).render('errors/404');
+  res.status(404).json({message: 'Not found.'});
 });
+
 module.exports = router;

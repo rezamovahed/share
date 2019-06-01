@@ -126,7 +126,6 @@ app.use((req, res, next) => {
 // Disables the powered by so it does not show express
 app.disable('x-powered-by');
 
-
 const apiRoutes = require('./routes/api');
 app.use('/api', limiter, apiRoutes)
 
@@ -197,7 +196,7 @@ db.once('open', () => {
     consola.log('----------------------------------------')
     consola.info(`Environment: ${app.get('env')}`)
     consola.info(`Base URL: http://localhost:${app.get('port')}`)
-    consola.info('Press CTRL-C to stop\n');
+    consola.info('Press CTRL-C to stop');
     consola.log('----------------------------------------')
   });
 });

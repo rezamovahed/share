@@ -96,7 +96,6 @@ router.get('/uploads/:page', (req, res) => {
 */
 router.delete('/uploads/:id', (req, res) => {
   Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
-    let fileType = {};
     const fileName = req.query.name
     const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
     fs.unlink(filePath, err => {

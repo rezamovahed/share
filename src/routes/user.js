@@ -16,7 +16,6 @@ const nodemailerSendGrid = require('../config/sendgrid.js');
 router.get('/activate/resend', (req, res) => {
   res.render('user/activate/resend', {
     title: 'Resend Account Activation',
-
   });
 });
 
@@ -255,7 +254,7 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
   </mj-body>
 </mjml>
 `)
-      var forgotPasswordEmail = {
+      const forgotPasswordEmail = {
         to: user.email,
         from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
         subject: `Password reset  | ${process.env.TITLE}`,

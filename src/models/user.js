@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema({
   banExpire: Date,
   isSuspended: Boolean,
   suspendedExpire: Date,
-  password: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   accountActvationToken: String,
@@ -42,4 +41,4 @@ userSchema.plugin(passportLocalMongoose, {
   usernameField: 'email'
 });
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model('User', userSchema)
