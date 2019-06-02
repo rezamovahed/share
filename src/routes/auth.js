@@ -118,6 +118,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
     User.register(newUser, password, (err, user) => {
       // if the user already exists then show the error.
       if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
+
       // if any errors ablove then show it
       if (JSON.stringify(error) !== '{}') {
         req.flash('error', error);
@@ -194,7 +195,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
           };
           nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
             req.flash('success', success)
-            res.redirect('/login');
+            res.redirect('/signup');
             done(err, 'done');
           })
         }
