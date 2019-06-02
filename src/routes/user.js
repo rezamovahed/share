@@ -6,6 +6,7 @@ const User = require('../models/user');
 const middleware = require('../middleware');
 const router = express.Router();
 const nodemailerSendGrid = require('../config/sendgrid.js');
+const mailConfig = require('../config/email')
 
 /**
  * @route /user/activate/resend
@@ -26,24 +27,25 @@ router.get('/activate/resend', (req, res) => {
  * @access Public
 */
 router.post('/activate/resend', (req, res) => {
-    User.findOne({
+  User.findOne({
     email: req.body.email
   }, (err, user) => {
     if (!user) {
       req.flash('error', 'User does not exist');
       res.redirect('/user/activate/resend');
       return;
-    }
+    };
+
     if (!user.accountActivated) {
       async.waterfall([
-        function (done) {
+        (done) => {
           crypto.randomBytes(16, function (err, buf) {
             var token = buf.toString('hex');
-            var tokenExpire = Date.now() + 3600000;
+            var tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
             done(err, token, tokenExpire)
           });
         },
-        function (token, tokenExpire, done) {
+        (token, tokenExpire, done) => {
           User.findOne({
             email: req.body.email
           }, function (err, user) {
@@ -54,7 +56,7 @@ router.post('/activate/resend', (req, res) => {
             });
           });
         },
-        function (token, done) {
+        (token, done) => {
           const htmlOuput = mjml(`<mjml>
         <mj-body background-color="#ffffff" font-size="13px">
           <mj-section>
@@ -97,7 +99,7 @@ router.post('/activate/resend', (req, res) => {
       `)
           const accountActvationEmail = {
             to: req.body.email,
-            from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
+            from: mailConfig.from,
             subject: `Activate Your Account | ${process.env.TITLE}`,
             html: htmlOuput.html
           };

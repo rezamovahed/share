@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
 router.put('/', (req, res) => {
   let error = {};
   const username = req.body.username.toString();
-  const email = req.body.email.toLowerCase();
+  const email = req.body.email.toString().toLowerCase();
   const newPassword = req.body.newPassword.toString();
   const oldPassword = req.body.oldPassword.toString();
   const confirmNewPassword = req.body.confirmNewPassword.toString();
@@ -43,22 +43,22 @@ router.put('/', (req, res) => {
 
   // Check if empty
   // Username
-  if (!username) { error.username = 'Please enter your username.' }
+  if (!username) { error.username = 'Please enter your username.' };
   // Email
   // Check if email is vaid
-  if (!email) { error.email = 'Please enter your email.' }
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
+  if (!email) { error.email = 'Please enter your email.' };
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
   // Password
   if (newPassword) {
     if (!newPassword) { error.newPassword = 'Must have a password' }
-    if (!confirmNewPassword) { error.confirmNewPassword = 'Must comfirm password' }
+    if (!confirmNewPassword) { error.confirmNewPassword = 'Must comfirm password' };
     if (validator.isLength(newPassword, {
       minimum: 8
     })) {
       error.password = 'Password must be at least 8 characters long. '
     }
-    if (newPassword !== confirmNewPassword) { error.confirmNewPassword = 'Both passowrds must match.' }
-    if (newPassword === oldPassword) { error.oldPassword = "Can't be the same as the old password" }
+    if (newPassword !== confirmNewPassword) { error.confirmNewPassword = 'Both passowrds must match.' };
+    if (newPassword === oldPassword) { error.oldPassword = "Can't be the same as the old password" };
   }
   // Check if passoword and comfirm password are the same.
   // Check password length
@@ -70,22 +70,24 @@ router.put('/', (req, res) => {
     }
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
       function changePassword() {
-        req.logOut();
-        req.flash('error', 'Your password has been changed.  Please relogin.')
-        res.redirect('/login')
-      }
+        req.logout();
+        req.flash('error', 'Your password has been changed.  Please relogin.');
+        res.redirect('/login');
+      };
+
       if (newPassword) {
         user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
           return changePassword();
         });
-      }
+      };
+
       req.flash('success', 'Your account has been succesfuly updated.');
       res.redirect('/me');
     })
   } else {
     req.flash('error', error);
     res.redirect('/me')
-  }
+  };
 });
 
 /**
@@ -124,9 +126,10 @@ router.get('/keys/create', (req, res) => {
   }
   Key.create(newKey, (err, key) => {
     req.flash('info', token);
-    res.redirect('/me/keys')
+    res.redirect('/me/keys');
   });
 });
+
 /**
  * @route /me/keys
  * @method POST
@@ -198,7 +201,7 @@ router.delete('/uploads/:id', (req, res) => {
         req.flash('error', 'Error in deleteing');
         res.redirect('back');
         return;
-      }
+      };
       req.flash('success', `Deleted ${fileName}`);
       res.redirect('back');
     })
@@ -220,7 +223,7 @@ router.get('/gallery', (req, res) => {
         title: 'Image Gallery',
         gallery,
       });
-    })
+    });
 });
 
 /**
@@ -240,7 +243,7 @@ router.get('/delete', (req, res) => {
   });
   Key.deleteMany({ 'user': { id: req.user.id } });
   User.findByIdAndDelete(req.user.id);
-  res.redirect('/')
+  res.redirect('/');
 });
 
 /**
