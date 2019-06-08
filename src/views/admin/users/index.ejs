@@ -54,7 +54,7 @@
             <%= users[i].username %>
           </td>
           <td>
-            <%- users[i].isAdmin ? 'Admin' : 'User' %>
+            <%- (users[i].isAdmin) ? 'Admin' : 'User' %>
           </td>
           <td>
             <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended for ${'1 day'}` : users[i].accountActivated ? 'Active' : 'Unactivated' %>

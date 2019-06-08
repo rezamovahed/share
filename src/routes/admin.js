@@ -199,7 +199,6 @@ router.put('/users/:id', (req, res) => {
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   const accountActivated = req.body.activate;
-  const isAdmin = req.body.admin;
   const avatar = gravatar.url(req.body.email, {
     s: '100',
     r: 'x',
@@ -228,9 +227,14 @@ router.put('/users/:id', (req, res) => {
       username,
       email,
       accountActivated,
-      isAdmin,
       avatar
     }
+    if (req.body.isAdmin) {
+      updatedUser.isAdmin = true
+    } else {
+      updatedUser.isAdmin = false;
+    };
+    console.log(updatedUser)
     User.findByIdAndUpdate(id, updatedUser, (err, user) => {
       if (err) {
         if (err.code === 11000) {
@@ -246,13 +250,13 @@ router.put('/users/:id', (req, res) => {
         });
       };
       // Add user password change.
-      req.flash('success', 'User has been updated');
+      req.flash('success', `${username} has been updated`);
       res.redirect('/admin/users');
       return;
     });
   } else {
     req.flash('error', error);
-    res.redirect(`/admin/users/${id}`);
+    res.redirect(`/ admin / users / ${id}`);
   }
 });
 
@@ -273,16 +277,16 @@ router.delete('/users/:id', (req, res) => {
 
   Upload.find({ 'uploader': req.params.id }, (err, file) => {
     file.map(file => {
-      const filePath = `${path.join(__dirname, '../public')}/u/${file}`;
+      const filePath = `${path.join(__dirname, '../public')} / u / ${file}`;
       Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-        fs.unlink(filePath, err => {});
+        fs.unlink(filePath, err => { });
       });
     });
   });
 
   Key.find({ 'user': { id: req.params.id } }, (err, keys) => {
     keys.map(key => {
-      Key.findByIdAndDelete(key.id, (err, removedKey) => {});
+      Key.findByIdAndDelete(key.id, (err, removedKey) => { });
     });
   });
 

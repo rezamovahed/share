@@ -68,7 +68,9 @@ npm run dev-web
 <!-- * You can now ban and suspend user -->
 <!-- * You can also ban or suspend users for perm or 24 hours , a week, and even a month. -->
 <!-- Added API docs markdown -->
-<!-- API has changed file and image route to just be as one. -->
+* API has changed file and image route to just be as one.
+* Changed createdAt to uploaded in lisings
+* Changed share to file in the lisings.
 * You can now limit the size of each upload by default its 100M
 * Fixed dashboard so it will add a 's' when there is more the one user or upload
 * Changed terms on users manger page.  Admin is not role which will display there role either admin or user

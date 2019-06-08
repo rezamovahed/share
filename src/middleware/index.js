@@ -4,7 +4,7 @@ const Key = require('../models/key');
 const md5 = require('js-md5');
 
 middlewareObj.isAdmin = (req, res, next) => {
-  if (!req.user.isAdmin) {
+  if (req.user.isAdmin === 'false') {
     req.flash('error', 'You must be admin.')
     res.redirect('/')
     return;
