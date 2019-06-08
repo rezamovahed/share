@@ -31,7 +31,7 @@ router.post('/activate/resend', (req, res) => {
     email: req.body.email
   }, (err, user) => {
     if (!user) {
-      req.flash('error', 'User does not exist');
+      req.flash('error', 'User does not exist.');
       res.redirect('/user/activate/resend');
       return;
     };
