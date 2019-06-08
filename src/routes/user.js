@@ -201,10 +201,6 @@ router.get('/forgot', (req, res) => {
  * @access Public
 */
 router.post('/forgot', middleware.isActvation, (req, res) => {
-  function forgotAccountNotFoundError() {
-    req.flash('error', 'No account could be found.');
-    res.redirect('/user/forgot');
-  }
   async.waterfall([
     (done) => {
       crypto.randomBytes(8, function (err, buf) {
@@ -217,7 +213,9 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
         email: req.body.email
       }, function (err, user) {
         if (!user) {
-          return forgotAccountNotFoundError();
+          req.flash('error', 'No account could be found.');
+          res.redirect('/user/forgot');
+          return;
         } else {
           user.resetPasswordToken = token;
           user.resetPasswordExpires = Date.now() + 1000 * 10 * 6 * 60;
@@ -315,7 +313,6 @@ router.post('/forgot/reset/:token', (req, res) => {
       res.redirect(`/user/forgot/reset/${req.params.token}`);
       return;
     };
-
     user.setPassword(req.body.password, function (err) {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
@@ -328,9 +325,8 @@ router.post('/forgot/reset/:token', (req, res) => {
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
       nodemailerSendGrid.sendMail(forgotResetPasswordEmail, err => {
-        req.flash('error', 'Your password has been changed.  You should be able to relogin with the new password')
-        res.redirect('/login')
-        done(err, 'done');
+        req.flash('success', 'Your password has been changed.  You should be able to relogin with the new password');
+        res.redirect('/login');
       });
     });
   });

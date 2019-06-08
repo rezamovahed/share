@@ -50,9 +50,9 @@ router.put('/', (req, res) => {
   if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
   // Password
   if (newPassword) {
-    if (!newPassword) { error.newPassword = 'Must have a password' }
+
     if (!confirmNewPassword) { error.confirmNewPassword = 'Must comfirm password' };
-    if (validator.isLength(newPassword, {
+    if (!validator.isLength(newPassword, {
       minimum: 8
     })) {
       error.password = 'Password must be at least 8 characters long. '
@@ -69,18 +69,22 @@ router.put('/', (req, res) => {
       avatar
     }
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
-      function changePassword() {
-        req.logout();
-        req.flash('error', 'Your password has been changed.  Please relogin.');
-        res.redirect('/login');
-      };
-
       if (newPassword) {
         user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
-          return changePassword();
+          if (err) {
+            if (err.name === 'IncorrectPasswordError') {
+              error.oldPassword = 'Wrong current password.'
+              req.flash('error', error);
+              res.redirect('/me');
+              return;
+            }
+          }
         });
+        req.flash('success', 'Your password has been changed.  Please relogin.');
+        req.logout();
+        res.redirect('/login');
+        return;
       };
-
       req.flash('success', 'Your account has been succesfuly updated.');
       res.redirect('/me');
     })
