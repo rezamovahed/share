@@ -50,10 +50,10 @@ Here's the sharex config templates for you
 
 [ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
 
-
 Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
 After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
 
+Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin
 
 ### Want help develop?
 You can use this command to start up with nodemon so you can work on it and test.
@@ -70,6 +70,7 @@ npm run dev-web
 <!-- * You can now ban and suspend user -->
 <!-- * You can also ban or suspend users for perm or 24 hours , a week, and even a month. -->
 <!-- Added API docs markdown -->
+* Now you can make yourself the first admin by going to /admin.  If the email matchs the one in the env then it will change the account to admin (This is safe as the email has to be verifyed anyways which makes sure its yours.)
 * API has changed file and image route to just be as one.
 * Changed createdAt to uploaded in lisings
 * Changed share to file in the lisings.

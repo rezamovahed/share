@@ -3,8 +3,20 @@ const User = require('../models/user');
 const Key = require('../models/key');
 const md5 = require('js-md5');
 
+middlewareObj.owner = (req, res, next) => {
+  // If the user is already admin then just move on
+  if (req.user.isAdmin) { return next() }
+  // If the user email matchs the email in the .env then it will make them admin (As they are the owner)
+  if (req.user.email === process.env.EMAIL) {
+    User.findOneAndUpdate({ email: req.user.email }, { isAdmin: true }, (err, user) => {
+      if (err) { return res.redirect('/') }
+      next();
+    });
+  }
+};
+
 middlewareObj.isAdmin = (req, res, next) => {
-  if (req.user.isAdmin === 'false') {
+  if (req.user.isAdmin) {
     req.flash('error', 'You must be admin.')
     res.redirect('/')
     return;

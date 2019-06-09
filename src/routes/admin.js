@@ -8,6 +8,7 @@ const path = require('path');
 const password = require('generate-password');
 const gravatar = require('gravatar');
 const validator = require('validator');
+const middleware = require('../middleware')
 
 /**
  * @route /admin
@@ -15,7 +16,7 @@ const validator = require('validator');
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/', async (req, res) => {
+router.get('/', middleware.owner, async (req, res) => {
   try {
     let uploads = await Upload.countDocuments({}, (err, count) => { return count });
     let users = await User.countDocuments({}, (err, count) => { return count });
