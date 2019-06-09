@@ -210,7 +210,7 @@ router.put('/users/:id', (req, res) => {
 
   // Check if empty
   // Username
-  if (!username) { error.username = 'Please enter your username.' };
+  if (!username) { error.username = 'Please enter a username.' };
   // Email
   // Check if email is vaid
   if (!email) { error.email = 'Please enter your email.' };

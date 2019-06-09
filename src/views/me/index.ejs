@@ -9,20 +9,25 @@
 
     <div class="form-group">
       <label for="username">Username</label>
-      <input name="username" type="text" class="form-control" id="username" value="<%= currentUser.username %>"
-        autocomplete="off" data-lpignore="true" required>
+      <input name="username" type="text" class="form-control <% if(errors && error[0].username) { %> is-invalid <% } %>"
+        id="username" value="<%= currentUser.displayName %>" autocomplete="off" data-lpignore="true" required>
+      <% if(errors && error[0].username) { %>
+      <small class="form-text text-danger">
+        <%= error[0].username %></small>
+      <% } %>
     </div>
+
 
     <div class="form-group">
       <label for="email">Email</label>
       <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>"
         id="email" value="<%= currentUser.email %>" required>
+      <% if(errors && error[0].email) { %>
+      <small class="form-text text-danger">
+        <%= error[0].email %></small>
+      <% } %>
     </div>
 
-    <% if(errors && error[0].email) { %>
-    <small class="form-text text-danger">
-      <%= error[0].email %></small>
-    <% } %>
     <h1 class="display-4">Edit security</h1>
 
     <div class="form-group">
@@ -35,12 +40,11 @@
             <i class="fa fa-eye-slash" aria-hidden="true"></i>
           </a>
         </div>
+        <% if(errors && error[0].oldPassword) { %>
+        <small class="form-text text-danger">
+          <%= error[0].oldPassword %></small>
+        <% } %>
       </div>
-
-      <% if(errors && error[0].oldPassword) { %>
-      <small class="form-text text-danger">
-        <%= error[0].oldPassword %></small>
-      <% } %>
 
       <div class="form-group">
         <label for="newPassword">New Password</label>

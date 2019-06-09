@@ -37,7 +37,7 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
     user.lastLog = Date.now();
     user.save();
   });
-  req.flash("success", `Welcome back, ${req.user.username}`)
+  req.flash("success", `Welcome back, ${req.user.displayName}`)
   res.redirect('/me')
 });
 
@@ -71,7 +71,8 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   }
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
-  const username = req.body.username;
+  let username = req.body.username;
+  const displayName = req.body.username;
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -108,16 +109,20 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   // Checks if there is any errors.
   if (JSON.stringify(error) === '{}') {
     // Create the user object.
+    username = username.toLowerCase();
     let newUser = {
       username,
+      displayName,
       email,
       avatar,
     };
 
     // Trys to create the user
     User.register(newUser, password, (err, user) => {
+      if(err) {
+        if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
+      }
       // if the user already exists then show the error.
-      if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
 
       // if any errors ablove then show it
       if (JSON.stringify(error) !== '{}') {

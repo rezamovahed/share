@@ -30,7 +30,8 @@ router.get('/', (req, res) => {
 */
 router.put('/', (req, res) => {
   let error = {};
-  const username = req.body.username.toString();
+  let username = req.body.username.toString();
+  let displayName = req.body.username.toString();
   const email = req.body.email.toString().toLowerCase();
   const newPassword = req.body.newPassword.toString();
   const oldPassword = req.body.oldPassword.toString();
@@ -63,12 +64,22 @@ router.put('/', (req, res) => {
   // Check if passoword and comfirm password are the same.
   // Check password length
   if (JSON.stringify(error) === '{}') {
+    username = username.toLowerCase();
     let updatedUser = {
       username,
+      displayName,
       email,
       avatar
     }
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
+      if (err) {
+        if (err.code === 11000) {
+          error.username = 'Username has already been taked.'
+        }
+        req.flash('error', error);
+        res.redirect('/me');
+        return;
+      }
       if (newPassword) {
         user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
           if (err) {

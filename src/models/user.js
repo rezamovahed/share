@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 // Schema Setup
@@ -8,6 +7,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
+  },
+  displayName: {
+    type: String,
+    unique: true,
   },
   email: {
     type: String,
@@ -32,6 +35,8 @@ const userSchema = new mongoose.Schema({
   },
   isAdmin: Boolean,
   lastLog: Date,
+  lastLogIP: String,
+  signupIP: String,
 }, {
     timestamps: true
   });
