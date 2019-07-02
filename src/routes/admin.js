@@ -9,6 +9,7 @@ const password = require('generate-password');
 const gravatar = require('gravatar');
 const validator = require('validator');
 const middleware = require('../middleware')
+const lisingsPerPage = require('./utils/lisingsPerPage');;
 
 /**
  * @route /admin
@@ -33,52 +34,22 @@ router.get('/', middleware.owner, async (req, res) => {
 });
 
 
-// Function for showing the lisings per page. (For uploads)
-function uploaderListingPerPage(req, res, page, model, limit, render, title) {
-  model
-    .find({})
-    .skip((limit * page) - limit)
-    .limit(limit)
-    .sort({ createdAt: -1 })
-    .populate('uploader')
-    .exec((err, data) => {
-      model.countDocuments().exec((err, count) => {
-        res.render(render, {
-          title,
-          data,
-          current: page,
-          pages: Math.ceil(count / limit),
-        });
-      })
-    })
-}
-// Function for showing the lisings per page. (Users)
-function usersListingPerPage(req, res, page, model, limit, render, title) {
-  model
-    .find({})
-    .skip((limit * page) - limit)
-    .limit(limit)
-    .sort({ createdAt: -1 })
-    .exec((err, data) => {
-      model.countDocuments().exec((err, count) => {
-        res.render(render, {
-          title,
-          data,
-          current: page,
-          pages: Math.ceil(count / limit)
-        });
-      });
-    });
-}
-
 /**
  * @route /admin/uploads
  * @method GET
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/uploads', (req, res) => {
-  uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Uploads Management');
+router.get('/uploads', async (req, res) => {
+  const uploads = (await lisingsPerPage(req, res, 1, Upload, 10, true, 'uploader'));
+  res.render('admin/uploads', {
+    title: 'Uploads Management',
+    data: uploads.data,
+    current: 1,
+    pages: Math.ceil(uploads.count / 10)
+  });
+
+  // uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Uploads Management');
 });
 
 /**
@@ -87,8 +58,15 @@ router.get('/uploads', (req, res) => {
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/uploads/:page', (req, res) => {
-  uploaderListingPerPage(req, res, req.params.page, Upload, 10, 'admin/uploads', 'Uploads Management');
+router.get('/uploads/:page',async(req, res) => {
+  const uploads = (await lisingsPerPage(req, res, req.params.page, Upload, 10, true, 'uploader'));
+  res.render('admin/uploads', {
+    title: 'Uploads Management',
+    data: uploads.data,
+    current: req.params.page,
+    // Count/limit
+    pages: Math.ceil(uploads.count / 10)
+  });
 });
 
 /**
@@ -105,7 +83,7 @@ router.delete('/uploads/:id', (req, res) => {
     fs.unlink(filePath, err => {
       req.flash('success', `Deleted ${fileName}`);
       res.redirect('back');
-    })
+    });
   });
 });
 
@@ -366,7 +344,7 @@ router.post('/users/new', (req, res) => {
       password: password,
 
     });
-  }
+  };
 });
 
 /**

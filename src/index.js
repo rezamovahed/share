@@ -14,7 +14,7 @@ const middleware = require('./middleware');
 const User = require('./models/user');
 
 // Load enviroment variables from .env file
-require('dotenv').config()
+require('dotenv').config();
 
 // Initilate Express
 const app = express();
@@ -96,7 +96,7 @@ app.use(flash());
 // Body parser
 app.use(bodyParser.urlencoded({
   extended: true
-}))
+}));
 
 // Express Locals
 app.use((req, res, next) => {
@@ -133,8 +133,8 @@ const csrfMiddleware = csrf()
 let csrfLocals = (req, res, next) => {
   // Csrf
   res.locals.csrfToken = req.csrfToken() || null;
-  next()
-}
+  next();
+};
 
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
@@ -153,12 +153,13 @@ app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
   // handle CSRF token errors here
-  res.status(403)
+  res.status(403);
   res.json({
+    status: 403,
     message: 'Error in CSRF Token',
-    error: {}
   });
 });
+
 app.get('*', function (req, res) {
   res.status(404).render('errors/404');
 });
@@ -171,7 +172,7 @@ mongoose.set('useCreateIndex', true);
 mongoose.connect(process.env.DATABASE_URI, {
   useNewUrlParser: true,
   autoReconnect: true
-})
+});
 
 const db = mongoose.connection;
 
@@ -193,11 +194,11 @@ db.once('open', () => {
       badge: true
     });
     // Log infomation after everything is started.
-    consola.log('----------------------------------------')
-    consola.info(`Environment: ${app.get('env')}`)
-    consola.info(`Base URL: http://localhost:${app.get('port')}`)
+    consola.log('----------------------------------------');
+    consola.info(`Environment: ${app.get('env')}`);
+    consola.info(`Base URL: http://localhost:${app.get('port')}`);
     consola.info('Press CTRL-C to stop');
-    consola.log('----------------------------------------')
+    consola.log('----------------------------------------');
   });
 });
 
