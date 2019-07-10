@@ -1,4 +1,4 @@
-# MacOS	node_modules
+# MacOS
 .DS_Store
 # NodejS
 node_modules/
@@ -8,8 +8,7 @@ package-lock.json
 .env
 # sass
 .sass-cache
-# Removes local uploads
-!src/public/u/f/.gitkeep
-!src/public/u/i/.gitkeep
-!src/public/u/t/.gitkeep
+# Local uploads
 src/public/u/*
+# Temp folder
+src/tmp

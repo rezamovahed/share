@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const middleware = require('../middleware')
+const middleware = require('../middleware');
 
 /**
  * @route /
@@ -9,7 +9,7 @@ const middleware = require('../middleware')
  * @access Public
 */
 router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
-  res.render('index')
+  res.render('index');
 });
 
 module.exports = router;

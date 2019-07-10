@@ -4,27 +4,32 @@
 <div class="container w-50 pt-5">
   <form action="/me?_method=PUT" method="POST">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-    <% if (success && success.length > 0){ %>
-    <div class="alert alert-success" role="alert">
-      <%= success %>
-    </div>
-    <% } %>
+    <% include ../partials/success %>
     <h1 class="display-4">Edit account</h1>
+
     <div class="form-group">
       <label for="username">Username</label>
-      <input name="username" type="text" class="form-control" id="username" value="<%= currentUser.username %>"
-        autocomplete="off" data-lpignore="true" required>
+      <input name="username" type="text" class="form-control <% if(errors && error[0].username) { %> is-invalid <% } %>"
+        id="username" value="<%= currentUser.displayName %>" autocomplete="off" data-lpignore="true" required>
+      <% if(errors && error[0].username) { %>
+      <small class="form-text text-danger">
+        <%= error[0].username %></small>
+      <% } %>
     </div>
+
+
     <div class="form-group">
       <label for="email">Email</label>
       <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>"
         id="email" value="<%= currentUser.email %>" required>
+      <% if(errors && error[0].email) { %>
+      <small class="form-text text-danger">
+        <%= error[0].email %></small>
+      <% } %>
     </div>
-    <% if(errors && error[0].email) { %>
-    <small class="form-text text-danger">
-      <%= error[0].email %></small>
-    <% } %>
+
     <h1 class="display-4">Edit security</h1>
+
     <div class="form-group">
       <label for="oldPassword">Current Password</label>
       <div class="input-group" id="show_hide_password_1">
@@ -35,11 +40,12 @@
             <i class="fa fa-eye-slash" aria-hidden="true"></i>
           </a>
         </div>
+        <% if(errors && error[0].oldPassword) { %>
+        <small class="form-text text-danger">
+          <%= error[0].oldPassword %></small>
+        <% } %>
       </div>
-      <% if(errors && error[0].oldPassword) { %>
-      <small class="form-text text-danger">
-        <%= error[0].oldPassword %></small>
-      <% } %>
+
       <div class="form-group">
         <label for="newPassword">New Password</label>
         <div class="input-group" id="show_hide_password_2">
@@ -72,7 +78,9 @@
           <%= error[0].confirmNewPassword %></small>
         <% } %>
       </div>
+
       <button type="submit" class="btn btn-primary">Save Account</button>
+      <a role=button" class="btn btn-primary text-white" href="/me/keys">View API Keys</a>
       <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -91,6 +99,7 @@
           </div>
         </div>
       </div>
+
       <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
         style="color: #ffff;">Delete
         account</a>

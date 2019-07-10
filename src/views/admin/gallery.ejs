@@ -1,7 +1,7 @@
 <% include ../partials/header %>
-<% include ../partials/navbar %>
+<% include ./partials/navbar %>
 <div class="container">
-  <div class="display-4 pt-2 pb-2 text-center">Admin image gallery</div>
+  <div class="display-4 pt-2 pb-2 text-center">Images Gallery</div>
 </div>
 <div class="container">
   <% if (success && success.length > 0){ %>
@@ -24,10 +24,10 @@
   <% gallery.map((image, index) =>{ %>
   <%- (index % 4 == 0) ? `<div class="row ml-2 mr-2 justify-content-center">`: "" %>
   <div class="col-md-2 col-xs-12 gallery">
-    <a href="/view/i/<%= image.fileName %>">
-      <img class="img-thumbnail" src="/u/i/<%= image.fileName %>">
+    <a href="/view/<%= image.fileName %>">
+      <img class="img-thumbnail" src="/u/<%= image.fileName %>">
     </a>
-    <form action="/admin/uploads/<%= image.id %>?_method=DELETE&type=image&name=<%= image.fileName %>" method="POST">
+    <form action="/admin/uploads/<%= image.id %>?_method=DELETE&name=<%= image.fileName %>" method="POST">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <button class="btn btn-danger position-absolute" title="Delete" data-toggle="tooltip">
         <i class="fas fa-trash"></i>

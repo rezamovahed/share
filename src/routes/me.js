@@ -3,14 +3,15 @@ const router = express.Router();
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const fileExists = require('file-exists');
 const validator = require('validator');
 const md5 = require('js-md5');
 const path = require('path');
 const Key = require('../models/key');
 const User = require('../models/user');
 const Upload = require('../models/upload');
-const middleware = require('../middleware')
+const userUploadsPerPage = require('./utils/userUploadsPerPage');;
+const deleteUpload = require('./utils/deleteUpload');
+
 
 /**
  * @route /me
@@ -21,7 +22,6 @@ const middleware = require('../middleware')
 router.get('/', (req, res) => {
   res.render('me/index', {
     title: 'Edit account',
-
   });
 });
 
@@ -33,12 +33,13 @@ router.get('/', (req, res) => {
 */
 router.put('/', (req, res) => {
   let error = {};
-  const username = req.body.username;
-  const email = req.body.email.toLowerCase();
-  const newPassword = req.body.newPassword;
-  const oldPassword = req.body.oldPassword;
-  const confirmNewPassword = req.body.confirmNewPassword;
-  const avatar = gravatar.url(req.body.email, {
+  let username = req.body.username.toString();
+  let displayName = req.body.username.toString();
+  const email = req.body.email.toString().toLowerCase();
+  const newPassword = req.body.newPassword.toString();
+  const oldPassword = req.body.oldPassword.toString();
+  const confirmNewPassword = req.body.confirmNewPassword.toString();
+  const avatar = gravatar.url(email, {
     s: '100',
     r: 'x',
     d: 'retro'
@@ -46,50 +47,65 @@ router.put('/', (req, res) => {
 
   // Check if empty
   // Username
-  if (!username) { error.username = 'Please enter your username.' }
+  if (!username) { error.username = 'Please enter your username.' };
   // Email
   // Check if email is vaid
-  if (!email) { error.email = 'Please enter your email.' }
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
+  if (!email) { error.email = 'Please enter your email.' };
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
   // Password
   if (newPassword) {
-    if (!newPassword) { error.newPassword = 'Must have a password' }
-    if (!confirmNewPassword) { error.confirmNewPassword = 'Must comfirm password' }
-    if (validator.isLength(newPassword, {
+
+    if (!confirmNewPassword) { error.confirmNewPassword = 'Must comfirm password' };
+    if (!validator.isLength(newPassword, {
       minimum: 8
     })) {
       error.password = 'Password must be at least 8 characters long. '
     }
-    if (newPassword !== confirmNewPassword) { error.confirmNewPassword = 'Both passowrds must match.' }
-    if (newPassword === oldPassword) { error.oldPassword = "Can't be the same as the old password" }
+    if (newPassword !== confirmNewPassword) { error.confirmNewPassword = 'Both passowrds must match.' };
+    if (newPassword === oldPassword) { error.oldPassword = "Can't be the same as the old password" };
   }
   // Check if passoword and comfirm password are the same.
   // Check password length
   if (JSON.stringify(error) === '{}') {
+    username = username.toLowerCase();
     let updatedUser = {
       username,
+      displayName,
       email,
       avatar
     }
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
-      function changePassword() {
-        req.logOut();
-        req.flash('error', 'Your password has been changed.  Please relogin.')
-        res.redirect('/login')
+      if (err) {
+        if (err.code === 11000) {
+          error.username = 'Username has already been taked.'
+        }
+        req.flash('error', error);
+        res.redirect('/me');
+        return;
       }
       if (newPassword) {
         user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
-          return changePassword();
+          if (err) {
+            if (err.name === 'IncorrectPasswordError') {
+              error.oldPassword = 'Wrong current password.'
+              req.flash('error', error);
+              res.redirect('/me');
+              return;
+            }
+          }
         });
-      } else {
-        req.flash('success', 'Your account has been succesfuly updated.');
-        res.redirect('/me');
-      }
+        req.flash('success', 'Your password has been changed.  Please relogin.');
+        req.logout();
+        res.redirect('/login');
+        return;
+      };
+      req.flash('success', 'Your account has been succesfuly updated.');
+      res.redirect('/me');
     })
   } else {
     req.flash('error', error);
     res.redirect('/me')
-  }
+  };
 });
 
 /**
@@ -101,18 +117,16 @@ router.put('/', (req, res) => {
 router.get('/keys', (req, res) => {
   Key.find({ 'user': { id: req.user._id } }, (err, keys) => {
     res.render('me/keys', {
-      title: 'My Keys',
+      title: 'Manage Keys',
       keys,
-
     });
-
   });
 });
 
 /**
  * @route /me/keys
  * @method POST
- * @description Diplays API Keys
+ * @description Creates a API Key
  * @access Private
 */
 router.get('/keys/create', (req, res) => {
@@ -130,42 +144,26 @@ router.get('/keys/create', (req, res) => {
   }
   Key.create(newKey, (err, key) => {
     req.flash('info', token);
-    res.redirect('/me/keys')
+    res.redirect('/me/keys');
   });
 });
+
 /**
  * @route /me/keys
  * @method POST
- * @description Diplays API Keys
+ * @description Removes API Key
  * @access Private
 */
 router.delete('/keys/:key', (req, res) => {
   Key.findByIdAndRemove(req.params.key, (err, key) => {
+    if (err) {
+      req.flash('error', 'Error in removing API Key');
+      return res.redirect('/me/keys')
+    }
     req.flash('success', 'API Key removed');
     res.redirect('/me/keys')
   });
 });
-
-// Here's where the content you upload will be stored.
-const uploadLimitPerPage = 10
-function commandListing(req, res, page) {
-  Upload
-    .find({ 'uploader': req.user._id })
-    .skip((uploadLimitPerPage * page) - uploadLimitPerPage)
-    .limit(uploadLimitPerPage)
-    .sort({ createdAt: -1 })
-    .exec((err, uploads) => {
-      Upload.find({ 'uploader': req.user._id }).countDocuments().exec((err, count) => {
-        res.render('me/uploads', {
-          title: `My Uploads`,
-          uploads,
-          current: page,
-          pages: Math.ceil(count / uploadLimitPerPage),
-
-        });
-      });
-    });
-}
 
 /**
  * @route /me/uploads
@@ -173,60 +171,53 @@ function commandListing(req, res, page) {
  * @description Displays uploaded stuff
  * @access Private
 */
-router.get('/uploads', (req, res) => {
+router.get('/uploads', async (req, res) => {
   let page = 1;
-  commandListing(req, res, page);
+  const uploads = await (userUploadsPerPage(req, res, page, req.user.id, 10));
+  res.render('me/uploads', {
+    title: `Manage Uploads`,
+    uploads: uploads.data,
+    current: page,
+    // Count/limit
+    pages: Math.ceil(uploads.count / 10),
+  });
 });
 
-router.get('/uploads/:page', (req, res) => {
+router.get('/uploads/:page', async (req, res) => {
   let page = req.params.page || 1;
   if (page === '0') { return res.redirect('/me/uploads') }
-  commandListing(req, res, page);
+  const uploads = await (userUploadsPerPage(req, res, page, req.user.id, 10));
+  res.render('me/uploads', {
+    title: `Manage Uploads`,
+    uploads: uploads.data,
+    current: page,
+    // Count/limit
+    pages: Math.ceil(uploads.count / 10),
+  });
 });
 
 /**
  * @route /me/uploads/id
  * @method delete
- * @description Upload a Image
+ * @description Remove uploaded file
  * @param type name
  * @access Private
 */
 router.delete('/uploads/:id', (req, res) => {
   Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
-    let fileType = {};
-    switch (req.query.type) {
-      case ('image'):
-        fileType.image = true
-        break;
-      case ('file'):
-        fileType.file = true
-        break;
-      case ('text'):
-        fileType.text = true
-        break;
-    }
     const fileName = req.query.name
-    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : fileType.file ? 'f' : 't'}/${fileName}`;
+    const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
     fs.unlink(filePath, err => {
       if (err) {
         req.flash('error', 'Error in deleteing');
         res.redirect('back');
         return;
-      }
+      };
       req.flash('success', `Deleted ${fileName}`);
       res.redirect('back');
     })
   });
 });
-
-function deleteByUploadFileType(type, file) {
-  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
-  Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-    fs.unlink(filePath, err => {
-      if (err) { return res.status(500) }
-    });
-  });
-}
 
 /**
  * @route /me/gallery
@@ -234,18 +225,12 @@ function deleteByUploadFileType(type, file) {
  * @description Displays images in a gallery fomate
  * @access Private
 */
-router.get('/gallery', (req, res) => {
-  Upload
-    .find({ 'uploader': req.user._id, 'isImage': true })
-    .sort({ createdAt: -1 })
-    .exec((err, gallery) => {
-      res.render('me/gallery', {
-        title: 'Image Gallery',
-        gallery,
-
-      });
-    })
-
+router.get('/gallery', async (req, res) => {
+  const gallery = (await Upload.find({ 'uploader': req.user._id, 'isImage': true }).sort({ createdAt: -1 }));
+  res.render('me/gallery', {
+    title: 'Image Gallery',
+    gallery,
+  });
 });
 
 /**
@@ -255,56 +240,17 @@ router.get('/gallery', (req, res) => {
  * @access Private
 */
 router.get('/delete', (req, res) => {
-  let images = [];
-  let files = [];
-  let texts = [];
-  let error;
-  Upload.find({ 'uploader': req.user._id }, (err, file) => {
+  const baseFilePath = `${path.join(__dirname, '../public')}/u/`;
+  Upload.find({ 'uploader': req.user.id }, (err, file) => {
     file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
-        });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
-        });
-      }
-    });
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
-      });
-    }
-  });
-  Key.find({ 'user': { id: req.user._id } }, (err, keys) => {
-    keys.map(key => {
-      Key.findByIdAndDelete(key.id, (err, removedKey) => {
+      Upload.findOneAndDelete({ fileName: file.fileName }, (err, removed) => {
+        fs.unlink(baseFilePath + file.fileName);
       });
     });
   });
-  User.findByIdAndDelete(req.user.id, (err, removedUser) => {
-    res.redirect('/')
-  });
+  Key.deleteMany({ 'user': { id: req.user.id } });
+  User.findByIdAndDelete(req.user.id);
+  res.redirect('/');
 });
 
 /**
@@ -313,54 +259,47 @@ router.get('/delete', (req, res) => {
  * @description Remove all images
  * @access Private
 */
-router.get('/uploads/delete/all', (req, res) => {
-  let images = [];
-  let files = [];
-  let texts = [];
-  let error;
-  Upload.find({ 'uploader': req.user._id }, (err, file) => {
-    file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
-        });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
+router.get('/uploads/delete/all', async (req, res) => {
+  let deleteErrors = {
+    file: 0,
+    db: 0,
+  };
+  // Find all uploads by the user
+  uploads = (await Upload.find({ 'uploader': req.user.id }));   // If no uploads are found then show a error message
+  if (uploads.length === 0) {
+    req.flash('error', 'You must upload before you can delete.');
+    res.redirect('/me/uploads');
+    return;
+  };
+  // Loop though all the uploads and removes it from the file system then removes it from the database
+  /**
+   * What am going to do here is "try" to remove each file then at the end if any erros happen it will show two messages.
+   * Saying it's done but also how many uploads failed.  This is so the user knows not all the uploads they wanted removed
+   * have been removed for some reason
+   */
+
+  uploads.map(file => {
+    deleteUpload.file(file.fileName, cb => {
+      if (!cb) {
+        deleteErrors.file += 1;
+      } else {
+        deleteUpload.database(file.fileName, cb => {
+          if (!cb) {
+            deleteErrors.db += 1;
+          }
         });
       }
     });
-    if (!images && !files && !texts) {
-      req.flash('error', 'You must upload before you can delete.')
-      res.redirect('/me/uploads')
-
+  })
+  setTimeout(() => {
+    if (deleteErrors.file > 0 || deleteErrors.db > 0) {
+      req.flash('error', `Not all files could be removed.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
+      res.redirect('/me/uploads');
+      return;
     }
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
-      });
-    }
-    req.flash('success', 'All your uploads has been deleted.')
-    res.redirect('/me/uploads')
+    // All uploads has been removed
+    req.flash('success', 'All your uploads has been deleted.');
+    res.redirect('/me/uploads');
   });
 });
 

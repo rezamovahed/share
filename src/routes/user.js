@@ -6,6 +6,7 @@ const User = require('../models/user');
 const middleware = require('../middleware');
 const router = express.Router();
 const nodemailerSendGrid = require('../config/sendgrid.js');
+const mailConfig = require('../config/email')
 
 /**
  * @route /user/activate/resend
@@ -16,7 +17,6 @@ const nodemailerSendGrid = require('../config/sendgrid.js');
 router.get('/activate/resend', (req, res) => {
   res.render('user/activate/resend', {
     title: 'Resend Account Activation',
-
   });
 });
 
@@ -27,24 +27,25 @@ router.get('/activate/resend', (req, res) => {
  * @access Public
 */
 router.post('/activate/resend', (req, res) => {
-    User.findOne({
+  User.findOne({
     email: req.body.email
   }, (err, user) => {
     if (!user) {
-      req.flash('error', 'User does not exist');
+      req.flash('error', 'User does not exist.');
       res.redirect('/user/activate/resend');
       return;
-    }
+    };
+
     if (!user.accountActivated) {
       async.waterfall([
-        function (done) {
+        (done) => {
           crypto.randomBytes(16, function (err, buf) {
             var token = buf.toString('hex');
-            var tokenExpire = Date.now() + 3600000;
+            var tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
             done(err, token, tokenExpire)
           });
         },
-        function (token, tokenExpire, done) {
+        (token, tokenExpire, done) => {
           User.findOne({
             email: req.body.email
           }, function (err, user) {
@@ -55,7 +56,7 @@ router.post('/activate/resend', (req, res) => {
             });
           });
         },
-        function (token, done) {
+        (token, done) => {
           const htmlOuput = mjml(`<mjml>
         <mj-body background-color="#ffffff" font-size="13px">
           <mj-section>
@@ -98,7 +99,7 @@ router.post('/activate/resend', (req, res) => {
       `)
           const accountActvationEmail = {
             to: req.body.email,
-            from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
+            from: mailConfig.from,
             subject: `Activate Your Account | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
@@ -109,7 +110,6 @@ router.post('/activate/resend', (req, res) => {
           });
         }
       ]);
-      return;
     }
     req.flash('success', 'Your account is already activated');
     res.redirect("/");
@@ -128,16 +128,17 @@ router.get('/activate/:token', (req, res) => {
     res.redirect('/user/activate/resend');
   }
   async.waterfall([
-    function (done) {
+    (done) => {
       User.findOne({
         accountActvationToken: req.params.token,
         accountActvationExpire: {
           $gt: Date.now()
         }
-      }, function (err, user) {
+      }, (err, user) => {
         if (!user) {
           return activationError();
-        }
+        };
+
         user.accountActvationToken = undefined;
         user.accountActvationExpire = undefined;
         user.accountActivated = true;
@@ -157,20 +158,21 @@ router.get('/activate/:token', (req, res) => {
  * @access Public
 */
 router.get('/delete/:token', (req, res) => {
-  function activationError() {
-    req.flash('error', 'Your token is invaid or your account is already activated.')
+  function deleteRemove() {
+    req.flash('error', 'Your token is invaid or account has not been created.')
     res.redirect('/login');
   }
+
   async.waterfall([
-    function (done) {
+    (done) => {
       User.findOneAndDelete({
         accountActvationToken: req.params.token,
         accountActvationExpire: {
           $gt: Date.now()
         }
-      }, function (err, user) {
+      }, (err, user) => {
         if (!user) {
-          return activationError();
+          return deleteRemove();
         }
         req.flash('success', 'Your account has been removed');
         res.redirect('/');
@@ -179,6 +181,7 @@ router.get('/delete/:token', (req, res) => {
     }
   ]);
 });
+
 /**
  * @route /user/forgot
  * @method GET
@@ -188,7 +191,6 @@ router.get('/delete/:token', (req, res) => {
 router.get('/forgot', (req, res) => {
   res.render('user/forgot/index', {
     title: 'Forgot Password',
-
   });
 });
 
@@ -199,33 +201,31 @@ router.get('/forgot', (req, res) => {
  * @access Public
 */
 router.post('/forgot', middleware.isActvation, (req, res) => {
-  function forgotAccountNotFoundError() {
-    req.flash('error', 'No account could be found.');
-    res.redirect('/user/forgot');
-  }
   async.waterfall([
-    function (done) {
+    (done) => {
       crypto.randomBytes(8, function (err, buf) {
         var token = buf.toString('hex');
         done(err, token)
       });
     },
-    function (token, done) {
+    (token, done) => {
       User.findOne({
         email: req.body.email
       }, function (err, user) {
         if (!user) {
-          return forgotAccountNotFoundError();
+          req.flash('error', 'No account could be found.');
+          res.redirect('/user/forgot');
+          return;
         } else {
           user.resetPasswordToken = token;
-          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+          user.resetPasswordExpires = Date.now() + 1000 * 10 * 6 * 60;
           user.save(function (err) {
             done(err, token, user);
           });
         }
       });
     },
-    function (token, user, done) {
+    (token, user, done) => {
       const htmlOuput = mjml(`
       <mjml>
   <mj-body background-color="#ffffff" font-size="13px">
@@ -246,7 +246,7 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
       <mj-section>
         <mj-column>
         <mj-text>Please click on the following link to complete the process:</mj-text>
-          <mj-button href="http://${req.headers.host}/user/forgot/reset/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+          <mj-button href="https://${req.headers.host}/user/forgot/reset/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
             Reset Password
           </mj-button>
         </mj-column>
@@ -255,10 +255,10 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
   </mj-body>
 </mjml>
 `)
-      var forgotPasswordEmail = {
+      const forgotPasswordEmail = {
         to: user.email,
-        from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
-        subject: `Password reset  | ${process.env.TITLE}`,
+        from: mailConfig.from,
+        subject: `Password reset | ${process.env.TITLE}`,
         html: htmlOuput.html
       };
       nodemailerSendGrid.sendMail(forgotPasswordEmail, function (err) {
@@ -266,7 +266,7 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
         res.redirect('/user/forgot')
         done(err, 'done');
       })
-    },
+    }
   ])
 });
 
@@ -284,12 +284,13 @@ router.get('/forgot/reset/:token', (req, res) => {
     }
   }, function (err, user) {
     if (!user) {
-      return res.redirect('/user/forgot');
-    }
+      req.flash('error', 'Password reset token is invaid or is expired')
+      res.redirect('/user/forgot');
+      return;
+    };
     res.render('user/forgot/reset', {
-      title: "Reset Password",
+      title: 'Reset Password',
       token: req.params.token,
-
     });
   });
 });
@@ -302,31 +303,33 @@ router.post('/forgot/reset/:token', (req, res) => {
     }
   }, (err, user) => {
     if (!user) {
-      return res.redirect('/user/forgot');
-    }
+      req.flash('error', 'Password reset token is invaid or is expired')
+      res.redirect('/user/forgot');
+      return;
+    };
+
     if (req.body.password !== req.body.passwordConfirm) {
-      return res.redirect('/user/forgot');
-    }
+      req.flash('error', 'Both passwords most match.')
+      res.redirect(`/user/forgot/reset/${req.params.token}`);
+      return;
+    };
     user.setPassword(req.body.password, function (err) {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
       user.save();
       const forgotResetPasswordEmail = {
         to: user.email,
-        from: `noreply@${process.env.EMAIL_DOMAIN}`,
+        from: mailConfig.from,
         subject: 'Your password has been changed',
-        text: 'Hello,\n\n' +
+        text: 'Hello,\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
-      nodemailerSendGrid.sendMail(forgotResetPasswordEmail, function (err) {
-        req.flash('error', 'Your password has been changed.  You should be able to relogin with the new password')
-        res.redirect('/login')
-        doe(err, 'done');
-      })
+      nodemailerSendGrid.sendMail(forgotResetPasswordEmail, err => {
+        req.flash('success', 'Your password has been changed.  You should be able to relogin with the new password');
+        res.redirect('/login');
+      });
     });
   });
-
 })
-
 
 module.exports = router;

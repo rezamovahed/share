@@ -1,11 +1,11 @@
-﻿{
+{
   "Version": "12.4.1",
-  "Name": "MrdemonWolf - File",
-  "DestinationType": "FileUploader",
+  "Name": "MrdemonWolf Custom Uploader",
+  "DestinationType": "ImageUploader",
   "RequestMethod": "POST",
-  "RequestURL": "https://yourdomain/api/upload/file",
+  "RequestURL": "https://www.example.com/api/upload/",
   "Headers": {
-    "Authorization": "Bearer "
+    "Authorization": "Bearer ${token}"
   },
   "Body": "MultipartFormData",
   "FileFormName": "file",

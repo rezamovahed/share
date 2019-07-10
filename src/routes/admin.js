@@ -7,7 +7,10 @@ const fs = require('fs');
 const path = require('path');
 const password = require('generate-password');
 const gravatar = require('gravatar');
-const validator = require('validator')
+const validator = require('validator');
+const middleware = require('../middleware')
+const uploadsLisingPerPage = require('./utils/adminUploadsPerPage');;
+const usersListingPerPage = require('./utils/userLisingPerPage');
 
 /**
  * @route /admin
@@ -15,7 +18,7 @@ const validator = require('validator')
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/', async (req, res) => {
+router.get('/', middleware.owner, async (req, res) => {
   try {
     let uploads = await Upload.countDocuments({}, (err, count) => { return count });
     let users = await User.countDocuments({}, (err, count) => { return count });
@@ -25,48 +28,11 @@ router.get('/', async (req, res) => {
       users
     })
   } catch (err) {
-    req.flash('error', 'Could not load data.')
+    req.flash('error', 'Could not load data.');
     res.render('admin/index');
     return;
   }
 });
-
-function uploaderListingPerPage(req, res, page, model, limit, render, title) {
-  model
-    .find({})
-    .skip((limit * page) - limit)
-    .limit(limit)
-    .sort({ createdAt: -1 })
-    .populate('uploader')
-    .exec((err, data) => {
-      model.countDocuments().exec((err, count) => {
-        res.render(render, {
-          title,
-          data,
-          current: page,
-          pages: Math.ceil(count / limit),
-        });
-      })
-    })
-}
-
-function usersListingPerPage(req, res, page, model, limit, render, title) {
-  model
-    .find({})
-    .skip((limit * page) - limit)
-    .limit(limit)
-    .sort({ createdAt: -1 })
-    .exec((err, data) => {
-      model.countDocuments().exec((err, count) => {
-        res.render(render, {
-          title,
-          data,
-          current: page,
-          pages: Math.ceil(count / limit)
-        });
-      });
-    });
-}
 
 /**
  * @route /admin/uploads
@@ -74,8 +40,14 @@ function usersListingPerPage(req, res, page, model, limit, render, title) {
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/uploads', (req, res) => {
-  uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Upload Management')
+router.get('/uploads', async (req, res) => {
+  const uploads = (await uploadsLisingPerPage(req, res, 1, Upload, 10, true, 'uploader'));
+  res.render('admin/uploads', {
+    title: 'Uploads Management',
+    data: uploads.data,
+    current: 1,
+    pages: Math.ceil(uploads.count / 10)
+  });
 });
 
 /**
@@ -84,8 +56,16 @@ router.get('/uploads', (req, res) => {
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/uploads/:page', (req, res) => {
-  uploaderListingPerPage(req, res, req.params.page, Upload, 10, 'admin/uploads', 'Upload Management')
+router.get('/uploads/:page', async (req, res) => {
+  if (req.params.page === '0') { return res.redirect('/admin/uploads') };
+  const uploads = (await uploadsLisingPerPage(req, res, req.params.page, Upload, 10, true, 'uploader'));
+  res.render('admin/uploads', {
+    title: 'Uploads Management',
+    data: uploads.data,
+    current: req.params.page,
+    // Count/limit
+    pages: Math.ceil(uploads.count / 10)
+  });
 });
 
 /**
@@ -95,41 +75,16 @@ router.get('/uploads/:page', (req, res) => {
  * @access Private
 */
 router.delete('/uploads/:id', (req, res) => {
+  // Finds the upload via the id and starts the removel process
   Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
-    let fileType = {};
-    switch (req.query.type) {
-      case ('image'):
-        fileType.image = true
-        break;
-      case ('file'):
-        fileType.file = true
-        break;
-      case ('text'):
-        fileType.text = true
-        break;
-    }
-    const fileName = req.query.name
-    const filePath = `${path.join(__dirname, '../public')}/u/${fileType.image ? 'i' : fileType.file ? 'f' : 't'}/${fileName}`;
+    const fileName = req.query.name;
+    const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
     fs.unlink(filePath, err => {
-      if (err) {
-        req.flash('error', 'Error in deleteing');
-        res.redirect('back');
-        return;
-      }
       req.flash('success', `Deleted ${fileName}`);
       res.redirect('back');
-    })
-  });
-});
-
-function deleteByUploadFileType(type, file) {
-  let filePath = `${path.join(__dirname, '../public')}/u/${type === 'image' ? 'i' : type === 'file' ? 'f' : 't'}/${file}`;
-  Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-    fs.unlink(filePath, err => {
-      if (err) { return res.status(500) }
     });
   });
-}
+});
 
 /**
  * @route /admin/uploads/delete/all
@@ -138,50 +93,18 @@ function deleteByUploadFileType(type, file) {
  * @access Private
 */
 router.get('/uploads/delete/all', (req, res) => {
-  let images = [];
-  let files = [];
-  let texts = [];
   let error;
   Upload.find({}, (err, file) => {
     file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
+      const filePath = `${path.join(__dirname, '../public')}/u/${file}`;
+      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
+        fs.unlink(filePath, err => {
+          res.redirect('back');
         });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
-        });
-      }
+      });
     });
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
-      });
-    }
   });
-  res.redirect('back')
 });
-
 
 /**
  * @route /admin/gallery
@@ -198,23 +121,56 @@ router.get('/gallery', (req, res) => {
         title: 'Image Gallery',
         gallery,
       });
-    })
+    });
 });
 
 /**
- * @route /admin/users/:id
+ * @route /admin/users/new
+ * @method GET
+ * @description Shows create user
+ * @access Private
+*/
+router.get('/users/new', (req, res) => {
+  let generatePassword = password.generate({
+    length: 16,
+    numbers: true
+  });
+  res.render('admin/users/new', {
+    title: 'Create new user',
+    password: generatePassword,
+  });
+});
+
+/**
+ * @route /admin/users/:page
+ * @method GET
+ * @description Show Admin Dashboard
+ * @access Private
+*/
+router.get('/users/:page', async (req, res) => {
+  if (req.params.page === '0') { return res.redirect('/admin/users') };
+  const data = (await usersListingPerPage(req, res, req.params.page, User, 10));
+  res.render('admin/users/index', {
+    title: 'User Management',
+    data: data.data,
+    current: req.params.page,
+    pages: Math.ceil(data.count / 10)
+  });
+});
+
+/**
+ * @route /admin/users/:id/edit
  * @method GET
  * @description Shows a edit form for the user
  * @access Private
 */
-router.get('/users/:id', (req, res) => {
+router.get('/users/:id/edit', (req, res) => {
   let id = req.params.id;
   User.findById(id, (err, user) => {
     let username = user.username;
     let email = user.email;
     let accountActivated = user.accountActivated;
     let isAdmin = user.isAdmin;
-    // Add user password change.
     res.render('admin/users/edit', {
       title: `Edit ${username}`,
       username,
@@ -238,27 +194,27 @@ router.put('/users/:id', (req, res) => {
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   const accountActivated = req.body.activate;
-  const isAdmin = req.body.admin;
   const avatar = gravatar.url(req.body.email, {
     s: '100',
     r: 'x',
     d: 'retro'
   }, true);
+
   let error = {};
 
   // Check if empty
   // Username
-  if (!username) { error.username = 'Please enter your username.' }
+  if (!username) { error.username = 'Please enter a username.' };
   // Email
   // Check if email is vaid
-  if (!email) { error.email = 'Please enter your email.' }
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
+  if (!email) { error.email = 'Please enter your email.' };
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
 
   // Password
   if (password && validator.isLength(password, {
     minimum: 8
   })) {
-    error.password = 'Password must be at least 8 characters long.'
+    error.password = 'Password must be at least 8 characters long.';
   }
 
   if (JSON.stringify(error) === '{}') {
@@ -266,15 +222,19 @@ router.put('/users/:id', (req, res) => {
       username,
       email,
       accountActivated,
-      isAdmin,
       avatar
     }
+    if (req.body.isAdmin) {
+      updatedUser.isAdmin = true
+    } else {
+      updatedUser.isAdmin = false;
+    };
+    console.log(updatedUser)
     User.findByIdAndUpdate(id, updatedUser, (err, user) => {
-
       if (err) {
         if (err.code === 11000) {
-          error.username = 'Username may be already in use.'
-          error.email = 'EMail may be already in use.'
+          error.username = 'Username may be already in use.';
+          error.email = 'EMail may be already in use.';
         }
         req.flash('error', error);
         res.redirect(`/admin/users/${id}`);
@@ -285,31 +245,14 @@ router.put('/users/:id', (req, res) => {
         });
       };
       // Add user password change.
-      req.flash('success', 'User has been updated');
+      req.flash('success', `${username} has been updated`);
       res.redirect('/admin/users');
       return;
     });
   } else {
     req.flash('error', error);
-    res.redirect(`/admin/users/${id}`);
+    res.redirect(`/ admin / users / ${id}`);
   }
-});
-
-/**
- * @route /admin/users/new
- * @method GET
- * @description Shows create user
- * @access Private
-*/
-router.get('/users/new', (req, res) => {
-  let generatePassword = password.generate({
-    length: 10,
-    numbers: true
-  });
-  res.render('admin/users/new', {
-    title: 'Create new user',
-    password: generatePassword,
-  });
 });
 
 /**
@@ -320,63 +263,33 @@ router.get('/users/new', (req, res) => {
 */
 router.delete('/users/:id', (req, res) => {
   if (req.user.id === req.params.id) {
-    req.flash('error', "You can't remove your own user")
-    res.redirect('back')
+    req.flash('error', "You can't remove your account.");
+    res.redirect('back');
     return;
   }
-  let images = [];
-  let files = [];
-  let texts = [];
+
   let error;
+
   Upload.find({ 'uploader': req.params.id }, (err, file) => {
     file.map(file => {
-      if (file.isImage) {
-        return images.push({
-          fileType: 'image',
-          fileName: file.fileName
-        });
-      }
-      if (file.isFile) {
-        return files.push({
-          fileType: 'file',
-          fileName: file.fileName
-        });
-      }
-      if (file.isText) {
-        return texts.push({
-          fileType: 'text',
-          fileName: file.fileName
-        });
-      }
+      const filePath = `${path.join(__dirname, '../public')} / u / ${file}`;
+      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
+        fs.unlink(filePath, err => { });
+      });
     });
-    if (images) {
-      images.map(image => {
-        deleteByUploadFileType(image.fileType, image.fileName);
-      });
-    }
-    if (files) {
-      files.map(file => {
-        deleteByUploadFileType(file.fileType, file.fileName);
-      });
-    }
-    if (texts) {
-      texts.map(text => {
-        deleteByUploadFileType(text.fileType, text.fileName);
-      });
-    }
   });
+
   Key.find({ 'user': { id: req.params.id } }, (err, keys) => {
     keys.map(key => {
-      Key.findByIdAndDelete(key.id, (err, removedKey) => {
-      });
+      Key.findByIdAndDelete(key.id, (err, removedKey) => { });
     });
   });
+
   User.findByIdAndDelete(req.params.id, (err, removedUser) => {
-    req.flash('success', `${removedUser.username} has been removed.`)
-    res.redirect('back')
+    req.flash('success', `${removedUser.username} has been removed.`);
+    res.redirect('back');
   });
 });
-
 
 /**
  * @route /admin/users/new
@@ -397,29 +310,32 @@ router.post('/users/new', (req, res) => {
 
   // Check if empty
   // Username
-  if (!username) { error.username = 'Please enter your username.' }
+  if (!username) { error.username = 'Please enter your username.' };
   // Email
-  if (!email) { error.email = 'Please enter your email.' }
+  if (!email) { error.email = 'Please enter your email.' };
   // Password
-  if (!password) { error.password = 'Must have a pssword' }
+  if (!password) { error.password = 'Must have a pssword' };
 
   // Check if email is vaid
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
   // Check if passoword and comfirm password are the same.
   // Check password length
   if (!validator.isLength(password, {
     minimum: 8
   })) {
-    error.password = 'Password must be at least 8 characters long. '
+    error.password = 'Password must be at least 8 characters long.';
   }
+
   if (JSON.stringify(error) === '{}') {
     let newUser = {
       username,
       email,
       avatar,
-    }
-    if (req.body.activate) { newUser.accountActivated = true }
-    if (req.body.admin) { newUser.isAdmin = true }
+    };
+
+    if (req.body.activate) { newUser.accountActivated = true };
+    if (req.body.admin) { newUser.isAdmin = true };
+
     User.register(newUser, password, (err, user) => {
       if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
       if (JSON.stringify(error) !== '{}') {
@@ -429,13 +345,12 @@ router.post('/users/new', (req, res) => {
           username,
           email: email,
           password: password,
-
         });
         return;
       }
-      req.flash('success', `${username} has been created`)
-      res.redirect('/admin/users')
-    })
+      req.flash('success', `${username} has been created`);
+      res.redirect('/admin/users');
+    });
   } else {
     req.flash('error', error)
     res.render('admin/users/new', {
@@ -445,7 +360,7 @@ router.post('/users/new', (req, res) => {
       password: password,
 
     });
-  }
+  };
 });
 
 /**
@@ -454,18 +369,15 @@ router.post('/users/new', (req, res) => {
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/users', (req, res) => {
-  usersListingPerPage(req, res, 1, User, 10, 'admin/users/index', 'User Management')
+router.get('/users', async (req, res) => {
+  const data = (await usersListingPerPage(req, res, 1, User, 10));
+  res.render('admin/users/index', {
+    title: 'User Management',
+    data: data.data,
+    current: 1,
+    pages: Math.ceil(data.count / 10)
+  });
 });
 
-/**
- * @route /admin/users/:page
- * @method GET
- * @description Show Admin Dashboard
- * @access Private
-*/
-router.get('/users/:pages', (req, res) => {
-  usersListingPerPage(req, res, req.params.page, User, 10, 'admin/users/index', 'User Management')
-});
 
 module.exports = router;

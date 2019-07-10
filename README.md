@@ -1,4 +1,4 @@
-# [MrDemonWolf Share Server](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
+# [MrDemonWolf Share](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
 
 ## Status
 
@@ -8,8 +8,8 @@
 [![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Average time to resolve an issue")
 [![Percentage of issues still open](https://isitmaintained.com/badge/open/MrDemonWolf/share-mrdemonwolf-me.svg)](https://isitmaintained.com/project/MrDemonWolf/share-mrdemonwolf-me "Percentage of issues still open")
 
-## Description
-This a simple ShareX server so I can upload images,files, and text files on my own domain/server.  This is fully open source and free to use by anyone.
+## Desrciption
+Simple uploader site with sharex support for uploading files,images, and text files.  This is open source and free to use.
 
 This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
@@ -40,21 +40,20 @@ npm install
 npm start
 ```
 ### Setup Account and ShareX
-And go to your localhost:5050 or yourdomainproxy.com either works and click login then create a account.
+And go to your localhost:5050 or yourdomain.com either works and click login then create a account.
 
 You should be be able to if you disable signups as you put your email in the __.env__ .
 
 Once done we move on the next step.
 
-#### Here's the sharex config templates for you
+Here's the sharex config templates for you
 
-[Image Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/File.sxcu)
+[ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
 
-[File Imput](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/template/Image.sxcu)
-
-Just edit the domain to fit your needs and imput into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
+Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
 After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
 
+Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin
 
 ### Want help develop?
 You can use this command to start up with nodemon so you can work on it and test.
@@ -64,8 +63,26 @@ npm run dev-web
 ```
 
 ### Changelog
-3.1.1
-* Fixed bug with middleware
+4.0.0
+<!-- * Added last login IP -->
+<!-- * Added signup IP -->
+<!-- * You can now upload files via your account on the website. -->
+<!-- * You can now ban and suspend user -->
+<!-- * You can also ban or suspend users for perm or 24 hours , a week, and even a month. -->
+<!-- Added API docs markdown -->
+* Now you can make yourself the first admin by going to /admin.  If the email matchs the one in the env then it will change the account to admin (This is safe as the email has to be verifyed anyways which makes sure its yours.)
+* API has changed file and image route to just be as one.
+* Changed createdAt to uploaded in lisings
+* Changed share to file in the lisings.
+* You can now limit the size of each upload by default its 100M
+* Fixed dashboard so it will add a 's' when there is more the one user or upload
+* Changed terms on users manger page.  Admin is not role which will display there role either admin or user
+* Changed 'Activated' to 'Role' and 'Admin' to 'Status'
+* Added Bannned or Suspended and Activate and Unactivated to status.
+* Removed last login from both database and user manger.
+* Changed text from 'Create user' to 'Create new user' in admin users.
+* Fixed the link in the admin nav gallery.  Now it links to the gallery
+* Fixed the navbar in admin gallery as it was linking the wrong one.
 
 3.1.0
 * Removed File and Text views

@@ -7,8 +7,10 @@ const crypto = require('crypto');
 const async = require('async');
 const middleware = require('../middleware');
 const nodemailerSendGrid = require('../config/sendgrid');
+const mailConfig = require('../config/email');
 const User = require('../models/user');
 const router = express.Router();
+
 /**
  * @route /login
  * @method GET
@@ -31,12 +33,11 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
   failureRedirect: "/login",
   failureFlash: true
 }), (req, res) => {
-
   User.findById(req.user.id, (err, user) => {
     user.lastLog = Date.now();
     user.save();
   });
-  req.flash("success", `Welcome back ${req.user.username}`)
+  req.flash("success", `Welcome back, ${req.user.displayName}`)
   res.redirect('/me')
 });
 
@@ -48,7 +49,7 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
 */
 router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   if (!process.env.SIGNUPS) {
-    return res.status(403).redirect('/')
+    return res.status(403).redirect('/');
   }
   res.render("auth/signup", {
     title: "Signup",
@@ -70,7 +71,8 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   }
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
-  const username = req.body.username;
+  let username = req.body.username;
+  const displayName = req.body.username;
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -82,50 +84,63 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
 
   // Check if empty
   // Username
-  if (!username) { error.username = 'Please enter your username.' }
+  if (!username) { error.username = 'Please enter your username.' };
+
   // Email
-  if (!email) { error.email = 'Please enter your email.' }
-  // Password
-  if (!password) { error.password = 'Must have a pssword' }
-  if (!confirmPassword) { error.confirmPassword = 'Must comfirm pssword' }
+  if (!email) { error.email = 'Please enter your email.' };
 
   // Check if email is vaid
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' }
-  // Check if passoword and comfirm password are the same.
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
+
+  // Password
+  if (!password) { error.password = 'Must have a pssword' };
+  if (!confirmPassword) { error.confirmPassword = 'Must comfirm pssword' };
+
   // Check password length
   if (!validator.isLength(password, {
     minimum: 8
   })) {
-    error.password = 'Password must be at least 8 characters long. '
+    error.password = 'Password must be at least 8 characters long. ';
   }
-  if (password !== confirmPassword) { error.confirmPassword = 'Both passowrds must match.' }
+
+  // Check if passoword and comfirm password are the same.
+  if (password !== confirmPassword) { error.confirmPassword = 'Both passowrds must match.' };
+
+  // Checks if there is any errors.
   if (JSON.stringify(error) === '{}') {
+    // Create the user object.
+    username = username.toLowerCase();
     let newUser = {
       username,
+      displayName,
       email,
       avatar,
-    }
+    };
+
+    // Trys to create the user
     User.register(newUser, password, (err, user) => {
-      if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
+      if(err) {
+        if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
+      }
+      // if the user already exists then show the error.
+
+      // if any errors ablove then show it
       if (JSON.stringify(error) !== '{}') {
         req.flash('error', error);
-        res.render('auth/signup', {
-          title: 'Signup',
-          username: req.body.username,
-          email: req.body.email
-        });
-        return;
-      }
+        return res.redirect('/signup');
+      };
+
+      // If all else passes then it creates the account and sends a email to activate it.
       async.waterfall([
-        function (done) {
+        (done) => {
           // Creates token
           crypto.randomBytes(8, function (err, buf) {
             var token = buf.toString('hex');
-            var tokenExpire = Date.now() + 3600000;
-            done(err, token, tokenExpire)
+            var tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
+            done(err, token, tokenExpire);
           });
         },
-        function (token, tokenExpire, done) {
+        (token, tokenExpire, done) => {
           // Finds and adds the token to user with a expire date
           User.findOne({
             email: req.body.email
@@ -137,7 +152,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
             });
           });
         },
-        function (token, done) {
+        (token, done) => {
           const htmlOuput = mjml(`<mjml>
         <mj-body background-color="#ffffff" font-size="13px">
           <mj-section>
@@ -176,25 +191,31 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
             </mj-section>
           </mj-wrapper>
         </mj-body>
-      </mjml>`)
+      </mjml>`);
           const accountActvationEmail = {
             to: req.body.email,
-            from: `${process.env.TITLE} No-Reply <noreply@${process.env.EMAIL_DOMAIN}>`,
+            from: mailConfig.from,
             subject: `Activate Your Account | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
           nodemailerSendGrid.sendMail(accountActvationEmail, function (err, info) {
             req.flash('success', success)
-            res.redirect('/login');
+            res.redirect('/signup');
             done(err, 'done');
           })
         }
-      ])
+      ]);
     });
-  } else {
-    req.flash('error', error)
-    res.redirect('/signup');
   }
+  else {
+    // if Any errors it renders them
+    res.render('auth/signup', {
+      title: 'Signup',
+      username,
+      email,
+      error: [error]
+    });
+  };
 });
 
 /**
@@ -205,7 +226,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
 */
 router.get('/logout', (req, res) => {
   req.logout();
-  res.redirect('/');
+  res.redirect('/login');
 });
 
 module.exports = router;

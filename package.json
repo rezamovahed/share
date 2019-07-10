@@ -1,7 +1,7 @@
 {
   "name": "share-mrdemonwolf-me",
-  "version": "3.1.1",
-  "description": "This a simple ShareX server so I can upload images,files, and text files on my own domain/server. This can be used for anyone but its not supported as much.",
+  "version": "4.0.0",
+  "description": "Simple uploader site with sharex support for uploading files,images, and text files.  This is open source and free to use.",
   "keywords": [
     "sharex",
     "custom-uploader",
@@ -16,49 +16,50 @@
     "start": "node src/index.js",
     "dev-start": "nodemon src/index.js",
     "scss": "sass --watch src/scss:src/public/css --style compressed",
-    "dev": "concurrently -n \"Client,Scss\" \"npm run dev-client\" \"npm run scss\""
+    "dev": "concurrently -n \"App,Scss\" \"npm run dev-start\" \"npm run scss\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MrDemonWolf/files.mrdemonwolf.me.git"
+    "url": "git+https://github.com/MrDemonWolf/share-mrdemonwolf-me.git"
   },
   "author": "MrDemonWolf",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MrDemonWolf/files.mrdemonwolf.me/issues"
+    "url": "https://github.com/MrDemonWolf/share-mrdemonwolf-me/issues"
   },
-  "homepage": "https://github.com/MrDemonWolf/files.mrdemonwolf.me#readme",
+  "homepage": "https://github.com/MrDemonWolf/share-mrdemonwolf-me#readme",
   "dependencies": {
     "async": "^2.6.2",
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
     "connect-mongo": "^2.0.3",
-    "consola": "^2.5.7",
+    "consola": "^2.7.1",
     "csurf": "^1.9.0",
     "dotenv": "^7.0.0",
     "ejs": "^2.6.1",
-    "express": "^4.16.4",
-    "express-fileupload": "^1.1.3-alpha.1",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
     "express-flash": "0.0.2",
-    "express-rate-limit": "^3.4.0",
-    "express-session": "^1.15.6",
+    "express-rate-limit": "^3.5.3",
+    "express-session": "^1.16.2",
     "file-exists": "^5.0.1",
     "generate-password": "^1.4.1",
+    "get-folder-size": "^2.0.1",
     "gravatar": "^1.8.0",
     "js-md5": "^0.7.3",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
-    "mjml": "^4.4.0-beta.1",
+    "mjml": "^4.4.0-beta.2",
     "moment": "^2.24.0",
-    "mongoose": "^5.4.19",
+    "mongoose": "^5.5.15",
     "morgan": "^1.9.1",
-    "nanoid": "^2.0.1",
+    "nanoid": "^2.0.3",
     "nodemailer": "^5.1.1",
     "nodemailer-sendgrid": "^1.0.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
-    "sass": "^1.17.3",
+    "sass": "^1.21.0",
     "validator": "^10.11.0"
   }
 }

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 // Schema Setup
@@ -8,6 +7,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
+  },
+  displayName: {
+    type: String,
+    unique: true,
   },
   email: {
     type: String,
@@ -18,7 +21,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  password: String,
+  isBanned: Boolean,
+  banExpire: Date,
+  isSuspended: Boolean,
+  suspendedExpire: Date,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   accountActvationToken: String,
@@ -27,8 +33,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  isAdmin: String,
+  isAdmin: Boolean,
   lastLog: Date,
+  lastLogIP: String,
+  signupIP: String,
 }, {
     timestamps: true
   });
@@ -38,4 +46,4 @@ userSchema.plugin(passportLocalMongoose, {
   usernameField: 'email'
 });
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model('User', userSchema)

@@ -47,7 +47,7 @@
       <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
         data-off="False">
     </div>
-    <% if(!accountActivated) { %>
+    <% if(accountActivated === false) { %>
     <script>
       $(document).ready(function () {
         $("#activate").attr('checked', false);
@@ -63,8 +63,8 @@
     <% } %>
     </script>
     <div class="form-group">
-      <label for="admin">Admin</label>
-      <input id="admin" name="admin" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
+      <label for="isAdmin">Admin</label>
+      <input id="isAdmin" name="isAdmin" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
         data-off="False">
     </div>
     <button type="submit " class="btn btn-primary">Edit User</button>
