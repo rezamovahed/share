@@ -9,10 +9,6 @@
  * What model to use for counting and returning the data per page.
  * @param limit
  * Is the limit per page.
- * @param render
- * Is the render.
- * @param title
- * Page title for render.
  * @param populate
  * Set to true to populate the data.
  * This is set to false by defult

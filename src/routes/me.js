@@ -9,6 +9,9 @@ const path = require('path');
 const Key = require('../models/key');
 const User = require('../models/user');
 const Upload = require('../models/upload');
+const userUploadsPerPage = require('./utils/userUploadsPerPage');;
+const deleteUpload = require('./utils/deleteUpload');
+
 
 /**
  * @route /me
@@ -162,42 +165,35 @@ router.delete('/keys/:key', (req, res) => {
   });
 });
 
-// Here's where the content you upload will be stored.
-// Can convert this function to be async.
-const uploadLimitPerPage = 10
-function commandListing(req, res, page) {
-  Upload
-    .find({ 'uploader': req.user._id })
-    .skip((uploadLimitPerPage * page) - uploadLimitPerPage)
-    .limit(uploadLimitPerPage)
-    .sort({ createdAt: -1 })
-    .exec((err, uploads) => {
-      Upload.find({ 'uploader': req.user._id }).countDocuments().exec((err, count) => {
-        res.render('me/uploads', {
-          title: `Manage Uploads`,
-          uploads,
-          current: page,
-          pages: Math.ceil(count / uploadLimitPerPage),
-        });
-      });
-    });
-};
-
 /**
  * @route /me/uploads
  * @method GET
  * @description Displays uploaded stuff
  * @access Private
 */
-router.get('/uploads', (req, res) => {
+router.get('/uploads', async (req, res) => {
   let page = 1;
-  commandListing(req, res, page);
+  const uploads = await (userUploadsPerPage(req, res, page, req.user.id, 10));
+  res.render('me/uploads', {
+    title: `Manage Uploads`,
+    uploads: uploads.data,
+    current: page,
+    // Count/limit
+    pages: Math.ceil(uploads.count / 10),
+  });
 });
 
-router.get('/uploads/:page', (req, res) => {
+router.get('/uploads/:page', async (req, res) => {
   let page = req.params.page || 1;
   if (page === '0') { return res.redirect('/me/uploads') }
-  commandListing(req, res, page);
+  const uploads = await (userUploadsPerPage(req, res, page, req.user.id, 10));
+  res.render('me/uploads', {
+    title: `Manage Uploads`,
+    uploads: uploads.data,
+    current: page,
+    // Count/limit
+    pages: Math.ceil(uploads.count / 10),
+  });
 });
 
 /**
@@ -229,16 +225,12 @@ router.delete('/uploads/:id', (req, res) => {
  * @description Displays images in a gallery fomate
  * @access Private
 */
-router.get('/gallery', (req, res) => {
-  Upload
-    .find({ 'uploader': req.user._id, 'isImage': true })
-    .sort({ createdAt: -1 })
-    .exec((err, gallery) => {
-      res.render('me/gallery', {
-        title: 'Image Gallery',
-        gallery,
-      });
-    });
+router.get('/gallery', async (req, res) => {
+  const gallery = (await Upload.find({ 'uploader': req.user._id, 'isImage': true }).sort({ createdAt: -1 }));
+  res.render('me/gallery', {
+    title: 'Image Gallery',
+    gallery,
+  });
 });
 
 /**
@@ -267,19 +259,44 @@ router.get('/delete', (req, res) => {
  * @description Remove all images
  * @access Private
 */
-router.get('/uploads/delete/all', (req, res) => {
+router.get('/uploads/delete/all', async (req, res) => {
+  let deleteErrors = {
+    file: 0,
+    db: 0,
+  };
   // Find all uploads by the user
-  Upload.find({ 'uploader': req.user.id }, (err, file) => {
-    // If no uploads are found then show a error message
-    if (file.length === 0) {
-      req.flash('error', 'You must upload before you can delete.');
+  uploads = (await Upload.find({ 'uploader': req.user.id }));   // If no uploads are found then show a error message
+  if (uploads.length === 0) {
+    req.flash('error', 'You must upload before you can delete.');
+    res.redirect('/me/uploads');
+    return;
+  };
+  // Loop though all the uploads and removes it from the file system then removes it from the database
+  /**
+   * What am going to do here is "try" to remove each file then at the end if any erros happen it will show two messages.
+   * Saying it's done but also how many uploads failed.  This is so the user knows not all the uploads they wanted removed
+   * have been removed for some reason
+   */
+
+  uploads.map(file => {
+    deleteUpload.file(file.fileName, cb => {
+      if (!cb) {
+        deleteErrors.file += 1;
+      } else {
+        deleteUpload.database(file.fileName, cb => {
+          if (!cb) {
+            deleteErrors.db += 1;
+          }
+        });
+      }
+    });
+  })
+  setTimeout(() => {
+    if (deleteErrors.file > 0 || deleteErrors.db > 0) {
+      req.flash('error', `Not all files could be removed.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
       res.redirect('/me/uploads');
       return;
-    };
-    // Loop though all the uploads and remove from database then remove from the FS
-
-    file.map(file => {
-    });
+    }
     // All uploads has been removed
     req.flash('success', 'All your uploads has been deleted.');
     res.redirect('/me/uploads');

@@ -9,7 +9,8 @@ const password = require('generate-password');
 const gravatar = require('gravatar');
 const validator = require('validator');
 const middleware = require('../middleware')
-const lisingsPerPage = require('./utils/lisingsPerPage');;
+const uploadsLisingPerPage = require('./utils/adminUploadsPerPage');;
+const usersListingPerPage = require('./utils/userLisingPerPage');
 
 /**
  * @route /admin
@@ -33,7 +34,6 @@ router.get('/', middleware.owner, async (req, res) => {
   }
 });
 
-
 /**
  * @route /admin/uploads
  * @method GET
@@ -41,15 +41,13 @@ router.get('/', middleware.owner, async (req, res) => {
  * @access Private
 */
 router.get('/uploads', async (req, res) => {
-  const uploads = (await lisingsPerPage(req, res, 1, Upload, 10, true, 'uploader'));
+  const uploads = (await uploadsLisingPerPage(req, res, 1, Upload, 10, true, 'uploader'));
   res.render('admin/uploads', {
     title: 'Uploads Management',
     data: uploads.data,
     current: 1,
     pages: Math.ceil(uploads.count / 10)
   });
-
-  // uploaderListingPerPage(req, res, 1, Upload, 10, 'admin/uploads', 'Uploads Management');
 });
 
 /**
@@ -58,8 +56,9 @@ router.get('/uploads', async (req, res) => {
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/uploads/:page',async(req, res) => {
-  const uploads = (await lisingsPerPage(req, res, req.params.page, Upload, 10, true, 'uploader'));
+router.get('/uploads/:page', async (req, res) => {
+  if (req.params.page === '0') { return res.redirect('/admin/uploads') };
+  const uploads = (await uploadsLisingPerPage(req, res, req.params.page, Upload, 10, true, 'uploader'));
   res.render('admin/uploads', {
     title: 'Uploads Management',
     data: uploads.data,
@@ -143,12 +142,29 @@ router.get('/users/new', (req, res) => {
 });
 
 /**
- * @route /admin/users/:id
+ * @route /admin/users/:page
+ * @method GET
+ * @description Show Admin Dashboard
+ * @access Private
+*/
+router.get('/users/:page', async (req, res) => {
+  if (req.params.page === '0') { return res.redirect('/admin/users') };
+  const data = (await usersListingPerPage(req, res, req.params.page, User, 10));
+  res.render('admin/users/index', {
+    title: 'User Management',
+    data: data.data,
+    current: req.params.page,
+    pages: Math.ceil(data.count / 10)
+  });
+});
+
+/**
+ * @route /admin/users/:id/edit
  * @method GET
  * @description Shows a edit form for the user
  * @access Private
 */
-router.get('/users/:id', (req, res) => {
+router.get('/users/:id/edit', (req, res) => {
   let id = req.params.id;
   User.findById(id, (err, user) => {
     let username = user.username;
@@ -353,18 +369,15 @@ router.post('/users/new', (req, res) => {
  * @description Show Admin Dashboard
  * @access Private
 */
-router.get('/users', (req, res) => {
-  usersListingPerPage(req, res, 1, User, 10, 'admin/users/index', 'User Management');
+router.get('/users', async (req, res) => {
+  const data = (await usersListingPerPage(req, res, 1, User, 10));
+  res.render('admin/users/index', {
+    title: 'User Management',
+    data: data.data,
+    current: 1,
+    pages: Math.ceil(data.count / 10)
+  });
 });
 
-/**
- * @route /admin/users/:page
- * @method GET
- * @description Show Admin Dashboard
- * @access Private
-*/
-router.get('/users/:pages', (req, res) => {
-  usersListingPerPage(req, res, req.params.page, User, 10, 'admin/users/index', 'User Management');
-});
 
 module.exports = router;
