@@ -126,7 +126,7 @@ router.get('/delete', (req, res) => {
  * @description Upload a Image or file etc.
  * @access Private
 */
-router.post('/upload', middleware.isAPIKeyVaild, (req, res) => {
+router.post('/upload', middleware.isAPIKeyVaild, middleware.isUploaderBanned, (req, res) => {
   const file = req.files.file;
   const fileExtension = path.extname(file.name);
   const fileMineType = file.mimetype;

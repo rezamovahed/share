@@ -55,9 +55,38 @@ middlewareObj.isLoggedIn = (req, res, next) => {
   next();
 };
 
+middlewareObj.isBanned = (req, res, next) => {
+  console.log(req.user.isBanned)
+  if (req.user.isBanned) {
+    return res.status(403).send(`<h1> Sorry but you have been permanently banned! If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></h1>`)
+  }
+  next();
+}
+
 // Uplaoder
+middlewareObj.isUploaderBanned = (req, res, next) => {
+  let token = req.headers['authorization'];
+  let rawToken = token.split(" ").slice(1).toString();
+  let tokenHash = md5(rawToken);
+  Key.findOne({ hash: tokenHash }, (err, key) => {
+    if (key === null) return res.status(401).json({
+      auth: false,
+      success: false,
+      error: {
+        authorization: 'Invaid api key provided.'
+      }
+    });
+    User.findById(key.user.id, (err, user) => {
+      if (user.isBanned) {
+        return res.status(403).send(`Sorry but you have been permanently banned! If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a>`)
+      }
+      next();
+    })
+  })
+}
 middlewareObj.isAPIKeyVaild = (req, res, next) => {
   let token = req.headers['authorization'];
+
   if (!token) {
     return res.status(401).json({
       auth: false,

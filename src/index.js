@@ -145,10 +145,10 @@ const adminRoutes = require('./routes/admin');
 
 app.use(csrfMiddleware, csrfLocals, indexRoutes);
 app.use(csrfMiddleware, csrfLocals, authRoutes);
-app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, userRoutes);
-app.use('/view', csrfMiddleware, csrfLocals, limiter, viewRoutes);
-app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, meRoutes);
-app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isAdmin, adminRoutes);
+app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, middleware.isBanned, userRoutes);
+app.use('/view', csrfMiddleware, csrfLocals, limiter, middleware.isBanned, viewRoutes);
+app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, meRoutes);
+app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, middleware.isAdmin, adminRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
