@@ -4,7 +4,6 @@ const Key = require('../models/key');
 const md5 = require('js-md5');
 
 middlewareObj.owner = (req, res, next) => {
-  console.log(req.user.isAdmin)
   // If the user is already admin then just move on
   if (req.user.isAdmin) { return next() }
   // If the user email matchs the email in the .env then it will make them admin (As they are the owner)
