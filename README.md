@@ -22,38 +22,7 @@ To help with Development of this project you can.
 * [Fork, Clone, or Download on GitHub](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
 
 ### Usage
-#### Edit the .env.example with basic config
-```sh
-cp .env.example .env
-```
-```sh
-nano .env
-```
-Add what you want to the __.env__.
-#### Install node packages
-```sh
-npm install
-```
-
-#### Start server
-```sh
-npm start
-```
-### Setup Account and ShareX
-And go to your localhost:5050 or yourdomain.com either works and click login then create a account.
-
-You should be be able to if you disable signups as you put your email in the __.env__ .
-
-Once done we move on the next step.
-
-Here's the sharex config templates for you
-
-[ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
-
-Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
-After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
-
-Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin
+Please read the setup guide writed [here](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/SETUP.md)
 
 ### Want help develop?
 You can use this command to start up with nodemon so you can work on it and test.
