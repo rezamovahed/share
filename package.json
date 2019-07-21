@@ -45,7 +45,6 @@
     "express-session": "^1.16.2",
     "file-exists": "^5.0.1",
     "generate-password": "^1.4.1",
-    "get-folder-size": "^2.0.1",
     "gravatar": "^1.8.0",
     "helmet": "^3.18.0",
     "js-md5": "^0.7.3",
