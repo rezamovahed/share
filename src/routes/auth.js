@@ -76,6 +76,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  const createdIP = req.clientIp;
   const avatar = gravatar.url(req.body.email, {
     s: '100',
     r: 'x',
@@ -109,12 +110,13 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   // Checks if there is any errors.
   if (JSON.stringify(error) === '{}') {
     // Create the user object.
-    username = username.toLowerCase();
+      username = username.toLowerCase();
     let newUser = {
       username,
       displayName,
       email,
       avatar,
+      createdIP
     };
 
     // Trys to create the user

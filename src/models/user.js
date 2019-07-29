@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
   isAdmin: Boolean,
   lastLog: Date,
   lastLogIP: String,
-  signupIP: String,
+  createdIP: String,
 }, {
     timestamps: true
   });

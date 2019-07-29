@@ -11,6 +11,7 @@ const validator = require('validator');
 const middleware = require('../middleware')
 const uploadsLisingPerPage = require('./utils/adminUploadsPerPage');;
 const usersListingPerPage = require('./utils/userLisingPerPage');
+const deleteUpload = require('./utils/deleteUpload');
 
 /**
  * @route /admin
@@ -76,13 +77,34 @@ router.get('/uploads/:page', async (req, res) => {
 */
 router.delete('/uploads/:id', (req, res) => {
   // Finds the upload via the id and starts the removel process
-  Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
-    const fileName = req.query.name;
-    const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
-    fs.unlink(filePath, err => {
-      req.flash('success', `Deleted ${fileName}`);
-      res.redirect('back');
-    });
+  const fileName = req.query.name;
+
+  let deleteErrors = {
+    file: 0,
+    db: 0,
+  };
+
+  deleteUpload.file(fileName, cb => {
+    if (!cb) {
+      deleteErrors.file += 1;
+    } else {
+      deleteUpload.database(fileName, cb => {
+        if (!cb) {
+          deleteErrors.db += 1;
+        }
+      });
+    }
+  });
+
+  setTimeout(() => {
+    if (deleteErrors.file > 0 || deleteErrors.db > 0) {
+      req.flash('error', `Could not remove that file.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
+      res.redirect('/me/uploads');
+      return;
+    }
+    // All uploads has been removed
+    req.flash('success', `Deleted ${fileName}`);
+    res.redirect('back');
   });
 });
 
@@ -92,16 +114,27 @@ router.delete('/uploads/:id', (req, res) => {
  * @description Delete Account
  * @access Private
 */
-router.get('/uploads/delete/all', (req, res) => {
+router.get('/uploads/delete/all', async (req, res) => {
   let error;
-  Upload.find({}, (err, file) => {
-    file.map(file => {
-      const filePath = `${path.join(__dirname, '../public')}/u/${file}`;
-      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-        fs.unlink(filePath, err => {
-          res.redirect('back');
+  uploads = (await Upload.find({}));   // If no uploads are found then show a error message
+
+  if (uploads.length === 0) {
+    req.flash('error', 'There are no uploads to remove.');
+    res.redirect('/me/uploads');
+    return;
+  };
+
+  uploads.map(file => {
+    deleteUpload.file(file.fileName, cb => {
+      if (!cb) {
+        deleteErrors.file += 1;
+      } else {
+        deleteUpload.database(file.fileName, cb => {
+          if (!cb) {
+            deleteErrors.db += 1;
+          }
         });
-      });
+      }
     });
   });
 });
@@ -229,7 +262,6 @@ router.put('/users/:id', (req, res) => {
     } else {
       updatedUser.isAdmin = false;
     };
-    console.log(updatedUser)
     User.findByIdAndUpdate(id, updatedUser, (err, user) => {
       if (err) {
         if (err.code === 11000) {

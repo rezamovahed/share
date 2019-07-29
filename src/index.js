@@ -14,6 +14,8 @@ const middleware = require('./middleware');
 const User = require('./models/user');
 const compression = require('compression');
 const helmet = require('helmet');
+const expressip = require('express-ip');
+const requestIp = require('request-ip');
 
 // Load enviroment variables from .env file
 require('dotenv').config();
@@ -39,6 +41,10 @@ app.set('view engine', 'ejs');
 
 // Enable method override
 app.use(methodOverride('_method'));
+
+// Setup IP middleware
+app.use(expressip().getIpInfoMiddleware);
+app.use(requestIp.mw())
 
 // Sets the view directory
 app.set('views', (__dirname + '/views'));
