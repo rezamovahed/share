@@ -33,8 +33,8 @@ Provide file in a __Form Data (mulitpart/form-data)__
 {
   "success": true,
   "file": {
-    "url": "http://localhost/u/Rw6M4jVuSeiKjzJh.png",
-    "delete": "http://localhost/api/delete?fileName=Rw6M4jVuSeiKjzJh.png&key=1b861ad1153a5990c77f323fdcc08493"
+    "url": "http://localhost:5050/u/Rw6M4jVuSeiKjzJh.png",
+    "delete": "http://localhost:5050/api/delete?fileName=Rw6M4jVuSeiKjzJh.png&key=1b861ad1153a5990c77f323fdcc08493"
   }
 }
 ```

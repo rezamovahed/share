@@ -12,23 +12,24 @@ const csrf = require('csurf');
 const rateLimit = require('express-rate-limit');
 const middleware = require('./middleware');
 const User = require('./models/user');
+const compression = require('compression');
+const helmet = require('helmet');
 
 // Load enviroment variables from .env file
 require('dotenv').config();
 
 // Initilate Express
 const app = express();
+
+// Setup console.log timestamps
+require('log-timestamp');
+
 // Set host and port
-app.set('host', process.env.IP || '0.0.0.0');
+app.set('host', process.env.IP || '127.0.0.1');
 app.set('port', process.env.PORT || 5050);
 
 // True Proxy
-if (process.env.PROXY) { app.enable("trust proxy") }
-
-const limiter = rateLimit({
-  windowMs: 1000 * 60 * 15, // 15 minutes
-  max: 50
-});
+if (process.env.PROXY === 'true') { app.enable("trust proxy") }
 
 // Load Assets from Public folder
 app.use(express.static(__dirname + '/public'));
@@ -42,13 +43,23 @@ app.use(methodOverride('_method'));
 // Sets the view directory
 app.set('views', (__dirname + '/views'));
 
+
+// Morgan HTTP request logging
 if (!process.env.NODE_ENV === 'development') {
   return app.use(logger('combined'));
 } else {
   app.use(logger('dev'));
 }
 
+// Compression
+app.use(compression())
+
+// Secure
+app.use(helmet())
+
 // Setup Session config
+// expiryDate for sessions:
+var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 let sess = {
   resave: false,
   saveUninitialized: false,
@@ -58,7 +69,7 @@ let sess = {
     httpOnly: true
 
   }, // Two weeks in milliseconds
-  name: process.env.COOKIE_NAME,
+  name: 'sessionId',
   store: new MongoStore({
     url: process.env.DATABASE_URI,
     autoReconnect: true,
@@ -126,10 +137,19 @@ app.use((req, res, next) => {
 // Disables the powered by so it does not show express
 app.disable('x-powered-by');
 
+// Rate Limiter
+const limiter = rateLimit({
+  windowMs: 1000 * 60 * 15, // 15 minutes
+  max: 50
+});
+
+// API Routes
 const apiRoutes = require('./routes/api');
 app.use('/api', limiter, apiRoutes)
 
+// CSRF
 const csrfMiddleware = csrf()
+
 let csrfLocals = (req, res, next) => {
   // Csrf
   res.locals.csrfToken = req.csrfToken() || null;
@@ -145,10 +165,10 @@ const adminRoutes = require('./routes/admin');
 
 app.use(csrfMiddleware, csrfLocals, indexRoutes);
 app.use(csrfMiddleware, csrfLocals, authRoutes);
-app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, userRoutes);
-app.use('/view', csrfMiddleware, csrfLocals, limiter, viewRoutes);
-app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, meRoutes);
-app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isAdmin, adminRoutes);
+app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, middleware.isBanned, userRoutes);
+app.use('/view', csrfMiddleware, csrfLocals, limiter, middleware.isBanned, viewRoutes);
+app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, meRoutes);
+app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, middleware.isAdmin, adminRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
@@ -160,9 +180,20 @@ app.use(function (err, req, res, next) {
   });
 });
 
-app.get('*', function (req, res) {
-  res.status(404).render('errors/404');
+// Handle 404 errors
+app.use(function (req, res, next) {
+  res.status(404);
+
+  // respond with json
+  if (req.accepts('json')) {
+    res.status(404).json({ error: 'Whoops, this resource or route could not be found' });
+    return;
+  }
+
+  // default to plain-text. send()
+  res.type('txt').send('Not found');
 });
+
 
 // Mongoose Setup
 mongoose.set('useFindAndModify', false);

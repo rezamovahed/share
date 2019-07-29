@@ -11,7 +11,7 @@
     "text",
     "custom"
   ],
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev-start": "nodemon src/index.js",
@@ -31,6 +31,7 @@
   "dependencies": {
     "async": "^2.6.2",
     "body-parser": "^1.18.3",
+    "compression": "^1.7.4",
     "concurrently": "^4.1.0",
     "connect-mongo": "^2.0.3",
     "consola": "^2.7.1",
@@ -44,10 +45,11 @@
     "express-session": "^1.16.2",
     "file-exists": "^5.0.1",
     "generate-password": "^1.4.1",
-    "get-folder-size": "^2.0.1",
     "gravatar": "^1.8.0",
+    "helmet": "^3.20.0",
     "js-md5": "^0.7.3",
     "jsonwebtoken": "^8.5.1",
+    "log-timestamp": "^0.3.0",
     "method-override": "^3.0.0",
     "mjml": "^4.4.0-beta.2",
     "moment": "^2.24.0",
