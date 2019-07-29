@@ -267,6 +267,8 @@ router.get('/delete', (req, res) => {
       });
     });
   });
+  // Check there is any erros and show a error message/
+
   Key.deleteMany({ 'user': { id: req.user.id } });
   User.findByIdAndDelete(req.user.id);
   res.redirect('/');
@@ -291,12 +293,12 @@ router.get('/uploads/delete/all', async (req, res) => {
     return;
   };
   // Loop though all the uploads and removes it from the file system then removes it from the database
+
   /**
    * What am going to do here is "try" to remove each file then at the end if any erros happen it will show two messages.
    * Saying it's done but also how many uploads failed.  This is so the user knows not all the uploads they wanted removed
    * have been removed for some reason
    */
-
   uploads.map(file => {
     deleteUpload.file(file.fileName, cb => {
       if (!cb) {

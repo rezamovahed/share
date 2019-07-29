@@ -229,7 +229,6 @@ router.put('/users/:id', (req, res) => {
     } else {
       updatedUser.isAdmin = false;
     };
-    console.log(updatedUser)
     User.findByIdAndUpdate(id, updatedUser, (err, user) => {
       if (err) {
         if (err.code === 11000) {

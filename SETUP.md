@@ -5,8 +5,7 @@
 cp .env.example .env
 ```
 
-Let me exapind what which setting in the .env is
-
+Let me explain what which setting in the .env is
 
 | Setting  | Des |
 | ------------- | ------------- |
@@ -25,6 +24,18 @@ Let me exapind what which setting in the .env is
 | NODE_ENV  | Set this to production when you are on prod. |
 | IP  | IP to run the app on |
 | PORT  | Port to run the app on |
+
+Everything here should be set.
+
+To setup SENDGRID you would need to create a account [here](https://www.sendgrid.com) if you need help getting a API key its not that hard.  Here's a guide on it. [https://sendgrid.com/docs/ui/account-and-settings/api-keys/](https://sendgrid.com/docs/ui/account-and-settings/api-keys/) .  To stop email from going to spam you may want to setup the domain so they know you own the domain your sending from. [https://sendgrid.com/docs/ui/account-and-settings/how-to-set-up-domain-authentication/](https://sendgrid.com/docs/ui/account-and-settings/how-to-set-up-domain-authentication/)
+
+For COOKIE_SECRET and API_SECRET you can just use a password gen.
+
+If your going to use this for personal use.  You want to set SETUPS to false.  As this would disable all signups for emails not matching yours in the env.
+
+Want to show support for the developer(me) keep CREDIT on true.  But if you don't want to show it then you can set it false.  But please consuider donating to me to help support my projects [paypal](https://paypal.me/demonwolfyt)
+
+There is already many guides on nodejs and MongoDB so if you want help installing that you can google terms like "How to install NodeJS on Ubuntu" etc depending on your OS.
 
 <!--
 #### Edit the .env.example with basic config
