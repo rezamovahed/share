@@ -79,7 +79,7 @@ router.delete('/uploads/:id', (req, res) => {
   // Finds the upload via the id and starts the removel process
   const fileName = req.query.name;
 
-    let deleteErrors = {
+  let deleteErrors = {
     file: 0,
     db: 0,
   };

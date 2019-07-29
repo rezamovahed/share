@@ -311,7 +311,7 @@ router.get('/uploads/delete/all', async (req, res) => {
         });
       }
     });
-  })
+  });
   setTimeout(() => {
     if (deleteErrors.file > 0 || deleteErrors.db > 0) {
       req.flash('error', `Not all files could be removed.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
