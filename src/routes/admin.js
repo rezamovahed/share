@@ -11,6 +11,7 @@ const validator = require('validator');
 const middleware = require('../middleware')
 const uploadsLisingPerPage = require('./utils/adminUploadsPerPage');;
 const usersListingPerPage = require('./utils/userLisingPerPage');
+const deleteUpload = require('./utils/deleteUpload');
 
 /**
  * @route /admin
@@ -92,16 +93,27 @@ router.delete('/uploads/:id', (req, res) => {
  * @description Delete Account
  * @access Private
 */
-router.get('/uploads/delete/all', (req, res) => {
+router.get('/uploads/delete/all', async (req, res) => {
   let error;
-  Upload.find({}, (err, file) => {
-    file.map(file => {
-      const filePath = `${path.join(__dirname, '../public')}/u/${file}`;
-      Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-        fs.unlink(filePath, err => {
-          res.redirect('back');
+  uploads = (await Upload.find({}));   // If no uploads are found then show a error message
+
+  if (uploads.length === 0) {
+    req.flash('error', 'There are no uploads to remove.');
+    res.redirect('/me/uploads');
+    return;
+  };
+
+  uploads.map(file => {
+    deleteUpload.file(file.fileName, cb => {
+      if (!cb) {
+        deleteErrors.file += 1;
+      } else {
+        deleteUpload.database(file.fileName, cb => {
+          if (!cb) {
+            deleteErrors.db += 1;
+          }
         });
-      });
+      }
     });
   });
 });
