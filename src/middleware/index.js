@@ -55,7 +55,6 @@ middlewareObj.isLoggedIn = (req, res, next) => {
 };
 
 middlewareObj.isBanned = (req, res, next) => {
-  console.log(req.user.isBanned)
   if (req.user.isBanned) {
     return res.status(403).send(`<h1> Sorry but you have been permanently banned! If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></h1>`)
   }

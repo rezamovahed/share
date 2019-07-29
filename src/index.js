@@ -12,10 +12,11 @@ const csrf = require('csurf');
 const rateLimit = require('express-rate-limit');
 const middleware = require('./middleware');
 const User = require('./models/user');
-const dotenv = require('dotenv');
+const compression = require('compression');
+const helmet = require('helmet');
 
 // Load enviroment variables from .env file
-dotenv.load({ path: '.env' });
+require('dotenv').config();
 
 // Initilate Express
 const app = express();
@@ -24,11 +25,11 @@ const app = express();
 require('log-timestamp');
 
 // Set host and port
-app.set('host', process.env.IP || '0.0.0.0');
+app.set('host', process.env.IP || '127.0.0.1');
 app.set('port', process.env.PORT || 5050);
 
 // True Proxy
-if (process.env.PROXY) { app.enable("trust proxy") }
+if (process.env.PROXY === 'true') { app.enable("trust proxy") }
 
 // Load Assets from Public folder
 app.use(express.static(__dirname + '/public'));
