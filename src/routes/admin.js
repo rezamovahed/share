@@ -77,13 +77,34 @@ router.get('/uploads/:page', async (req, res) => {
 */
 router.delete('/uploads/:id', (req, res) => {
   // Finds the upload via the id and starts the removel process
-  Upload.findByIdAndDelete(req.params.id, (err, removedFile) => {
-    const fileName = req.query.name;
-    const filePath = `${path.join(__dirname, '../public')}/u/${fileName}`;
-    fs.unlink(filePath, err => {
-      req.flash('success', `Deleted ${fileName}`);
-      res.redirect('back');
-    });
+  const fileName = req.query.name;
+
+    let deleteErrors = {
+    file: 0,
+    db: 0,
+  };
+
+  deleteUpload.file(fileName, cb => {
+    if (!cb) {
+      deleteErrors.file += 1;
+    } else {
+      deleteUpload.database(fileName, cb => {
+        if (!cb) {
+          deleteErrors.db += 1;
+        }
+      });
+    }
+  });
+
+  setTimeout(() => {
+    if (deleteErrors.file > 0 || deleteErrors.db > 0) {
+      req.flash('error', `Could not remove that file.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
+      res.redirect('/me/uploads');
+      return;
+    }
+    // All uploads has been removed
+    req.flash('success', `Deleted ${fileName}`);
+    res.redirect('back');
   });
 });
 
