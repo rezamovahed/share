@@ -1,5 +1,5 @@
-## How to Setup
-#### Edit the .env.example with basic config
+# How to Setup
+## Edit the .env.example with basic config
 
 ```sh
 cp .env.example .env
