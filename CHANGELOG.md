@@ -1,7 +1,7 @@
 # Changelog
 4.0.0
-<!-- * Added last login IP -->
-<!-- * Added signup IP -->
+* Added last login IP
+* Added signup IP
 <!-- * You can now upload files via your account on the website. -->
 <!-- * You can now ban and suspend user -->
 <!-- * You can also ban or suspend users for perm or 24 hours , a week, and even a month. -->
