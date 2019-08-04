@@ -66,15 +66,20 @@
             Never Logged In
             <% }%>
           </td>
-          <td>
+          <td style="width:15%">
             <a href="/admin/users/<%= users[i].id %>" class="edit" title="Edit" data-toggle="tooltip">
-              <i class="fas fa-edit"></i>
+              <i class="fas fa-user-edit"></i>
             </a>
-
+            <a href="/admin/users/<%= users[i].id %>/ban" class="ban" title="Ban" data-toggle="tooltip">
+              <i class="fas fa-gavel"></i>
+            </a><a href="/admin/users/<%= users[i].id %>/edit/suspend" class="suspend" title="Suspend"
+              data-toggle="tooltip">
+              <i class="fas fa-pause"></i>
+            </a>
             <form class=" d-inline" action="/admin/users/<%= users[i].id %>?_method=DELETE %>" method="POST">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
               <button class="delete" title="Delete" data-toggle="tooltip">
-                <i class="fas fa-times-circle"></i>
+                <i class="fas fa-trash"></i>
               </button>
             </form>
           </td>

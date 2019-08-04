@@ -65,13 +65,12 @@ app.use(helmet())
 
 // Setup Session config
 // expiryDate for sessions:
-var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 let sess = {
   resave: false,
   saveUninitialized: false,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    maxAge: 120960000,
+    maxAge: 60 * 60 * 1000,
     httpOnly: true
 
   }, // Two weeks in milliseconds
