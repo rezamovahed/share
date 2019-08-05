@@ -57,12 +57,6 @@ if (!process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));
 }
 
-// Compression
-app.use(compression())
-
-// Secure
-app.use(helmet())
-
 // Setup Session config
 // expiryDate for sessions:
 let sess = {
@@ -84,6 +78,11 @@ let sess = {
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1)
   sess.cookie.secure = true // serve secure cookies
+  // Compression
+  app.use(compression())
+
+  // Secure
+  app.use(helmet())
 }
 
 // Session store

@@ -104,10 +104,44 @@ table.table td a.edit {
 }
 
 // Ban button
-table.table td a.ban {
+table.table td button.ban {
+  background: none repeat scroll 0 0 transparent;
+  border: medium none;
+  border-spacing: 0;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.42rem;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+  cursor: pointer;
   color: #ff1100;
   &:hover {
     color: lighten(#ff1100, 10);
+  }
+}
+
+// Ban button
+table.table td button.unban {
+  background: none repeat scroll 0 0 transparent;
+  border: medium none;
+  border-spacing: 0;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.42rem;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+  cursor: pointer;
+  color: green;
+  &:hover {
+    color: lighten(green, 10);
   }
 }
 

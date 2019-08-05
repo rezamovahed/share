@@ -216,6 +216,32 @@ router.get('/users/:id/edit', (req, res) => {
 });
 
 /**
+ * @route /admin/users/:id/ban
+ * @method PATCH
+ * @description Bans a user.
+ * @access Private
+*/
+router.patch('/users/:id/ban', async (req, res) => {
+  let toBan = await User.findById(req.params.id);
+  toBan.isBanned = true;
+  toBan.save();
+  res.redirect('back');
+});
+
+/**
+ * @route /admin/users/:id/unban
+ * @method PATCH
+ * @description Shows a edit form for the user
+ * @access Private
+*/
+router.patch('/users/:id/unban', async (req, res) => {
+  let toBan = await User.findById(req.params.id);
+  toBan.isBanned = null;
+  toBan.save();
+  res.redirect('back');
+});
+
+/**
  * @route /admin/users/:id
  * @method PUT
  * @description Shows a edit form for the user

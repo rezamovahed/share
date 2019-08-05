@@ -70,9 +70,22 @@
             <a href="/admin/users/<%= users[i].id %>" class="edit" title="Edit" data-toggle="tooltip">
               <i class="fas fa-user-edit"></i>
             </a>
-            <a href="/admin/users/<%= users[i].id %>/ban" class="ban" title="Ban" data-toggle="tooltip">
-              <i class="fas fa-gavel"></i>
-            </a><a href="/admin/users/<%= users[i].id %>/edit/suspend" class="suspend" title="Suspend"
+            <% if (users[i].isBanned) { %>
+            <form class=" d-inline" action="/admin/users/<%= users[i].id %>/unban?_method=PATCH %>" method="POST">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="unban" title="Unban" data-toggle="tooltip">
+                <i class="fas fa-gavel"></i>
+              </button>
+            </form>
+            <% } else { %><form class=" d-inline" action="/admin/users/<%= users[i].id %>/ban?_method=PATCH %>"
+              method="POST">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="ban" title="Ban" data-toggle="tooltip">
+                <i class="fas fa-gavel"></i>
+              </button>
+            </form>
+            <% } %>
+            <a href="/admin/users/<%= users[i].id %>/edit/suspend" class="suspend" title="Suspend"
               data-toggle="tooltip">
               <i class="fas fa-pause"></i>
             </a>
