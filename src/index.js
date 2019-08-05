@@ -57,21 +57,14 @@ if (!process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));
 }
 
-// Compression
-app.use(compression())
-
-// Secure
-app.use(helmet())
-
 // Setup Session config
 // expiryDate for sessions:
-var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 let sess = {
   resave: false,
   saveUninitialized: false,
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    maxAge: 120960000,
+    maxAge: 60 * 60 * 1000,
     httpOnly: true
 
   }, // Two weeks in milliseconds
@@ -85,6 +78,11 @@ let sess = {
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1)
   sess.cookie.secure = true // serve secure cookies
+  // Compression
+  app.use(compression())
+
+  // Secure
+  app.use(helmet())
 }
 
 // Session store

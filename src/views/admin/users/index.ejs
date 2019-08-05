@@ -66,15 +66,33 @@
             Never Logged In
             <% }%>
           </td>
-          <td>
+          <td style="width:15%">
             <a href="/admin/users/<%= users[i].id %>" class="edit" title="Edit" data-toggle="tooltip">
-              <i class="fas fa-edit"></i>
+              <i class="fas fa-user-edit"></i>
             </a>
-
+            <% if (users[i].isBanned) { %>
+            <form class=" d-inline" action="/admin/users/<%= users[i].id %>/unban?_method=PATCH %>" method="POST">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="unban" title="Unban" data-toggle="tooltip">
+                <i class="fas fa-gavel"></i>
+              </button>
+            </form>
+            <% } else { %><form class=" d-inline" action="/admin/users/<%= users[i].id %>/ban?_method=PATCH %>"
+              method="POST">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="ban" title="Ban" data-toggle="tooltip">
+                <i class="fas fa-gavel"></i>
+              </button>
+            </form>
+            <% } %>
+            <a href="/admin/users/<%= users[i].id %>/edit/suspend" class="suspend" title="Suspend"
+              data-toggle="tooltip">
+              <i class="fas fa-pause"></i>
+            </a>
             <form class=" d-inline" action="/admin/users/<%= users[i].id %>?_method=DELETE %>" method="POST">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
               <button class="delete" title="Delete" data-toggle="tooltip">
-                <i class="fas fa-times-circle"></i>
+                <i class="fas fa-trash"></i>
               </button>
             </form>
           </td>

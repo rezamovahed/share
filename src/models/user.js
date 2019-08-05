@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   isBanned: Boolean,
-  banExpire: Date,
   isSuspended: Boolean,
   suspendedExpire: Date,
   resetPasswordToken: String,
