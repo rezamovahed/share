@@ -222,6 +222,12 @@ router.get('/users/:id/edit', (req, res) => {
  * @access Private
 */
 router.patch('/users/:id/ban', async (req, res) => {
+  if (req.user.id === req.params.id) {
+    req.flash('error', "You can't remove your account.");
+    res.redirect('back');
+    return;
+  }
+
   let toBan = await User.findById(req.params.id);
   toBan.isBanned = true;
   toBan.save();
@@ -235,9 +241,14 @@ router.patch('/users/:id/ban', async (req, res) => {
  * @access Private
 */
 router.patch('/users/:id/unban', async (req, res) => {
-  let toBan = await User.findById(req.params.id);
-  toBan.isBanned = null;
-  toBan.save();
+  if (req.user.id === req.params.id) {
+    req.flash('error', "You can't remove your account.");
+    res.redirect('back');
+    return;
+  }
+  let toUnban = await User.findById(req.params.id);
+  toUnban.isBanned = undefined;
+  toUnban.save();
   res.redirect('back');
 });
 
@@ -292,7 +303,7 @@ router.put('/users/:id', (req, res) => {
       if (err) {
         if (err.code === 11000) {
           error.username = 'Username may be already in use.';
-          error.email = 'EMail may be already in use.';
+          error.email = 'Email may be already in use.';
         }
         req.flash('error', error);
         res.redirect(`/admin/users/${id}`);
