@@ -221,11 +221,11 @@ router.get('/users/:id/edit', (req, res) => {
  * @description Shows a form that allows you to defind the time to suspend the user
  * @access Private
 */
-router.get('/users/:username/suspend', (req, res) => {
-
+router.get('/users/:id/suspend', (req, res) => {
   res.render('admin/users/suspend', {
-    title: `Suspend ${req.params.username}`,
-    username: req.params.username
+    title: `Suspend ${req.query.username}`,
+    username: req.query.username,
+    id: req.params.id
   });
 });
 
@@ -236,7 +236,7 @@ router.get('/users/:username/suspend', (req, res) => {
  * @access Private
 */
 router.patch('/users/:id/suspend', (req, res) => {
-
+  console.log(req.body)
 });
 
 /**

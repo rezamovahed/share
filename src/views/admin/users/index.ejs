@@ -106,7 +106,6 @@
                 title="Unban" data-toggle="tooltip">
                 <i class="fas fa-gavel"></i>
               </a>
-
               <% } %>
               <% if (users[i].isSuspended) { %>
               <form class=" d-inline" action="/admin/users/<%= users[i].id %>/unsuspend?_method=PATCH %>" method="POST">
@@ -116,13 +115,11 @@
                 </button>
               </form>
               <% }  else {%>
-              <a href="/admin/users/<%= users[i].username %>/suspend" class="suspend" title="Suspend"
-                data-toggle="tooltip">
+              <a href="/admin/users/<%= users[i].id %>/suspend?username=<%= users[i].username %>" class="suspend"
+                title="Suspend" data-toggle="tooltip">
                 <i class="fas fa-pause"></i>
               </a>
-
               <% } %>
-
               <form class=" d-inline" action="/admin/users/<%= users[i].id %>?_method=DELETE %>" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                 <button class="delete" title="Delete" data-toggle="tooltip">
