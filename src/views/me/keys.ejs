@@ -1,81 +1,83 @@
 <% include ../partials/header %>
 <% include ../partials/navbar %>
 <div class="container me_api w-75 pt-2">
-  <div class="table-wrapper">
-    <div class="table-title">
-      <div class="row">
-        <div class="col-6">
-          <h2>Your API Keys</b>
-          </h2>
-        </div>
-        <div class="col-12 col-sm-6">
-          <a href="/me/keys/create" class="btn btn-custom btn-primary">
-            <i class="fas fa-plus"></i>
-            <span>Created API Key</span>
-          </a>
+  <div class="customTable">
+    <div class="table-wrapper">
+      <div class="table-title">
+        <div class="row">
+          <div class="col-6">
+            <h2>Your API Keys</b>
+            </h2>
+          </div>
+          <div class="col-12 col-sm-6">
+            <a href="/me/keys/create" class="btn btn-custom btn-primary">
+              <i class="fas fa-plus"></i>
+              <span>Created API Key</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <% if (info && info.length > 0){ %>
-  <div class="alert alert-primary text-wrap" role="alert">
-    Here's your API Key
-    <p id="apiKey"><%= info %><p>this will not been shown again.
-  </div>
-  <script>
-    $(document).ready(function () {
-      $('[data-toggle="tooltip"]').tooltip();
-      const span = document.getElementById("apiKey");
-      span.onclick = function () {
-        document.execCommand("copy");
-      }
-      span.addEventListener("copy", function (event) {
-        event.preventDefault();
-        if (event.clipboardData) {
-          event.clipboardData.setData("text/plain", span.textContent);
+    <% if (info && info.length > 0){ %>
+    <div class="alert alert-primary text-wrap" role="alert">
+      Here's your API Key
+      <p id="apiKey"><%= info %><p>this will not been shown again.
+    </div>
+    <script>
+      $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        const span = document.getElementById("apiKey");
+        span.onclick = function () {
+          document.execCommand("copy");
         }
+        span.addEventListener("copy", function (event) {
+          event.preventDefault();
+          if (event.clipboardData) {
+            event.clipboardData.setData("text/plain", span.textContent);
+          }
+        });
       });
-    });
-  </script>
-  <% } %>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Hash</th>
-          <th scope="col">Created</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% let keysLength = keys.length; %>
-        <% if (keysLength === 0) { %>
-        <tr class="text-center">
-          <td colspan=5">No keys found</td>
-        </tr>
-        <% } else { %>
+    </script>
+    <% } %>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Hash</th>
+            <th scope="col">Created</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let keysLength = keys.length; %>
+          <% if (keysLength === 0) { %>
+          <tr class="text-center">
+            <td colspan=5">No keys found</td>
+          </tr>
+          <% } else { %>
 
-        <% for(i = 0; i < keysLength; i++) { %>
-        <tr>
-          <td>
-            <%= keys[i].hash %>
-          </td>
-          <td>
-            <%= moment(keys[i].createdAt).format('MMM Do YYYY hh:mm A') %>
-          </td>
-          <td>
-            <form class="d-inline" action="/me/keys/<%= keys[i].id%>?_method=DELETE" method="POST">
-              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-              <button class="delete" title="Delete" data-toggle="tooltip">
-                <i class="fas fa-times-circle"></i>
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% } %>
-        <% } %>
-      </tbody>
-    </table>
+          <% for(i = 0; i < keysLength; i++) { %>
+          <tr>
+            <td>
+              <%= keys[i].hash %>
+            </td>
+            <td>
+              <%= moment(keys[i].createdAt).format('MMM Do YYYY hh:mm A') %>
+            </td>
+            <td>
+              <form class="d-inline" action="/me/keys/<%= keys[i].id%>?_method=DELETE" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button class="delete" title="Delete" data-toggle="tooltip">
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 <% include ../partials/footer %>

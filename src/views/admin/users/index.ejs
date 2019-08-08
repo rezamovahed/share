@@ -15,113 +15,127 @@
     </div>
   </div>
   <% } %>
-  <div class="table-wrapper">
-    <div class="table-title">
-      <div class="row">
-        <div class="col-6">
-          <h2>Manage <strong>Users</strong></b>
-          </h2>
-        </div>
-        <div class="col-12 col-sm-6">
-          <a role="button" class="btn btn-light text-dark float-right" href="/admin/users/new">Create New User</a>
+  <div class="customTable">
+    <div class="table-wrapper">
+      <div class="table-title">
+        <div class="row">
+          <div class="col-6">
+            <h2>Manage <strong>Users</strong></b>
+            </h2>
+          </div>
+          <div class="col-12 col-sm-6">
+            <a role="button" class="btn btn-light text-dark float-right" href="/admin/users/new">Create New User</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Username</th>
-          <th scope="col">Role</th>
-          <th scope="col">Status</th>
-          <th scope="col">Last Activity</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% let usersLength = data.length; %>
-        <% let users = data; %>
-        <% if (usersLength === 0) { %>
-        <tr class="text-center">
-          <td colspan=5">No users found</td>
-        </tr>
-        <% } else { %>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Role</th>
+            <th scope="col">Status</th>
+            <th scope="col">Last Activity</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let usersLength = data.length; %>
+          <% let users = data; %>
+          <% if (usersLength === 0) { %>
+          <tr class="text-center">
+            <td colspan=5">No users found</td>
+          </tr>
+          <% } else { %>
 
-        <% for(i = 0; i < usersLength; i++) { %>
-        <tr>
-          <td>
-            <%= users[i].username %>
-          </td>
-          <td>
-            <%- (users[i].isAdmin) ? 'Admin' : 'User' %>
-          </td>
-          <td>
-            <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended for ${'1 day'}` : users[i].accountActivated ? 'Active' : 'Unactivated' %>
-          </td>
-          <td>
-            <% if(users[i].lastLog) {%>
-            <%= moment(users[i].lastLog).format('MMM Do YYYY hh:mm A') %>
-            <% } else { %>
-            Never Logged In
-            <% }%>
-          </td>
-          <td style="width:15%">
-            <a href="/admin/users/<%= users[i].id %>" class="edit" title="Edit" data-toggle="tooltip">
-              <i class="fas fa-user-edit"></i>
-            </a>
-            <% if (users[i].isBanned) { %>
-            <form class=" d-inline" action="/admin/users/<%= users[i].id %>/unban?_method=PATCH %>" method="POST">
-              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-              <button class="unban" title="Unban" data-toggle="tooltip">
-                <i class="fas fa-gavel"></i>
-              </button>
-            </form>
-            <% } else { %>
-            <div class="modal fade" id="confirm-ban-<%= users[i].id %>" tabindex="-1" role="dialog" aria-labelledby="ban-<%= users[i].id %>"
-              aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Account Deletion</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  </div>
-                  <div class="modal-body">
-                    <p>Are you sure you want to ban <%= users[i].username %>?</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <form class=" d-inline" action="/admin/users/<%= users[i].id %>/ban?_method=PATCH %>" method="POST">
-                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                      <button type="submit" href="/me/delete" class="btn btn-danger btn-ok" style="color: #ffff;">Ban
-                        User</a>
-                    </form>
+          <% for(i = 0; i < usersLength; i++) { %>
+          <tr>
+            <td>
+              <%= users[i].username %>
+            </td>
+            <td>
+              <%- (users[i].isAdmin) ? 'Admin' : 'User' %>
+            </td>
+            <td>
+              <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended for ${'1 day'}` : users[i].accountActivated ? 'Active' : 'Unactivated' %>
+            </td>
+            <td>
+              <% if(users[i].lastLog) {%>
+              <%= moment(users[i].lastLog).format('MMM Do YYYY hh:mm A') %>
+              <% } else { %>
+              Never Logged In
+              <% }%>
+            </td>
+            <td style="width:15%">
+              <a href="/admin/users/<%= users[i].id %>" class="edit" title="Edit" data-toggle="tooltip">
+                <i class="fas fa-user-edit"></i>
+              </a>
+              <% if (users[i].isBanned) { %>
+              <form class=" d-inline" action="/admin/users/<%= users[i].id %>/unban?_method=PATCH %>" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button class="unban" title="Unban" data-toggle="tooltip">
+                  <i class="fas fa-gavel"></i>
+                </button>
+              </form>
+              <% } else { %>
+              <div class="modal fade" id="confirm-ban-<%= users[i].id %>" tabindex="-1" role="dialog"
+                aria-labelledby="ban-<%= users[i].id %>" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Account Deletion</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure you want to ban <%= users[i].username %>?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <form class=" d-inline" action="/admin/users/<%= users[i].id %>/ban?_method=PATCH %>"
+                        method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button type="submit" href="/me/delete" class="btn btn-danger btn-ok" style="color: #ffff;">Ban
+                          User</a>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <a data-toggle="modal" data-target="#confirm-ban-<%= users[i].id %>" role="button" class="ban" title="Unban"
-              data-toggle="tooltip">
-              <i class="fas fa-gavel"></i>
-            </a>
+              <a data-toggle="modal" data-target="#confirm-ban-<%= users[i].id %>" role="button" class="ban"
+                title="Unban" data-toggle="tooltip">
+                <i class="fas fa-gavel"></i>
+              </a>
 
-            <% } %>
-            <a href="/admin/users/<%= users[i].id %>/edit/suspend" class="suspend" title="Suspend"
-              data-toggle="tooltip">
-              <i class="fas fa-pause"></i>
-            </a>
-            <form class=" d-inline" action="/admin/users/<%= users[i].id %>?_method=DELETE %>" method="POST">
-              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-              <button class="delete" title="Delete" data-toggle="tooltip">
-                <i class="fas fa-trash"></i>
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% } %>
-        <% } %>
-      </tbody>
-    </table>
+              <% } %>
+              <% if (users[i].isSuspended) { %>
+              <form class=" d-inline" action="/admin/users/<%= users[i].id %>/unsuspend?_method=PATCH %>" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button class="unsuspend" title="Unsuspend" data-toggle="tooltip">
+                  <i class="fas fa-play"></i>
+                </button>
+              </form>
+              <% }  else {%>
+              <a href="/admin/users/<%= users[i].username %>/suspend" class="suspend" title="Suspend"
+                data-toggle="tooltip">
+                <i class="fas fa-pause"></i>
+              </a>
+
+              <% } %>
+
+              <form class=" d-inline" action="/admin/users/<%= users[i].id %>?_method=DELETE %>" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button class="delete" title="Delete" data-toggle="tooltip">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
     <% if (pages > 1) { %>
     <ul class="pagination justify-content-center float-none">
       <% if (current == 1) { %>
