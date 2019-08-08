@@ -182,12 +182,12 @@ router.get('/users/new', (req, res) => {
 */
 router.get('/users/:page', async (req, res) => {
   if (req.params.page === '0') { return res.redirect('/admin/users') };
-  const data = (await usersListingPerPage(req, res, req.params.page, User, 10));
+  const data = (await usersListingPerPage(req, res, req.params.page, User, 8));
   res.render('admin/users/index', {
     title: 'User Management',
     data: data.data,
     current: req.params.page,
-    pages: Math.ceil(data.count / 10)
+    pages: Math.ceil(data.count / 8)
   });
 });
 
@@ -216,6 +216,40 @@ router.get('/users/:id/edit', (req, res) => {
 });
 
 /**
+ * @route /admin/users/:id/suspend
+ * @method GET
+ * @description Shows a form that allows you to defind the time to suspend the user
+ * @access Private
+*/
+router.get('/users/:username/suspend', (req, res) => {
+
+  res.render('admin/users/suspend', {
+    title: `Suspend ${req.params.username}`,
+    username: req.params.username
+  });
+});
+
+/**
+ * @route /admin/users/:id/suspend
+ * @method PATCH
+ * @description Shows a form that allows you to defind the time to suspend the user
+ * @access Private
+*/
+router.patch('/users/:id/suspend', (req, res) => {
+
+});
+
+/**
+ * @route /admin/users/:id/unsuspend
+ * @method PATCH
+ * @description Allows you to unsuspend a user.
+ * @access Private
+*/
+router.patch('/users/:id/unsuspend', (req, res) => {
+
+});
+
+/**
  * @route /admin/users/:id/ban
  * @method PATCH
  * @description Bans a user.
@@ -226,8 +260,7 @@ router.patch('/users/:id/ban', async (req, res) => {
     req.flash('error', "You can't remove your account.");
     res.redirect('back');
     return;
-  }
-
+  };
   let toBan = await User.findById(req.params.id);
   toBan.isBanned = true;
   toBan.save();
@@ -237,7 +270,7 @@ router.patch('/users/:id/ban', async (req, res) => {
 /**
  * @route /admin/users/:id/unban
  * @method PATCH
- * @description Shows a edit form for the user
+ * @description Changes the user isBanned to false based on the ID
  * @access Private
 */
 router.patch('/users/:id/unban', async (req, res) => {
@@ -245,7 +278,7 @@ router.patch('/users/:id/unban', async (req, res) => {
     req.flash('error', "You can't remove your account.");
     res.redirect('back');
     return;
-  }
+  };
   let toUnban = await User.findById(req.params.id);
   toUnban.isBanned = undefined;
   toUnban.save();
@@ -398,6 +431,7 @@ router.post('/users/new', (req, res) => {
   if (JSON.stringify(error) === '{}') {
     let newUser = {
       username,
+      displayName: username,
       email,
       avatar,
     };
@@ -439,12 +473,12 @@ router.post('/users/new', (req, res) => {
  * @access Private
 */
 router.get('/users', async (req, res) => {
-  const data = (await usersListingPerPage(req, res, 1, User, 10));
+  const data = (await usersListingPerPage(req, res, 1, User, 8));
   res.render('admin/users/index', {
     title: 'User Management',
     data: data.data,
     current: 1,
-    pages: Math.ceil(data.count / 10)
+    pages: Math.ceil(data.count / 8)
   });
 });
 
