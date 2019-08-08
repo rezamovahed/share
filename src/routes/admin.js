@@ -398,6 +398,7 @@ router.post('/users/new', (req, res) => {
   if (JSON.stringify(error) === '{}') {
     let newUser = {
       username,
+      displayName: username,
       email,
       avatar,
     };
