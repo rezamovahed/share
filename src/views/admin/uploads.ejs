@@ -16,73 +16,74 @@
   </div>
   <% } %>
   <% let uploadsLength = data.length; %>
-
-  <div class="table-wrapper">
-    <div class="table-title">
-      <div class="row">
-        <div class="col-6">
-          <h2>Manage <strong>Uploads</strong></b>
-          </h2>
+  <div class="customTable">
+    <div class="table-wrapper">
+      <div class="table-title">
+        <div class="row">
+          <div class="col-6">
+            <h2>Manage <strong>Uploads</strong></b>
+            </h2>
+          </div>
+          <% if(uploadsLength > 0 ) { %>
+          <div class="col-12 col-sm-6">
+            <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger float-right">Delete
+              All</a>
+          </div>
+          <% } %>
         </div>
-        <% if(uploadsLength > 0 ) { %>
-        <div class="col-12 col-sm-6">
-          <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger float-right">Delete
-            All</a>
-        </div>
-        <% } %>
       </div>
     </div>
-  </div>
-  <div class="table-responsive">
-    <table class="table table-hover" id="table" data-toggle="table">
-      <thead>
-        <tr>
-          <th scope="col">File</th>
-          <th scope="col" data-sortable="true">Size</th>
-          <th scope="col" data-sortable="true">Uploaded</th>
-          <th scope="col" data-sortable="true">Uploader</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% let uploads = data; %>
-        <% if (uploadsLength === 0) { %>
-        <tr class="text-center">
-          <td colspan="6">No uploads found</td>
-        </tr>
-        <% } else { %>
+    <div class="table-responsive">
+      <table class="table table-hover" id="table" data-toggle="table">
+        <thead>
+          <tr>
+            <th scope="col">File</th>
+            <th scope="col" data-sortable="true">Size</th>
+            <th scope="col" data-sortable="true">Uploaded</th>
+            <th scope="col" data-sortable="true">Uploader</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let uploads = data; %>
+          <% if (uploadsLength === 0) { %>
+          <tr class="text-center">
+            <td colspan="6">No uploads found</td>
+          </tr>
+          <% } else { %>
 
-        <% for(i = 0; i < uploadsLength; i++) { %>
-        <tr>
-          <td>
-            <a
-              href="<%- uploads[i].isImage ? `/view/${uploads[i].fileName}` : `/u/${uploads[i].fileName}` %>"><%= uploads[i].fileName %></a>
-          </td>
-          <td>
-            <%= uploads[i].size %>
-          </td>
-          <td>
-            <%= moment(uploads[i].createdAt).format('MMM Do YYYY hh:mm A') %>
-          </td>
-          <td>
-            <%= uploads[i].uploader.username %>
-          </td>
+          <% for(i = 0; i < uploadsLength; i++) { %>
+          <tr>
+            <td>
+              <a
+                href="<%- uploads[i].isImage ? `/view/${uploads[i].fileName}` : `/u/${uploads[i].fileName}` %>"><%= uploads[i].fileName %></a>
+            </td>
+            <td>
+              <%= uploads[i].size %>
+            </td>
+            <td>
+              <%= moment(uploads[i].createdAt).format('MMM Do YYYY hh:mm A') %>
+            </td>
+            <td>
+              <%= uploads[i].uploader.username %>
+            </td>
 
-          <td>
-            <form class=" d-inline"
-              action="/admin/uploads/<%= uploads[i].id %>?_method=DELETE&name=<%= uploads[i].fileName %>"
-              method="POST">
-              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-              <button class="delete" title="Delete" data-toggle="tooltip">
-                <i class="fas fa-times-circle"></i>
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% } %>
-        <% } %>
-      </tbody>
-    </table>
+            <td>
+              <form class=" d-inline"
+                action="/admin/uploads/<%= uploads[i].id %>?_method=DELETE&name=<%= uploads[i].fileName %>"
+                method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button class="delete" title="Delete" data-toggle="tooltip">
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
     <div class="mt-3">
       <% if (pages > 1) { %>
       <ul class="pagination justify-content-center float-none">
