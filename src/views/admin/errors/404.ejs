@@ -1,0 +1,74 @@
+<% include ../../partials/header %>
+<% include ../partials/navbar %>
+<!-- Error Page Content -->
+<div class="container">
+  <!-- Jumbotron -->
+  <div class="jumbotron">
+    <h1>
+      <i class="icon svg-icon"><svg preserveAspectRatio="xMaxYMax meet" viewBox="0 0 1792 1792"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M1262 1229q8 25-4 48.5t-37 31.5-49-4-32-38q-25-80-92.5-129.5t-151.5-49.5-151.5 49.5-92.5 129.5q-8 26-31.5 38t-48.5 4q-26-8-38-31.5t-4-48.5q37-121 138-195t228-74 228 74 138 195zm-494-589q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm512 0q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm256 256q0-130-51-248.5t-136.5-204-204-136.5-248.5-51-248.5 51-204 136.5-136.5 204-51 248.5 51 248.5 136.5 204 204 136.5 248.5 51 248.5-51 204-136.5 136.5-204 51-248.5zm128 0q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"
+            fill="#d9534f" /></svg></i> 404 Not Found</h1>
+    <p class="lead"><%= message %>
+      <em>
+        <span id="display-domain"></span>
+      </em>.</p>
+    <p>
+      <a href="<%= redirect %>" class="btn btn-default btn-lg">
+        <span class="green">Take me back</span>
+      </a>
+    </p>
+  </div>
+</div>
+<!-- End Error Page Content -->
+<footer>
+  <style>
+    /* Error Page Inline Styles */
+    .body {
+      padding-top: 20px;
+    }
+
+    /* Layout */
+
+    .jumbotron {
+      font-size: 21px;
+      font-weight: 200;
+      line-height: 2.1428571435;
+      color: inherit;
+      padding: 10px 0px;
+    }
+
+    /* Everything but the jumbotron gets side spacing for mobile-first views */
+
+    .masthead,
+    .body-content {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    /* Main marketing message and sign up button */
+
+    .jumbotron {
+      text-align: center;
+      background-color: transparent;
+    }
+
+    .jumbotron .btn {
+      font-size: 21px;
+      padding: 14px 24px;
+
+    }
+
+    .icon svg {
+      height: 1em;
+      width: 1em;
+    }
+
+    .svg-icon {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+
+<% include ../../partials/footer %>
