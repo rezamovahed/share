@@ -1,20 +1,6 @@
 <% include ../../partials/header %>
 <% include ../partials/navbar %>
 <div class="container w-75 pt-2">
-  <% if (success && success.length > 0){ %>
-  <div class="container">
-    <div class="alert alert-success" role="alert">
-      <%= success %>
-    </div>
-  </div>
-  <% } %>
-  <% if (error && error.length > 0){ %>
-  <div class="container">
-    <div class="alert alert-danger" role="alert">
-      <%= error %>
-    </div>
-  </div>
-  <% } %>
   <div class="customTable">
     <div class="table-wrapper">
       <div class="table-title">
@@ -29,13 +15,27 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive">
+    <% if (success && success.length > 0){ %>
+    <div class="container">
+      <div class="alert alert-success" role="alert">
+        <%= success %>
+      </div>
+    </div>
+    <% } %>
+    <% if (error && error.length > 0){ %>
+    <div class="container">
+      <div class="alert alert-danger" role="alert">
+        <%= error %>
+      </div>
+    </div>
+    <% } %>
+    <div class="table-responsive pt-2">
       <table class="table table-hover">
         <thead>
           <tr>
             <th scope="col">Username</th>
             <th scope="col">Role</th>
-            <th scope="col">Status</th>
+            <th scope="col" style="width: 35%;">Status</th>
             <th scope="col">Last Activity</th>
             <th scope="col">Actions</th>
           </tr>
@@ -61,14 +61,16 @@
               <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended till ${moment(users[i].suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : users[i].accountActivated ? 'Active' : 'Unactivated' %>
             </td>
             <td>
-              <% if(users[i].lastLog) {%>
-              <%= moment(users[i].lastLog).format('MMM Do YYYY hh:mm A') %>
+              <% if(users[i].lastActivity) {%>
+              <%= moment(users[i].lastActivity).format('MMM Do YYYY hh:mm A') %> CST
+              <% } else if(users[i].lastLog) { %>
+              <%= moment(users[i].lastLog).format('MMM Do YYYY hh:mm A') %> CST
               <% } else { %>
-              Never Logged In
+              Has not logged in yet
               <% }%>
             </td>
             <td style="width:15%">
-              <a href="/admin/users/<%= users[i].id %>" class="edit" title="Edit" data-toggle="tooltip">
+              <a href="/admin/users/<%= users[i].id %>/edit" class="edit" title="View and Edit" data-toggle="tooltip">
                 <i class="fas fa-user-edit"></i>
               </a>
               <% if (users[i].isBanned) { %>
@@ -115,17 +117,38 @@
                 </button>
               </form>
               <% }  else {%>
-              <a href="/admin/users/<%= users[i].id %>/suspend" class="suspend"
-                title="Suspend" data-toggle="tooltip">
+              <a href="/admin/users/<%= users[i].id %>/suspend" class="suspend" title="Suspend" data-toggle="tooltip">
                 <i class="fas fa-pause"></i>
               </a>
               <% } %>
-              <form class=" d-inline" action="/admin/users/<%= users[i].id %>?_method=DELETE %>" method="POST">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                <button class="delete" title="Delete" data-toggle="tooltip">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </form>
+              <div class="modal fade" id="confirm-delete-<%= users[i].id %>" tabindex="-1" role="dialog"
+                aria-labelledby="delete-<%= users[i].id %>" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Account Deletion</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure you want to delete <strong><%= users[i].username %></strong>, this procedure is
+                        irreversible. This will remove all the user uploads,keys and other profile data.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <form class=" d-inline" action="/admin/users/<%= users[i].id %>?_method=DELETE %>" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button type="submit" class="btn btn-danger btn-ok" style="color: #ffff;">Delete
+                          User Account</a>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <a data-toggle="modal" data-target="#confirm-delete-<%= users[i].id %>" role="button" class="delete"
+                title="Delete" data-toggle="tooltip">
+                <i class="fas fa-trash"></i>
+              </a>
+
             </td>
           </tr>
           <% } %>

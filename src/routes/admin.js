@@ -199,18 +199,36 @@ router.get('/users/:page', async (req, res) => {
  * @access Private
 */
 router.get('/users/:id/edit', (req, res) => {
-  let id = req.params.id;
+  const id = req.params.id;
   User.findById(id, (err, user) => {
-    let username = user.username;
-    let email = user.email;
-    let accountActivated = user.accountActivated;
-    let isAdmin = user.isAdmin;
+    const username = user.username;
+    const email = user.email;
+    const accountActivated = user.accountActivated;
+    const isAdmin = user.isAdmin;
+    const lastLog = user.lastLog || 'N/A';
+    const lastLogIP = user.lastLogIP || 'N/A';
+    const createdIP = user.createdIP || 'N/A';
+    const lastActivity = user.lastActivity || 'N/A';
+    const lastActivityIP = user.lastActivityIP || 'N/A';
+    const isBanned = user.isBanned;
+    const isSuspended = user.isSuspended;
+    const suspendedReason = user.suspendedReason;
+    const suspendedExpire = user.suspendedExpire || null;
     res.render('admin/users/edit', {
       title: `Edit ${username}`,
       username,
       email,
       accountActivated,
       isAdmin,
+      lastLog,
+      lastLogIP,
+      createdIP,
+      lastActivity,
+      lastActivityIP,
+      isBanned,
+      isSuspended,
+      suspendedExpire,
+      suspendedReason,
       id
     });
   });
@@ -259,10 +277,14 @@ router.patch('/users/:id/suspend', (req, res) => {
   };
   const expire = (req.body.suspendExpire === 'custom') ? expireCustom : expireDate;
   User.findById(req.params.id, (err, user) => {
+    if (user.isBanned) {
+      user.isBanned = undefined;
+    }
     user.isSuspended = true;
-    user.suspendExpire = expire;
+    user.suspendedExpire = expire;
+    user.suspendedReason = reason;
     user.save();
-    req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')}`)
+    req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')} UTC`)
     res.redirect('/admin/users');
   });
 
@@ -275,7 +297,14 @@ router.patch('/users/:id/suspend', (req, res) => {
  * @access Private
 */
 router.patch('/users/:id/unsuspend', (req, res) => {
-
+  User.findById(req.params.id, (err, user) => {
+    user.isSuspended = undefined;
+    user.suspendExpire = undefined;
+    user.suspendedReason = undefined;
+    user.save();
+    req.flash('success', `${user.username} has been unsuspend.`)
+    res.redirect('/admin/users');
+  });
 });
 
 /**
@@ -286,12 +315,16 @@ router.patch('/users/:id/unsuspend', (req, res) => {
 */
 router.patch('/users/:id/ban', async (req, res) => {
   if (req.user.id === req.params.id) {
-    req.flash('error', "You can't remove your account.");
+    req.flash('error', "You can't ban your account.");
     res.redirect('back');
     return;
   };
   let toBan = await User.findById(req.params.id);
   toBan.isBanned = true;
+  if (toBan.isSuspended) {
+    toBan.isSuspended = undefined;
+    toBan.suspendedExpire = undefined;
+  }
   toBan.save();
   res.redirect('back');
 });
