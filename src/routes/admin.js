@@ -275,6 +275,9 @@ router.patch('/users/:id/suspend', (req, res) => {
   };
   const expire = (req.body.suspendExpire === 'custom') ? expireCustom : expireDate;
   User.findById(req.params.id, (err, user) => {
+    if (user.isBanned) {
+      user.isBanned = undefined;
+    }
     user.isSuspended = true;
     user.suspendExpire = expire;
     user.save();
@@ -308,12 +311,16 @@ router.patch('/users/:id/unsuspend', (req, res) => {
 */
 router.patch('/users/:id/ban', async (req, res) => {
   if (req.user.id === req.params.id) {
-    req.flash('error', "You can't remove your account.");
+    req.flash('error', "You can't ban your account.");
     res.redirect('back');
     return;
   };
   let toBan = await User.findById(req.params.id);
   toBan.isBanned = true;
+  if (toBan.isSuspended) {
+    toBan.isSuspended = undefined;
+    toBan.suspendedExpire = undefined;
+  }
   toBan.save();
   res.redirect('back');
 });
