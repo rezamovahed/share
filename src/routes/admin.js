@@ -212,6 +212,7 @@ router.get('/users/:id/edit', (req, res) => {
     const lastActivityIP = user.lastActivityIP || 'N/A';
     const isBanned = user.isBanned;
     const isSuspended = user.isSuspended;
+    const suspendedReason = user.suspendedReason;
     const suspendedExpire = user.suspendedExpire || null;
     res.render('admin/users/edit', {
       title: `Edit ${username}`,
@@ -227,6 +228,7 @@ router.get('/users/:id/edit', (req, res) => {
       isBanned,
       isSuspended,
       suspendedExpire,
+      suspendedReason,
       id
     });
   });
@@ -279,7 +281,8 @@ router.patch('/users/:id/suspend', (req, res) => {
       user.isBanned = undefined;
     }
     user.isSuspended = true;
-    user.suspendExpire = expire;
+    user.suspendedExpire = expire;
+    user.suspendedReason = reason;
     user.save();
     req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')} UTC`)
     res.redirect('/admin/users');
@@ -297,6 +300,7 @@ router.patch('/users/:id/unsuspend', (req, res) => {
   User.findById(req.params.id, (err, user) => {
     user.isSuspended = undefined;
     user.suspendExpire = undefined;
+    user.suspendedReason = undefined;
     user.save();
     req.flash('success', `${user.username} has been unsuspend.`)
     res.redirect('/admin/users');
