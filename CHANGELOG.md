@@ -4,7 +4,7 @@
 * Added signup IP
 <!-- * You can now upload files via your account on the website. -->
 * You can now ban and unban users. Comfirm the ban of a user has been added.
-<!-- * You can also suspend users 24 hours , a week, and even a month. With unsuspend  -->
+* You can also suspend users 24 hours , a week, and even a month. With unsuspend
 <!-- *Added API docs markdown -->
 * Now you can make yourself the first admin by going to /admin.  If the email matchs the one in the env then it will change the account to admin (This is safe as the email has to be verifyed anyways which makes sure its yours.)
 * API has changed file and image route to just be as one.
