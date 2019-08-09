@@ -35,8 +35,8 @@ npm run dev-web
 * Added last login IP
 * Added signup IP
 <!-- * You can now upload files via your account on the website. -->
-<!-- * You can now ban and unban users -->
-<!-- * You can also suspend users 24 hours , a week, and even a month. With unsuspend  -->
+* You can now ban and unban users. Comfirm the ban of a user has been added.
+* You can also suspend users 24 hours , a week, and even a month. With unsuspend
 <!-- *Added API docs markdown -->
 * Now you can make yourself the first admin by going to /admin.  If the email matchs the one in the env then it will change the account to admin (This is safe as the email has to be verifyed anyways which makes sure its yours.)
 * API has changed file and image route to just be as one.
@@ -51,7 +51,6 @@ npm run dev-web
 * Changed text from 'Create user' to 'Create new user' in admin users.
 * Fixed the link in the admin nav gallery.  Now it links to the gallery
 * Fixed the navbar in admin gallery as it was linking the wrong one.
-
 
 3.1.0
 * Removed File and Text views
