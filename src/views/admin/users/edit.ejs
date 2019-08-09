@@ -1,7 +1,7 @@
 <% include ../../partials/header %>
 <% include ../partials/navbar %>
 <% errors = error && error.length > 0 %>
-<div class="container w-50">
+<div class="container w-50 adminEdit">
   <div class="display-4 pt-4">Edit <%= username %></div>
   <form action="/admin/users/<%= id %>?_method=PUT" method="POST" novalidate>
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
@@ -42,7 +42,32 @@
         <% } %>
       </div>
     </div>
-    <div class="form-group">
+
+    <h2>Basic Info</h2>
+    <div class="info">
+      <div class="header">Last Login IP</div>
+      <p><%= lastLoginIP %></p>
+    </div>
+    <div class="info">
+      <div class="header">Last Login</div>
+      <p><%= lastLogin %></p>
+    </div>
+    <div class="info">
+      <div class="header">Last Activity IP</div>
+      <p><%= lastActivityIP %></p>
+    </div>
+    <div class="info">
+      <div class="header">Last Activity</div>
+      <p><%= lastActivity %></p>
+    </div>
+    <div class="info">
+      <div class="header">Status</div>
+      <p>
+        <%- isBanned ? 'Banned' : isSuspended ? `Suspended till ${moment(suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : accountActivated ? 'Active' : 'Unactivated' %>
+      </p>
+    </div>
+
+    <div class="form-group  d-inline">
       <label for="activate">Activated</label>
       <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
         data-off="False">
@@ -62,12 +87,14 @@
     </script>
     <% } %>
     </script>
-    <div class="form-group">
+    <div class="form-group pl-3 d-inline">
       <label for="isAdmin">Admin</label>
       <input id="isAdmin" name="isAdmin" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
         data-off="False">
     </div>
-    <button type="submit " class="btn btn-primary">Edit User</button>
+    <div class="form-group pt-2">
+      <button type="submit " class="btn btn-primary">Edit User</button>
+    </div>
   </form>
 </div>
 <% include ../../partials/footer %>

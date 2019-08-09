@@ -36,6 +36,8 @@ const userSchema = new mongoose.Schema({
   lastLog: Date,
   lastLogIP: String,
   createdIP: String,
+  lastActivity: Date,
+  lastActivityIP: String,
 }, {
     timestamps: true
   });

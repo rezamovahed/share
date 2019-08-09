@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 const fileExtensionCheck = require('../config/extensions')
 const fileMinetypeCheck = require('../config/mineTypes')
 const Upload = require('../models/upload');
+const User = require('../models/user');
 
 router.use(fileUpload({
   safeFileNames: true,
@@ -164,6 +165,13 @@ router.post('/upload', middleware.isAPIKeyVaild, middleware.isUploaderBanned, (r
     };
   };
 
+  // Logs the upload even if it fails
+
+  User.findById(auth, (err, user) => {
+    user.lastActivity = Date.now();
+    user.lastActivityIP = req.clientIp;
+    user.save();
+  });
   // Gets the file size and the hash of the file (Ya I know MD5 is not the best but its just its shorter.  If I get many requests for stonger hash I will add it.)
   const size = humanFileSize(file.size);
   const fileHash = file.md5;

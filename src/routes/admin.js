@@ -199,18 +199,28 @@ router.get('/users/:page', async (req, res) => {
  * @access Private
 */
 router.get('/users/:id/edit', (req, res) => {
-  let id = req.params.id;
+  const id = req.params.id;
   User.findById(id, (err, user) => {
-    let username = user.username;
-    let email = user.email;
-    let accountActivated = user.accountActivated;
-    let isAdmin = user.isAdmin;
+    const username = user.username;
+    const email = user.email;
+    const accountActivated = user.accountActivated;
+    const isAdmin = user.isAdmin;
+    const lastLog = user.lastLog;
+    const lastLogIP = user.lastLogIP;
+    const createdIP = user.createdIP;
+    const lastActivity = user.lastActivity;
+    const lastActivityIP = user.lastActivityIP;
     res.render('admin/users/edit', {
       title: `Edit ${username}`,
       username,
       email,
       accountActivated,
       isAdmin,
+      lastLog,
+      lastLogIP,
+      createdIP,
+      lastActivity,
+      lastActivityIP,
       id
     });
   });
