@@ -262,7 +262,7 @@ router.patch('/users/:id/suspend', (req, res) => {
     user.isSuspended = true;
     user.suspendExpire = expire;
     user.save();
-    req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')}`)
+    req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')} UTC`)
     res.redirect('/admin/users');
   });
 
@@ -275,7 +275,13 @@ router.patch('/users/:id/suspend', (req, res) => {
  * @access Private
 */
 router.patch('/users/:id/unsuspend', (req, res) => {
-
+  User.findById(req.params.id, (err, user) => {
+    user.isSuspended = undefined;
+    user.suspendExpire = undefined;
+    user.save();
+    req.flash('success', `${user.username} has been unsuspend.`)
+    res.redirect('/admin/users');
+  });
 });
 
 /**
