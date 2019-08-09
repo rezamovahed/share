@@ -2,14 +2,13 @@
 <% include ../partials/navbar %>
 <% errors = error && error.length > 0 %>
 
-<div class="container w-25">
+<div class="container w-75">
   <div class="display-4 pt-4 pb-4">Suspend <%= username %></div>
   <form id="suspend" action="/admin/users/<%= id %>/suspend?_method=PATCH" method="POST" novalidate>
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <div class="form-group">
       <label for="suspendExpire">How long?</label>
-      <select name="suspendExpire" class="selectpicker" data-live-search="true"
-        data-style="btn-primary">
+      <select name="suspendExpire" class="selectpicker" data-style="btn-primary">
         <option value="1">24 Hours</option>
         <option value="7">A Week</option>
         <option value="30">A Month</option>

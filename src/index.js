@@ -169,10 +169,10 @@ const adminRoutes = require('./routes/admin');
 
 app.use(csrfMiddleware, csrfLocals, indexRoutes);
 app.use(csrfMiddleware, csrfLocals, authRoutes);
-app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, middleware.isBanned, userRoutes);
-app.use('/view', csrfMiddleware, csrfLocals, limiter, middleware.isBanned, viewRoutes);
-app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, meRoutes);
-app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, middleware.isAdmin, adminRoutes);
+app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, middleware.isBanned, middleware.isSuspended, userRoutes);
+app.use('/view', csrfMiddleware, csrfLocals, limiter, middleware.isBanned, middleware.isSuspended, viewRoutes);
+app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, middleware.isSuspended, meRoutes);
+app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, middleware.isSuspended, middleware.isAdmin, adminRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
@@ -244,3 +244,31 @@ process.on('SIGINT', function () {
     process.exit(0);
   });
 });
+
+
+// Reload suspended expires and remove them if they have expired
+User.find({
+  suspendedExpire: {
+    $gt: Date.now()
+  }
+}, (err, users) => {
+  users.map((user) => {
+    user.isSuspended = undefined;
+    user.suspendedExpire = undefined;
+    user.save();
+  });
+});
+setInterval(() => {
+  User.find({
+    suspendedExpire: {
+      $gt: Date.now()
+    }
+  }, (err, users) => {
+      users.map((user) => {
+      user.isSuspended = undefined;
+        user.suspendedExpire = undefined;
+        user.suspendedReason = undefined;
+      user.save();
+    });
+  });
+}, 1000 * 60 * 60);

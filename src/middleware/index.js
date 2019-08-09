@@ -1,8 +1,8 @@
 var middlewareObj = {};
+const moment = require('moment');
 const User = require('../models/user');
 const Key = require('../models/key');
 const md5 = require('js-md5');
-
 middlewareObj.owner = (req, res, next) => {
   // If the user is already admin then just move on
   if (req.user.isAdmin) { return next() }
@@ -61,6 +61,21 @@ middlewareObj.isBanned = (req, res, next) => {
   next();
 }
 
+
+middlewareObj.isSuspended = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.isSuspended) {
+    if (req.user.suspendedExpire < moment()) {
+      User.findById(req.user.id, (err, user) => {
+        user.isSuspended = undefined;
+        user.suspendedExpire = undefined;
+        user.save();
+        return next();
+      });
+    }
+    return res.status(403).send(`<h1> Sorry but you have been suspended till ${moment(req.user.suspendedExpire).format('M/D/YYYY h:mm A')} UTC.  Reason: ${req.user.suspendedReason} If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></h1>`)
+  }
+  next();
+}
 // Uplaoder
 middlewareObj.isUploaderBanned = (req, res, next) => {
   let token = req.headers['authorization'];

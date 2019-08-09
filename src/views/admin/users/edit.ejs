@@ -1,8 +1,12 @@
 <% include ../../partials/header %>
 <% include ../partials/navbar %>
 <% errors = error && error.length > 0 %>
-<div class="container w-50">
+<div class="container w-50 adminEdit">
   <div class="display-4 pt-4">Edit <%= username %></div>
+  <div class="accountStatus pt-2 pb-2">
+    Account Status: <strong>
+      <%- isBanned ? 'Banned' : isSuspended ? `Suspended till ${moment(suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : accountActivated ? 'Active' : 'Unactivated' %></strong>
+  </div>
   <form action="/admin/users/<%= id %>?_method=PUT" method="POST" novalidate>
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <div class="form-group">
@@ -42,32 +46,76 @@
         <% } %>
       </div>
     </div>
-    <div class="form-group">
-      <label for="activate">Activated</label>
-      <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
-        data-off="False">
+
+    <% if(lastLog === null) { %>
+    <h2>Basic Info</h2>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last Login IP</h5>
+            <p class="card-text"><%= lastLogIP %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last Login</h5>
+            <p class="card-text"><%= moment(lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <% if(accountActivated === false) { %>
-    <script>
-      $(document).ready(function () {
-        $("#activate").attr('checked', false);
-      });
-    </script>
-    <% } %>
-    <% if(!isAdmin) { %>
-    <script>
-      $(document).ready(function () {
-        $("#admin").attr('checked', false);
-      });
-    </script>
-    <% } %>
-    </script>
-    <div class="form-group">
-      <label for="isAdmin">Admin</label>
-      <input id="isAdmin" name="isAdmin" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
-        data-off="False">
+    <div class="row pt-4">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last Activity IP</h5>
+            <p class="card-text"><%= lastActivityIP %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last Activity</h5>
+            <p class="card-text"><%= moment(lastActivity).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <button type="submit " class="btn btn-primary">Edit User</button>
+    <% } %>
+    <div class="pt-4">
+      <div class="form-group d-inline">
+        <label for="activate">Activated</label>
+        <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
+          data-off="False">
+      </div>
+      <% if(accountActivated === false) { %>
+      <script>
+        $(document).ready(function () {
+          $("#activate").attr('checked', false);
+        });
+      </script>
+      <% } %>
+      <% if(!isAdmin) { %>
+      <script>
+        $(document).ready(function () {
+          $("#admin").attr('checked', false);
+        });
+      </script>
+      <% } %>
+      </script>
+      <div class="form-group pl-3 d-inline">
+        <label for="isAdmin">Admin</label>
+        <input id="isAdmin" name="isAdmin" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
+          data-off="False">
+      </div>
+    </div>
+    <div class="form-group pt-2 float-right">
+      <button type="submit " class="btn btn-primary">Edit User</button>
+    </div>
   </form>
 </div>
 <% include ../../partials/footer %>
