@@ -2,29 +2,46 @@
 <% include ../partials/navbar %>
 <% errors = error && error.length > 0 %>
 
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm-6">
-      <div class="form-group">
-        <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-          <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" />
-          <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-          </div>
+<div class="container w-25">
+  <div class="display-4 pt-4 pb-4">Suspend <%= username %></div>
+  <form id="suspend" action="/admin/users/<%= id %>/suspend?_method=PATCH" method="POST" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <div class="form-group">
+      <label for="suspendExpire">How long?</label>
+      <select name="suspendExpire" class="selectpicker" data-live-search="true"
+        data-style="btn-primary">
+        <option value="1">24 Hours</option>
+        <option value="7">A Week</option>
+        <option value="30">A Month</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+    <div data-cond="[name=suspendExpire] === custom" class="form-group">
+      <label for="suspendExpireCustom">Custom Date</label>
+      <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+        <input id="suspendExpireCustom" name="suspendExpireCustom" type="text" class="form-control datetimepicker-input"
+          data-target="#datetimepicker1" />
+        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
         </div>
       </div>
+      <script type="text/javascript">
+        $(document).ready(function () {
+          $(function () {
+            $('#datetimepicker1').datetimepicker({ defaultDate: moment().add('24', 'hours') });
+          });
+          $('#suspend').conditionize({
+            selector: '[data-cond]'
+          });
+        });
+      </script>
     </div>
-    <script type="text/javascript">
-      $(function () {
-        $('#datetimepicker1').datetimepicker();
-      });
-    </script>
-  </div>
-
-<div class="container w-50">
-  <div class="display-4 pt-4">Suspend <%= username %></div>
-<button type="submit " class="btn btn-primary">Suspend</button>
-</form>
+    <div class="form-group">
+      <label for="reason">Reason</label>
+      <input type="text" id="reason" name="reason" class="form-control "
+        value="For breaking the reasons you have been issued a temp suspend from our site">
+    </div>
+    <button type="submit " class="btn btn-primary">Suspend</button>
+  </form>
 </div>
 <% include ../../partials/footer %>
