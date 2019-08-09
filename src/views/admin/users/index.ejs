@@ -58,7 +58,7 @@
               <%- (users[i].isAdmin) ? 'Admin' : 'User' %>
             </td>
             <td>
-              <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended for ${'1 day'}` : users[i].accountActivated ? 'Active' : 'Unactivated' %>
+              <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended till ${moment(users[i].suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : users[i].accountActivated ? 'Active' : 'Unactivated' %>
             </td>
             <td>
               <% if(users[i].lastLog) {%>
@@ -115,7 +115,7 @@
                 </button>
               </form>
               <% }  else {%>
-              <a href="/admin/users/<%= users[i].id %>/suspend?username=<%= users[i].username %>" class="suspend"
+              <a href="/admin/users/<%= users[i].id %>/suspend" class="suspend"
                 title="Suspend" data-toggle="tooltip">
                 <i class="fas fa-pause"></i>
               </a>

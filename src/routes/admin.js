@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 const Upload = require('../models/upload');
 const User = require('../models/user');
 const Key = require('../models/key');
@@ -221,10 +222,20 @@ router.get('/users/:id/edit', (req, res) => {
  * @description Shows a form that allows you to defind the time to suspend the user
  * @access Private
 */
-router.get('/users/:id/suspend', (req, res) => {
+router.get('/users/:id/suspend', async (req, res) => {
+  let user;
+  try {
+    user = await User.findById(req.params.id);
+  } catch (e) {
+    res.status(404).render('admin/errors/404', {
+      title: 'User not found',
+      message: 'The user your trying to suspend can not be found.',
+      redirect: '/admin/users/'
+    });
+  };
   res.render('admin/users/suspend', {
-    title: `Suspend ${req.query.username}`,
-    username: req.query.username,
+    title: `Suspend ${user.username}`,
+    username: user.username,
     id: req.params.id
   });
 });
@@ -236,7 +247,25 @@ router.get('/users/:id/suspend', (req, res) => {
  * @access Private
 */
 router.patch('/users/:id/suspend', (req, res) => {
-  console.log(req.body)
+  let reason = req.body.reason;
+  const expireCustom = moment(req.body.suspendExpireCustom, "M/D/YYYY h:mm A").utc();
+  const expireDate = moment().add(req.body.suspendExpire || 0, 'days');
+
+  if (!reason) {
+    reason = 'For breaking the reasons you have been issued a temp suspend from our site';
+  }
+  if (req.body.suspendExpire === 'custom') {
+
+  };
+  const expire = (req.body.suspendExpire === 'custom') ? expireCustom : expireDate;
+  User.findById(req.params.id, (err, user) => {
+    user.isSuspended = true;
+    user.suspendExpire = expire;
+    user.save();
+    req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')}`)
+    res.redirect('/admin/users');
+  });
+
 });
 
 /**
