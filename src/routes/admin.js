@@ -205,11 +205,14 @@ router.get('/users/:id/edit', (req, res) => {
     const email = user.email;
     const accountActivated = user.accountActivated;
     const isAdmin = user.isAdmin;
-    const lastLog = user.lastLog;
-    const lastLogIP = user.lastLogIP;
-    const createdIP = user.createdIP;
-    const lastActivity = user.lastActivity;
-    const lastActivityIP = user.lastActivityIP;
+    const lastLog = user.lastLog || 'N/A';
+    const lastLogIP = user.lastLogIP || 'N/A';
+    const createdIP = user.createdIP || 'N/A';
+    const lastActivity = user.lastActivity || 'N/A';
+    const lastActivityIP = user.lastActivityIP || 'N/A';
+    const isBanned = user.isBanned;
+    const isSuspended = user.isSuspended;
+    const suspendedExpire = user.suspendedExpire || null;
     res.render('admin/users/edit', {
       title: `Edit ${username}`,
       username,
@@ -221,6 +224,9 @@ router.get('/users/:id/edit', (req, res) => {
       createdIP,
       lastActivity,
       lastActivityIP,
+      isBanned,
+      isSuspended,
+      suspendedExpire,
       id
     });
   });
