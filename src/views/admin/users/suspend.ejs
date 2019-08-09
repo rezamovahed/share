@@ -6,10 +6,8 @@
   <div class="display-4 pt-4">Suspend <%= username %></div>
   <form action="/admin/users/<%= id %>/suspend?_method=PATCH" method="POST" novalidate>
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-
     <div class="form-group">
       <label for="suspendExpire">Suspend Expire Date</label>
-
       <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
         <input id=suspendExpire" name=suspendExpire" type="text" class="form-control datetimepicker-input"
           data-target="#datetimepicker1" />
