@@ -353,7 +353,7 @@ router.patch('/users/:id/unban', async (req, res) => {
  * @description Shows a edit form for the user
  * @access Private
 */
-router.put('/users/:id', (req, res) => {
+router.put('/users/:id', async (req, res) => {
   const id = req.params.id;
   const username = req.body.username;
   const email = req.body.email.toLowerCase();
@@ -367,13 +367,25 @@ router.put('/users/:id', (req, res) => {
 
   let error = {};
 
+  let updatedUser = {
+    username,
+    email,
+    accountActivated,
+    avatar
+  }
   // Check if empty
   // Username
   if (!username) { error.username = 'Please enter a username.' };
-  // Email
-  // Check if email is vaid
-  if (!email) { error.email = 'Please enter your email.' };
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
+
+  if (req.user.streamerMode) {
+    const editUser = await User.findById(id);
+    updatedUser.email = editUser.email;
+  } else {
+    // Email
+    // Check if email is vaid
+    if (!email) { error.email = 'Please enter your email.' };
+    if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
+  }
 
   // Password
   if (password && validator.isLength(password, {
@@ -383,12 +395,7 @@ router.put('/users/:id', (req, res) => {
   }
 
   if (JSON.stringify(error) === '{}') {
-    let updatedUser = {
-      username,
-      email,
-      accountActivated,
-      avatar
-    }
+
     if (req.body.isAdmin) {
       updatedUser.isAdmin = true
     } else {
@@ -415,7 +422,7 @@ router.put('/users/:id', (req, res) => {
     });
   } else {
     req.flash('error', error);
-    res.redirect(`/ admin / users / ${id}`);
+    res.redirect(`/admin/users/${id}`);
   }
 });
 
