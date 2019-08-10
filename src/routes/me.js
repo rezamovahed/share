@@ -44,13 +44,23 @@ router.put('/', (req, res) => {
     d: 'retro'
   }, true);
 
+  let updatedUser = {
+    username,
+    displayName,
+    avatar
+  }
+
   // Check if empty
   // Username
   if (!username) { error.username = 'Please enter your username.' };
-  // Email
-  // Check if email is vaid
-  if (!email) { error.email = 'Please enter your email.' };
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
+  if (req.user.streamerMode) {
+    updatedUser.email = req.user.email;
+  } else {
+    // Email
+    // Check if email is vaid
+    if (!email) { error.email = 'Please enter your email.' };
+    if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
+  }
   // Password
   if (newPassword) {
 
@@ -67,13 +77,16 @@ router.put('/', (req, res) => {
   // Check password length
   if (JSON.stringify(error) === '{}') {
     username = username.toLowerCase();
-    let updatedUser = {
-      username,
-      displayName,
-      email,
-      avatar
-    }
+
+
+    if (req.body.streamerMode) {
+      updatedUser.streamerMode = true
+    } else {
+      updatedUser.streamerMode = false;
+    };
+
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
+      console.log(user)
       if (err) {
         if (err.code === 11000) {
           error.username = 'Username has already been taked.'
