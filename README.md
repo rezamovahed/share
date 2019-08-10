@@ -34,6 +34,7 @@ npm run dev-web
 4.0.0
 * Added last login IP
 * Added signup IP
+* Streamer mode has been added in the users settings.  It will stop leaks for both the user and if they have admin others as well.
 <!-- * You can now upload files via your account on the website. -->
 * You can now ban and unban users. Comfirm the ban of a user has been added.
 * You can also suspend users 24 hours , a week, and even a month. With unsuspend

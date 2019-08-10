@@ -92,7 +92,7 @@
         <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
           data-off="False">
       </div>
-      <% if(accountActivated === false) { %>
+      <% if(!accountActivated) { %>
       <script>
         $(document).ready(function () {
           $("#activate").attr('checked', false);

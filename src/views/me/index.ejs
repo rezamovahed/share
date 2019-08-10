@@ -17,11 +17,10 @@
       <% } %>
     </div>
 
-
     <div class="form-group">
-      <label for="email">Email</label>
+      <label for="email">Email <% if(currentUser.streamerMode) { %> (Your email can't be updated as streamer mode is enabled.) <% } %></label>
       <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>"
-        id="email" value="<%= currentUser.email %>" required>
+        id="email" value="<% if(currentUser.streamerMode) {%>Streamer Mode is enabled<%} else {%><%= currentUser.email %><%}%>" required>
       <% if(errors && error[0].email) { %>
       <small class="form-text text-danger">
         <%= error[0].email %></small>
@@ -78,6 +77,69 @@
           <%= error[0].confirmNewPassword %></small>
         <% } %>
       </div>
+
+      <h1 class="display-4">Toggles</h1>
+
+      <div class="form-group d-inline">
+        <label for="streamerMode">Streamer Mode</label>
+        <input id="streamerMode" name="streamerMode" value="true" type="checkbox" checked data-toggle="toggle"
+          data-on="On" data-off="Off">
+      </div>
+
+      <% if(!currentUser.streamerMode) { %>
+      <script>
+        $(document).ready(function () {
+          $("#streamerMode").attr('checked', false);
+        });
+      </script>
+      <% } else { %>
+
+      <script>
+        $(document).ready(function () {
+          $("#streamerMode").attr('checked', true);
+        });
+      </script>
+      <% }%>
+
+      <% if(currentUser.lastLog !== null) { %>
+      <h1 class="display-4">Basic Info</h1>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Last Login IP</h5>
+              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled <% } else { %><%= currentUser.lastLogIP %> <% } %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Last Login</h5>
+              <p class="card-text"><%= moment(currentUser.lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row pt-4  pb-4">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Last Activity IP</h5>
+              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled <% } else { %><%= currentUser.lastActivityIP %> <% } %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Last Activity</h5>
+              <p class="card-text"><%= moment(currentUser.lastActivity).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
 
       <button type="submit" class="btn btn-primary">Save Account</button>
       <a role=button" class="btn btn-primary text-white" href="/me/keys">View API Keys</a>
