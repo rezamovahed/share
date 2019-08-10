@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  streamerMode: Boolean,
   isAdmin: Boolean,
   lastLog: Date,
   lastLogIP: String,
