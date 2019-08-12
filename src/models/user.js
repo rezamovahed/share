@@ -25,6 +25,8 @@ const userSchema = new mongoose.Schema({
   isSuspended: Boolean,
   suspendedExpire: Date,
   suspendedReason: String,
+  passwordChanged: Date,
+  passwordChangedIP: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   accountActvationToken: String,
@@ -36,10 +38,8 @@ const userSchema = new mongoose.Schema({
   streamerMode: Boolean,
   isAdmin: Boolean,
   lastLog: Date,
-  lastLogIP: String,
-  createdIP: String,
   lastActivity: Date,
-  lastActivityIP: String,
+  createdIP: String,
 }, {
     timestamps: true
   });
