@@ -80,11 +80,10 @@ router.put('/', (req, res) => {
     if (req.body.streamerMode) {
       updatedUser.streamerMode = true
     } else {
-      updatedUser.streamerMode = false;
+      updatedUser.streamerMode = undefined;
     };
 
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
-      console.log(user)
       if (err) {
         if (err.code === 11000) {
           error.username = 'Username has already been taked.'
@@ -96,8 +95,6 @@ router.put('/', (req, res) => {
       if (newPassword) {
 
         user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
-          console.log(err)
-          console.log(error)
           if (err) {
             if (err.name === 'IncorrectPasswordError') {
               error.oldPassword = 'Wrong current password.'

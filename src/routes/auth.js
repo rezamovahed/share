@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const gravatar = require('gravatar');
-const mjml = require('mjml');
+const emailTemplates = require('../config/emailTemplates')
 const validator = require('validator');
 const crypto = require('crypto');
 const async = require('async');
@@ -37,7 +37,7 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
     user.lastLog = Date.now();
     user.save();
   });
-  req.flash("success", `Welcome back, ${req.user.displayName}`)
+  req.flash('success', `Welcome back, ${req.user.displayName}`)
   res.redirect('/me')
 });
 
@@ -47,8 +47,8 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
  * @description Displays signup form
  * @access Public
 */
-router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
-  if (!process.env.SIGNUPS) {
+router.get('/signup', middleware.isAlreadyLoggedIn, (req, res) => {
+  if (process.env.SIGNUPS === 'false') {
     return res.status(403).redirect('/');
   }
   res.render("auth/signup", {
@@ -65,7 +65,7 @@ router.get("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
  * @access Public
 */
 router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
-  if (!process.env.SIGNUPS) {
+  if (process.env.SIGNUPS === 'false') {
     if (req.body.email !== process.env.EMAIL) { return res.redirect('/', 403); }
     res.redirect('/', 403);
   }
@@ -110,7 +110,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   // Checks if there is any errors.
   if (JSON.stringify(error) === '{}') {
     // Create the user object.
-      username = username.toLowerCase();
+    username = username.toLowerCase();
     let newUser = {
       username,
       displayName,
@@ -121,7 +121,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
 
     // Trys to create the user
     User.register(newUser, password, (err, user) => {
-      if(err) {
+      if (err) {
         if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };
       }
       // if the user already exists then show the error.
@@ -155,45 +155,10 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
           });
         },
         (token, done) => {
-          const htmlOuput = mjml(`<mjml>
-        <mj-body background-color="#ffffff" font-size="13px">
-          <mj-section>
-            <mj-column>
-              <mj-text font-style="bold" font-size="24px" color="#626262" align="center">
-                Your account details
-              </mj-text>
-            </mj-column>
-          </mj-section>
-          <mj-divider border-color="#4f92ff" />
-          <mj-wrapper padding-top="0">
-            <mj-section padding-top="0">
-              <mj-column>
-                <mj-text>
-                  You are receiving this because you (or someone else) created a account ${process.env.TITLE}.
-                </mj-text>
-              </mj-column>
-            </mj-section>
-            <mj-section>
-              <mj-column>
-                <mj-text>Please click activate to finalize your account creation.</mj-text>
-                <mj-text>If you did not request this account to be made or want your data removed. Please click the delete button.</mj-text>
-              </mj-column>
-            </mj-section>
-            <mj-section>
-              <mj-column>
-                <mj-button href="http://${req.headers.host}/user/activate/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
-                  Activate
-                </mj-button>
-              </mj-column>
-              <mj-column>
-                <mj-button href="http://${req.headers.host}/user/delete/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
-                  Delete Account
-                </mj-button>
-              </mj-column>
-            </mj-section>
-          </mj-wrapper>
-        </mj-body>
-      </mjml>`);
+          const htmlOuput = emailTemplates.activateAccount(req.headers.host, token);
+          done(err, htmlOuput);
+        },
+        (htmlOuput, done) => {
           const accountActvationEmail = {
             to: req.body.email,
             from: mailConfig.from,

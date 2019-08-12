@@ -20,7 +20,9 @@ router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
 */
 if (process.env.NODE_ENV !== 'production') {
   router.get('/test', (req, res) => {
-    res.send(req.user);
+    const emailTemplates = require('../config/emailTemplates')
+    let html = emailTemplates.activateAccount(req.headers.host, 'testestjnetjjhkte')
+    res.send(html.html);
   });
 };
 module.exports = router;
