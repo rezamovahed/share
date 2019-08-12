@@ -24,10 +24,10 @@
       <input name="email" class="form-control <% if(error && error.length > 0 && error[0].email){ %>is-invalid <% } %>"
         id="email" type="email" required value="<% if (currentUser.streamerMode) {%>Streamer Mode is enabled<%} else{%><%= email %><%}%>">
       <% if (errors && error[0].email) { %>
-      <small class=" invalid-feedback">
-      <%= error[0].email %>
-      </small>
-      <% } %>
+        <small class=" invalid-feedback">
+          <%= error[0].email %>
+        </small>
+        <% } %>
     </div>
     <div class="form-group">
       <label for="password">Change password</label>
@@ -48,37 +48,9 @@
     </div>
     <% if(lastLog !== 'N/A' && lastActivity !== 'N/A') { %>
     <h2>Basic Info</h2>
-    <% if(lastLog !== 'N/A') { %>
     <div class="row">
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Last Login IP</h5>
-            <p class="card-text"><% if (currentUser.streamerMode) {%>Streamer Mode is enabled<%} else{%><%= lastLogIP %><%}%></p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Last Login</h5>
-            <p class="card-text"><%= moment(lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <% } %>
-    <% if(lastActivity !== 'N/A') { %>
-    <div class="row pt-4">
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Last Activity IP</h5>
-            <p class="card-text"><% if (currentUser.streamerMode) {%>Streamer Mode is enabled<%} else{%><%= lastActivityIP %><%}%></p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
+      <% if(lastActivity !== 'N/A') { %>
+      <div class="col-sm-4">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Last Activity</h5>
@@ -86,8 +58,18 @@
           </div>
         </div>
       </div>
+      <% } %>
+      <% if(lastLog !== 'N/A') { %>
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last Login</h5>
+            <p class="card-text"><%= moment(lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+          </div>
+        </div>
+      </div>
+      <% } %>
     </div>
-    <% } %>
     <% } %>
     <div class="pt-4">
       <div class="form-group d-inline">

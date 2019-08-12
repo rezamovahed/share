@@ -103,17 +103,8 @@
       <% }%>
 
       <h1 class="display-4">Basic Info</h1>
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Last Login IP</h5>
-              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled
-                <% } else { %><%= currentUser.lastLogIP %> <% } %></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
+      <div class="row pb-5">
+        <div class="col-sm-4">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Last Login</h5>
@@ -121,19 +112,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <% if(currentUser.lastActivity !== undefined) { %>
-      <div class="row pt-4  pb-4">
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Last Activity IP</h5>
-              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled
-                <% } else { %><%= currentUser.lastActivityIP %> <% } %></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
+        <% if(currentUser.lastActivity !== undefined) { %>
+        <div class="col-sm-4">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Last Activity</h5>

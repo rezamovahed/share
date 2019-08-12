@@ -2,10 +2,8 @@ const express = require('express');
 const router = express.Router();
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 const validator = require('validator');
 const md5 = require('js-md5');
-const path = require('path');
 const Key = require('../models/key');
 const User = require('../models/user');
 const Upload = require('../models/upload');
@@ -96,7 +94,10 @@ router.put('/', (req, res) => {
         return;
       }
       if (newPassword) {
+
         user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
+          console.log(err)
+          console.log(error)
           if (err) {
             if (err.name === 'IncorrectPasswordError') {
               error.oldPassword = 'Wrong current password.'
@@ -105,6 +106,9 @@ router.put('/', (req, res) => {
               return;
             }
           }
+          user.passwordChangedIP = req.clientIp;
+          user.passwordChanged = Date.now();
+          user.save();
         });
         req.flash('success', 'Your password has been changed.  Please relogin.');
         req.logout();

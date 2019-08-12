@@ -12,4 +12,15 @@ router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
   res.render('index');
 });
 
+/**
+ * @route /testing
+ * @method GET
+ * @description TESTING ROUTE
+ * @access Public
+*/
+if (process.env.NODE_ENV !== 'production') {
+  router.get('/test', (req, res) => {
+    res.send(req.user);
+  });
+};
 module.exports = router;

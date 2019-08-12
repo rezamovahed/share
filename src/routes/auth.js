@@ -35,7 +35,6 @@ router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, pass
 }), (req, res) => {
   User.findById(req.user.id, (err, user) => {
     user.lastLog = Date.now();
-    user.lastLogIP = req.clientIp;
     user.save();
   });
   req.flash("success", `Welcome back, ${req.user.displayName}`)

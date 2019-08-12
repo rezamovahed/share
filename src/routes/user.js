@@ -316,13 +316,19 @@ router.post('/forgot/reset/:token', (req, res) => {
     user.setPassword(req.body.password, function (err) {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
+      user.passwordChangedIP = req.clientIp;
+      user.passwordChanged = Date.now();
       user.save();
       const forgotResetPasswordEmail = {
         to: user.email,
         from: mailConfig.from,
         subject: 'Your password has been changed',
-        text: 'Hello,\n' +
-          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+        html: 'Hello,\n' +
+          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n' +
+          '<strong>IP</strong> ' + `<a href="https://whatismyipaddress.com/ip/${req.clientIp}">${req.clientIp}</a>` + ' \n' +
+          '<strong>City</strong> ' + req.ipInfo.city.toString() + ' \n' +
+          '<strong>State</strong> ' + req.ipInfo.region + ' \n' +
+          '<strong>Country</strong> ' + req.ipInfo.country + ' \n'
       };
       nodemailerSendGrid.sendMail(forgotResetPasswordEmail, err => {
         req.flash('success', 'Your password has been changed.  You should be able to relogin with the new password');
