@@ -380,6 +380,7 @@ router.put('/users/:id', async (req, res) => {
   if (req.user.streamerMode) {
     const editUser = await User.findById(id);
     updatedUser.email = editUser.email;
+
   } else {
     // Email
     // Check if email is vaid
@@ -412,11 +413,15 @@ router.put('/users/:id', async (req, res) => {
         return;
       }
       if (password) {
-        user.setPassword(password, (err, newPassword) => {
-        });
+        user.setPassword(password, (err, newPassword) => { });
       };
+      if (req.user.streamerMode) {
+        req.flash('success', `${username} has been updated. Email has been left unchanged due to streamer mode being enabled.`);
+        res.redirect('/admin/users');
+        return;
+      }
       // Add user password change.
-      req.flash('success', `${username} has been updated`);
+      req.flash('success', `${username} has been updated.`);
       res.redirect('/admin/users');
       return;
     });

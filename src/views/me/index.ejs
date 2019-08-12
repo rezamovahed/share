@@ -18,12 +18,13 @@
     </div>
 
     <div class="form-group">
-      <label for="email">Email <% if(currentUser.streamerMode) { %> (Your email can't be updated as streamer mode is enabled.) <% } %></label>
+      <label for="email">Email <% if(currentUser.streamerMode) { %> (Your email can't be updated as streamer mode is
+        enabled.) <% } %></label>
       <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>"
         id="email" value="<% if(currentUser.streamerMode) {%>Streamer Mode is enabled<%} else {%><%= currentUser.email %><%}%>" required>
       <% if(errors && error[0].email) { %>
-      <small class="form-text text-danger">
-        <%= error[0].email %></small>
+      <small class=" form-text text-danger">
+      <%= error[0].email %></small>
       <% } %>
     </div>
 
@@ -101,14 +102,14 @@
       </script>
       <% }%>
 
-      <% if(currentUser.lastLog !== null) { %>
       <h1 class="display-4">Basic Info</h1>
       <div class="row">
         <div class="col-sm-6">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Last Login IP</h5>
-              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled <% } else { %><%= currentUser.lastLogIP %> <% } %></p>
+              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled
+                <% } else { %><%= currentUser.lastLogIP %> <% } %></p>
             </div>
           </div>
         </div>
@@ -121,12 +122,14 @@
           </div>
         </div>
       </div>
+      <% if(currentUser.lastActivity !== undefined) { %>
       <div class="row pt-4  pb-4">
         <div class="col-sm-6">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Last Activity IP</h5>
-              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled <% } else { %><%= currentUser.lastActivityIP %> <% } %></p>
+              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled
+                <% } else { %><%= currentUser.lastActivityIP %> <% } %></p>
             </div>
           </div>
         </div>

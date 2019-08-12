@@ -20,12 +20,12 @@
       <% } %>
     </div>
     <div class="form-group">
-      <label for="email">Email</label>
+      <label for="email">Email <% if (currentUser.streamerMode) {%>(Email can't be updated as streamer mode is enabled.)<%}%></label>
       <input name="email" class="form-control <% if(error && error.length > 0 && error[0].email){ %>is-invalid <% } %>"
         id="email" type="email" required value="<% if (currentUser.streamerMode) {%>Streamer Mode is enabled<%} else{%><%= email %><%}%>">
       <% if (errors && error[0].email) { %>
-      <small class="invalid-feedback">
-        <%= error[0].email %>
+      <small class=" invalid-feedback">
+      <%= error[0].email %>
       </small>
       <% } %>
     </div>
@@ -46,9 +46,9 @@
         <% } %>
       </div>
     </div>
-
-    <% if(lastLog !== null) { %>
+    <% if(lastLog !== 'N/A' && lastActivity !== 'N/A') { %>
     <h2>Basic Info</h2>
+    <% if(lastLog !== 'N/A') { %>
     <div class="row">
       <div class="col-sm-6">
         <div class="card">
@@ -67,6 +67,8 @@
         </div>
       </div>
     </div>
+    <% } %>
+    <% if(lastActivity !== 'N/A') { %>
     <div class="row pt-4">
       <div class="col-sm-6">
         <div class="card">
@@ -85,6 +87,7 @@
         </div>
       </div>
     </div>
+    <% } %>
     <% } %>
     <div class="pt-4">
       <div class="form-group d-inline">
