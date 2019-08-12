@@ -169,7 +169,6 @@ router.post('/upload', middleware.isAPIKeyVaild, middleware.isUploaderBanned, (r
 
   User.findById(auth, (err, user) => {
     user.lastActivity = Date.now();
-    user.lastActivityIP = req.clientIp;
     user.save();
   });
   // Gets the file size and the hash of the file (Ya I know MD5 is not the best but its just its shorter.  If I get many requests for stonger hash I will add it.)

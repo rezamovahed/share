@@ -12,4 +12,17 @@ router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
   res.render('index');
 });
 
+/**
+ * @route /testing
+ * @method GET
+ * @description TESTING ROUTE
+ * @access Public
+*/
+if (process.env.NODE_ENV !== 'production') {
+  router.get('/test', (req, res) => {
+    const emailTemplates = require('../config/emailTemplates')
+    let html = emailTemplates.activateAccount(req.headers.host, 'testestjnetjjhkte')
+    res.send(html.html);
+  });
+};
 module.exports = router;

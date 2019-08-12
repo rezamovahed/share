@@ -18,12 +18,13 @@
     </div>
 
     <div class="form-group">
-      <label for="email">Email <% if(currentUser.streamerMode) { %> (Your email can't be updated as streamer mode is enabled.) <% } %></label>
+      <label for="email">Email <% if(currentUser.streamerMode) { %> (Your email can't be updated as streamer mode is
+        enabled.) <% } %></label>
       <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>"
         id="email" value="<% if(currentUser.streamerMode) {%>Streamer Mode is enabled<%} else {%><%= currentUser.email %><%}%>" required>
       <% if(errors && error[0].email) { %>
-      <small class="form-text text-danger">
-        <%= error[0].email %></small>
+      <small class=" form-text text-danger">
+      <%= error[0].email %></small>
       <% } %>
     </div>
 
@@ -101,18 +102,9 @@
       </script>
       <% }%>
 
-      <% if(currentUser.lastLog !== null) { %>
       <h1 class="display-4">Basic Info</h1>
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Last Login IP</h5>
-              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled <% } else { %><%= currentUser.lastLogIP %> <% } %></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
+      <div class="row pb-5">
+        <div class="col-sm-4">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Last Login</h5>
@@ -120,17 +112,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="row pt-4  pb-4">
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Last Activity IP</h5>
-              <p class="card-text"><% if(currentUser.streamerMode){ %> Streamer Mode is enabled <% } else { %><%= currentUser.lastActivityIP %> <% } %></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
+        <% if(currentUser.lastActivity !== undefined) { %>
+        <div class="col-sm-4">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Last Activity</h5>
@@ -140,32 +123,33 @@
         </div>
       </div>
       <% } %>
+    </div>
 
-      <button type="submit" class="btn btn-primary">Save Account</button>
-      <a role=button" class="btn btn-primary text-white" href="/me/keys">View API Keys</a>
-      <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Account Deletion</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            </div>
-            <div class="modal-body">
-              <p>Are you sure you want to delete your account, this procedure is irreversible.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              <a href="/me/delete" class="btn btn-danger btn-ok" style="color: #ffff;">Delete my account</a>
-            </div>
+    <button type="submit" class="btn btn-primary">Save Account</button>
+    <a role=button" class="btn btn-primary text-white" href="/me/keys">View API Keys</a>
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Account Deletion</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete your account, this procedure is irreversible.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <a href="/me/delete" class="btn btn-danger btn-ok" style="color: #ffff;">Delete my account</a>
           </div>
         </div>
       </div>
-
-      <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
-        style="color: #ffff;">Delete
-        account</a>
+    </div>
+    <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
+      style="color: #ffff;">Delete
+      account</a>
   </form>
 </div>
 </div>
+
 <% include ../partials/footer %>

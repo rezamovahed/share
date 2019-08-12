@@ -1,7 +1,9 @@
 # Changelog
 4.0.0
-* Added last login IP
-* Added signup IP
+* Added last password change IP and time.
+* Added last activity time.
+* Added last login time.
+* Added signup IP.
 * Streamer mode has been added in the users settings.  It will stop leaks for both the user and if they have admin others as well.
 <!-- * You can now upload files via your account on the website. -->
 * You can now ban and unban users. Comfirm the ban of a user has been added.
