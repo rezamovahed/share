@@ -2,7 +2,7 @@
 <% include ../partials/navbar %>
 <% errors = error && error.length > 0 %>
 <div class="container w-50 pt-5">
-  <form action="/me?_method=PUT" method="POST">
+  <form action="/me?_method=PATCH" method="POST">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <% include ../partials/success %>
     <h1 class="display-4">Edit account</h1>

@@ -24,11 +24,11 @@ router.get('/', (req, res) => {
 
 /**
  * @route /me
- * @method PUT
+ * @method PATCH
  * @description Updates account details.
  * @access Private
 */
-router.put('/', (req, res) => {
+router.patch('/', (req, res) => {
   let error = {};
   let username = req.body.username.toString();
   let displayName = req.body.username.toString();
@@ -77,13 +77,9 @@ router.put('/', (req, res) => {
     username = username.toLowerCase();
 
 
-    if (req.body.streamerMode) {
-      updatedUser.streamerMode = true
-    } else {
-      updatedUser.streamerMode = undefined;
-    };
 
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
+
       if (err) {
         if (err.code === 11000) {
           error.username = 'Username has already been taked.'
@@ -111,6 +107,13 @@ router.put('/', (req, res) => {
         req.logout();
         res.redirect('/login');
         return;
+      };
+      if (req.body.streamerMode) {
+        user.streamerMode = true
+        user.save();
+      } else {
+        user.streamerMode = undefined;
+        user.save();
       };
       req.flash('success', 'Your account has been succesfuly updated.');
       res.redirect('/me');
