@@ -50,8 +50,8 @@ router.post('/activate/resend', (req, res) => {
           User.findOne({
             email: req.body.email
           }, function (err, user) {
-            user.accountActvationToken = token;
-            user.accountActvationExpire = tokenExpire;
+            user.emailVerificationToken = token;
+            user.emailVerificationTokenExpire = tokenExpire;
             user.save(function (err) {
               done(err, token);
             });

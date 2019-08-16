@@ -152,27 +152,26 @@ const apiRoutes = require('./routes/api');
 app.use('/api', limiter, apiRoutes)
 
 // CSRF
-const csrfMiddleware = csrf()
+const csrfMiddleware = csrf({ cookie: true })
 
-let csrfLocals = (req, res, next) => {
-  // Csrf
-  res.locals.csrfToken = req.csrfToken() || null;
-  next();
-};
 
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const loginRoutes = require('./routes/login');
 const userRoutes = require('./routes/user');
 const viewRoutes = require('./routes/view');
 const meRoutes = require('./routes/me');
 const adminRoutes = require('./routes/admin');
 
-app.use(csrfMiddleware, csrfLocals, indexRoutes);
-app.use(csrfMiddleware, csrfLocals, authRoutes);
-app.use('/user', csrfMiddleware, csrfLocals, limiter, middleware.isAlreadyLoggedIn, middleware.isBanned, middleware.isSuspended, userRoutes);
-app.use('/view', csrfMiddleware, csrfLocals, limiter, middleware.isBanned, middleware.isSuspended, viewRoutes);
-app.use('/me', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, middleware.isSuspended, meRoutes);
-app.use('/admin', csrfMiddleware, csrfLocals, middleware.isLoggedIn, middleware.isBanned, middleware.isSuspended, middleware.isAdmin, adminRoutes);
+app.use(csrfMiddleware, indexRoutes);
+app.use('/login', csrfMiddleware, loginRoutes);
+app.use('/signup', csrfMiddleware, signupRoutes);
+
+// app.use(csrfMiddleware,  authRoutes);
+app.use('/user', csrfMiddleware, limiter, middleware.isAlreadyLoggedIn, middleware.isBanned, middleware.isSuspended, userRoutes);
+app.use('/view', csrfMiddleware, limiter, middleware.isBanned, middleware.isSuspended, viewRoutes);
+app.use('/me', csrfMiddleware, middleware.isLoggedIn, middleware.isBanned, middleware.isSuspended, meRoutes);
+app.use('/admin', csrfMiddleware, middleware.isLoggedIn, middleware.isBanned, middleware.isSuspended, middleware.isAdmin, adminRoutes);
 
 app.use(function (err, req, res, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
@@ -264,10 +263,10 @@ setInterval(() => {
       $gt: Date.now()
     }
   }, (err, users) => {
-      users.map((user) => {
+    users.map((user) => {
       user.isSuspended = undefined;
-        user.suspendedExpire = undefined;
-        user.suspendedReason = undefined;
+      user.suspendedExpire = undefined;
+      user.suspendedReason = undefined;
       user.save();
     });
   });

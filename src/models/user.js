@@ -29,8 +29,8 @@ const userSchema = new mongoose.Schema({
   passwordChangedIP: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  accountActvationToken: String,
-  accountActvationExpire: Date,
+  emailVerificationToken: String,
+  emailVerificationTokenExpire: Date,
   accountActivated: {
     type: Boolean,
     default: false
