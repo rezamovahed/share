@@ -6,7 +6,8 @@ const User = require('../models/user');
 const middleware = require('../middleware');
 const router = express.Router();
 const nodemailerSendGrid = require('../config/sendgrid.js');
-const mailConfig = require('../config/email')
+const mailConfig = require('../config/email');
+const emailTemplates = require('../config/emailTemplates');
 
 /**
  * @route /user/activate/resend
@@ -57,46 +58,10 @@ router.post('/activate/resend', (req, res) => {
           });
         },
         (token, done) => {
-          const htmlOuput = mjml(`<mjml>
-        <mj-body background-color="#ffffff" font-size="13px">
-          <mj-section>
-            <mj-column>
-              <mj-text font-style="bold" font-size="24px" color="#626262" align="center">
-                Your account details
-              </mj-text>
-            </mj-column>
-          </mj-section>
-          <mj-divider border-color="#4f92ff" />
-          <mj-wrapper padding-top="0">
-            <mj-section padding-top="0">
-              <mj-column>
-                <mj-text>
-                  You are receiving this because you (or someone else) created a account ${process.env.TITLE}.
-                </mj-text>
-              </mj-column>
-            </mj-section>
-            <mj-section>
-              <mj-column>
-                <mj-text>Please click activate to finalize your account creation.</mj-text>
-                <mj-text>If you did not request this account to be made or want your data removed. Please click the delete button.</mj-text>
-              </mj-column>
-            </mj-section>
-            <mj-section>
-              <mj-column>
-                <mj-button href="http://${req.headers.host}/user/activate/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
-                  Activate
-                </mj-button>
-              </mj-column>
-              <mj-column>
-                <mj-button href="http://${req.headers.host}/user/delete/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
-                  Delete Account
-                </mj-button>
-              </mj-column>
-            </mj-section>
-          </mj-wrapper>
-        </mj-body>
-      </mjml>
-      `)
+          const htmlOuput = emailTemplates.activateAccount(req.headers.host, token);
+          done(err, htmlOuput);
+        },
+        (htmlOuput, done) => {
           const accountActvationEmail = {
             to: req.body.email,
             from: mailConfig.from,
@@ -110,9 +75,10 @@ router.post('/activate/resend', (req, res) => {
           });
         }
       ]);
+    } else {
+      req.flash('success', 'Your account is already activated');
+      res.redirect('/');
     }
-    req.flash('success', 'Your account is already activated');
-    res.redirect("/");
   });
 });
 

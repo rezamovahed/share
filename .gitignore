@@ -8,7 +8,7 @@ package-lock.json
 .env
 # sass
 .sass-cache
-# Local uploads
+# Uploads folder
 src/public/u/*
 # Temp folder
 src/tmp
