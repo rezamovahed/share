@@ -16,7 +16,7 @@ This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
 You can now download the release [here](https://github.com/MrDemonWolf/share-mrdemonwolf-me/releases/latest/download.zip)
 
-To help with Development or Download of this project you can.
+To help with Development of this project you can.
 * Clone the repo: `git clone https://github.com/MrDemonWolf/share-mrdemonwolf-me.git`
 * [Fork, Clone, or Download on GitHub](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
 
