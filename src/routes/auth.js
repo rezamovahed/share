@@ -12,6 +12,36 @@ const User = require('../models/user');
 const router = express.Router();
 
 /**
+ * @route /login
+ * @method GET
+ * @description Displays Login form
+ * @access Public
+*/
+router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
+  res.render('auth/login', {
+    title: 'Login'
+  });
+});
+
+/**
+ * @route /login
+ * @method POST
+ * @description Login post
+ * @access Public
+*/
+router.post('/', middleware.isActvation, middleware.isAlreadyLoggedIn, passport.authenticate('local', {
+  failureRedirect: '/login',
+  failureFlash: true
+}), (req, res) => {
+  User.findById(req.user.id, (err, user) => {
+    user.lastLog = Date.now();
+    user.save();
+  });
+  req.flash('success', `Welcome back, ${req.user.displayName}`)
+  res.redirect('/me')
+});
+
+/**
  * @route /signup
  * @method GET
  * @description Displays signup form
