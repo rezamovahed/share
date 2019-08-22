@@ -29,8 +29,8 @@ const userSchema = new mongoose.Schema({
   passwordChangedIP: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  accountActvationToken: String,
-  accountActvationExpire: Date,
+  emailVerificationToken: String,
+  emailVerificationTokenExpire: Date,
   accountActivated: {
     type: Boolean,
     default: false
@@ -49,4 +49,4 @@ userSchema.plugin(passportLocalMongoose, {
   usernameField: 'email'
 });
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);

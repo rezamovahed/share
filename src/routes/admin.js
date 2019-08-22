@@ -9,8 +9,8 @@ const path = require('path');
 const password = require('generate-password');
 const gravatar = require('gravatar');
 const validator = require('validator');
-const middleware = require('../middleware')
-const uploadsLisingPerPage = require('./utils/adminUploadsPerPage');;
+const middleware = require('../middleware');
+const uploadsLisingPerPage = require('./utils/adminUploadsPerPage');
 const usersListingPerPage = require('./utils/userLisingPerPage');
 const deleteUpload = require('./utils/deleteUpload');
 
@@ -28,7 +28,7 @@ router.get('/', middleware.owner, async (req, res) => {
       title: 'Admin',
       uploads,
       users
-    })
+    });
   } catch (err) {
     req.flash('error', 'Could not load data.');
     res.render('admin/index');
@@ -92,9 +92,9 @@ router.delete('/uploads/:id', (req, res) => {
       deleteUpload.database(fileName, cb => {
         if (!cb) {
           deleteErrors.db += 1;
-        }
+        };
       });
-    }
+    };
   });
 
   setTimeout(() => {
@@ -102,7 +102,7 @@ router.delete('/uploads/:id', (req, res) => {
       req.flash('error', `Could not remove that file.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
       res.redirect('/me/uploads');
       return;
-    }
+    };
     // All uploads has been removed
     req.flash('success', `Deleted ${fileName}`);
     res.redirect('back');
@@ -133,9 +133,9 @@ router.get('/uploads/delete/all', async (req, res) => {
         deleteUpload.database(file.fileName, cb => {
           if (!cb) {
             deleteErrors.db += 1;
-          }
+          };
         });
-      }
+      };
     });
   });
 });
@@ -287,7 +287,6 @@ router.patch('/users/:id/suspend', (req, res) => {
     req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')} UTC`)
     res.redirect('/admin/users');
   });
-
 });
 
 /**
@@ -411,7 +410,7 @@ router.put('/users/:id', async (req, res) => {
         req.flash('error', error);
         res.redirect(`/admin/users/${id}`);
         return;
-      }
+      };
       if (password) {
         user.setPassword(password, (err, newPassword) => { });
       };
@@ -419,7 +418,7 @@ router.put('/users/:id', async (req, res) => {
         req.flash('success', `${username} has been updated. Email has been left unchanged due to streamer mode being enabled.`);
         res.redirect('/admin/users');
         return;
-      }
+      };
       // Add user password change.
       req.flash('success', `${username} has been updated.`);
       res.redirect('/admin/users');
@@ -428,7 +427,7 @@ router.put('/users/:id', async (req, res) => {
   } else {
     req.flash('error', error);
     res.redirect(`/admin/users/${id}`);
-  }
+  };
 });
 
 /**
@@ -442,7 +441,7 @@ router.delete('/users/:id', (req, res) => {
     req.flash('error', "You can't remove your account.");
     res.redirect('back');
     return;
-  }
+  };
 
   let error;
 
@@ -524,7 +523,7 @@ router.post('/users/new', (req, res) => {
           password: password,
         });
         return;
-      }
+      };
       req.flash('success', `${username} has been created`);
       res.redirect('/admin/users');
     });
@@ -532,10 +531,9 @@ router.post('/users/new', (req, res) => {
     req.flash('error', error)
     res.render('admin/users/new', {
       title: 'Create new user',
-      username: username,
-      email: email,
-      password: password,
-
+      username,
+      email,
+      password,
     });
   };
 });

@@ -1,5 +1,7 @@
 # Changelog
 4.0.0
+<!-- * Made a lot of the code cleaner and easier to mange for developers -->
+* Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export. For easier  reuse.
 * Added last password change IP and time.
 * Added last activity time.
 * Added last login time.

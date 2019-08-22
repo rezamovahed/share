@@ -17,4 +17,4 @@ const keySchema = new mongoose.Schema({
   });
 
 
-module.exports = mongoose.model('Key', keySchema)
+module.exports = mongoose.model('Key', keySchema);

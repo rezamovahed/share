@@ -1,16 +1,15 @@
 const express = require('express');
 const middleware = require('../middleware');
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate')
-const crypto = require('crypto')
+const generate = require('nanoid/generate');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const fileExists = require('file-exists');
 const fileUpload = require('express-fileupload');
 const jwt = require('jsonwebtoken');
-const fileExtensionCheck = require('../config/extensions')
-const fileMinetypeCheck = require('../config/mineTypes')
+const fileExtensionCheck = require('../config/extensions');
+const fileMinetypeCheck = require('../config/mineTypes');
 const Upload = require('../models/upload');
 const User = require('../models/user');
 
@@ -133,7 +132,7 @@ router.post('/upload', middleware.isAPIKeyVaild, middleware.isUploaderBanned, (r
   const fileMineType = file.mimetype;
   const newFileName = generate(alphabet, 16) + fileExtension;
   const uploadPath = `${path.join(__dirname, '../public')}/u/${newFileName}`;
-  const key = crypto.randomBytes(16).toString('hex')
+  const key = generate(alphabet, 16);
   const rawToken = req.headers['authorization'].split(" ").slice(1).toString();
   const decoded = jwt.decode(rawToken, { complete: true });
   const auth = decoded.payload.sub;

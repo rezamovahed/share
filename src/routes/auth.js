@@ -29,8 +29,8 @@ router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
  * @description Login post
  * @access Public
 */
-router.post('/login', middleware.isActvation, middleware.isAlreadyLoggedIn, passport.authenticate('local', {
-  failureRedirect: "/login",
+router.post('/', middleware.isActvation, middleware.isAlreadyLoggedIn, passport.authenticate('local', {
+  failureRedirect: '/login',
   failureFlash: true
 }), (req, res) => {
   User.findById(req.user.id, (err, user) => {
@@ -147,8 +147,8 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
           User.findOne({
             email: req.body.email
           }, function (err, user) {
-            user.accountActvationToken = token;
-            user.accountActvationExpire = tokenExpire;
+            user.emailVerificationToken = token;
+            user.emailVerificationTokenExpire = tokenExpire;
             user.save(function (err) {
               done(err, token);
             });
