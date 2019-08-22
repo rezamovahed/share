@@ -23,9 +23,6 @@ require("dotenv").config();
 // Initilate Express
 const app = express();
 
-// Setup console.log timestamps
-require("log-timestamp");
-
 // Set host and port
 app.set("host", process.env.IP || "127.0.0.1");
 app.set("port", process.env.PORT || 5050);
