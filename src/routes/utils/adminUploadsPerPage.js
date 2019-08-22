@@ -19,9 +19,9 @@ module.exports = async (req, res, page, model, limit, populate, populateType) =>
   count = (await model.countDocuments());
   if (populate) {
     data = (await model.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }).populate(populateType));
-    return { data, count }
+    return { data, count };
   } else {
     data = (await model.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }));
-    return { data, count }
-  }
-}
+    return { data, count };
+  };
+};

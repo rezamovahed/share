@@ -56,10 +56,10 @@ middlewareObj.isLoggedIn = (req, res, next) => {
 
 middlewareObj.isBanned = (req, res, next) => {
   if (req.isAuthenticated() && req.user.isBanned) {
-    return res.status(403).send(`<h1> Sorry but you have been permanently banned! If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></h1>`)
+    return res.status(403).send(`<h1> Sorry but you have been permanently banned! If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></h1>`);
   }
   next();
-}
+};
 
 
 middlewareObj.isSuspended = (req, res, next) => {
@@ -72,10 +72,10 @@ middlewareObj.isSuspended = (req, res, next) => {
         return next();
       });
     }
-    return res.status(403).send(`<h1> Sorry but you have been suspended till ${moment(req.user.suspendedExpire).format('M/D/YYYY h:mm A')} UTC.  Reason: ${req.user.suspendedReason} If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></h1>`)
+    return res.status(403).send(`<h1> Sorry but you have been suspended till ${moment(req.user.suspendedExpire).format('M/D/YYYY h:mm A')} UTC.  Reason: ${req.user.suspendedReason} If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a></h1>`);
   }
   next();
-}
+};
 // Uplaoder
 middlewareObj.isUploaderBanned = (req, res, next) => {
   let token = req.headers['authorization'];
@@ -94,9 +94,10 @@ middlewareObj.isUploaderBanned = (req, res, next) => {
         return res.status(403).send(`Sorry but you have been permanently banned! If you feel this is a mistake please email <a href="mailto:${process.env.EMAIL}">${process.env.EMAIL}</a>`)
       }
       next();
-    })
-  })
-}
+    });
+  });
+};
+
 middlewareObj.isAPIKeyVaild = (req, res, next) => {
   let token = req.headers['authorization'];
 
@@ -120,7 +121,7 @@ middlewareObj.isAPIKeyVaild = (req, res, next) => {
       }
     });
     next();
-  })
+  });
 };
 
 module.exports = middlewareObj;
