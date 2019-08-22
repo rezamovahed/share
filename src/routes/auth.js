@@ -3,12 +3,13 @@ const passport = require('passport');
 const gravatar = require('gravatar');
 const emailTemplates = require('../config/emailTemplates')
 const validator = require('validator');
-const crypto = require('crypto');
 const async = require('async');
 const middleware = require('../middleware');
 const nodemailerSendGrid = require('../config/sendgrid');
 const mailConfig = require('../config/email');
 const User = require('../models/user');
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const generate = require('nanoid/generate')
 const router = express.Router();
 
 /**
@@ -29,7 +30,7 @@ router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
  * @description Login post
  * @access Public
 */
-router.post('/', middleware.isActvation, middleware.isAlreadyLoggedIn, passport.authenticate('local', {
+router.post('/', middleware.isAlreadyLoggedIn, middleware.isActvation passport.authenticate('local', {
   failureRedirect: '/login',
   failureFlash: true
 }), (req, res) => {
@@ -136,11 +137,9 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
       async.waterfall([
         (done) => {
           // Creates token
-          crypto.randomBytes(8, function (err, buf) {
-            var token = buf.toString('hex');
-            var tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
-            done(err, token, tokenExpire);
-          });
+          const token = generate(alphabet, 24);
+          const tokenExpire = Date.now() + 1000 * 60 * 60 * 3;
+          done(err, token, tokenExpire);
         },
         (token, tokenExpire, done) => {
           // Finds and adds the token to user with a expire date
