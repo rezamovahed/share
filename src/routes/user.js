@@ -1,13 +1,14 @@
 const express = require("express");
 const mjml = require('mjml');
-const crypto = require("crypto");
 const async = require("async");
 const User = require('../models/user');
 const middleware = require('../middleware');
-const router = express.Router();
 const nodemailerSendGrid = require('../config/sendgrid.js');
 const mailConfig = require('../config/email');
 const emailTemplates = require('../config/emailTemplates');
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const generate = require('nanoid/generate')
+const router = express.Router();
 
 /**
  * @route /user/activate/resend
@@ -40,11 +41,9 @@ router.post('/activate/resend', (req, res) => {
     if (!user.accountActivated) {
       async.waterfall([
         (done) => {
-          crypto.randomBytes(16, function (err, buf) {
-            var token = buf.toString('hex');
-            var tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
-            done(err, token, tokenExpire)
-          });
+          const token = generate(alphabet, 24);
+          const tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
+          done(err, token, tokenExpire)
         },
         (token, tokenExpire, done) => {
           User.findOne({
@@ -169,10 +168,9 @@ router.get('/forgot', (req, res) => {
 router.post('/forgot', middleware.isActvation, (req, res) => {
   async.waterfall([
     (done) => {
-      crypto.randomBytes(8, function (err, buf) {
-        var token = buf.toString('hex');
-        done(err, token)
-      });
+      const token = generate(alphabet, 24);
+      const token = buf.toString('hex');
+      done(err, token)
     },
     (token, done) => {
       User.findOne({

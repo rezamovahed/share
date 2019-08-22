@@ -31,17 +31,17 @@ app.set("port", process.env.PORT || 5050);
 app.use(express.static(__dirname + "/public"));
 
 // Set view mode
-app.set("view engine", "ejs");
+app.set('view engine', 'ejs');
 
 // Enable method override
-app.use(methodOverride("_method"));
+app.use(methodOverride('_method'));
 
 // Setup IP middleware
 app.use(expressip().getIpInfoMiddleware);
 app.use(requestIp.mw());
 
 // Sets the view directory
-app.set("views", __dirname + "/views");
+app.set('views', __dirname + '/views');
 
 // Morgan HTTP request logging
 if (!process.env.NODE_ENV === "development") {

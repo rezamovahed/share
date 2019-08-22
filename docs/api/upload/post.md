@@ -15,7 +15,7 @@ not already exist. Each User can only have one Account.
 
 Provide file in a __Form Data (mulitpart/form-data)__
 
-```body
+```json
 {
     "file": file
 }
