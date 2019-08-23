@@ -25,6 +25,5 @@ module.exports = async (email, cb) => {
   nodemailerSendGrid.sendMail(accountActvationEmail, (err, info) => {
     if (err) return cb(null, 'Could not send email.  Please contact support.')
     cb(true, null);
-    console.log('Sent Email')
-  })
+  });
 };
