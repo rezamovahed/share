@@ -1,3 +1,5 @@
+const Upload = require('../../../models/upload')
+
 /**
  * @param req
  * Express Req.
@@ -5,8 +7,6 @@
  * Express res.
  * @param page
  * is the page number.
- * @param model
- * What model to use for counting and returning the data per page.
  * @param limit
  * Is the limit per page.
  * @param populate
@@ -14,6 +14,7 @@
  * This is set to false by defult
  * @param what to populate in to the data.
  */
+
 module.exports = async (req, res, page, model, limit, populate, populateType) => {
   if (populate === null) { populate = false; }
   count = (await model.countDocuments());

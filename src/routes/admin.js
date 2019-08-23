@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const moment = require('moment');
 const Upload = require('../models/upload');
 const User = require('../models/user');
@@ -10,9 +9,10 @@ const password = require('generate-password');
 const gravatar = require('gravatar');
 const validator = require('validator');
 const middleware = require('../middleware');
-const uploadsLisingPerPage = require('./utils/adminUploadsPerPage');
+const uploadsLisingPerPage = require('./utils/admin/uploadsPerPage');
 const usersListingPerPage = require('./utils/userLisingPerPage');
 const deleteUpload = require('./utils/deleteUpload');
+const router = express.Router();
 
 /**
  * @route /admin
@@ -43,7 +43,7 @@ router.get('/', middleware.owner, async (req, res) => {
  * @access Private
 */
 router.get('/uploads', async (req, res) => {
-  const uploads = (await uploadsLisingPerPage(req, res, 1, Upload, 10, true, 'uploader'));
+  const uploads = (await uploadsLisingPerPage(req, res, 1, 10, true, 'uploader'));
   res.render('admin/uploads', {
     title: 'Uploads Management',
     data: uploads.data,
@@ -60,7 +60,7 @@ router.get('/uploads', async (req, res) => {
 */
 router.get('/uploads/:page', async (req, res) => {
   if (req.params.page === '0') { return res.redirect('/admin/uploads') };
-  const uploads = (await uploadsLisingPerPage(req, res, req.params.page, Upload, 10, true, 'uploader'));
+  const uploads = (await uploadsLisingPerPage(req, res, req.params.page, 10, true, 'uploader'));
   res.render('admin/uploads', {
     title: 'Uploads Management',
     data: uploads.data,
