@@ -1,4 +1,4 @@
-const Upload = require('../../models/upload');
+const Upload = require('../../../models/upload');
 
 /**
  * @param req
@@ -11,14 +11,6 @@ const Upload = require('../../models/upload');
  * What user to look up.
  * @param limit
  * Is the limit per page.
- * @param render
- * Is the render.
- * @param title
- * Page title for render.
- * @param populate
- * Set to true to populate the data.
- * This is set to false by defult
- * @param what to populate in to the data.
  */
 module.exports = async (req, res, page, user, limit) => {
   const data = (await Upload.find({ 'uploader': user }).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }));
