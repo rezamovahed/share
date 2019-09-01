@@ -38,7 +38,7 @@ router.post('/activate/resend', (req, res) => {
       return;
     };
 
-    if (!user.accountActivated) {
+    if (!user.emailVerified) {
       async.waterfall([
         (done) => {
           const token = generate(alphabet, 24);
@@ -106,7 +106,7 @@ router.get('/activate/:token', (req, res) => {
 
         user.accountActvationToken = undefined;
         user.accountActvationExpire = undefined;
-        user.accountActivated = true;
+        user.emailVerified = true;
         user.save();
         req.flash('success', 'Your account is now activated.  You may login.');
         res.redirect('/login');
@@ -169,7 +169,6 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
   async.waterfall([
     (done) => {
       const token = generate(alphabet, 24);
-      const token = buf.toString('hex');
       done(err, token)
     },
     (token, done) => {

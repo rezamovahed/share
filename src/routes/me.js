@@ -7,7 +7,7 @@ const md5 = require('js-md5');
 const Key = require('../models/key');
 const User = require('../models/user');
 const Upload = require('../models/upload');
-const userUploadsPerPage = require('./utils/userUploadsPerPage');;
+const userUploadsPerPage = require('./utils/user/uploadsPerPage');;
 const deleteUpload = require('./utils/deleteUpload');
 
 /**
@@ -31,7 +31,6 @@ router.get('/', (req, res) => {
 router.patch('/', (req, res) => {
   let error = {};
   let username = req.body.username.toString();
-  let displayName = req.body.username.toString();
   const email = req.body.email.toString().toLowerCase();
   const newPassword = req.body.newPassword.toString();
   const oldPassword = req.body.oldPassword.toString();
@@ -44,7 +43,6 @@ router.patch('/', (req, res) => {
 
   let updatedUser = {
     username,
-    displayName,
     avatar
   }
 
@@ -220,32 +218,20 @@ router.get('/uploads/:page', async (req, res) => {
  * @access Private
 */
 router.delete('/uploads/:id', (req, res) => {
-  const fileName = req.query.name
-  let deleteErrors = {
-    file: 0,
-    db: 0,
-  };
-  deleteUpload.file(fileName, cb => {
-    if (!cb) {
-      deleteErrors.file += 1;
+  const fileName = req.query.name;
+
+  deleteUpload.file(fileName, err => {
+    if (err) {
+      req.flash('error', `Could not remove that file.  Please try again.`);
+      res.redirect('back');
     } else {
-      deleteUpload.database(fileName, cb => {
-        if (!cb) {
-          deleteErrors.db += 1;
-        }
-      });
-    }
+      deleteUpload.database(fileName)
+      req.flash('success', `Removed ${fileName}`);
+      res.redirect('back');
+    };
   });
-  setTimeout(() => {
-    if (deleteErrors.file > 0 || deleteErrors.db > 0) {
-      req.flash('error', `Could not remove that file.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
-      res.redirect('/me/uploads');
-      return;
-    }
-    // All uploads has been removed
-    req.flash('success', `Deleted ${fileName}`);
-    res.redirect('back');
-  });
+
+
 });
 
 /**
@@ -271,12 +257,12 @@ router.get('/gallery', async (req, res) => {
 router.get('/delete', (req, res) => {
   Upload.find({ 'uploader': req.user.id }, (err, file) => {
     file.map(file => {
-      deleteUpload.file(file.fileName, cb => {
-        if (!cb) {
+      deleteUpload.file(file.fileName, err => {
+        if (err) {
           deleteErrors.file += 1;
         } else {
-          deleteUpload.database(file.fileName, cb => {
-            if (!cb) {
+          deleteUpload.database(file.fileName, err => {
+            if (err) {
               deleteErrors.db += 1;
             }
           });
@@ -309,20 +295,14 @@ router.get('/uploads/delete/all', async (req, res) => {
     res.redirect('/me/uploads');
     return;
   };
-  // Loop though all the uploads and removes it from the file system then removes it from the database
 
-  /**
-   * What am going to do here is "try" to remove each file then at the end if any erros happen it will show two messages.
-   * Saying it's done but also how many uploads failed.  This is so the user knows not all the uploads they wanted removed
-   * have been removed for some reason
-   */
-  uploads.map(file => {
-    deleteUpload.file(file.fileName, cb => {
-      if (!cb) {
+  await uploads.map(file => {
+    deleteUpload.file(file.fileName, err => {
+      if (err) {
         deleteErrors.file += 1;
       } else {
-        deleteUpload.database(file.fileName, cb => {
-          if (!cb) {
+        deleteUpload.database(file.fileName, err => {
+          if (err) {
             deleteErrors.db += 1;
           }
         });
@@ -331,7 +311,7 @@ router.get('/uploads/delete/all', async (req, res) => {
   });
   setTimeout(() => {
     if (deleteErrors.file > 0 || deleteErrors.db > 0) {
-      req.flash('error', `Not all files could be removed.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
+      req.flash('error', `Not all files could be removed.  Please try again.`);
       res.redirect('/me/uploads');
       return;
     }

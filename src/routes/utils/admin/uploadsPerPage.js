@@ -1,4 +1,4 @@
-const Upload = require('../../../models/upload')
+const Upload = require('../../../models/upload');
 
 /**
  * @param req
@@ -15,14 +15,13 @@ const Upload = require('../../../models/upload')
  * @param what to populate in to the data.
  */
 
-module.exports = async (req, res, page, model, limit, populate, populateType) => {
-  if (populate === null) { populate = false; }
-  count = (await model.countDocuments());
+module.exports = async (req, res, page, limit, populate, populateType) => {
+  count = (await Upload.countDocuments());
   if (populate) {
-    data = (await model.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }).populate(populateType));
+    data = (await Upload.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }).populate(populateType));
     return { data, count };
   } else {
-    data = (await model.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }));
+    data = (await Upload.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }));
     return { data, count };
   };
 };

@@ -58,7 +58,7 @@
               <%- (users[i].isAdmin) ? 'Admin' : 'User' %>
             </td>
             <td>
-              <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended till ${moment(users[i].suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : users[i].accountActivated ? 'Active' : 'Unactivated' %>
+              <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended till ${moment(users[i].suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : users[i].emailVerified ? 'Active' : 'Unactivated' %>
             </td>
             <td>
               <% if(users[i].lastActivity) {%>
