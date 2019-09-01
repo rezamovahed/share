@@ -10,9 +10,10 @@ const gravatar = require('gravatar');
 const validator = require('validator');
 const middleware = require('../middleware');
 const uploadsLisingPerPage = require('./utils/admin/uploadsPerPage');
-const usersListingPerPage = require('./utils/userLisingPerPage');
+const userPerPage = require('./utils/admin/userPerPage');
 const deleteUpload = require('./utils/deleteUpload');
 const router = express.Router();
+const updateUser = ('./utils/admin/updateUser.js');
 
 /**
  * @route /admin
@@ -21,19 +22,13 @@ const router = express.Router();
  * @access Private
 */
 router.get('/', middleware.owner, async (req, res) => {
-  try {
-    let uploads = await Upload.countDocuments({}, (err, count) => { return count });
-    let users = await User.countDocuments({}, (err, count) => { return count });
-    res.render('admin/index', {
-      title: 'Admin',
-      uploads,
-      users
-    });
-  } catch (err) {
-    req.flash('error', 'Could not load data.');
-    res.render('admin/index');
-    return;
-  }
+  const uploads = await Upload.countDocuments({});
+  const users = await User.countDocuments({});
+  res.render('admin/index', {
+    title: 'Admin',
+    uploads,
+    users
+  });
 });
 
 /**
@@ -43,11 +38,12 @@ router.get('/', middleware.owner, async (req, res) => {
  * @access Private
 */
 router.get('/uploads', async (req, res) => {
-  const uploads = (await uploadsLisingPerPage(req, res, 1, 10, true, 'uploader'));
+  const uploads = await uploadsLisingPerPage(req, res, 1, 10, true, 'uploader');
   res.render('admin/uploads', {
     title: 'Uploads Management',
     data: uploads.data,
     current: 1,
+    // Count/limit
     pages: Math.ceil(uploads.count / 10)
   });
 });
@@ -60,7 +56,7 @@ router.get('/uploads', async (req, res) => {
 */
 router.get('/uploads/:page', async (req, res) => {
   if (req.params.page === '0') { return res.redirect('/admin/uploads') };
-  const uploads = (await uploadsLisingPerPage(req, res, req.params.page, 10, true, 'uploader'));
+  const uploads = await uploadsLisingPerPage(req, res, req.params.page, 10, true, 'uploader');
   res.render('admin/uploads', {
     title: 'Uploads Management',
     data: uploads.data,
@@ -80,32 +76,16 @@ router.delete('/uploads/:id', (req, res) => {
   // Finds the upload via the id and starts the removel process
   const fileName = req.query.name;
 
-  let deleteErrors = {
-    file: 0,
-    db: 0,
-  };
+  deleteUpload.file(fileName, err => {
+    if (err) {
+      req.flash('error', `Could not remove that file.  Please try again.`);
+      res.redirect('back');
 
-  deleteUpload.file(fileName, cb => {
-    if (!cb) {
-      deleteErrors.file += 1;
     } else {
-      deleteUpload.database(fileName, cb => {
-        if (!cb) {
-          deleteErrors.db += 1;
-        };
-      });
+      deleteUpload.database(fileName)
+      req.flash('success', `Removed ${fileName}`);
+      res.redirect('back');
     };
-  });
-
-  setTimeout(() => {
-    if (deleteErrors.file > 0 || deleteErrors.db > 0) {
-      req.flash('error', `Could not remove that file.  Please try again. If this keeps happening then contact the site admin <a href="/me/support">here</a>`);
-      res.redirect('/me/uploads');
-      return;
-    };
-    // All uploads has been removed
-    req.flash('success', `Deleted ${fileName}`);
-    res.redirect('back');
   });
 });
 
@@ -116,8 +96,7 @@ router.delete('/uploads/:id', (req, res) => {
  * @access Private
 */
 router.get('/uploads/delete/all', async (req, res) => {
-  let error;
-  uploads = (await Upload.find({}));   // If no uploads are found then show a error message
+  uploads = await Upload.find({});   // If no uploads are found then show a error message
 
   if (uploads.length === 0) {
     req.flash('error', 'There are no uploads to remove.');
@@ -125,19 +104,27 @@ router.get('/uploads/delete/all', async (req, res) => {
     return;
   };
 
-  uploads.map(file => {
-    deleteUpload.file(file.fileName, cb => {
-      if (!cb) {
+  await uploads.map(file => {
+    deleteUpload.file(file.fileName, err => {
+      if (err) {
         deleteErrors.file += 1;
       } else {
-        deleteUpload.database(file.fileName, cb => {
-          if (!cb) {
+        deleteUpload.database(file.fileName, err => {
+          if (err) {
             deleteErrors.db += 1;
           };
         });
       };
     });
   });
+  if (deleteErrors.file > 0 || deleteErrors.db > 0) {
+    req.flash('error', `Could not remove that file.  Please try again.`);
+    res.redirect('/me/uploads');
+    return;
+  };
+  // All uploads has been removed
+  req.flash('success', `Removed ${fileName}`);
+  res.redirect('back');
 });
 
 /**
@@ -146,16 +133,12 @@ router.get('/uploads/delete/all', async (req, res) => {
  * @description Admin image gallery
  * @access Private
 */
-router.get('/gallery', (req, res) => {
-  Upload
-    .find({ 'isImage': true })
-    .sort({ createdAt: -1 })
-    .exec((err, gallery) => {
-      res.render('admin/gallery', {
-        title: 'Image Gallery',
-        gallery,
-      });
-    });
+router.get('/gallery', async (req, res) => {
+  const gallery = await Upload.find({ 'isImage': true }).sort({ createdAt: -1 });
+  res.render('admin/gallery', {
+    title: 'Image Gallery',
+    gallery,
+  });
 });
 
 /**
@@ -165,7 +148,7 @@ router.get('/gallery', (req, res) => {
  * @access Private
 */
 router.get('/users/new', (req, res) => {
-  let generatePassword = password.generate({
+  const generatePassword = password.generate({
     length: 16,
     numbers: true
   });
@@ -183,7 +166,7 @@ router.get('/users/new', (req, res) => {
 */
 router.get('/users/:page', async (req, res) => {
   if (req.params.page === '0') { return res.redirect('/admin/users') };
-  const data = (await usersListingPerPage(req, res, req.params.page, User, 8));
+  const data = (await userPerPage(req, res, req.params.page, User, 8));
   res.render('admin/users/index', {
     title: 'User Management',
     data: data.data,
@@ -203,28 +186,24 @@ router.get('/users/:id/edit', (req, res) => {
   User.findById(id, (err, user) => {
     const username = user.username;
     const email = user.email;
-    const accountActivated = user.accountActivated;
+    const emailVerified = user.emailVerified;
     const isAdmin = user.isAdmin;
-    const lastLog = user.lastLog || 'N/A';
-    const lastLogIP = user.lastLogIP || 'N/A';
-    const createdIP = user.createdIP || 'N/A';
-    const lastActivity = user.lastActivity || 'N/A';
-    const lastActivityIP = user.lastActivityIP || 'N/A';
+    const lastLog = user.lastLog;
+    const lastLogIP = user.lastLogIP;
+    const lastActivity = user.lastActivity;
     const isBanned = user.isBanned;
     const isSuspended = user.isSuspended;
     const suspendedReason = user.suspendedReason;
-    const suspendedExpire = user.suspendedExpire || null;
+    const suspendedExpire = user.suspendedExpire;
     res.render('admin/users/edit', {
       title: `Edit ${username}`,
       username,
       email,
-      accountActivated,
+      emailVerified,
       isAdmin,
       lastLog,
       lastLogIP,
-      createdIP,
       lastActivity,
-      lastActivityIP,
       isBanned,
       isSuspended,
       suspendedExpire,
@@ -264,7 +243,7 @@ router.get('/users/:id/suspend', async (req, res) => {
  * @description Shows a form that allows you to defind the time to suspend the user
  * @access Private
 */
-router.patch('/users/:id/suspend', (req, res) => {
+router.patch('/users/:id/suspend', async (req, res) => {
   let reason = req.body.reason;
   const expireCustom = moment(req.body.suspendExpireCustom, "M/D/YYYY h:mm A").utc();
   const expireDate = moment().add(req.body.suspendExpire || 0, 'days');
@@ -276,17 +255,16 @@ router.patch('/users/:id/suspend', (req, res) => {
 
   };
   const expire = (req.body.suspendExpire === 'custom') ? expireCustom : expireDate;
-  User.findById(req.params.id, (err, user) => {
-    if (user.isBanned) {
-      user.isBanned = undefined;
-    }
-    user.isSuspended = true;
-    user.suspendedExpire = expire;
-    user.suspendedReason = reason;
-    user.save();
-    req.flash('success', `${user.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')} UTC`)
-    res.redirect('/admin/users');
-  });
+  const account = await User.findById(req.params.id);
+  if (account.isBanned) {
+    account.isBanned = undefined;
+  }
+  account.isSuspended = true;
+  account.suspendedExpire = expire;
+  account.suspendedReason = reason;
+  account.save();
+  req.flash('success', `${account.username} has been suspend till ${moment(expire).format('M/D/YYYY h:mm A')} UTC`)
+  res.redirect('/admin/users');
 });
 
 /**
@@ -295,15 +273,14 @@ router.patch('/users/:id/suspend', (req, res) => {
  * @description Allows you to unsuspend a user.
  * @access Private
 */
-router.patch('/users/:id/unsuspend', (req, res) => {
-  User.findById(req.params.id, (err, user) => {
-    user.isSuspended = undefined;
-    user.suspendExpire = undefined;
-    user.suspendedReason = undefined;
-    user.save();
-    req.flash('success', `${user.username} has been unsuspend.`)
-    res.redirect('/admin/users');
-  });
+router.patch('/users/:id/unsuspend', async (req, res) => {
+  const account = await User.findById(req.params.id)
+  account.isSuspended = undefined;
+  account.suspendExpire = undefined;
+  account.suspendedReason = undefined;
+  account.save();
+  req.flash('success', `${user.username} has been unsuspend.`)
+  res.redirect('/admin/users');
 });
 
 /**
@@ -318,7 +295,7 @@ router.patch('/users/:id/ban', async (req, res) => {
     res.redirect('back');
     return;
   };
-  let toBan = await User.findById(req.params.id);
+  const toBan = await User.findById(req.params.id);
   toBan.isBanned = true;
   if (toBan.isSuspended) {
     toBan.isSuspended = undefined;
@@ -336,11 +313,11 @@ router.patch('/users/:id/ban', async (req, res) => {
 */
 router.patch('/users/:id/unban', async (req, res) => {
   if (req.user.id === req.params.id) {
-    req.flash('error', "You can't remove your account.");
+    req.flash('error', "You can't ban your account.");
     res.redirect('back');
     return;
   };
-  let toUnban = await User.findById(req.params.id);
+  const toUnban = await User.findById(req.params.id);
   toUnban.isBanned = undefined;
   toUnban.save();
   res.redirect('back');
@@ -354,80 +331,20 @@ router.patch('/users/:id/unban', async (req, res) => {
 */
 router.put('/users/:id', async (req, res) => {
   const id = req.params.id;
-  const username = req.body.username;
+  const username = req.body.username.toString();
   const email = req.body.email.toLowerCase();
-  const password = req.body.password;
-  const accountActivated = req.body.activate;
-  const avatar = gravatar.url(req.body.email, {
-    s: '100',
-    r: 'x',
-    d: 'retro'
-  }, true);
+  const password = req.body.password.toString();
+  const emailVerified = req.body.activate;
+  const streamerMode = req.user.streamerMode;
+  const isAdmin = req.body.isAdmin;
 
-  let error = {};
+  updateUser(streamerMode, id, username, email, password, emailVerified, isAdmin, (err, scuress) => {
 
-  let updatedUser = {
-    username,
-    email,
-    accountActivated,
-    avatar
-  }
-  // Check if empty
-  // Username
-  if (!username) { error.username = 'Please enter a username.' };
-
-  if (req.user.streamerMode) {
-    const editUser = await User.findById(id);
-    updatedUser.email = editUser.email;
-
-  } else {
-    // Email
-    // Check if email is vaid
-    if (!email) { error.email = 'Please enter your email.' };
-    if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
-  }
-
-  // Password
-  if (password && validator.isLength(password, {
-    minimum: 8
-  })) {
-    error.password = 'Password must be at least 8 characters long.';
-  }
-
-  if (JSON.stringify(error) === '{}') {
-
-    if (req.body.isAdmin) {
-      updatedUser.isAdmin = true
-    } else {
-      updatedUser.isAdmin = false;
-    };
-    User.findByIdAndUpdate(id, updatedUser, (err, user) => {
-      if (err) {
-        if (err.code === 11000) {
-          error.username = 'Username may be already in use.';
-          error.email = 'Email may be already in use.';
-        }
-        req.flash('error', error);
-        res.redirect(`/admin/users/${id}`);
-        return;
-      };
-      if (password) {
-        user.setPassword(password, (err, newPassword) => { });
-      };
-      if (req.user.streamerMode) {
-        req.flash('success', `${username} has been updated. Email has been left unchanged due to streamer mode being enabled.`);
-        res.redirect('/admin/users');
-        return;
-      };
-      // Add user password change.
-      req.flash('success', `${username} has been updated.`);
-      res.redirect('/admin/users');
-      return;
-    });
-  } else {
-    req.flash('error', error);
-    res.redirect(`/admin/users/${id}`);
-  };
+  });
+  // if (streamerMode) {
+    // const editUser = await User.findById(id);
+    // email = editUser.email;
+  // }
 });
 
 /**
@@ -443,20 +360,18 @@ router.delete('/users/:id', (req, res) => {
     return;
   };
 
-  let error;
-
   Upload.find({ 'uploader': req.params.id }, (err, file) => {
     file.map(file => {
       const filePath = `${path.join(__dirname, '../public')} / u / ${file}`;
       Upload.findOneAndDelete({ fileName: file }, (err, removed) => {
-        fs.unlink(filePath, err => { });
+        fs.unlink(filePath);
       });
     });
   });
 
-  Key.find({ 'user': { id: req.params.id } }, (err, keys) => {
+  Key.findAndDelete({ 'user': { id: req.params.id } }, (err, keys) => {
     keys.map(key => {
-      Key.findByIdAndDelete(key.id, (err, removedKey) => { });
+      Key.findByIdAndDelete(key.id);
     });
   });
 
@@ -504,12 +419,11 @@ router.post('/users/new', (req, res) => {
   if (JSON.stringify(error) === '{}') {
     let newUser = {
       username,
-      displayName: username,
       email,
       avatar,
     };
 
-    if (req.body.activate) { newUser.accountActivated = true };
+    if (req.body.activate) { newUser.emailVerified = true };
     if (req.body.admin) { newUser.isAdmin = true };
 
     User.register(newUser, password, (err, user) => {
@@ -545,7 +459,7 @@ router.post('/users/new', (req, res) => {
  * @access Private
 */
 router.get('/users', async (req, res) => {
-  const data = (await usersListingPerPage(req, res, 1, User, 8));
+  const data = (await userPerPage(req, res, 1, User, 8));
   res.render('admin/users/index', {
     title: 'User Management',
     data: data.data,

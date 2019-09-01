@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // Schema Setup
-const uploadSchema = new mongoose.Schema({
+const uploadSchema = new Schema({
   uploader: {
     type: mongoose.Types.ObjectId,
     ref: "User"

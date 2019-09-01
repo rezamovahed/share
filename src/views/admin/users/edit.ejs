@@ -5,7 +5,7 @@
   <div class="display-4 pt-4">Edit <%= username %></div>
   <div class="accountStatus pt-2 pb-2">
     Account Status: <strong>
-      <%- isBanned ? 'Banned' : isSuspended ? `Suspended till ${moment(suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : accountActivated ? 'Active' : 'Unactivated' %></strong>
+      <%- isBanned ? 'Banned' : isSuspended ? `Suspended till ${moment(suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : emailVerified ? 'Active' : 'Unactivated' %></strong>
   </div>
   <form action="/admin/users/<%= id %>?_method=PUT" method="POST" novalidate>
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
@@ -77,7 +77,7 @@
         <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
           data-off="False">
       </div>
-      <% if(!accountActivated) { %>
+      <% if(!emailVerified) { %>
       <script>
         $(document).ready(function () {
           $("#activate").attr('checked', false);

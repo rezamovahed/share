@@ -30,7 +30,7 @@ router.get('/login', middleware.isAlreadyLoggedIn, (req, res) => {
  * @description Login post
  * @access Public
 */
-router.post('/', middleware.isAlreadyLoggedIn, middleware.isActvation passport.authenticate('local', {
+router.post('/login', middleware.isAlreadyLoggedIn, middleware.isActvation ,passport.authenticate('local', {
   failureRedirect: '/login',
   failureFlash: true
 }), (req, res) => {
@@ -38,7 +38,7 @@ router.post('/', middleware.isAlreadyLoggedIn, middleware.isActvation passport.a
     user.lastLog = Date.now();
     user.save();
   });
-  req.flash('success', `Welcome back, ${req.user.displayName}`)
+  req.flash('success', `Welcome back, ${req.user.username}`)
   res.redirect('/me')
 });
 
@@ -73,7 +73,6 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   let error = {};
   let success = 'Your account has been created but must be activated.  Please check your email.'
   let username = req.body.username;
-  const displayName = req.body.username;
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -114,7 +113,6 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
     username = username.toLowerCase();
     let newUser = {
       username,
-      displayName,
       email,
       avatar,
       createdIP

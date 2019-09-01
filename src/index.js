@@ -158,7 +158,6 @@ const csrfLocals = (req, res, next) => {
 
 const indexRoutes = require("./routes/index");
 const authRoutes = require("./routes/auth");
-const loginRoutes = require("./routes/login");
 const userRoutes = require("./routes/user");
 const viewRoutes = require("./routes/view");
 const meRoutes = require("./routes/me");
