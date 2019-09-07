@@ -28,7 +28,7 @@ const userSchema = new Schema({
   resetPasswordExpires: Date,
   emailVerificationToken: String,
   emailVerificationTokenExpire: Date,
-  accountActivated: {
+  emailVerified: {
     type: Boolean,
     default: false
   },
@@ -36,7 +36,6 @@ const userSchema = new Schema({
   isAdmin: Boolean,
   lastLog: Date,
   lastActivity: Date,
-  createdIP: String,
 }, {
     timestamps: true
   });

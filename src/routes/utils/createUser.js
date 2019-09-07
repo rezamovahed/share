@@ -13,8 +13,6 @@ const validator = require('validator');
  * Password of the User
  * @param confirmPassword
  * Password of the User
- * @param createdIP
- * IP of the user that created the account
  */
 
 // username,

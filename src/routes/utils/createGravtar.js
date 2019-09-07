@@ -1,5 +1,8 @@
+const gravatar = require('gravatar');
+
 /**
- *  param email
+ * @param email
+ * @type String
  * Email of the user.
  */
 module.exports = (email) => {
