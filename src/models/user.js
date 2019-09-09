@@ -18,6 +18,12 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  emailVerificationToken: String,
+  emailVerificationTokenExpire: Date,
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
   isBanned: Boolean,
   isSuspended: Boolean,
   suspendedExpire: Date,
@@ -26,12 +32,6 @@ const userSchema = new Schema({
   passwordChangedIP: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  emailVerificationToken: String,
-  emailVerificationTokenExpire: Date,
-  emailVerified: {
-    type: Boolean,
-    default: false
-  },
   streamerMode: Boolean,
   isAdmin: Boolean,
   lastLog: Date,

@@ -1,15 +1,19 @@
-const nodemailerSendGrid = require('./src/config/sendgrid');
-const mailConfig = require('./src//config/email');
+const nodemailerSendGrid = require('../../../config/sendgrid');
+const mailConfig = require('../../../config/email');
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const generate = require('nanoid/generate')
-const User = require('./src/models/user');
-const emailTemplates = require('./src/config/emailTemplates');
+const User = require('../../../models/user');
+const emailTemplates = require('../../../config/emailTemplates');
 
-async function sendEmail(email, cb) {
+/**
+ * @param email
+ * Email of the user
+ */
+module.exports = async (email) => {
   const account = await User.findOne({ email })
 
   // Sets the token to the user
-  const token = generate(alphabet, 24);
+  const token = await generate(alphabet, 24);
   account.emailVerificationToken = token;
 
   // Sets the token to expire in 3 hours
@@ -19,14 +23,11 @@ async function sendEmail(email, cb) {
   await account.save()
 
   // Get's the email template and enters the details.  Setups the basic email formate for nodemailer
-  const accountActvationEmail = {
+  const verifyEmail = {
     to: email,
     from: mailConfig.from,
-    subject: `Activate Your Account at ${process.env.TITLE}`,
+    subject: `Activate your Account at ${process.env.TITLE}`,
     html: emailTemplates.emailVerify(token).html
   }
-  console.log('Sent email')
-  console.log(accountActvationEmail)
-}
-
-sendEmail('demonwolf@demonwolfdev.com')
+  await nodemailerSendGrid.sendMail(verifyEmail);
+};

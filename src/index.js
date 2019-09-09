@@ -25,7 +25,7 @@ const app = express();
 
 // Set host and port
 app.set("host", process.env.IP || "127.0.0.1");
-app.set("port", process.env.PORT || 5050);
+app.set("port", process.env.PORT || 8080);
 
 // Load Assets from Public folder
 app.use(express.static(__dirname + "/public"));

@@ -3,6 +3,7 @@ const moment = require('moment');
 const User = require('../models/user');
 const Key = require('../models/key');
 const md5 = require('js-md5');
+
 middlewareObj.owner = (req, res, next) => {
   // If the user is already admin then just move on
   if (req.user.isAdmin) { return next() }

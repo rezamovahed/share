@@ -32,8 +32,12 @@ npm run dev-web
 
 ## Changelog
 4.0.0
-* Added last login IP
-* Added signup IP
+<!-- * Made a lot of the code cleaner and easier to mange for developers -->
+* Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export. For easier  reuse.
+* Added last password change IP and time.
+* Added last activity time.
+* Added last login time.
+* Added signup IP.
 * Streamer mode has been added in the users settings.  It will stop leaks for both the user and if they have admin others as well.
 <!-- * You can now upload files via your account on the website. -->
 * You can now ban and unban users. Comfirm the ban of a user has been added.
@@ -53,6 +57,12 @@ npm run dev-web
 * Fixed the link in the admin nav gallery.  Now it links to the gallery
 * Fixed the navbar in admin gallery as it was linking the wrong one.
 
+3.1.2
+* Hotfix for createdAt date in the upload.js. Now when  you upload it should show the right date.
+
+3.1.1
+* Fixed bug with middleware
+
 3.1.0
 * Removed File and Text views
 * Removed Removed text support due to others being better. (You should use github gists if anything.)
@@ -64,4 +74,4 @@ Have a bug or an issue with this bot? [Open a new issue](https://github.com/MrDe
 
 ## Copyright and License
 
-Copyright 2019 MrDemonWolf. Code released under the [MIT](LICENSE) license.
+Copyright 2019 MrDemonWolf. Code released under the [MIT](/LICENSE) license.
