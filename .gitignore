@@ -12,3 +12,6 @@ package-lock.json
 src/public/u/*
 # Temp folder
 src/tmp
+
+# Test javascript file
+test.js
