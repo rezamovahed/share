@@ -1,11 +1,8 @@
 const mjml = require('mjml');
-let protocol = (process.env.SSL_PROXY === true) ? 'https' : 'http';
 
 module.exports = {
-  activateAccount: (domain, token) => {
+  emailVerify: ( token) => {
     /**
-     *  @param domain
-     *  Express is the domain from the request.
      *  @param token
      *  Express is the domain from the request.
      */
@@ -41,12 +38,12 @@ module.exports = {
             </mj-section>
             <mj-section>
               <mj-column>
-                <mj-button href="${protocol}://${domain}/user/activate/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+                <mj-button href="${process.env.FULL_DOMAIN}/user/activate/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
                   Activate
                 </mj-button>
               </mj-column>
               <mj-column>
-                <mj-button href="http://${domain}/user/delete/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
+                <mj-button href="${process.env.FULL_DOMAIN}/user/delete/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
                   Delete Account
                 </mj-button>
               </mj-column>
@@ -57,8 +54,6 @@ module.exports = {
   },
   passwordReset: (domain, token) => {
     /**
- *  @param domain
- *  Express is the domain from the request.
  *  @param token
  *  Express is the domain from the request.
  */

@@ -25,6 +25,12 @@
 * Fixed the link in the admin nav gallery.  Now it links to the gallery
 * Fixed the navbar in admin gallery as it was linking the wrong one.
 
+3.1.2
+* Hotfix for createdAt date in the upload.js. Now when  you upload it should show the right date.
+
+3.1.1
+* Fixed bug with middleware
+
 3.1.0
 * Removed File and Text views
 * Removed Removed text support due to others being better. (You should use github gists if anything.)

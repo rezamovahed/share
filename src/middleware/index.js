@@ -3,6 +3,7 @@ const moment = require('moment');
 const User = require('../models/user');
 const Key = require('../models/key');
 const md5 = require('js-md5');
+
 middlewareObj.owner = (req, res, next) => {
   // If the user is already admin then just move on
   if (req.user.isAdmin) { return next() }
@@ -28,7 +29,7 @@ middlewareObj.isActvation = (req, res, next) => {
   User.findOne({
     email: req.body.email
   }, function (err, user) {
-    if (user && !user.accountActivated) {
+    if (user && !user.emailVerified) {
       req.flash('error', `You MUST verify your email before you can login.  If you need to resend the verify email click <a href="/user/activate/resend">here</a>`)
       res.redirect('/login')
       return;

@@ -15,8 +15,8 @@ router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
 /**
  * @route /testing
  * @method GET
- * @description TESTING ROUTE
- * @access Public
+ * @description TESTING ROUTE This is only enabled
+ * @access Private
 */
 if (process.env.NODE_ENV !== 'production') {
   router.get('/test', (req, res) => {

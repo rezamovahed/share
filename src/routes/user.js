@@ -17,6 +17,7 @@ const router = express.Router();
  * @access Public
 */
 router.get('/activate/resend', (req, res) => {
+
   res.render('user/activate/resend', {
     title: 'Resend Account Activation',
   });
@@ -29,6 +30,7 @@ router.get('/activate/resend', (req, res) => {
  * @access Public
 */
 router.post('/activate/resend', (req, res) => {
+
   User.findOne({
     email: req.body.email
   }, (err, user) => {
@@ -57,7 +59,7 @@ router.post('/activate/resend', (req, res) => {
           });
         },
         (token, done) => {
-          const htmlOuput = emailTemplates.activateAccount(req.headers.host, token);
+          const htmlOuput = emailTemplates.activateAccount(token);
           done(err, htmlOuput);
         },
         (htmlOuput, done) => {
@@ -95,8 +97,8 @@ router.get('/activate/:token', (req, res) => {
   async.waterfall([
     (done) => {
       User.findOne({
-        accountActvationToken: req.params.token,
-        accountActvationExpire: {
+        emailVerificationToken: req.params.token,
+        emailVerificationTokenExpire: {
           $gt: Date.now()
         }
       }, (err, user) => {
@@ -104,8 +106,8 @@ router.get('/activate/:token', (req, res) => {
           return activationError();
         };
 
-        user.accountActvationToken = undefined;
-        user.accountActvationExpire = undefined;
+        user.emailVerificationToken = undefined;
+        user.emailVerificationTokenExpire = undefined;
         user.emailVerified = true;
         user.save();
         req.flash('success', 'Your account is now activated.  You may login.');
