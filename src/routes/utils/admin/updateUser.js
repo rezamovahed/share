@@ -44,13 +44,8 @@ module.exports = (id, username, email, password, active, isAdmin, cb) => {
   })) {
     error.password = 'Password must be at least 8 characters long.';
   }
-
-  if (req.body.isAdmin) {
-    updatedUser.isAdmin = true
-  } else {
-    updatedUser.isAdmin = undefined;
-  };
-
+  
+  updatedUser.role = req.body.isAdmin ? 'admin' : undefined;
 
   // if (JSON.stringify(error) === '{}') {
   // User.findByIdAndUpdate(id, updatedUser, (err, user) => {

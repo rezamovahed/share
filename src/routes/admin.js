@@ -187,7 +187,7 @@ router.get('/users/:id/edit', (req, res) => {
     const username = user.username;
     const email = user.email;
     const emailVerified = user.emailVerified;
-    const isAdmin = user.isAdmin;
+    const isAdmin = user.role === 'admin';
     const lastLog = user.lastLog;
     const lastLogIP = user.lastLogIP;
     const lastActivity = user.lastActivity;
@@ -424,7 +424,7 @@ router.post('/users/new', (req, res) => {
     };
 
     if (req.body.activate) { newUser.emailVerified = true };
-    if (req.body.admin) { newUser.isAdmin = true };
+    if (req.body.admin) { newUser.role = 'admin' };
 
     User.register(newUser, password, (err, user) => {
       if (err.name === 'UserExistsError') { error.alreadyAccount = 'A user with the given username is already registered' };

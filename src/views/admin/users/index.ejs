@@ -55,7 +55,7 @@
               <%= users[i].username %>
             </td>
             <td>
-              <%- (users[i].isAdmin) ? 'Admin' : 'User' %>
+              <%- (users[i].role === 'admin') ? 'Admin' : 'User' %>
             </td>
             <td>
               <%- users[i].isBanned ? 'Banned' : users[i].isSuspended ? `Suspended till ${moment(users[i].suspendedExpire).format('M/D/YYYY h:mm A')} UTC` : users[i].emailVerified ? 'Active' : 'Unactivated' %>
