@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const middleware = require('../middleware');
-
+const passport = require('passport')
 /**
  * @route /
  * @method GET
@@ -20,9 +20,6 @@ router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
 */
 if (process.env.NODE_ENV !== 'production') {
   router.get('/test', (req, res) => {
-    const emailTemplates = require('../config/emailTemplates')
-    let html = emailTemplates.activateAccount(req.headers.host, 'testestjnetjjhkte')
-    res.send(html.html);
   });
 };
 module.exports = router;
