@@ -31,14 +31,9 @@
     </div>
     <div class="form-group">
       <label for="password">Change password</label>
-      <div class="input-group" id="show_hide_password_5">
-        <input name="password" type="password"
+      <div class="input-group">
+        <input name="password" type="password" data-toggle="password"
           class="form-control <% if(errors && error[0].password){ %>is-invalid <% } %>" id="password" required>
-        <div class="input-group-append">
-          <a class="btn btn-light" role="button" id="button-addon2">
-            <i class="fa fa-eye-slash text-dark" aria-hidden="true"></i>
-          </a>
-        </div>
         <% if (errors && error[0].password) { %>
         <small class="invalid-feedback">
           <%= error[0].password %>
