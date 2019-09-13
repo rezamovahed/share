@@ -1,7 +1,7 @@
 const mjml = require('mjml');
 
 module.exports = {
-  emailVerify: ( token) => {
+  emailVerify: (token) => {
     /**
      *  @param token
      *  Express is the domain from the request.
