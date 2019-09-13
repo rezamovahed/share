@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 const Schema = mongoose.Schema;
 
+const userRoles = ['admin', 'user'];
+
 // Schema Setup
 const userSchema = new Schema({
   username: {
@@ -33,7 +35,11 @@ const userSchema = new Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   streamerMode: Boolean,
-  isAdmin: Boolean,
+  role: {
+    type: String,
+    enum: userRoles,
+    default: 'user'
+  },
   lastLog: Date,
   lastActivity: Date,
 }, {

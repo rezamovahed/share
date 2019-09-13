@@ -46,9 +46,9 @@ module.exports = (id, username, email, password, active, isAdmin, cb) => {
   }
 
   if (req.body.isAdmin) {
-    updatedUser.isAdmin = true
+    updatedUser.role = 'admin';
   } else {
-    updatedUser.isAdmin = undefined;
+    updatedUser.role = 'user';
   };
 
 
