@@ -261,7 +261,6 @@ db.once("open", () => {
     consola.log("----------------------------------------");
     consola.info(`Environment: ${app.get("env")}`);
     consola.info(`Base URL: http://localhost:${app.get("port")}`);
-    consola.info("Press CTRL-C to stop");
     consola.log("----------------------------------------");
   });
 });
