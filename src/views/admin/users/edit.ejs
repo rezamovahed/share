@@ -1,7 +1,7 @@
 <% include ../../partials/header %>
 <% include ../partials/navbar %>
 <% errors = error && error.length > 0 %>
-<div class="container w-50 adminEdit">
+<div class="container adminEdit pl-5 pr-5">
   <div class="display-4 pt-4">Edit <%= username %></div>
   <div class="accountStatus pt-2 pb-2">
     Account Status: <strong>
@@ -42,23 +42,23 @@
       </div>
     </div>
     <% if(lastLog !== 'N/A' && lastActivity !== 'N/A') { %>
-    <h2>Basic Info</h2>
+    <h4>Basic Info</h4>
     <div class="row">
       <% if(lastActivity !== 'N/A') { %>
-      <div class="col-sm-4">
+      <div class="col-md-4 col-sm-6">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Last Activity</h5>
+            <h6 class="card-title">Last Activity</h6>
             <p class="card-text"><%= moment(lastActivity).format('MMM Do YYYY hh:mm A') %> CST %> </p>
           </div>
         </div>
       </div>
       <% } %>
       <% if(lastLog !== 'N/A') { %>
-      <div class="col-sm-4">
+      <div class="col-md-4 col-sm-6">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Last Login</h5>
+            <h6 class="card-title">Last Login</h6>
             <p class="card-text"><%= moment(lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
           </div>
         </div>
@@ -67,10 +67,17 @@
     </div>
     <% } %>
     <div class="pt-4">
-      <div class="form-group d-inline">
-        <label for="activate">Activated</label>
-        <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
-          data-off="False">
+      <label for="role">Role</label>
+
+      <select id="role" class="selectpicker">
+        <option>Admin</option>
+        <option>User</option>
+      </select>
+
+      <div class="form-group pt-2">
+        <label for="activate">Activate</label>
+        <input id="activate" name="activate" value="true" type="checkbox" checked data-toggle="toggle" data-on="Yes"
+          data-off="No" data-onstyle="success" data-offstyle="danger">
       </div>
       <% if(!emailVerified) { %>
       <script>
@@ -79,19 +86,6 @@
         });
       </script>
       <% } %>
-      <% if(!isAdmin) { %>
-      <script>
-        $(document).ready(function () {
-          $("#admin").attr('checked', false);
-        });
-      </script>
-      <% } %>
-      </script>
-      <div class="form-group pl-3 d-inline">
-        <label for="isAdmin">Admin</label>
-        <input id="isAdmin" name="isAdmin" value="true" type="checkbox" checked data-toggle="toggle" data-on="True"
-          data-off="False">
-      </div>
     </div>
     <div class="form-group pt-2 float-right">
       <button type="submit " class="btn btn-primary">Edit User</button>

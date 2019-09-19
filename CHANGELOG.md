@@ -1,8 +1,9 @@
 # Changelog
 4.0.0
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
-* Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export. For easier  reuse.
-* Added last password change IP and time.
+* Docker is now officaly supported thanks to @exia for adding this.
+* Added new way to hide/show password for the front-end.
+* Added a better way to hannel the emails by using templates.
 * Added last activity time.
 * Added last login time.
 * Added signup IP.
@@ -18,8 +19,7 @@
 * You can now limit the size of each upload by default its 100M
 * Fixed dashboard so it will add a 's' when there is more the one user or upload
 * Changed terms on users manger page.  Admin is not role which will display there role either admin or user
-* Changed 'Activated' to 'Role' and 'Admin' to 'Status'
-* Added Bannned or Suspended and Activate and Unactivated to status.
+* Changed how status/roles work.
 * Removed last login from both database and user manger.
 * Changed text from 'Create user' to 'Create new user' in admin users.
 * Fixed the link in the admin nav gallery.  Now it links to the gallery

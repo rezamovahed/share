@@ -5,7 +5,7 @@
   <form action="/me?_method=PATCH" method="POST">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <% include ../partials/success %>
-    <h1 class="display-4">Edit account</h1>
+    <h1 class="display-4">Account</h1>
 
     <div class="form-group">
       <label for="username">Username</label>
@@ -28,12 +28,12 @@
       <% } %>
     </div>
 
-    <h1 class="display-4">Edit security</h1>
+    <h1 class="display-4">Security</h1>
 
     <div class="form-group">
       <label for="oldPassword">Current Password</label>
       <div class="input-group">
-        <input name="oldPassword"  data-toggle="password" type="password"
+        <input name="oldPassword" data-toggle="password" type="password"
           class="form-control <% if(errors && error[0].oldPassword) { %> is-invalid <% } %>" id="oldPassword">
         <% if(errors && error[0].oldPassword) { %>
         <small class="form-text text-danger">
@@ -47,76 +47,73 @@
           <input name="newPassword" type="password" data-toggle="password"
             class="form-control <% if(errors && error[0].newPassword | error[0].confirmNewPassword === 'Both passowrds must match.') { %> is-invalid <% } %>"
             id="newPassword">
-          </div>
-        </div>
-        <% if(errors && error[0].newPassword) { %>
-        <small class="form-text text-danger">
-          <%= error[0].newPassword %></small>
-        <% } %>
-        <label for="conformNewPassword">Confirm New Password</label>
-        <div class="input-group">
-          <input name="confirmNewPassword" type="password" data-toggle="password"
-            class="form-control <% if(errors && error[0].confirmNewPassword) { %> is-invalid <% } %>"
-            id="confirmNewPassword">
-        </div>
-        <% if(errors && error[0].confirmNewPassword) { %>
-        <small class="form-text text-danger">
-          <%= error[0].confirmNewPassword %></small>
-        <% } %>
-      </div>
-
-      <h1 class="display-4">Toggles</h1>
-
-      <div class="form-group d-inline">
-        <label for="streamerMode">Streamer Mode</label>
-        <input id="streamerMode" name="streamerMode" value="true" type="checkbox" checked data-toggle="toggle"
-          data-on="On" data-off="Off">
-      </div>
-
-      <% if(!currentUser.streamerMode) { %>
-      <script>
-        $(document).ready(function () {
-          $("#streamerMode").attr('checked', false);
-        });
-      </script>
-      <% } else { %>
-
-      <script>
-        $(document).ready(function () {
-          $("#streamerMode").attr('checked', true);
-        });
-      </script>
-      <% }%>
-
-      <h1 class="display-4">Basic Info</h1>
-      <div class="row pb-5">
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Last Login</h5>
-              <p class="card-text"><%= moment(currentUser.lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
-            </div>
-          </div>
-        </div>
-        <% if(currentUser.lastActivity !== undefined) { %>
-        <div class="col-sm-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Last Activity</h5>
-              <p class="card-text"><%= moment(currentUser.lastActivity).format('MMM Do YYYY hh:mm A') %> CST %> </p>
-            </div>
-          </div>
         </div>
       </div>
+      <% if(errors && error[0].newPassword) { %>
+      <small class="form-text text-danger">
+        <%= error[0].newPassword %></small>
+      <% } %>
+      <label for="conformNewPassword">Confirm New Password</label>
+      <div class="input-group">
+        <input name="confirmNewPassword" type="password" data-toggle="password"
+          class="form-control <% if(errors && error[0].confirmNewPassword) { %> is-invalid <% } %>"
+          id="confirmNewPassword">
+      </div>
+      <% if(errors && error[0].confirmNewPassword) { %>
+      <small class="form-text text-danger">
+        <%= error[0].confirmNewPassword %></small>
       <% } %>
     </div>
+    <hr>
+    <div class="form-group d-inline">
+      <label for="streamerMode">Enable Streamer Mode</label>
+      <input id="streamerMode" name="streamerMode" value="true" type="checkbox" checked data-toggle="toggle"
+        data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger">
+    </div>
+    <% if(!currentUser.streamerMode) { %>
+    <script>
+      $(document).ready(function () {
+        $("#streamerMode").attr('checked', false);
+      });
+    </script>
+    <% } else { %>
 
-    <button type="submit" class="btn btn-primary">Save Account</button>
-    <a role=button" class="btn btn-primary text-white" href="/me/keys">View API Keys</a>
-    <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
-      style="color: #ffff;">Delete
-      account</a>
-  </form>
+    <script>
+      $(document).ready(function () {
+        $("#streamerMode").attr('checked', true);
+      });
+    </script>
+    <% }%>
+    <hr>
+
+    <h5>Basic Info</h5>
+    <div class="row pb-5">
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last Login</h5>
+            <p class="card-text"><%= moment(currentUser.lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+          </div>
+        </div>
+      </div>
+      <% if(currentUser.lastActivity !== undefined) { %>
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last Activity</h5>
+            <p class="card-text"><%= moment(currentUser.lastActivity).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+</div>
+
+<button type="submit" class="btn btn-primary">Save Account</button>
+<a role=button" class="btn btn-primary text-white" href="/me/keys">View API Keys</a>
+<a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger" style="color: #ffff;">Delete
+  account</a>
+</form>
 </div>
 </div>
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"

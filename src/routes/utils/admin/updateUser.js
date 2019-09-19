@@ -7,7 +7,7 @@ const validator = require('validator');
  * Id of the user
  * @param username
  * Username of the user
- * @param email
+ * @param updatedEmail
  * Email of the user.
  * @param password
  * Password of the User
@@ -19,8 +19,7 @@ const validator = require('validator');
  * The callback for the function.  err,surcess
  */
 
-module.exports = (id, username, email, password, active, isAdmin, cb) => {
-  let updatedEmail = email;
+module.exports = (id, username, updatedEmail, password, active, isAdmin, cb) => {
   // Check if empty
   // Username
   if (validator.isEmpty(username)) { error.username = 'Must have a username.' };
@@ -29,10 +28,10 @@ module.exports = (id, username, email, password, active, isAdmin, cb) => {
   if (validator.isEmpty(email)) { error.email = 'Must have a email.' };
 
   // Activate
-  if (validator.isEmpty(active)) { error.email = 'Account can only be active or non active.' };
+  if (validator.isEmpty(active)) { error.active = 'Account can only be active or non active.' };
 
   // IsAdmin
-  if (validator.isEmpty(active)) { error.email = 'Account can only be admin or non admin.' };
+  if (validator.isEmpty(isAdmin)) { error.isAdmin = 'Account can only be admin or non admin.' };
 
   // Email
   // Check if email is vaid
@@ -44,7 +43,7 @@ module.exports = (id, username, email, password, active, isAdmin, cb) => {
   })) {
     error.password = 'Password must be at least 8 characters long.';
   }
-  
+
   updatedUser.role = req.body.isAdmin ? 'admin' : undefined;
 
   // if (JSON.stringify(error) === '{}') {
