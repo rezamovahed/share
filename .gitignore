@@ -12,6 +12,8 @@ package-lock.json
 src/public/u/*
 # Temp folder
 src/tmp
+#docker
+docker-compose.override.yml
 
 # Test javascript file
 test.js

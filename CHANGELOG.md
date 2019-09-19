@@ -1,12 +1,13 @@
 # Changelog
 4.0.0
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
-* Docker is now officaly supported thanks to @exia for adding this.
+* Docker is now officaly supported thanks to @exia for adding this. Works for both development and production modes.
 * Added new way to hide/show password for the front-end.
 * Added a better way to hannel the emails by using templates.
+* Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export. For easier  reuse.
+//* Added last password change IP and time.
 * Added last activity time.
 * Added last login time.
-* Added signup IP.
 * Streamer mode has been added in the users settings.  It will stop leaks for both the user and if they have admin others as well.
 <!-- * You can now upload files via your account on the website. -->
 * You can now ban and unban users. Comfirm the ban of a user has been added.

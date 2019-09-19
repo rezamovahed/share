@@ -30,10 +30,25 @@ You can use this command to start up with nodemon so you can work on it and test
 npm run dev-web
 ```
 
+# Get started with Docker
+
+Docker has now been integrated. To get started with Docker do the following...
+
+```sh
+$ cp docker-compose.override.yml.example docker-compose.override.yml
+```
+
+Change the values to match your pm2+ public and private key.
+
+```sh
+$ docker-compose up -d
+```
+
 
 ## Changelog
 4.0.0
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
+* Integrated Docker both for development and production modes.
 * Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export. For easier  reuse.
 * Added last password change IP and time.
 * Added last activity time.
