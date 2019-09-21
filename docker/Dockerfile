@@ -8,7 +8,7 @@ RUN npm ci
 
 FROM node:10-alpine
 
-RUN npm install pm2 nodemon -g
+RUN npm install pm2 nodemon concurrently sass -g
 
 ARG PM2_PUBLIC_KEY
 ARG PM2_SECRET_KEY
