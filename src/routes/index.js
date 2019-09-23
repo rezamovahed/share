@@ -8,8 +8,10 @@ const passport = require('passport')
  * @description Displays a not allowed message
  * @access Public
 */
-router.get('/', middleware.isAlreadyLoggedIn, (req, res) => {
-  res.render('index');
+router.get('/' ,(req, res) => {
+  res.render('index',{
+    title: 'Welcome'
+  });
 });
 
 /**

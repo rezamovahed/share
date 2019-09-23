@@ -118,12 +118,12 @@ app.use((req, res, next) => {
   res.locals.currentPath = req.path;
   // Custom ENV
   res.locals.siteTitle = process.env.TITLE;
-  res.locals.credit = process.env.CREDIT;
+  res.locals.credit = (process.env.CREDIT === 'true') ? true : false;
   res.locals.footerTitle = process.env.FOOTER_TITLE;
   res.locals.siteWebmasterEmail = process.env.EMAIL;
   res.locals.siteDesc = process.env.DESC;
   res.locals.sitePowered = `Uploader Powered by ${process.env.TITLE}`;
-  res.locals.signups = process.env.SIGNUPS;
+  res.locals.signups = (process.env.SIGNUPS === 'true') ? true : false;
   // Pass flash to locals
   res.locals.info = req.flash("info");
   res.locals.success = req.flash("success");
