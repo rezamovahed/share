@@ -46,7 +46,7 @@ $ docker-compose up -d
 
 
 ## Changelog
-4.0.0
+4.0.0 (Unrelased)
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
 * Integrated Docker both for development and production modes.
 * Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export. For easier  reuse.
