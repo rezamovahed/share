@@ -8,7 +8,7 @@ const validator = require('validator');
  * @param username
  * Username of the user
  * @param updatedEmail
- * Email of the user.
+ * Updated Email of the user.
  * @param password
  * Password of the User
  * @param active
@@ -19,13 +19,14 @@ const validator = require('validator');
  * The callback for the function.  err,surcess
  */
 
-module.exports = (id, username, updatedEmail, password, active, isAdmin, cb) => {
+module.exports = async (id, username, updatedEmail, password, active, isAdmin, cb) => {
   // Check if empty
   // Username
   if (validator.isEmpty(username)) { error.username = 'Must have a username.' };
 
   // Email
-  if (validator.isEmpty(email)) { error.email = 'Must have a email.' };
+  if (validator.isEmpty(email)) { error.updatedEmail = 'Must have a email.' };
+
 
   // Activate
   if (validator.isEmpty(active)) { error.active = 'Account can only be active or non active.' };
@@ -35,7 +36,7 @@ module.exports = (id, username, updatedEmail, password, active, isAdmin, cb) => 
 
   // Email
   // Check if email is vaid
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
+  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example: someone@example.com)' };
 
   // Password
   if (password && validator.isLength(password, {
@@ -46,20 +47,30 @@ module.exports = (id, username, updatedEmail, password, active, isAdmin, cb) => 
 
   updatedUser.role = req.body.isAdmin ? 'admin' : undefined;
 
-  // if (JSON.stringify(error) === '{}') {
-  // User.findByIdAndUpdate(id, updatedUser, (err, user) => {
-  // if (err) {
-  // if (err.code === 11000) {
-  // error.username = 'Username may be already in use.';
-  // error.email = 'Email may be already in use.';
-  // }
-  // req.flash('error', error);
-  // res.redirect(`/admin/users/${id}`);
-  // return;
-  // };
-  // if (password) {
-  // user.setPassword(password, (err, newPassword) => { });
-  // };
+  if (Object.keys(error).length === 0) {
+    const user = User.findById(id);
+    const usernameAlreadyInUse = User.findOne(username);
+    const emailAlreadyInUse = User.findOne(email);
+    if (!usernameAlreadyInUse || !emailAlreadyInUse) {
+      req.flash('error', error);
+      return res.redirect(`/admin/users/${id}`);
+    }
+    if (password) {
+      user.setPassword(password);
+      // Add send password in email
+    };
+
+    user.username = username;
+    
+    // if(req.user.streamerMode)
+
+
+
+
+    await user.save()
+
+  }
+
   // if (req.user.streamerMode) {
   // req.flash('success', `${username} has been updated. Email has been left unchanged due to streamer mode being enabled.`);
   // res.redirect('/admin/users');

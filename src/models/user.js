@@ -26,6 +26,7 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  newEmail: String,
   isBanned: Boolean,
   isSuspended: Boolean,
   suspendedExpire: Date,
