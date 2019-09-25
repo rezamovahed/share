@@ -29,10 +29,10 @@ module.exports = async (id, username, updatedEmail, password, active, isAdmin, c
 
 
   // Activate
-  if (validator.isEmpty(active)) { error.email = 'Account can only be active or non active.' };
+  if (validator.isEmpty(active)) { error.active = 'Account can only be active or non active.' };
 
   // IsAdmin
-  if (validator.isEmpty(active)) { error.email = 'Account can only be admin or non admin.' };
+  if (validator.isEmpty(isAdmin)) { error.isAdmin = 'Account can only be admin or non admin.' };
 
   // Email
   // Check if email is vaid
