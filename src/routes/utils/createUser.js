@@ -12,7 +12,7 @@ const createGravtar = require('./createGravtar');
  * @param password
  * Password of the User
  * @param cb(err,success)
- * Error or success
+ * Error or success callback
  */
 module.exports = (username, email, password, cb) => {
   let error = {};
@@ -20,6 +20,7 @@ module.exports = (username, email, password, cb) => {
   // Check if empty
   if (validator.isEmpty(username)) { error.username = 'Username is required.' };
   if (validator.isEmpty(email)) { error.email = 'Email is required.' };
+  if (validator.isEmpty(password)) { error.password = 'Password is required.' };
 
   // Check if real email.
   if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)' };
@@ -45,6 +46,5 @@ module.exports = (username, email, password, cb) => {
     })
   } else {
     cb({ type: 'normal', message: error })
-    console.log(err)
   }
 }
