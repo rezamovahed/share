@@ -1,10 +1,7 @@
-# [MrDemonWolf Share](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
+# [MrDemonWolf Share](/)
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MrDemonWolf/share-mrdemonwolf-mer/master/LICENSE)
-[![dependencies Status](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me/status.svg)](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me)
-[![devDependencies Status](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me/dev-status.svg)](https://david-dm.org/MrDemonWolf/share-mrdemonwolf-me?type=dev)
 ![GitHub release](https://img.shields.io/github/release/mrdemonwolf/share-mrdemonwolf-me.svg)
-![GitHub repo size](https://img.shields.io/github/repo-size/MrDemonWolf/share-mrdemonwolf-me.svg)
 [![Follow on twitter](https://img.shields.io/twitter/follow/mrdemonwolf.svg?label=Follow)](https://www.twitter.com/mrdemonwolf "Follow on twitter")
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=flat-square&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 [![Join Discord](https://discordapp.com/api/guilds/127607669103001600/embed.png)](https://discord.gg/invite/A9x3qEN)
@@ -15,7 +12,7 @@ This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
 # Download
 
-You can now download the release [here](https://github.com/MrDemonWolf/share-mrdemonwolf-me/releases/latest/download.zip)
+You can now download the release [here](https://github.com/MrDemonWolf/share-mrdemonwolf-me/releases/latest)
 
 You can also fork,clone,download from github for pre release builds and development.
 * Clone the repo: `git clone https://github.com/MrDemonWolf/share-mrdemonwolf-me.git`
