@@ -21,7 +21,7 @@ You can also fork,clone,download from github for pre release builds and developm
 ## Setup
 If your a normal user then please read the setup guide here.
 
-If you want to help out development read this guide here.
+If you want to help out development read this here.
 
 # Changelog
 4.0.0 (Unrelased _Oct 31, 2019_)

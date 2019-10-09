@@ -43,7 +43,11 @@ Want to show support for the developer(me) keep CREDIT on true.  But if you don'
 There is already many guides on nodejs and MongoDB so if you want help installing that you can google terms like "How to install NodeJS on Ubuntu" etc depending on your OS.
 
 ## Setup for install
-You have to edit the .env with the new vaules then run npm run installer
+You have to edit the .env with the new vaules then run
+
+```sh
+$ npm run installer
+```
 
 This will give you a *ONE Time password* used to verify its you.  Enter this on the website and it will take you to create the first admin account and setup some basic settings.
 
