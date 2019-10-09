@@ -46,31 +46,72 @@ There is already many guides on nodejs and MongoDB so if you want help installin
 You have to edit the .env with the new vaules then run npm run installer
 
 This will give you a *ONE Time password* used to verify its you.  Enter this on the website and it will take you to create the first admin account and setup some basic settings.
-<!--
+
 #### Edit the .env.example with basic config
 ```sh
 cp .env.example .env
 ```
+
 ```sh
 nano .env
 ```
+
 Add what you want to the __.env__.
+
+## Starting the app
+
 #### Install node packages
 ```sh
 npm install
 ```
 
 #### Start server
+To get started with Docker do the following...
+
+```sh
+$ cp docker-compose.override.yml.example docker-compose.override.yml
+```
+
+Change the values to match your pm2+ public and private key.
+
+```sh
+$ docker-compose up
+```
+
+Or if you want to run normal
+
 ```sh
 npm start
 ```
-### Setup Account and ShareX
-And go to your localhost:5050 or yourdomain.com either works and click login then create a account.
 
-You should be be able to if you disable signups as you put your email in the __.env__ .
+With *PM2*
+```sh
+pm2 start process.yml
+```
+___
 
-Once done we move on the next step.
+## Want help develop?
+You can use this command to start up with nodemon so you can work on it and test.
 
+```sh
+npm run dev-web
+```
+
+To get started with Docker do the following...
+
+```sh
+$ cp docker-compose.override.yml.example docker-compose.override.yml
+```
+
+Change the values to match your pm2+ public and private key.
+
+```sh
+$ docker-compose up
+```
+
+___
+
+### Setup ShareX Config
 Here's the sharex config templates for you
 
 [ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)

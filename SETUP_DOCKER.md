@@ -1,10 +1,3 @@
-# Want help develop?
-You can use this command to start up with nodemon so you can work on it and test.
-
-```sh
-npm run dev-web
-```
-
 # Get started with Docker
 
 Docker has now been integrated. To get started with Docker do the following...
