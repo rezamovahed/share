@@ -42,15 +42,6 @@ Want to show support for the developer(me) keep CREDIT on true.  But if you don'
 ## NodeJS and MongoDB
 There is already many guides on nodejs and MongoDB so if you want help installing that you can google terms like "How to install NodeJS on Ubuntu" etc depending on your OS.
 
-## Setup for install
-You have to edit the .env with the new vaules then run
-
-```sh
-$ npm run installer
-```
-
-This will give you a *ONE Time password* used to verify its you.  Enter this on the website and it will take you to create the first admin account and setup some basic settings.
-
 #### Edit the .env.example with basic config
 ```sh
 cp .env.example .env
@@ -123,4 +114,4 @@ Here's the sharex config templates for you
 Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
 After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
 
-Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin -->
+Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin
