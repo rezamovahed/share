@@ -1,17 +1,22 @@
 # MacOS
 .DS_Store
+
 # NodejS
 node_modules/
 npm-debug.log*
-package-lock.json
+
 # Env
 .env
+
 # sass
 .sass-cache
+
 # Uploads folder
 src/public/u/*
+
 # Temp folder
 src/tmp
+
 #docker
 docker-compose.override.yml
 
