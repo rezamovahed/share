@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const userRoles = ['admin', 'user'];
 
@@ -44,12 +44,7 @@ const userSchema = new Schema({
   lastLog: Date,
   lastActivity: Date,
 }, {
-    timestamps: true
-  });
-
-// Passport Mongoose addon.
-userSchema.plugin(passportLocalMongoose, {
-  usernameField: 'email'
+  timestamps: true
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,6 +1,5 @@
-
-const User = require('../../models/user');
 const validator = require('validator');
+const User = require('../../models/user');
 
 /**
  * @param id
@@ -19,29 +18,51 @@ const validator = require('validator');
  * The callback for the function.  err,surcess
  */
 
-module.exports = async (id, username, updatedEmail, password, active, isAdmin, cb) => {
+module.exports = async (
+  id,
+  username,
+  updatedEmail,
+  password,
+  active,
+  isAdmin,
+  cb
+) => {
+  // eslint-disable-next-line prefer-const
+  let error = {};
   // Check if empty
   // Username
-  if (validator.isEmpty(username)) { error.username = 'Must have a username.' };
+  if (validator.isEmpty(username)) {
+    error.username = 'Must have a username.';
+  }
 
   // Email
-  if (validator.isEmpty(email)) { error.updatedEmail = 'Must have a email.' };
-
+  if (validator.isEmpty(email)) {
+    error.updatedEmail = 'Must have a email.';
+  }
 
   // Activate
-  if (validator.isEmpty(active)) { error.active = 'Account can only be active or non active.' };
+  if (validator.isEmpty(active)) {
+    error.active = 'Account can only be active or non active.';
+  }
 
   // IsAdmin
-  if (validator.isEmpty(isAdmin)) { error.isAdmin = 'Account can only be admin or non admin.' };
+  if (validator.isEmpty(isAdmin)) {
+    error.isAdmin = 'Account can only be admin or non admin.';
+  }
 
   // Email
   // Check if email is vaid
-  if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example: someone@example.com)' };
+  if (!validator.isEmail(email)) {
+    error.email = 'Email must be vaild (Example: someone@example.com)';
+  }
 
   // Password
-  if (password && validator.isLength(password, {
-    minimum: 8
-  })) {
+  if (
+    password
+    && validator.isLength(password, {
+      minimum: 8
+    })
+  ) {
     error.password = 'Password must be at least 8 characters long.';
   }
 
@@ -58,17 +79,13 @@ module.exports = async (id, username, updatedEmail, password, active, isAdmin, c
     if (password) {
       user.setPassword(password);
       // Add send password in email
-    };
+    }
 
     user.username = username;
-    
+
     // if(req.user.streamerMode)
 
-
-
-
-    await user.save()
-
+    await user.save();
   }
 
   // if (req.user.streamerMode) {

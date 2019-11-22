@@ -1,16 +1,18 @@
+const generate = require('nanoid/generate');
 const nodemailerSendGrid = require('../../../config/sendgrid');
+// eslint-disable-next-line operator-linebreak
+const alphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const mailConfig = require('../../../config/email');
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate')
-const User = require('../../../models/user');
 const emailTemplates = require('../../../config/emailTemplates');
+const User = require('../../../models/user');
 
 /**
  * @param email
  * Email of the user
  */
-module.exports = async (email) => {
-  const account = await User.findOne({ email })
+module.exports = async email => {
+  const account = await User.findOne({ email });
 
   // Sets the token to the user
   const token = await generate(alphabet, 24);
@@ -20,7 +22,7 @@ module.exports = async (email) => {
   account.emailVerificationTokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
 
   // Saves the account with the new data
-  await account.save()
+  await account.save();
 
   // Get's the email template and enters the details.  Setups the basic email formate for nodemailer
   const verifyEmail = {
@@ -28,6 +30,6 @@ module.exports = async (email) => {
     from: mailConfig.from,
     subject: `Activate your Account at ${process.env.TITLE}`,
     html: emailTemplates.emailVerify(token).html
-  }
+  };
   await nodemailerSendGrid.sendMail(verifyEmail);
 };

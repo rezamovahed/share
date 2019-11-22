@@ -1,7 +1,8 @@
 const nodemailerSendGrid = require('../../../config/sendgrid');
 const mailConfig = require('../../../config/email');
+
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate')
+const generate = require('nanoid/generate');
 const User = require('../../../models/user');
 const emailTemplates = require('../../../config/emailTemplates');
 
@@ -22,14 +23,14 @@ module.exports = async (id, newEmail) => {
   account.emailVerificationTokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
 
   // Saves the account with the new data
-  await account.save()
+  await account.save();
 
   // Get's the email template and enters the details.  Setups the basic email formate for nodemailer
-  const newEmail = {
-    to: email,
+  const comfirmNewEmail = {
+    to: newEmail,
     from: mailConfig.from,
     subject: `Please comfirm your new email at ${process.env.TITLE}`,
     html: emailTemplates.newEmail(token).html
-  }
+  };
   await nodemailerSendGrid.sendMail(newEmail);
 };

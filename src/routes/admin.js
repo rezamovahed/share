@@ -1,16 +1,17 @@
 const express = require("express");
 const moment = require("moment");
-const Upload = require("../models/upload");
-const User = require("../models/user");
-const Key = require("../models/key");
 const fs = require("fs");
 const path = require("path");
 const password = require("generate-password");
 const gravatar = require("gravatar");
 const validator = require("validator");
+const Key = require("../models/key");
+const User = require("../models/user");
+const Upload = require("../models/upload");
 const uploadsLisingPerPage = require("./utils/admin/uploadsPerPage");
 const userPerPage = require("./utils/admin/userPerPage");
 const deleteUpload = require("./utils/deleteUpload");
+
 const router = express.Router();
 const updateUser = "./utils/admin/updateUser.js";
 
@@ -191,19 +192,19 @@ router.get("/users/:page", async (req, res) => {
  * @access Private
  */
 router.get("/users/:id/edit", (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   User.findById(id, (err, user) => {
-    const username = user.username;
-    const email = user.email;
-    const emailVerified = user.emailVerified;
+    const { username } = user;
+    const { email } = user;
+    const { emailVerified } = user;
     const isAdmin = user.role === "admin";
-    const lastLog = user.lastLog;
-    const lastLogIP = user.lastLogIP;
-    const lastActivity = user.lastActivity;
-    const isBanned = user.isBanned;
-    const isSuspended = user.isSuspended;
-    const suspendedReason = user.suspendedReason;
-    const suspendedExpire = user.suspendedExpire;
+    const { lastLog } = user;
+    const { lastLogIP } = user;
+    const { lastActivity } = user;
+    const { isBanned } = user;
+    const { isSuspended } = user;
+    const { suspendedReason } = user;
+    const { suspendedExpire } = user;
     res.render("admin/users/edit", {
       title: `Edit ${username}`,
       username,
@@ -253,7 +254,7 @@ router.get("/users/:id/suspend", async (req, res) => {
  * @access Private
  */
 router.patch("/users/:id/suspend", async (req, res) => {
-  let reason = req.body.reason;
+  let { reason } = req.body;
   const expireCustom = moment(
     req.body.suspendExpireCustom,
     "M/D/YYYY h:mm A"
@@ -261,13 +262,11 @@ router.patch("/users/:id/suspend", async (req, res) => {
   const expireDate = moment().add(req.body.suspendExpire || 0, "days");
 
   if (!reason) {
-    reason =
-      "For breaking the reasons you have been issued a temp suspend from our site";
+    reason = "For breaking the reasons you have been issued a temp suspend from our site";
   }
   if (req.body.suspendExpire === "custom") {
   }
-  const expire =
-    req.body.suspendExpire === "custom" ? expireCustom : expireDate;
+  const expire = req.body.suspendExpire === "custom" ? expireCustom : expireDate;
   const account = await User.findById(req.params.id);
   if (account.isBanned) {
     account.isBanned = undefined;
@@ -348,13 +347,13 @@ router.patch("/users/:id/unban", async (req, res) => {
  * @access Private
  */
 router.put("/users/:id", async (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   const username = req.body.username.toString();
   const email = req.body.email.toLowerCase();
   const password = req.body.password.toString();
   const emailVerified = req.body.activate;
-  const streamerMode = req.user.streamerMode;
-  const isAdmin = req.body.isAdmin;
+  const { streamerMode } = req.user;
+  const { isAdmin } = req.body;
 
   updateUser(
     streamerMode,
@@ -413,10 +412,10 @@ router.delete("/users/:id", (req, res) => {
  * @access Private
  */
 router.post("/users/new", (req, res) => {
-  let error = {};
-  const username = req.body.username;
+  const error = {};
+  const { username } = req.body;
   const email = req.body.email.toLowerCase();
-  const password = req.body.password;
+  const { password } = req.body;
   const avatar = gravatar.url(
     req.body.email,
     {
@@ -456,7 +455,7 @@ router.post("/users/new", (req, res) => {
   }
 
   if (JSON.stringify(error) === "{}") {
-    let newUser = {
+    const newUser = {
       username,
       email,
       avatar
@@ -471,16 +470,15 @@ router.post("/users/new", (req, res) => {
 
     User.register(newUser, password, (err, user) => {
       if (err.name === "UserExistsError") {
-        error.alreadyAccount =
-          "A user with the given username is already registered";
+        error.alreadyAccount = "A user with the given username is already registered";
       }
       if (JSON.stringify(error) !== "{}") {
         req.flash("error", error);
         res.render("admin/users/new", {
           title: "Create new user",
           username,
-          email: email,
-          password: password
+          email,
+          password
         });
         return;
       }

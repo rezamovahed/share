@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const Upload = require('../models/upload');
 
@@ -9,8 +10,8 @@ const Upload = require('../models/upload');
  * @access Private
 */
 router.get('/:fileName', (req, res) => {
-  const fileName = req.params.fileName;
-  const fullUrl = req.protocol + '://' + req.get('host');
+  const { fileName } = req.params;
+  const fullUrl = `${req.protocol}://${req.get('host')}`;
   Upload.findOne({ fileName }, (err, uploaded) => {
     res.render('view/image', {
       title: `${fileName}`,

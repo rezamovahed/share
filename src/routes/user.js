@@ -6,8 +6,10 @@ const middleware = require('../middleware');
 const nodemailerSendGrid = require('../config/sendgrid.js');
 const mailConfig = require('../config/email');
 const emailTemplates = require('../config/emailTemplates');
+
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate')
+const generate = require('nanoid/generate');
+
 const router = express.Router();
 
 /**
@@ -17,7 +19,6 @@ const router = express.Router();
  * @access Public
 */
 router.get('/activate/resend', (req, res) => {
-
   res.render('user/activate/resend', {
     title: 'Resend Account Activation',
   });
@@ -30,7 +31,6 @@ router.get('/activate/resend', (req, res) => {
  * @access Public
 */
 router.post('/activate/resend', (req, res) => {
-
   User.findOne({
     email: req.body.email
   }, (err, user) => {
@@ -38,22 +38,22 @@ router.post('/activate/resend', (req, res) => {
       req.flash('error', 'User does not exist.');
       res.redirect('/user/activate/resend');
       return;
-    };
+    }
 
     if (!user.emailVerified) {
       async.waterfall([
         (done) => {
           const token = generate(alphabet, 24);
           const tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
-          done(err, token, tokenExpire)
+          done(err, token, tokenExpire);
         },
         (token, tokenExpire, done) => {
           User.findOne({
             email: req.body.email
-          }, function (err, user) {
+          }, (err, user) => {
             user.emailVerificationToken = token;
             user.emailVerificationTokenExpire = tokenExpire;
-            user.save(function (err) {
+            user.save((err) => {
               done(err, token);
             });
           });
@@ -69,7 +69,7 @@ router.post('/activate/resend', (req, res) => {
             subject: `Activate Your Account | ${process.env.TITLE}`,
             html: htmlOuput.html
           };
-          nodemailerSendGrid.sendMail(accountActvationEmail, function (err) {
+          nodemailerSendGrid.sendMail(accountActvationEmail, (err) => {
             req.flash('success', 'Your account activation email has been resent');
             res.redirect('/login');
             done(err, 'done');
@@ -91,7 +91,7 @@ router.post('/activate/resend', (req, res) => {
 */
 router.get('/activate/:token', (req, res) => {
   function activationError() {
-    req.flash('error', 'Your token is invaid or your account is already activated.')
+    req.flash('error', 'Your token is invaid or your account is already activated.');
     res.redirect('/user/activate/resend');
   }
   async.waterfall([
@@ -104,7 +104,7 @@ router.get('/activate/:token', (req, res) => {
       }, (err, user) => {
         if (!user) {
           return activationError();
-        };
+        }
 
         user.emailVerificationToken = undefined;
         user.emailVerificationTokenExpire = undefined;
@@ -126,7 +126,7 @@ router.get('/activate/:token', (req, res) => {
 */
 router.get('/delete/:token', (req, res) => {
   function deleteRemove() {
-    req.flash('error', 'Your token is invaid or account has not been created.')
+    req.flash('error', 'Your token is invaid or account has not been created.');
     res.redirect('/login');
   }
 
@@ -171,20 +171,19 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
   async.waterfall([
     (done) => {
       const token = generate(alphabet, 24);
-      done(err, token)
+      done(err, token);
     },
     (token, done) => {
       User.findOne({
         email: req.body.email
-      }, function (err, user) {
+      }, (err, user) => {
         if (!user) {
           req.flash('error', 'No account could be found.');
           res.redirect('/user/forgot');
-          return;
         } else {
           user.resetPasswordToken = token;
           user.resetPasswordExpires = Date.now() + 1000 * 10 * 6 * 60;
-          user.save(function (err) {
+          user.save((err) => {
             done(err, token, user);
           });
         }
@@ -219,20 +218,20 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
     </mj-wrapper>
   </mj-body>
 </mjml>
-`)
+`);
       const forgotPasswordEmail = {
         to: user.email,
         from: mailConfig.from,
         subject: `Password reset | ${process.env.TITLE}`,
         html: htmlOuput.html
       };
-      nodemailerSendGrid.sendMail(forgotPasswordEmail, function (err) {
+      nodemailerSendGrid.sendMail(forgotPasswordEmail, (err) => {
         req.flash('success', 'Password reset email has been sent.');
-        res.redirect('/user/forgot')
+        res.redirect('/user/forgot');
         done(err, 'done');
-      })
+      });
     }
-  ])
+  ]);
 });
 
 /**
@@ -247,12 +246,12 @@ router.get('/forgot/reset/:token', (req, res) => {
     resetPasswordExpires: {
       $gt: Date.now()
     }
-  }, function (err, user) {
+  }, (err, user) => {
     if (!user) {
-      req.flash('error', 'Password reset token is invaid or is expired')
+      req.flash('error', 'Password reset token is invaid or is expired');
       res.redirect('/user/forgot');
       return;
-    };
+    }
     res.render('user/forgot/reset', {
       title: 'Reset Password',
       token: req.params.token,
@@ -268,17 +267,17 @@ router.post('/forgot/reset/:token', (req, res) => {
     }
   }, (err, user) => {
     if (!user) {
-      req.flash('error', 'Password reset token is invaid or is expired')
+      req.flash('error', 'Password reset token is invaid or is expired');
       res.redirect('/user/forgot');
       return;
-    };
+    }
 
     if (req.body.password !== req.body.passwordConfirm) {
-      req.flash('error', 'Both passwords most match.')
+      req.flash('error', 'Both passwords most match.');
       res.redirect(`/user/forgot/reset/${req.params.token}`);
       return;
-    };
-    user.setPassword(req.body.password, function (err) {
+    }
+    user.setPassword(req.body.password, (err) => {
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
       user.passwordChangedIP = req.clientIp;
@@ -288,12 +287,12 @@ router.post('/forgot/reset/:token', (req, res) => {
         to: user.email,
         from: mailConfig.from,
         subject: 'Your password has been changed',
-        html: 'Hello,\n' +
-          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n' +
-          '<strong>IP</strong> ' + `<a href="https://whatismyipaddress.com/ip/${req.clientIp}">${req.clientIp}</a>` + ' \n' +
-          '<strong>City</strong> ' + req.ipInfo.city.toString() + ' \n' +
-          '<strong>State</strong> ' + req.ipInfo.region + ' \n' +
-          '<strong>Country</strong> ' + req.ipInfo.country + ' \n'
+        html: `${'Hello,\n'
+          + 'This is a confirmation that the password for your account '}${user.email} has just been changed.\n`
+          + `<strong>IP</strong> ` + `<a href="https://whatismyipaddress.com/ip/${req.clientIp}">${req.clientIp}</a>` + ` \n`
+          + `<strong>City</strong> ${req.ipInfo.city.toString()} \n`
+          + `<strong>State</strong> ${req.ipInfo.region} \n`
+          + `<strong>Country</strong> ${req.ipInfo.country} \n`
       };
       nodemailerSendGrid.sendMail(forgotResetPasswordEmail, err => {
         req.flash('success', 'Your password has been changed.  You should be able to relogin with the new password');
@@ -301,6 +300,6 @@ router.post('/forgot/reset/:token', (req, res) => {
       });
     });
   });
-})
+});
 
 module.exports = router;

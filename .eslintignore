@@ -3,4 +3,6 @@ node_modules
 bower_components
 
 # Docs
-public/docs
+src/public/docs
+src/public/lib
+src/public/js
