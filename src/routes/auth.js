@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const middleware = require('../middleware');
 const User = require('../models/user');
+
 const router = express.Router();
 const createUser = require('./utils/createUser');
 
@@ -31,8 +32,8 @@ router.post('/login', middleware.isAlreadyLoggedIn, middleware.isActvation, pass
     user.lastLog = Date.now();
     user.save();
   });
-  req.flash('success', `Welcome back, ${req.user.username}`)
-  res.redirect('/me')
+  req.flash('success', `Welcome back, ${req.user.username}`);
+  res.redirect('/me');
 });
 
 /**
@@ -63,7 +64,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
   if (process.env.SIGNUPS === 'false') {
     if (req.body.email !== process.env.EMAIL) { return res.redirect('/'); }
     res.redirect('/');
-  };
+  }
 
   const username = req.body.username.toString();
   const email = req.body.email.toLowerCase();
@@ -73,7 +74,7 @@ router.post("/signup", middleware.isAlreadyLoggedIn, (req, res) => {
     if (err) {
       req.flash('error', err.message);
       return res.redirect('/signup');
-    };
+    }
     req.flash('success', success);
     res.redirect('/login');
   });

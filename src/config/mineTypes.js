@@ -1,10 +1,10 @@
 module.exports = {
-  "images": [
+  images: [
     "image/png",
     "image/jpeg",
     "image/gif"
   ],
-  "files": [
+  files: [
     "text/plain",
     "application/zip",
     "application/x-zip",

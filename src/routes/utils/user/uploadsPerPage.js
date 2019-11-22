@@ -13,7 +13,10 @@ const Upload = require('../../../models/upload');
  * Is the limit per page.
  */
 module.exports = async (req, res, page, user, limit) => {
-  const data = (await Upload.find({ 'uploader': user }).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }));
-  const count = (await Upload.find({ 'uploader': user }).countDocuments());
-  return { data, count }
+  const data = await Upload.find({ uploader: user })
+    .skip(limit * page - limit)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+  const count = await Upload.find({ uploader: user }).countDocuments();
+  return { data, count };
 };

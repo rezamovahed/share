@@ -1,11 +1,11 @@
 module.exports = {
-  "images": [
+  images: [
     ".png",
     ".jpg",
     ".jpeg",
     ".gif"
   ],
-  "files": [
+  files: [
     ".zip",
     '.txt',
     ".tar",

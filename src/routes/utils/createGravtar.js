@@ -5,10 +5,8 @@ const gravatar = require('gravatar');
  * @type String
  * Email of the user.
  */
-module.exports = (email) => {
-  return gravatar.url(email, {
-    s: '100',
-    r: 'x',
-    d: 'retro'
-  }, true);
-};
+module.exports = (email) => gravatar.url(email, {
+  s: '100',
+  r: 'x',
+  d: 'retro'
+}, true);
