@@ -1,8 +1,7 @@
-const generate = require('nanoid/generate');
-const nodemailerSendGrid = require('../../../config/sendgrid');
-// eslint-disable-next-line operator-linebreak
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const generate = require('nanoid/generate');
+const nodemailerSendGrid = require('../../../config/sendgrid');
 const mailConfig = require('../../../config/email');
 const emailTemplates = require('../../../config/emailTemplates');
 const User = require('../../../models/user');

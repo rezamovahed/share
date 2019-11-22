@@ -179,7 +179,6 @@ app.use(
 );
 
 // Handle 404 errors
-// eslint-disable-next-line no-unused-vars
 app.use((req, res, next) => {
   res.status(404);
 
