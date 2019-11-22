@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/MrDemonWolf/share-mrdemonwolf-me#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "async": "^2.6.3",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
