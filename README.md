@@ -1,3 +1,7 @@
+npm uninstall csurf && npm i bcrypt lusca
+npm uninstall passport-local-mongoose
+express-fileupload1
+
 # [MrDemonWolf Share](/)
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MrDemonWolf/share-mrdemonwolf-mer/master/LICENSE)
@@ -21,13 +25,17 @@ You can also fork,clone,download from github for pre release builds and developm
 ## Setup
 If your a normal user then please read the setup guide here.
 
-If you want to help out development read this guide here.
+If you want to help out development read this here.
 
 # Changelog
-4.0.0 (Unrelased _Oct 31, 2019_)
+4.0.0 (Unrelased _Dec 31, 2019_)
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
 <!-- * You can now upload files via your account on the website. -->
 <!-- *Added API docs markdown -->
+<!-- * Switched to sendgrid offical mailer -->
+<!-- * Changed from express-fileupload to multer  -->
+<!-- * Changed from csurf to lusca  -->
+<!-- * Changed from passport-local-monngoose to coding it my self  -->
 * Integrated Docker both for development and production modes.  Thanks to @exia for adding this.
 * Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export.  For easier reuse.
 * Added last password change IP and time.
