@@ -1,6 +1,7 @@
 const express = require('express');
 
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const alphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const generate = require('nanoid/generate');
 
 const router = express.Router();
@@ -14,18 +15,8 @@ const fileMinetypeCheck = require('../config/mineTypes');
 const Upload = require('../models/upload');
 const User = require('../models/user');
 
-router.use(
-  fileUpload({
-    safeFileNames: true,
-    preserveExtension: true,
-    useTempFiles: true,
-    tempFileDir: './src/tmp/',
-    limits: {
-      fileSize: process.env.UPLOAD_LIMIT || 100000000
-    },
-    abortOnLimit: true
-  })
-);
+router
+  .use();
 
 function humanFileSize(bytes, si) {
   const thresh = si ? 1000 : 1024;
@@ -38,6 +29,7 @@ function humanFileSize(bytes, si) {
   let u = -1;
   do {
     bytes /= thresh;
+    // eslint-disable-next-line no-plusplus
     ++u;
   } while (Math.abs(bytes) >= thresh && u < units.length - 1);
   return `${bytes.toFixed(1)} ${units[u]}`;
@@ -161,10 +153,12 @@ router.post(
 
     // Runs checks if file check is enabled and saves them
     if (process.env.FILE_CHECK) {
-      const imageCheck = fileExtensionCheck.images.indexOf(fileExtension) == -1
-        || fileMinetypeCheck.images.indexOf(fileMineType) == -1;
-      const fileCheck = fileExtensionCheck.files.indexOf(fileExtension) == -1
-        || fileMinetypeCheck.files.indexOf(fileMineType) == -1;
+      const imageCheck =
+        fileExtensionCheck.images.indexOf(fileExtension) === -1 ||
+        fileMinetypeCheck.images.indexOf(fileMineType) === -1;
+      const fileCheck =
+        fileExtensionCheck.files.indexOf(fileExtension) === -1 ||
+        fileMinetypeCheck.files.indexOf(fileMineType) === -1;
 
       // If both checks are true then that means its a invaid file.
       if (imageCheck && fileCheck) {
@@ -200,8 +194,8 @@ router.post(
 
     // If the file is a image then add the isImage to true.
     if (
-      fileExtensionCheck.images.indexOf(fileExtension) === 0
-      || fileMinetypeCheck.images.indexOf(fileMineType) === 0
+      fileExtensionCheck.images.indexOf(fileExtension) === 0 ||
+      fileMinetypeCheck.images.indexOf(fileMineType) === 0
     ) {
       newFile.isImage = true;
     }

@@ -16,12 +16,18 @@ const Upload = require('../../../models/upload');
  */
 
 module.exports = async (req, res, page, limit, populate, populateType) => {
-  count = (await Upload.countDocuments());
+  const count = await Upload.countDocuments();
   if (populate) {
-    data = (await Upload.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 })
-      .populate(populateType));
+    const data = await Upload.find({})
+      .skip(limit * page - limit)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .populate(populateType);
     return { data, count };
   }
-  data = (await Upload.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }));
+  const data = await Upload.find({})
+    .skip(limit * page - limit)
+    .limit(limit)
+    .sort({ createdAt: -1 });
   return { data, count };
 };

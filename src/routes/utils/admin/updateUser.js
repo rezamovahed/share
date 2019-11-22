@@ -1,5 +1,5 @@
 const validator = require('validator');
-const User = require('../../models/user');
+const User = require('../../../models/user');
 
 /**
  * @param id
@@ -36,7 +36,7 @@ module.exports = async (
   }
 
   // Email
-  if (validator.isEmpty(email)) {
+  if (validator.isEmpty(updatedEmail)) {
     error.updatedEmail = 'Must have a email.';
   }
 
@@ -52,41 +52,41 @@ module.exports = async (
 
   // Email
   // Check if email is vaid
-  if (!validator.isEmail(email)) {
+  if (!validator.isEmail(updatedEmail)) {
     error.email = 'Email must be vaild (Example: someone@example.com)';
   }
 
   // Password
   if (
-    password
-    && validator.isLength(password, {
+    password &&
+    validator.isLength(password, {
       minimum: 8
     })
   ) {
     error.password = 'Password must be at least 8 characters long.';
   }
 
-  updatedUser.role = req.body.isAdmin ? 'admin' : undefined;
+  // updatedUser.role = req.body.isAdmin ? 'admin' : undefined;
 
-  if (Object.keys(error).length === 0) {
-    const user = User.findById(id);
-    const usernameAlreadyInUse = User.findOne(username);
-    const emailAlreadyInUse = User.findOne(email);
-    if (!usernameAlreadyInUse || !emailAlreadyInUse) {
-      req.flash('error', error);
-      return res.redirect(`/admin/users/${id}`);
-    }
-    if (password) {
-      user.setPassword(password);
-      // Add send password in email
-    }
+  // if (Object.keys(error).length === 0) {
+  //   const user = User.findById(id);
+  //   const usernameAlreadyInUse = User.findOne(username);
+  //   const emailAlreadyInUse = User.findOne(email);
+  //   if (!usernameAlreadyInUse || !emailAlreadyInUse) {
+  //     req.flash('error', error);
+  //     return res.redirect(`/admin/users/${id}`);
+  //   }
+  //   if (password) {
+  //     user.setPassword(password);
+  //     // Add send password in email
+  //   }
 
-    user.username = username;
+  // user.username = username;
 
-    // if(req.user.streamerMode)
+  // if(req.user.streamerMode)
 
-    await user.save();
-  }
+  //   await user.save();
+  // }
 
   // if (req.user.streamerMode) {
   // req.flash('success', `${username} has been updated. Email has been left unchanged due to streamer mode being enabled.`);

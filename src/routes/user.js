@@ -1,14 +1,14 @@
-const express = require("express");
+const alphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const generate = require('nanoid/generate');
+const express = require('express');
 const mjml = require('mjml');
-const async = require("async");
+const async = require('async');
 const User = require('../models/user');
 const middleware = require('../middleware');
 const nodemailerSendGrid = require('../config/sendgrid.js');
 const mailConfig = require('../config/email');
 const emailTemplates = require('../config/emailTemplates');
-
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate');
 
 const router = express.Router();
 
@@ -17,10 +17,10 @@ const router = express.Router();
  * @method GET
  * @description Enter the email to resend activate
  * @access Public
-*/
+ */
 router.get('/activate/resend', (req, res) => {
   res.render('user/activate/resend', {
-    title: 'Resend Account Activation',
+    title: 'Resend Account Activation'
   });
 });
 
@@ -29,58 +29,67 @@ router.get('/activate/resend', (req, res) => {
  * @method POST
  * @description Takes the email and checks it and resends.
  * @access Public
-*/
+ */
 router.post('/activate/resend', (req, res) => {
-  User.findOne({
-    email: req.body.email
-  }, (err, user) => {
-    if (!user) {
-      req.flash('error', 'User does not exist.');
-      res.redirect('/user/activate/resend');
-      return;
-    }
+  User.findOne(
+    {
+      email: req.body.email
+    },
+    (err, user) => {
+      if (!user) {
+        req.flash('error', 'User does not exist.');
+        res.redirect('/user/activate/resend');
+        return;
+      }
 
-    if (!user.emailVerified) {
-      async.waterfall([
-        (done) => {
-          const token = generate(alphabet, 24);
-          const tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
-          done(err, token, tokenExpire);
-        },
-        (token, tokenExpire, done) => {
-          User.findOne({
-            email: req.body.email
-          }, (err, user) => {
-            user.emailVerificationToken = token;
-            user.emailVerificationTokenExpire = tokenExpire;
-            user.save((err) => {
-              done(err, token);
+      if (!user.emailVerified) {
+        async.waterfall([
+          done => {
+            const token = generate(alphabet, 24);
+            const tokenExpire = Date.now() + 1000 * 10 * 6 * 60 * 3;
+            done(err, token, tokenExpire);
+          },
+          (token, tokenExpire, done) => {
+            User.findOne(
+              {
+                email: req.body.email
+              },
+              (err, user) => {
+                user.emailVerificationToken = token;
+                user.emailVerificationTokenExpire = tokenExpire;
+                user.save(err => {
+                  done(err, token);
+                });
+              }
+            );
+          },
+          (token, done) => {
+            const htmlOuput = emailTemplates.activateAccount(token);
+            done(err, htmlOuput);
+          },
+          (htmlOuput, done) => {
+            const accountActvationEmail = {
+              to: req.body.email,
+              from: mailConfig.from,
+              subject: `Activate Your Account | ${process.env.TITLE}`,
+              html: htmlOuput.html
+            };
+            nodemailerSendGrid.sendMail(accountActvationEmail, err => {
+              req.flash(
+                'success',
+                'Your account activation email has been resent'
+              );
+              res.redirect('/login');
+              done(err, 'done');
             });
-          });
-        },
-        (token, done) => {
-          const htmlOuput = emailTemplates.activateAccount(token);
-          done(err, htmlOuput);
-        },
-        (htmlOuput, done) => {
-          const accountActvationEmail = {
-            to: req.body.email,
-            from: mailConfig.from,
-            subject: `Activate Your Account | ${process.env.TITLE}`,
-            html: htmlOuput.html
-          };
-          nodemailerSendGrid.sendMail(accountActvationEmail, (err) => {
-            req.flash('success', 'Your account activation email has been resent');
-            res.redirect('/login');
-            done(err, 'done');
-          });
-        }
-      ]);
-    } else {
-      req.flash('success', 'Your account is already activated');
-      res.redirect('/');
+          }
+        ]);
+      } else {
+        req.flash('success', 'Your account is already activated');
+        res.redirect('/');
+      }
     }
-  });
+  );
 });
 
 /**
@@ -88,32 +97,41 @@ router.post('/activate/resend', (req, res) => {
  * @method GET
  * @description ACtivates account if token is vaid
  * @access Public
-*/
+ */
 router.get('/activate/:token', (req, res) => {
   function activationError() {
-    req.flash('error', 'Your token is invaid or your account is already activated.');
+    req.flash(
+      'error',
+      'Your token is invaid or your account is already activated.'
+    );
     res.redirect('/user/activate/resend');
   }
   async.waterfall([
-    (done) => {
-      User.findOne({
-        emailVerificationToken: req.params.token,
-        emailVerificationTokenExpire: {
-          $gt: Date.now()
-        }
-      }, (err, user) => {
-        if (!user) {
-          return activationError();
-        }
+    done => {
+      User.findOne(
+        {
+          emailVerificationToken: req.params.token,
+          emailVerificationTokenExpire: {
+            $gt: Date.now()
+          }
+        },
+        (err, user) => {
+          if (!user) {
+            return activationError();
+          }
 
-        user.emailVerificationToken = undefined;
-        user.emailVerificationTokenExpire = undefined;
-        user.emailVerified = true;
-        user.save();
-        req.flash('success', 'Your account is now activated.  You may login.');
-        res.redirect('/login');
-        done(err, 'done');
-      });
+          user.emailVerificationToken = undefined;
+          user.emailVerificationTokenExpire = undefined;
+          user.emailVerified = true;
+          user.save();
+          req.flash(
+            'success',
+            'Your account is now activated.  You may login.'
+          );
+          res.redirect('/login');
+          done(err, 'done');
+        }
+      );
     }
   ]);
 });
@@ -123,7 +141,7 @@ router.get('/activate/:token', (req, res) => {
  * @method GET
  * @description ACtivates account if token is vaid
  * @access Public
-*/
+ */
 router.get('/delete/:token', (req, res) => {
   function deleteRemove() {
     req.flash('error', 'Your token is invaid or account has not been created.');
@@ -131,20 +149,23 @@ router.get('/delete/:token', (req, res) => {
   }
 
   async.waterfall([
-    (done) => {
-      User.findOneAndDelete({
-        accountActvationToken: req.params.token,
-        accountActvationExpire: {
-          $gt: Date.now()
+    done => {
+      User.findOneAndDelete(
+        {
+          accountActvationToken: req.params.token,
+          accountActvationExpire: {
+            $gt: Date.now()
+          }
+        },
+        (err, user) => {
+          if (!user) {
+            return deleteRemove();
+          }
+          req.flash('success', 'Your account has been removed');
+          res.redirect('/');
+          done(err, 'done');
         }
-      }, (err, user) => {
-        if (!user) {
-          return deleteRemove();
-        }
-        req.flash('success', 'Your account has been removed');
-        res.redirect('/');
-        done(err, 'done');
-      });
+      );
     }
   ]);
 });
@@ -154,10 +175,10 @@ router.get('/delete/:token', (req, res) => {
  * @method GET
  * @description Shows a form to enter email
  * @access Public
-*/
+ */
 router.get('/forgot', (req, res) => {
   res.render('user/forgot/index', {
-    title: 'Forgot Password',
+    title: 'Forgot Password'
   });
 });
 
@@ -166,28 +187,32 @@ router.get('/forgot', (req, res) => {
  * @method POST
  * @description Takes the email and sends a reset token
  * @access Public
-*/
+ */
 router.post('/forgot', middleware.isActvation, (req, res) => {
   async.waterfall([
-    (done) => {
+    done => {
       const token = generate(alphabet, 24);
+      // eslint-disable-next-line no-undef
       done(err, token);
     },
     (token, done) => {
-      User.findOne({
-        email: req.body.email
-      }, (err, user) => {
-        if (!user) {
-          req.flash('error', 'No account could be found.');
-          res.redirect('/user/forgot');
-        } else {
-          user.resetPasswordToken = token;
-          user.resetPasswordExpires = Date.now() + 1000 * 10 * 6 * 60;
-          user.save((err) => {
-            done(err, token, user);
-          });
+      User.findOne(
+        {
+          email: req.body.email
+        },
+        (err, user) => {
+          if (!user) {
+            req.flash('error', 'No account could be found.');
+            res.redirect('/user/forgot');
+          } else {
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 1000 * 10 * 6 * 60;
+            user.save(err => {
+              done(err, token, user);
+            });
+          }
         }
-      });
+      );
     },
     (token, user, done) => {
       const htmlOuput = mjml(`
@@ -225,7 +250,7 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
         subject: `Password reset | ${process.env.TITLE}`,
         html: htmlOuput.html
       };
-      nodemailerSendGrid.sendMail(forgotPasswordEmail, (err) => {
+      nodemailerSendGrid.sendMail(forgotPasswordEmail, err => {
         req.flash('success', 'Password reset email has been sent.');
         res.redirect('/user/forgot');
         done(err, 'done');
@@ -239,67 +264,81 @@ router.post('/forgot', middleware.isActvation, (req, res) => {
  * @method POST
  * @description Takes the email and sends a reset token
  * @access Public
-*/
+ */
 router.get('/forgot/reset/:token', (req, res) => {
-  User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
+  User.findOne(
+    {
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: {
+        $gt: Date.now()
+      }
+    },
+    (err, user) => {
+      if (!user) {
+        req.flash('error', 'Password reset token is invaid or is expired');
+        res.redirect('/user/forgot');
+        return;
+      }
+      res.render('user/forgot/reset', {
+        title: 'Reset Password',
+        token: req.params.token
+      });
     }
-  }, (err, user) => {
-    if (!user) {
-      req.flash('error', 'Password reset token is invaid or is expired');
-      res.redirect('/user/forgot');
-      return;
-    }
-    res.render('user/forgot/reset', {
-      title: 'Reset Password',
-      token: req.params.token,
-    });
-  });
+  );
 });
 
 router.post('/forgot/reset/:token', (req, res) => {
-  User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
-    }
-  }, (err, user) => {
-    if (!user) {
-      req.flash('error', 'Password reset token is invaid or is expired');
-      res.redirect('/user/forgot');
-      return;
-    }
+  User.findOne(
+    {
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: {
+        $gt: Date.now()
+      }
+    },
+    (err, user) => {
+      if (!user) {
+        req.flash('error', 'Password reset token is invaid or is expired');
+        res.redirect('/user/forgot');
+        return;
+      }
 
-    if (req.body.password !== req.body.passwordConfirm) {
-      req.flash('error', 'Both passwords most match.');
-      res.redirect(`/user/forgot/reset/${req.params.token}`);
-      return;
-    }
-    user.setPassword(req.body.password, (err) => {
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpires = undefined;
-      user.passwordChangedIP = req.clientIp;
-      user.passwordChanged = Date.now();
-      user.save();
-      const forgotResetPasswordEmail = {
-        to: user.email,
-        from: mailConfig.from,
-        subject: 'Your password has been changed',
-        html: `${'Hello,\n'
-          + 'This is a confirmation that the password for your account '}${user.email} has just been changed.\n`
-          + `<strong>IP</strong> ` + `<a href="https://whatismyipaddress.com/ip/${req.clientIp}">${req.clientIp}</a>` + ` \n`
-          + `<strong>City</strong> ${req.ipInfo.city.toString()} \n`
-          + `<strong>State</strong> ${req.ipInfo.region} \n`
-          + `<strong>Country</strong> ${req.ipInfo.country} \n`
-      };
-      nodemailerSendGrid.sendMail(forgotResetPasswordEmail, err => {
-        req.flash('success', 'Your password has been changed.  You should be able to relogin with the new password');
-        res.redirect('/login');
+      if (req.body.password !== req.body.passwordConfirm) {
+        req.flash('error', 'Both passwords most match.');
+        res.redirect(`/user/forgot/reset/${req.params.token}`);
+        return;
+      }
+      user.setPassword(req.body.password, err => {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        user.passwordChangedIP = req.clientIp;
+        user.passwordChanged = Date.now();
+        user.save();
+        const forgotResetPasswordEmail = {
+          to: user.email,
+          from: mailConfig.from,
+          subject: 'Your password has been changed',
+          html:
+            `${'Hello,\n' +
+              'This is a confirmation that the password for your account '}${
+              user.email
+            } has just been changed.\n` +
+            `<strong>IP</strong> ` +
+            `<a href="https://whatismyipaddress.com/ip/${req.clientIp}">${req.clientIp}</a>` +
+            ` \n` +
+            `<strong>City</strong> ${req.ipInfo.city.toString()} \n` +
+            `<strong>State</strong> ${req.ipInfo.region} \n` +
+            `<strong>Country</strong> ${req.ipInfo.country} \n`
+        };
+        nodemailerSendGrid.sendMail(forgotResetPasswordEmail, err => {
+          req.flash(
+            'success',
+            'Your password has been changed.  You should be able to relogin with the new password'
+          );
+          res.redirect('/login');
+        });
       });
-    });
-  });
+    }
+  );
 });
 
 module.exports = router;

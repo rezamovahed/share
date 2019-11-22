@@ -1,8 +1,9 @@
+const generate = require('nanoid/generate');
 const nodemailerSendGrid = require('../../../config/sendgrid');
 const mailConfig = require('../../../config/email');
 
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate');
+const alphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const User = require('../../../models/user');
 const emailTemplates = require('../../../config/emailTemplates');
 

@@ -11,7 +11,11 @@
  * Is the limit per page.
  */
 module.exports = async (req, res, page, model, limit) => {
-  data = (await model.find({}).skip((limit * page) - limit).limit(limit).sort({ createdAt: -1 }));
-  count = (await model.countDocuments());
+  const data = await model
+    .find({})
+    .skip(limit * page - limit)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+  const count = await model.countDocuments();
   return { data, count };
 };

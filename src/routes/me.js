@@ -16,10 +16,10 @@ const deleteUpload = require('./utils/deleteUpload');
  * @method GET
  * @description Displays account.
  * @access Private
-*/
+ */
 router.get('/', (req, res) => {
   res.render('me/index', {
-    title: 'Edit account',
+    title: 'Edit account'
   });
 });
 
@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
  * @method PATCH
  * @description Updates account details.
  * @access Private
-*/
+ */
 router.patch('/', (req, res) => {
   const error = {};
   let username = req.body.username.toString();
@@ -36,11 +36,15 @@ router.patch('/', (req, res) => {
   const newPassword = req.body.newPassword.toString();
   const oldPassword = req.body.oldPassword.toString();
   const confirmNewPassword = req.body.confirmNewPassword.toString();
-  const avatar = gravatar.url(email, {
-    s: '100',
-    r: 'x',
-    d: 'retro'
-  }, true);
+  const avatar = gravatar.url(
+    email,
+    {
+      s: '100',
+      r: 'x',
+      d: 'retro'
+    },
+    true
+  );
 
   const updatedUser = {
     username,
@@ -49,31 +53,44 @@ router.patch('/', (req, res) => {
 
   // Check if empty
   // Username
-  if (!username) { error.username = 'Please enter your username.'; }
+  if (!username) {
+    error.username = 'Please enter your username.';
+  }
   if (req.user.streamerMode) {
     updatedUser.email = req.user.email;
   } else {
     // Email
     // Check if email is vaid
-    if (!email) { error.email = 'Please enter your email.'; }
-    if (!validator.isEmail(email)) { error.email = 'Email must be vaild (Example someone@example.com)'; }
+    if (!email) {
+      error.email = 'Please enter your email.';
+    }
+    if (!validator.isEmail(email)) {
+      error.email = 'Email must be vaild (Example someone@example.com)';
+    }
   }
   // Password
   if (newPassword) {
-    if (!confirmNewPassword) { error.confirmNewPassword = 'Must comfirm password'; }
-    if (!validator.isLength(newPassword, {
-      minimum: 8
-    })) {
+    if (!confirmNewPassword) {
+      error.confirmNewPassword = 'Must comfirm password';
+    }
+    if (
+      !validator.isLength(newPassword, {
+        minimum: 8
+      })
+    ) {
       error.password = 'Password must be at least 8 characters long. ';
     }
-    if (newPassword !== confirmNewPassword) { error.confirmNewPassword = 'Both passowrds must match.'; }
-    if (newPassword === oldPassword) { error.oldPassword = "Can't be the same as the old password"; }
+    if (newPassword !== confirmNewPassword) {
+      error.confirmNewPassword = 'Both passowrds must match.';
+    }
+    if (newPassword === oldPassword) {
+      error.oldPassword = "Can't be the same as the old password";
+    }
   }
   // Check if passoword and comfirm password are the same.
   // Check password length
   if (JSON.stringify(error) === '{}') {
     username = username.toLowerCase();
-
 
     User.findByIdAndUpdate(req.user.id, updatedUser, (err, user) => {
       if (err) {
@@ -85,20 +102,27 @@ router.patch('/', (req, res) => {
         return;
       }
       if (newPassword) {
-        user.changePassword(oldPassword, newPassword, (err, changedPassword) => {
-          if (err) {
-            if (err.name === 'IncorrectPasswordError') {
-              error.oldPassword = 'Wrong current password.';
-              req.flash('error', error);
-              res.redirect('/me');
-              return;
+        user.changePassword(
+          oldPassword,
+          newPassword,
+          (err, changedPassword) => {
+            if (err) {
+              if (err.name === 'IncorrectPasswordError') {
+                error.oldPassword = 'Wrong current password.';
+                req.flash('error', error);
+                res.redirect('/me');
+                return;
+              }
             }
+            user.passwordChangedIP = req.clientIp;
+            user.passwordChanged = Date.now();
+            user.save();
           }
-          user.passwordChangedIP = req.clientIp;
-          user.passwordChanged = Date.now();
-          user.save();
-        });
-        req.flash('success', 'Your password has been changed.  Please relogin.');
+        );
+        req.flash(
+          'success',
+          'Your password has been changed.  Please relogin.'
+        );
         req.logout();
         res.redirect('/login');
         return;
@@ -124,12 +148,12 @@ router.patch('/', (req, res) => {
  * @method GET
  * @description Diplays API Keys
  * @access Private
-*/
+ */
 router.get('/keys', (req, res) => {
-  Key.find({ user: { id: req.user._id } }, (err, keys) => {
+  Key.find({ user: { id: req.user.id } }, (err, keys) => {
     res.render('me/keys', {
       title: 'Manage Keys',
-      keys,
+      keys
     });
   });
 });
@@ -139,19 +163,18 @@ router.get('/keys', (req, res) => {
  * @method POST
  * @description Creates a API Key
  * @access Private
-*/
+ */
 router.get('/keys/create', (req, res) => {
-  const token = jwt.sign({
-  }, process.env.API_SECRET, {
+  const token = jwt.sign({}, process.env.API_SECRET, {
     issuer: process.env.TITLE,
-    subject: req.user._id.toString()
+    subject: req.user.id.toString()
   });
   const tokenHash = md5(token);
   const newKey = {
     user: {
       id: req.user.id
     },
-    hash: tokenHash,
+    hash: tokenHash
   };
   Key.create(newKey, (err, key) => {
     req.flash('info', token);
@@ -164,7 +187,7 @@ router.get('/keys/create', (req, res) => {
  * @method POST
  * @description Removes API Key
  * @access Private
-*/
+ */
 router.delete('/keys/:key', (req, res) => {
   Key.findByIdAndRemove(req.params.key, (err, key) => {
     if (err) {
@@ -181,29 +204,31 @@ router.delete('/keys/:key', (req, res) => {
  * @method GET
  * @description Displays uploaded stuff
  * @access Private
-*/
+ */
 router.get('/uploads', async (req, res) => {
   const page = 1;
-  const uploads = await (userUploadsPerPage(req, res, page, req.user.id, 10));
+  const uploads = await userUploadsPerPage(req, res, page, req.user.id, 10);
   res.render('me/uploads', {
     title: `Manage Uploads`,
     uploads: uploads.data,
     current: page,
     // Count/limit
-    pages: Math.ceil(uploads.count / 10),
+    pages: Math.ceil(uploads.count / 10)
   });
 });
 
 router.get('/uploads/:page', async (req, res) => {
   const page = req.params.page || 1;
-  if (page === '0') { return res.redirect('/me/uploads'); }
-  const uploads = await (userUploadsPerPage(req, res, page, req.user.id, 10));
+  if (page === '0') {
+    return res.redirect('/me/uploads');
+  }
+  const uploads = await userUploadsPerPage(req, res, page, req.user.id, 10);
   res.render('me/uploads', {
     title: `Manage Uploads`,
     uploads: uploads.data,
     current: page,
     // Count/limit
-    pages: Math.ceil(uploads.count / 10),
+    pages: Math.ceil(uploads.count / 10)
   });
 });
 
@@ -213,7 +238,7 @@ router.get('/uploads/:page', async (req, res) => {
  * @description Remove uploaded file
  * @param type name
  * @access Private
-*/
+ */
 router.delete('/uploads/:id', (req, res) => {
   const fileName = req.query.name;
 
@@ -234,12 +259,15 @@ router.delete('/uploads/:id', (req, res) => {
  * @method GET
  * @description Displays images in a gallery fomate
  * @access Private
-*/
+ */
 router.get('/gallery', async (req, res) => {
-  const gallery = (await Upload.find({ uploader: req.user._id, isImage: true }).sort({ createdAt: -1 }));
+  const gallery = await Upload.find({
+    uploader: req.user.id,
+    isImage: true
+  }).sort({ createdAt: -1 });
   res.render('me/gallery', {
     title: 'Image Gallery',
-    gallery,
+    gallery
   });
 });
 
@@ -248,8 +276,10 @@ router.get('/gallery', async (req, res) => {
  * @method GET
  * @description Delete Account
  * @access Private
-*/
+ */
 router.get('/delete', (req, res) => {
+  // eslint-disable-next-line prefer-const
+  let deleteErrors = {};
   Upload.find({ uploader: req.user.id }, (err, file) => {
     file.map(file => {
       deleteUpload.file(file.fileName, err => {
@@ -277,21 +307,21 @@ router.get('/delete', (req, res) => {
  * @method GET
  * @description Remove all images
  * @access Private
-*/
+ */
 router.get('/uploads/delete/all', async (req, res) => {
   const deleteErrors = {
     file: 0,
-    db: 0,
+    db: 0
   };
   // Find all uploads by the user
-  uploads = (await Upload.find({ uploader: req.user.id })); // If no uploads are found then show a error message
+  const uploads = await Upload.find({ uploader: req.user.id }); // If no uploads are found then show a error message
   if (uploads.length === 0) {
     req.flash('error', 'You must upload before you can delete.');
     res.redirect('/me/uploads');
     return;
   }
 
-  await uploads.map(file => {
+  uploads.map(file => {
     deleteUpload.file(file.fileName, err => {
       if (err) {
         deleteErrors.file += 1;
