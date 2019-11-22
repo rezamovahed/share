@@ -14,73 +14,44 @@ const helmet = require('helmet');
 const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
-// const middleware = require('./middleware');
-const User = require('./models/User');
+const middleware = require('./middleware');
+const User = require('./models/user');
 
-/**
- * Load environment variables from the .env file, where API keys and passwords are stored.
- */
+// Load enviroment variables from .env file
 require('dotenv').config();
 
-/**
- * Created Express server.
- */
+// Initilate Express
 const app = express();
 
-/**
- * Connect to MongoDB.
- */
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.DATABASE_URI, {
-  useNewUrlParser: true,
-  autoReconnect: true
-});
-const db = mongoose.connection;
-
-/**
- * Setup host and port.
- */
+// Set host and port
 app.set('host', process.env.IP || '127.0.0.1');
 app.set('port', process.env.PORT || 8080);
 
-/**
- * Serve Public Folder.
- */
+// Load Assets from Public folder
 app.use(express.static(`${__dirname}/public`));
 
-/**
- * Express configuration (compression, logging, body-parser,methodoverride)
- */
+// Set view mode
 app.set('view engine', 'ejs');
+
+// Enable method override
 app.use(methodOverride('_method'));
+
+// Setup IP middleware
 app.use(expressip().getIpInfoMiddleware);
 app.use(requestIp.mw());
-app.use(flash());
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
-app.disable('x-powered-by');
 
+// Sets the view directory
+app.set('views', `${__dirname}/views`);
+
+// Morgan HTTP request logging
 if (!process.env.NODE_ENV === 'development') {
   app.use(logger('combined'));
 } else {
   app.use(logger('dev'));
 }
 
-/**
- * Helmet - security for HTTP headers
- * Learn more at https://helmetjs.github.io/
- */
-app.use(helmet());
-
-/**
- * Express session configuration.
- */
+// Setup Session config
+// expiryDate for sessions:
 // eslint-disable-next-line prefer-const
 let sess = {
   resave: false,
@@ -96,41 +67,50 @@ let sess = {
     autoReconnect: true
   })
 };
-app.use(session(sess));
 
-/**
- * Prod settings
- */
-if (!process.env.NODE_ENV === 'development') {
+if (app.get('env') === 'production') {
   app.enable('trust proxy');
   app.set('trust proxy', 1);
   // serve secure cookies
   sess.cookie.secure = true;
   // Compression
   app.use(compression());
+
+  // Secure
+  app.use(helmet());
 }
 
-/**
- * Passport
- */
-app.use(passport.initialize());
-require('./config/passport').default(passport);
+// Session store
+app.use(session(sess));
 
+// Passport
+app.use(passport.initialize());
 app.use(passport.session());
 
+// Passport config
+passport.use(User.createStrategy());
+
+// Passport needed stuff
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-
 passport.deserializeUser((id, done) => {
   User.findById(id, (err, user) => {
     done(null, user);
   });
 });
 
-/**
- * Express locals
- */
+// Express Flash
+app.use(flash());
+
+// Body parser
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+
+// Express Locals
 app.use((req, res, next) => {
   // NodeJS Lib
   res.locals.moment = moment;
@@ -151,10 +131,14 @@ app.use((req, res, next) => {
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
-
+  // Other
+  res.locals.host = req.headers.host;
   res.locals.currentYear = new Date().getFullYear();
   next();
 });
+
+// Disables the powered by so it does not show express
+app.disable('x-powered-by');
 
 // Rate Limiter
 const limiter = rateLimit({
@@ -163,11 +147,38 @@ const limiter = rateLimit({
 });
 
 // API Routes
+const apiRoutes = require('./routes/api');
 
-/**
- * Handle 404 errors
- */
-// eslint-disable-next-line no-unused-vars
+app.use('/api', limiter, apiRoutes);
+
+const indexRoutes = require('./routes/index');
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const viewRoutes = require('./routes/view');
+const meRoutes = require('./routes/me');
+const adminRoutes = require('./routes/admin');
+
+app.use(indexRoutes);
+app.use(authRoutes);
+app.use('/user', middleware.isAlreadyLoggedIn, userRoutes);
+app.use('/view', middleware.isBanned, middleware.isSuspended, viewRoutes);
+app.use(
+  '/me',
+  middleware.isLoggedIn,
+  middleware.isBanned,
+  middleware.isSuspended,
+  meRoutes
+);
+app.use(
+  '/admin',
+  middleware.isLoggedIn,
+  middleware.isBanned,
+  middleware.isSuspended,
+  middleware.isAdmin,
+  adminRoutes
+);
+
+// Handle 404 errors
 app.use((req, res, next) => {
   res.status(404);
 
@@ -183,20 +194,32 @@ app.use((req, res, next) => {
   res.type('txt').send('Not found');
 });
 
-/**
- * Mongo and Express actions
- */
+// Mongoose Setup
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
+// Mongoose Connect
+mongoose.connect(process.env.DATABASE_URI, {
+  useNewUrlParser: true,
+  autoReconnect: true
+});
+
+const db = mongoose.connection;
+
+// MongoDB Error
 db.on('error', () => {
   consola.error(
     new Error('MongoDB connection error. Please make sure MongoDB is running.`')
   );
 });
 
+// MongoDB Connected
 db.once('open', () => {
   consola.ready({
     message: 'Database',
     badge: true
   });
+  // Starts the express server
   app.listen(app.get('port'), () => {
     consola.ready({
       message: 'Web',
@@ -219,3 +242,36 @@ process.on('SIGINT', () => {
     process.exit(0);
   });
 });
+
+// Reload suspended expires and remove them if they have expired
+// User.find(
+// {
+// suspendedExpire: {
+// $gt: Date.now()
+// }
+// },
+// (err, users) => {
+// users.map(user => {
+// user.isSuspended = undefined;
+// user.suspendedExpire = undefined;
+// user.save();
+// });
+// }
+// );
+// setInterval(() => {
+//   User.find(
+//     {
+//       suspendedExpire: {
+//         $gt: Date.now()
+//       }
+//     },
+//     (err, users) => {
+//       users.map(user => {
+//         user.isSuspended = undefined;
+//         user.suspendedExpire = undefined;
+//         user.suspendedReason = undefined;
+//         user.save();
+//       });
+//     }
+//   );
+// }, 1000 * 60 * 60);
