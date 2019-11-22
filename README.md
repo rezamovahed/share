@@ -1,10 +1,10 @@
-npm uninstall csurf && npm i bcrypt lusca
+<!-- npm uninstall csurf && npm i bcrypt lusca
 npm uninstall passport-local-mongoose
-express-fileupload1
+express-fileupload1 -->
 
 # [MrDemonWolf Share](/)
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/MrDemonWolf/share-mrdemonwolf-mer/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 ![GitHub release](https://img.shields.io/github/release/mrdemonwolf/share-mrdemonwolf-me.svg)
 [![Follow on twitter](https://img.shields.io/twitter/follow/mrdemonwolf.svg?label=Follow)](https://www.twitter.com/mrdemonwolf "Follow on twitter")
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=flat-square&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
@@ -16,11 +16,11 @@ This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
 
 # Download
 
-You can now download the release [here](https://github.com/MrDemonWolf/share-mrdemonwolf-me/releases/latest)
+You can now download the release [here](/releases/latest)
 
 You can also fork,clone,download from github for pre release builds and development.
-* Clone the repo: `git clone https://github.com/MrDemonWolf/share-mrdemonwolf-me.git`
-* [Fork, Clone, or Download on GitHub](https://github.com/MrDemonWolf/share-mrdemonwolf-me)
+* Clone the repo: `git clone https://github.com/MrDemonWolf/share.git`
+* [Fork, Clone, or Download on GitHub](/)
 
 ## Setup
 If your a normal user then please read the setup guide here.
