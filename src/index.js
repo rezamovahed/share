@@ -52,6 +52,11 @@ app.set('port', process.env.PORT || 8080);
 app.use(express.static(`${__dirname}/public`));
 
 /**
+ * Set the view directory
+ */
+app.set('views', `${__dirname}/views`);
+
+/**
  * Express configuration (compression, logging, body-parser,methodoverride)
  */
 app.set('view engine', 'ejs');
@@ -85,7 +90,7 @@ app.use(helmet());
 let sess = {
   resave: false,
   saveUninitialized: false,
-  secret: process.env.COOKIE_SECRET,
+  secret: process.env.SESSION_SECRET,
   cookie: {
     maxAge: 1000 * 60 * 60 * 7 * 2,
     httpOnly: true
@@ -114,7 +119,7 @@ if (!process.env.NODE_ENV === 'development') {
  * Passport
  */
 app.use(passport.initialize());
-require('./config/passport').default(passport);
+require('./config/passport')(passport);
 
 app.use(passport.session());
 
@@ -142,7 +147,6 @@ app.use((req, res, next) => {
   // eslint-disable-next-line no-unneeded-ternary
   res.locals.credit = process.env.CREDIT === 'true' ? true : false;
   res.locals.footerTitle = process.env.FOOTER_TITLE;
-  res.locals.siteWebmasterEmail = process.env.EMAIL;
   res.locals.siteDesc = process.env.DESC;
   res.locals.sitePowered = `Uploader Powered by ${process.env.TITLE}`;
   // eslint-disable-next-line no-unneeded-ternary
@@ -156,13 +160,27 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rate Limiter
+/**
+ * Rate Limiter
+ */
 const limiter = rateLimit({
   windowMs: 1000 * 60 * 15, // 15 minutes
-  max: 50
+  max: 50 // Max of 50 requests
 });
 
-// API Routes
+/**
+ * Primary app routes.
+ */
+const indexRoutes = require('./routes/index');
+
+app.use(indexRoutes);
+
+/**
+ * API routes.
+ */
+// TODO add the API route for uploading under v1
+// so it can be updated without breaking older configs
+// const apiV1Routes = require('./routes/api/v1');
 
 /**
  * Handle 404 errors

@@ -10,9 +10,9 @@ express-fileupload1 -->
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=flat-square&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 [![Join Discord](https://discordapp.com/api/guilds/127607669103001600/embed.png)](https://discord.gg/invite/A9x3qEN)
 
-Simple uploader site with sharex support for uploading files,images, and text files.  This is open source and free to use.
+Advanced uploader with web front-end for images,files,and text. Built with ShareX in mind licensed under MIT and is free to use.
 
-This is made by [Nathan Henniges](https://www.github.com/nathanhenniges)
+Creator [Nathan Henniges](https://www.github.com/nathanhenniges)
 
 # Download
 
@@ -27,15 +27,17 @@ If your a normal user then please read the setup guide here.
 
 If you want to help out development read this here.
 
+<!-- Add other helps in the code base here -->
+
 # Changelog
 4.0.0 (Unrelased _Dec 31, 2019_)
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
 <!-- * You can now upload files via your account on the website. -->
-<!-- *Added API docs markdown -->
+<!-- *Added API docs -->
 <!-- * Switched to sendgrid offical mailer -->
 <!-- * Changed from express-fileupload to multer  -->
 <!-- * Changed from csurf to lusca  -->
-<!-- * Changed from passport-local-monngoose to coding it my self  -->
+* Changed from passport-local-monngoose to coding it my self
 * Integrated Docker both for development and production modes.  Thanks to @exia for adding this.
 * Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export.  For easier reuse.
 * Added last password change IP and time.

@@ -1,17 +1,17 @@
 const express = require('express');
 
 const router = express.Router();
-const passport = require('passport');
-const middleware = require('../middleware');
+
 /**
  * @route /
  * @method GET
- * @description Displays a not allowed message
- * @access Public
-*/
+ * @description Displays landing page or
+ *  users uploads if they are logged inn
+ * @access Public/Private
+ */
 router.get('/', (req, res) => {
   res.render('index', {
-    title: 'Welcome'
+    pageTitle: 'Home'
   });
 });
 
