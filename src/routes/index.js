@@ -10,8 +10,8 @@ const router = express.Router();
  * @access Public/Private
  */
 router.get('/', (req, res) => {
-  res.render('index', {
-    pageTitle: 'Home'
+  res.render('landing/index', {
+    pageTitle: 'Landing'
   });
 });
 

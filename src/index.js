@@ -172,8 +172,17 @@ const limiter = rateLimit({
  * Primary app routes.
  */
 const indexRoutes = require('./routes/index');
+// const authController = require('./routes/authController');
 
 app.use(indexRoutes);
+// app.post(
+//   '/login',
+//   passport.authenticate('local', {
+//     failureRedirect: '/login',
+//     failureFlash: true
+//   }),
+//   authController
+// );
 
 /**
  * API routes.
