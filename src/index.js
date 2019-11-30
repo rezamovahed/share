@@ -167,10 +167,7 @@ app.use((req, res, next) => {
  * CSRF
  */
 app.use((req, res, next) => {
-  if (
-    req.path === '/api' ||
-    req.path === '/api/v1'
-  ) {
+  if (req.path === '/api' || req.path === '/api/v1' && process.env.NODE_ENV === 'test') {
     // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
     next();
   } else {
@@ -274,3 +271,5 @@ process.on('SIGINT', () => {
     process.exit(0);
   });
 });
+
+module.exports = app;

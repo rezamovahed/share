@@ -19,7 +19,8 @@
     "dev": "concurrently -n \"App,SCSS\" \"npm run dev-start\" \"npm run scss\"",
     "lint": "eslint . --ext .js --fix",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write",
-    "apidoc": "apidoc -i ./src/routes/api -f .js -o ./docs"
+    "apidoc": "apidoc -i ./src/routes/api -f .js -o ./docs",
+    "test": "mocha --exit"
   },
   "repository": {
     "type": "git",
