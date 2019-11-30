@@ -38,3 +38,15 @@ describe('GET /signup', () => {
       });
   });
 });
+
+// describe('POST /login', () => {
+//   it('it should has status code 200', done => {
+//     supertest(app)
+//       .post('/login')
+//       .expect(200)
+//       .end((err, res) => {
+//         if (err) done(err);
+//         done();
+//       });
+//   });
+// });

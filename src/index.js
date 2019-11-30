@@ -167,8 +167,12 @@ app.use((req, res, next) => {
  * CSRF
  */
 app.use((req, res, next) => {
-  if (req.path === '/api' || req.path === '/api/v1' && process.env.NODE_ENV === 'test') {
+  if (
+    req.path === '/api' ||
+    (req.path === '/api/v1' && process.env.NODE_ENV === 'test')
+  ) {
     // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
+    console.log('CSRF IS DISABLED');
     next();
   } else {
     lusca.csrf()(req, res, next);

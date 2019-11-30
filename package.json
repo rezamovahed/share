@@ -20,7 +20,7 @@
     "lint": "eslint . --ext .js --fix",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write",
     "apidoc": "apidoc -i ./src/routes/api -f .js -o ./docs",
-    "test": "mocha --exit"
+    "test": "NODE_ENV=test mocha --exit"
   },
   "repository": {
     "type": "git",
