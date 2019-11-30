@@ -15,7 +15,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev-start": "nodemon src/index.js",
-    "scss": "sass --watch src/scss:src/public/css --style compressed",
+    "scss": "sass --watch src/scss:src/public/assets/css --style compressed",
     "dev": "concurrently -n \"App,SCSS\" \"npm run dev-start\" \"npm run scss\"",
     "lint": "eslint . --ext .js --fix",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write",

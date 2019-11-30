@@ -1,0 +1,71 @@
+<!doctype html>
+<html class="h-100" lang="en">
+
+<head>
+  <title>
+    <%= pageTitle %> | <%= siteTitle %>
+  </title>
+  <!-- Basic Meta -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Frameworks -->
+  <!-- Font Awsome-->
+  <link rel="stylesheet" type="text/css" href="/assets/vender/font-awesome/css/all.min.css">
+  <!--Bootstrap -->
+  <link rel="stylesheet" type="text/css" href="/assets/vender/bootstrap/css/bootstrap.min.css">
+  <!-- Custom -->
+  <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+</head>
+
+<body class="auth mb-0">
+  <div class="form-auth">
+    <img class="mx-auto d-block mb-4" src="/assets/images/logo_text.png" width="320">
+    <% errors = error && error.length > 0 %>
+    <% if (errors){ %>
+    <div class="alert alert-danger" role="alert">
+      <%- error %>
+    </div>
+    <% } %>
+    <% if (success && success.length > 0){ %>
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+    <% } %>
+    <form action="/login" method="POST" novalidate>
+      <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input name="email" type="email" class="form-control <% if(errors){ %>is-invalid <% } %>"
+          id="email" placeholder="Enter email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input name="password" type="password"
+          class="form-control <% if(errors){ %>is-invalid <% } %>" id="password"
+          placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-login btn-primary btn-block">login</button>
+    </form>
+    <div class="info">
+      <a href="/user/forgot">
+        <small class=" info text">Forgot your password?</small>
+      </a>
+      <a href="/user/activation/resend">
+        <small class=" info text">Resend account activation token</small>
+      </a>
+      <a href="/signup">
+        <small class="info text">Create a account</small>
+      </a>
+    </div>
+  </div>
+</body>
+<!-- Loadidng JS -->
+<!-- Bootstrap Javascript -->
+<script type="text/javascript" src="/assets/vender/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Custom -->
+<script type="text/javascript" src="/assets/js/main.js"></script>
+
+</html>
+

@@ -14,6 +14,7 @@ const helmet = require('helmet');
 const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
+const lusca = require('lusca');
 // const middleware = require('./middleware');
 const User = require('./models/User');
 
@@ -69,6 +70,8 @@ app.use(
     extended: true
   })
 );
+app.use(lusca.xframe('SAMEORIGIN'));
+app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 
 if (!process.env.NODE_ENV === 'development') {
@@ -161,6 +164,20 @@ app.use((req, res, next) => {
 });
 
 /**
+ * CSRF
+ */
+app.use((req, res, next) => {
+  if (
+    req.path === '/api' ||
+    req.path === '/api/v1'
+  ) {
+    // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
+    next();
+  } else {
+    lusca.csrf()(req, res, next);
+  }
+});
+/**
  * Rate Limiter
  */
 const limiter = rateLimit({
@@ -169,12 +186,23 @@ const limiter = rateLimit({
 });
 
 /**
+ * Load middlewares
+ */
+// TODO Add isAlreadyAuth check
+// TODO Add isAccountActivate check
+// TODO Add isVerifyed check
+// TODO Add vaildation for the input
+
+/**
  * Primary app routes.
  */
 const indexRoutes = require('./routes/index');
+const authRoutes = require('./routes/auth');
 // const authController = require('./routes/authController');
 
 app.use(indexRoutes);
+app.use(authRoutes);
+
 // app.post(
 //   '/login',
 //   passport.authenticate('local', {
