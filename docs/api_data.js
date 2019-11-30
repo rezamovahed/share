@@ -1,38 +1,48 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "/v1",
+    "url": "/v1/",
     "title": "Shows routes on the api endpoint.",
-    "description": "<p>Shows routes on the api endpoint.</p>",
-    "version": "1.0.0",
-    "name": "Endpoints",
+    "name": "Shows_routes_on_the_api_endpoint_",
+    "group": "Endpoints",
+    "version": "4.0.0",
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "json",
+            "type": "Object",
             "optional": false,
-            "field": "object",
-            "description": "<p>Available routes</p>"
+            "field": "Available",
+            "description": "<p>routes</p>"
           }
         ]
       }
     },
-    "error": {
+    "filename": "src/routes/api/index.js",
+    "groupTitle": "Endpoints"
+  },
+  {
+    "type": "get",
+    "url": "/v1/",
+    "title": "Shows routes on the api endpoint.",
+    "name": "Shows_routes_on_the_api_endpoint_",
+    "group": "Endpoints",
+    "version": "4.0.0",
+    "success": {
       "fields": {
-        "Unauthorized 401": [
+        "Success 200": [
           {
-            "group": "Unauthorized 401",
+            "group": "Success 200",
+            "type": "Object",
             "optional": false,
-            "field": "Unauthorized",
-            "description": "<p>Only authenticated Users can access the data</p>"
+            "field": "Available",
+            "description": "<p>routes</p>"
           }
         ]
       }
     },
     "filename": "src/routes/api/v1/index.js",
-    "group": "_mnt_c_Users_mrdem_Documents_Projects_personal_share_mrdemonwolf_me_src_routes_api_v1_index_js",
-    "groupTitle": "_mnt_c_Users_mrdem_Documents_Projects_personal_share_mrdemonwolf_me_src_routes_api_v1_index_js"
+    "groupTitle": "Endpoints"
   }
 ] });
