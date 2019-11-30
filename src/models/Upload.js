@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-// Schema Setup
 const uploadSchema = new Schema({
   uploader: {
     type: mongoose.Types.ObjectId,
