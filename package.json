@@ -19,7 +19,7 @@
     "dev": "concurrently -n \"App,SCSS\" \"npm run dev-start\" \"npm run scss\"",
     "lint": "eslint . --ext .js --fix",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write",
-    "apidoc": "prettier-eslint 'server/**/*.{js,json}' --write"
+    "apidoc": "apidoc -i ./src/routes/api/v1 -f .js -o ./docs"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/MrDemonWolf/share#readme",
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
+    "apidoc": "^0.18.0",
     "async": "^2.6.3",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
