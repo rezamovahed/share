@@ -2,13 +2,18 @@
 4.0.0 (Unrelased _Oct 31, 2019_)
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
 <!-- * You can now upload files via your account on the website. -->
-<!-- *Added API docs markdown -->
+<!-- *Added API docs -->
+<!-- * Switched to sendgrid offical mailer -->
+<!-- * Changed from express-fileupload to multer  -->
+<!-- * Changed from csurf to lusca  -->
+<!-- * Added last password change IP and time. -->
+<!-- * Added last activity time.
+* Added last login time. -->
+<!-- * Added signup IP. -->
+
+* Changed from passport-local-monngoose to coding it my self
 * Integrated Docker both for development and production modes.  Thanks to @exia for adding this.
-* Adding a better way to hannel the emails.  As there is so many templates that are just reused.  So why not make it a export.  For easier reuse.
-* Added last password change IP and time.
-* Added last activity time.
-* Added last login time.
-* Added signup IP.
+* Adding a better way to hannel the emails.  As there is so many templates that are just reused.  For easier reuse.
 * Added Streamer mode.  It will stop leaks for both the user and if they have admin others as well.
 * Added ban and unban users. Comfirm the ban of a user has been added.
 * Added suspend users 24 hours , a week, and even a month. With unsuspend
