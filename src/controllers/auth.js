@@ -12,10 +12,9 @@ const User = require('../models/User');
  * Current User Password
  */
 exports.postSignup = async (req, res) => {
-
-
+  const { username, email, password } = req.body;
+  // User.create
 };
-
 
 /**
  * Login Controler - This verifys the login details then if vaild
