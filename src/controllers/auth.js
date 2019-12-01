@@ -1,9 +1,20 @@
 const User = require('../models/User');
 
 /**
- * Load middlewares
+ * Signup Controler - Take the users email and password to create there account.
+ * Also will send them aa email to verify there email address
+ *
+ * @param username
+ * Current User username
+ * @param email
+ * Current User email
+ * @param password
+ * Current User Password
  */
-// TODO Add isAlreadyAuth check
+exports.postSignup = async (req, res) => {
+
+
+};
 
 
 /**
