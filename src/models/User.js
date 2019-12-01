@@ -20,9 +20,13 @@ const userSchema = new Schema(
       required: true
     },
     newEmail: String,
-    avatar: {
+    password: {
       type: String,
       required: true
+    },
+    avatar: {
+      type: String,
+      default: 'https://www.gravatar.com/avatar'
     },
     emailVerificationToken: String,
     emailVerificationTokenExpire: Date,
