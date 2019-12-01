@@ -169,10 +169,12 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   if (
     req.path === '/api' ||
-    (req.path === '/api/v1' && process.env.NODE_ENV === 'test')
+    req.path === '/api/v1' ||
+    process.env.NODE_ENV === 'test'
   ) {
     // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
-    console.log('CSRF IS DISABLED');
+    // eslint-disable-next-line no-underscore-dangle
+    res.locals._csrf = '';
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -203,7 +205,7 @@ const authController = require('./controllers/auth');
 
 app.use(indexRoutes);
 app.use(authRoutes);
-app.post('/login', authController);
+app.post('/signup', authController.postSignup);
 
 // app.post(
 //   '/login',
