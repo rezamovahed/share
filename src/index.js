@@ -199,10 +199,11 @@ const limiter = rateLimit({
  */
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
-// const authController = require('./routes/authController');
+const authController = require('./controllers/auth');
 
 app.use(indexRoutes);
 app.use(authRoutes);
+app.post('/login', authController);
 
 // app.post(
 //   '/login',

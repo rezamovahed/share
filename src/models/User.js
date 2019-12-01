@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const gravatar = require('gravatar');
 const bcrypt = require('bcrypt');
 
 const { Schema } = mongoose;
@@ -21,7 +22,7 @@ const userSchema = new Schema(
     newEmail: String,
     avatar: {
       type: String,
-      default: ''
+      required: true
     },
     emailVerificationToken: String,
     emailVerificationTokenExpire: Date,
@@ -58,7 +59,7 @@ userSchema.pre('save', function save(next) {
   if (!user.isModified('password')) {
     return next();
   }
-  bcrypt.genSalt(10, (err, salt) => {
+  bcrypt.genSalt(12, (err, salt) => {
     if (err) {
       return next(err);
     }
@@ -78,10 +79,19 @@ userSchema.pre('save', function save(next) {
  */
 userSchema.pre('save', function save(next) {
   const user = this;
-  if (!user.isModified('password')) {
+  if (!user.isModified('email')) {
     return next();
   }
-  user.password = 'tj';
+
+  user.avatar = gravatar.url(
+    user.email,
+    {
+      s: '100',
+      r: 'x',
+      d: 'retro'
+    },
+    true
+  );
   next();
 });
 
