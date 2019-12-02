@@ -14,6 +14,21 @@ describe('GET /login', () => {
       });
   });
 });
+// describe('POST /login', () => {
+//   it('it should has status code 200', done => {
+//     supertest(app)
+//       .post('/login')
+//       .send({
+//         email: 'demonwolf@demonwolfdev.com',
+//         password: 'demonwolf@demonwolfdev.com'
+//       })
+//       .expect(200)
+//       .end((err, res) => {
+//         if (err) done(err);
+//         done();
+//       });
+//   });
+// });
 
 describe('GET /signup', () => {
   it('it should has status code 200', done => {
@@ -27,14 +42,14 @@ describe('GET /signup', () => {
   });
 });
 
-describe('POST /signup', () => {
-  it('it should has status code 200', done => {
-    supertest(app)
-      .post('/signup')
-      .expect(200)
-      .end((err, res) => {
-        if (err) done(err);
-        done();
-      });
-  });
-});
+// describe('POST /signup', () => {
+//   it('it should has status code 200', done => {
+//     supertest(app)
+//       .post('/signup')
+//       .expect(200)
+//       .end((err, res) => {
+//         if (err) done(err);
+//         done();
+//       });
+//   });
+// });
