@@ -17,4 +17,8 @@ module.exports = function validateLoginInput(data) {
   if (!Validator.isEmail(data.email)) {
     errors.email = 'Email is invaild.  Example (example@example.com)';
   }
+  return {
+    errors,
+    isValid: isEmpty(errors)
+  };
 };

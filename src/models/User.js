@@ -102,12 +102,12 @@ userSchema.pre('save', function save(next) {
 /**
  * Helper method for validating user's password.
  */
-userSchema.methods.comparePassword = function comparePassword(
-  candidatePassword,
-  cb
-) {
+userSchema.methods.verifyPassword = function verifyPassword(candidatePassword) {
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    cb(err, isMatch);
+    if (err || !isMatch) {
+      return false;
+    }
+    return true;
   });
 };
 

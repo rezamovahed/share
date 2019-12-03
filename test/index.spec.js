@@ -1,9 +1,8 @@
 /* eslint-disable no-undef */
 const supertest = require('supertest');
-const superagent = require('superagent');
 // const assert = require('assert');
-const app = require('../src/index');
 
+const app = require('../src/index');
 
 describe('GET /', () => {
   it('it should has status code 200', done => {
@@ -21,4 +20,3 @@ describe('GET /', () => {
       });
   });
 });
-
