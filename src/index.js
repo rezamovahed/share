@@ -36,8 +36,7 @@ mongoose.set('useCreateIndex', true);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect(process.env.DATABASE_URI, {
-  useNewUrlParser: true,
-  autoReconnect: true
+  useNewUrlParser: true
 });
 const db = mongoose.connection;
 
@@ -99,10 +98,7 @@ let sess = {
     httpOnly: true
   }, // Two weeks in milliseconds
   name: 'sessionId',
-  store: new MongoStore({
-    url: process.env.DATABASE_URI,
-    autoReconnect: true
-  })
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
 };
 app.use(session(sess));
 
