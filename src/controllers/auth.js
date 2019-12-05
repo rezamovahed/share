@@ -9,6 +9,7 @@ const User = require('../models/User');
 /**
  * Load input validators.
  */
+// const validateSingupInput
 
 // eslint-disable-next-line operator-linebreak
 const alphabet =
