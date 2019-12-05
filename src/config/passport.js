@@ -25,7 +25,6 @@ module.exports = passport => {
         if (!isValid) {
           // TODO Add return errors function here to return the errors to the front-end in ejs
         }
-        console.log(email, password);
         User.findOne({ email }, async (err, user) => {
           if (err) {
             return done(err);

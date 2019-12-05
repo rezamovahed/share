@@ -10,7 +10,7 @@
 <!-- * Added last activity time.
 * Added last login time. -->
 <!-- * Added signup IP. -->
-
+<!-- Changed the routes a little bit.  /me is now / and account is /account -->
 * Changed from passport-local-monngoose to coding it my self
 * Integrated Docker both for development and production modes.  Thanks to @exia for adding this.
 * Adding a better way to hannel the emails.  As there is so many templates that are just reused.  For easier reuse.
