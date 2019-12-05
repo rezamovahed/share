@@ -143,13 +143,11 @@ app.use((req, res, next) => {
   res.locals.currentPath = req.path;
   // Custom ENV
   res.locals.siteTitle = process.env.TITLE;
-  // eslint-disable-next-line no-unneeded-ternary
-  res.locals.credit = process.env.CREDIT === 'true' ? true : false;
+  res.locals.credit = process.env.CREDIT === 'true';
   res.locals.footerTitle = process.env.FOOTER_TITLE;
   res.locals.siteDesc = process.env.DESC;
   res.locals.sitePowered = `Uploader Powered by ${process.env.TITLE}`;
-  // eslint-disable-next-line no-unneeded-ternary
-  res.locals.signups = process.env.SIGNUPS === 'true' ? true : false;
+  res.locals.signups = process.env.SIGNUPS === 'true';
   // Pass flash to locals
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
@@ -197,10 +195,12 @@ const limiter = rateLimit({
  */
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const accountRoutes = require('./routes/account');
 const authController = require('./controllers/auth');
 
 app.use(indexRoutes);
 app.use(authRoutes);
+app.use('/account', accountRoutes);
 app.post('/signup', authController.postSignup);
 
 app.post(
