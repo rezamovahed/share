@@ -207,14 +207,28 @@ app.use(indexRoutes);
 app.use(authRoutes);
 app.post('/signup', authController.postSignup);
 
+app.post(
+  '/login',
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  (req, res) => {
+    req.flash('error', ['hello world']);
+    res.redirect('/');
+  }
+);
 // app.post(
 //   '/login',
 //   passport.authenticate('local', {
 //     failureRedirect: '/login',
 //     failureFlash: true
 //   }),
-//   authController
+//   (req, res) => {
+//     res.redirect('/');
+//   }
+//   // authController
 // );
+app.get('/admin', (req, res) => {
+  res.send('hello world');
+});
 
 /**
  * API routes.
