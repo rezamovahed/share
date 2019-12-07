@@ -10,13 +10,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Frameworks -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script type="text/javascript" src="/assets/vender/jquery/js/jquery.min.js"></script>
   <!-- Font Awsome-->
   <link rel="stylesheet" type="text/css" href="/assets/vender/font-awesome/css/all.min.css">
   <!--Bootstrap -->
   <link rel="stylesheet" type="text/css" href="/assets/vender/bootstrap/css/bootstrap.min.css">
   <!-- Custom -->
   <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+
+  <!-- Site meta data -->
+  <meta name="og:site_name" content="<%= siteTitle %>" />
+  <meta name="twitter:title" content="<%= siteTitle %>" />
+  <meta name="twitter:description" content="<%= siteDesc %>" />
+  <meta name="description" content="<%= siteDesc %>">
+  <meta property="og:description" content="<%= siteDesc %>" />
+  <meta name="theme-color" content="#0084da">
+  <meta content="<%= siteURL + currentPath %>" property="og:url" />
 </head>
 
 <body class="auth mb-0">
@@ -36,17 +46,18 @@
     <form action="/login" method="POST" novalidate>
       <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
       <div class="form-group">
-        <label for="email">Email</label>
-        <input name="email" type="email" class="form-control <% if(errors){ %>is-invalid <% } %>"
-          id="email" placeholder="Enter email">
+        <input name="email" type="email" class="form-control <% if(errors){ %>is-invalid <% } %>" id="email"
+          placeholder="Your email">
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input name="password" type="password"
-          class="form-control <% if(errors){ %>is-invalid <% } %>" id="password"
-          placeholder="Password">
+        <input name="password" type="password" class="form-control <% if(errors){ %>is-invalid <% } %>" id="password"
+          placeholder="Your password">
       </div>
-      <button type="submit" class="btn btn-login btn-primary btn-block">login</button>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Remember me</label>
+      </div>
+      <button type="submit" class="btn btn-auth btn-primary btn-block">login</button>
     </form>
     <div class="info">
       <a href="/user/forgot">
@@ -61,11 +72,10 @@
     </div>
   </div>
 </body>
-<!-- Loadidng JS -->
+
 <!-- Bootstrap Javascript -->
 <script type="text/javascript" src="/assets/vender/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Custom -->
 <script type="text/javascript" src="/assets/js/main.js"></script>
 
 </html>
-
