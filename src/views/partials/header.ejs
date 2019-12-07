@@ -9,6 +9,15 @@
   <title>
     <%= pageTitle %> | <%= siteTitle %>
   </title>
+  <!-- Site meta data -->
+  <meta name="og:site_name" content="<%= siteTitle %>" />
+  <meta name="twitter:title" content="<%= siteTitle %>" />
+  <meta name="twitter:description" content="<%= siteDesc %>" />
+  <meta name="description" content="<%= siteDesc %>">
+  <meta property="og:description" content="<%= siteDesc %>" />
+  <meta name="theme-color" content="#0084da">
+  <meta content="<%= siteURL + currentPath %>" property="og:url" />
+
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script type="text/javascript" src="/assets/vender/jquery/js/jquery.min.js"></script>
   <!-- Moment -->

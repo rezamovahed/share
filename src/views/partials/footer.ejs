@@ -1,17 +1,26 @@
 <!-- Footer -->
 <footer>
   <!-- Footer copyright with auto update year. -->
-  <div class="container text-center">
-    <p> Copyright ©
-      <%= currentYear %>
-      <strong>
-        <%= footerTitle %>
-      </strong>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <p> Copyright ©
+          <%= currentYear %>
+          <strong>
+            <%= footerTitle %>
+          </strong>
           <% if(credit) { %>
-          | Source Code <a href="https://github.com/MrDemonWolf/share/" target="_blank" rel="nofollow"><i class="fab fa-github"
-              aria-hidden="true"></i></a>
+            <span class="display-hidden">
+          - Github Repo <a href="https://github.com/MrDemonWolf/share/" target="_blank" rel="nofollow"><i
+              class="fab fa-github" aria-hidden="true"></i></a></span>
           <% } %>
-    </p>
+        </p>
+      </div>
+      <div class="col-md-6 display-hidden">
+        <span><p class="mt-0 pt-0 text-muted">Version <%= version %></p></span>
+      </div>
+    </div>
+  </div>
 </footer>
 </body>
 <!-- Loadidng JS -->

@@ -10,7 +10,6 @@ footer {
     p {
         font-size: 1.15em;
         color: $footer-color;
-        padding: 10px 0;
         margin-bottom: 0;
 
         a {
@@ -22,6 +21,9 @@ footer {
             color: lighten($footer-color_link, 15%);
             text-decoration: none;
         }
+        &.text-muted {
+          font-size: 0.75em;
+        }
     }
 }
 
@@ -31,7 +33,7 @@ footer {
             text-align: center;
         }
 
-        p span {
+        .display-hidden{
             display: none;
         }
     }
