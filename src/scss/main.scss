@@ -20,11 +20,13 @@
 
 // 5. Components
 @import "components/gallery";
-@import "components/auth";
 @import "components/tableList";
 @import "components/cards";
+@import "components/notloggedin";
 
 // 6. Page-specific styles
-@import "pages/me";
+@import "pages/account";
 @import "pages/admin";
 @import "pages/view";
+@import "pages/auth";
+

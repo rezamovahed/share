@@ -11,8 +11,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.render('account/index', {
     pageTitle: 'My Account',
-    pageDesc:
-      'Advanced uploader with web front-end for images,files,and text. Built with ShareX in mind. Licensed under MIT and is free to use.'
+    pageDesc: process.env.DESC
   });
 });
 

@@ -74,3 +74,12 @@ exports.postLogin = async (req, res) => {
   req.flash('success', `Welcome back, ${req.user.username}`);
   res.redirect('/me');
 };
+
+/**
+ * Logout Controler - If the user is loggin this will logged
+ * them out and remove there session from there browser.
+ */
+exports.getLogout = async (req, res) => {
+  req.logout();
+  res.redirect('/');
+};
