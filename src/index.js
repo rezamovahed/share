@@ -148,6 +148,7 @@ app.use((req, res, next) => {
   res.locals.siteURL = process.env.FULL_DOMAIN;
   res.locals.footerTitle = process.env.FOOTER_TITLE;
   res.locals.credit = process.env.CREDIT === 'true';
+  res.locals.showVersion = process.env.SHOW_VERSION === 'true';
   res.locals.signups = process.env.SIGNUPS === 'true';
   res.locals.version = process.env.npm_package_version;
   // Pass flash to locals
