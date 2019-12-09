@@ -72,7 +72,7 @@ exports.postSignup = async (req, res) => {
  */
 exports.postLogin = async (req, res) => {
   req.flash('success', `Welcome back, ${req.user.username}`);
-  res.redirect('/me');
+  res.redirect('/');
 };
 
 /**
