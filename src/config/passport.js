@@ -1,7 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 
 /**
- * Load User model
+ * Load MongoDB models.
  */
 const User = require('../models/User');
 

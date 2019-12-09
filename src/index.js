@@ -201,6 +201,7 @@ const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const accountRoutes = require('./routes/account');
 const authController = require('./controllers/auth');
+const userController = require('./controllers/user');
 
 app.use(indexRoutes);
 app.use(authRoutes);
@@ -212,7 +213,7 @@ app.post(
   '/login',
   passport.authenticate('local', { failureRedirect: '/login' }),
   (req, res) => {
-    req.flash('error', ['hello world']);
+    req.flash('success', `Welcome back ${req.user.username}`);
     res.redirect('/');
   }
 );

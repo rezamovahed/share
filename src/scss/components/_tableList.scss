@@ -3,6 +3,13 @@
 // -----------------------------------------------------------------------------
 .customTable {
   .table-wrapper {
+    .table-title {
+      .btn-danger {
+        float: right;
+      }
+    }
+  }
+  .table-wrapper {
     background: #fff;
     padding: 15px 15px 0px;
     margin: 30px 0;
@@ -270,5 +277,22 @@
     float: left;
     margin-top: 10px;
     font-size: 13px;
+  }
+}
+@media (max-width: 991px) {
+  .customTable {
+    .table-wrapper {
+      .table-title {
+        h2 {
+          text-align: center;
+        }
+        .btn-danger {
+          margin-top: 1em;
+          float: none;
+          text-align: center;
+          width: 100%;
+        }
+      }
+    }
   }
 }
