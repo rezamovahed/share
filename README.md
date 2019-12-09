@@ -1,10 +1,8 @@
-[![GitHub license](https://img.shields.io/github/license/mrdemonwolf/share.svg?style=for-the-badge&logo=github)](/LICENSE)
 ![GitHub release](https://img.shields.io/github/release/mrdemonwolf/share-mrdemonwolf-me.svg?style=for-the-badge)
-![Code Size](https://img.shields.io/github/languages/code-size/MrDemonWolf/share?style=for-the-badge&logo=docusign)
-[![GitHub last commit](https://img.shields.io/github/last-commit/NikhilNamal17/popular-movie-quotes.svg?logo=git&style=for-the-badge)](https://github.com/NikhilNamal17/popular-movie-quotes) [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg?logo=npm&style=for-the-badge)](https://github.com/NikhilNamal17/NikhilNamal17)
+[![GitHub last commit](https://img.shields.io/github/last-commit/mrdemonwolf/share.svg?logo=git&style=for-the-badge)](https://github.com/mrdemonwolf/popular-movie-quotes) [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg?logo=npm&style=for-the-badge)](https://github.com/mrdemonnwolf/share)
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=for-the-badge&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 
-**Advanced uploader with web front-end for images,files,and text. Built with ShareX in mind. Licensed under MIT and is free to use.**
+**Advanced custom uploader with web front-end.  Allows uploads for  images, files, and text. Built with ShareX in mind.**
 
 # Getting started
 
@@ -15,7 +13,9 @@ You can also fork,clone,download from github for pre release builds and developm
 * Clone the repo: `git clone https://github.com/MrDemonWolf/share.git`
 * [Fork, Clone, or Download on GitHub](/)
 
-## Setup
+### Installation
+Before installing, [download and install Node.js](https://nodejs.org/en/download/).
+
 If your a user then please read the setup guide here.
 
 If you want to help out development read this here.
@@ -31,8 +31,15 @@ Have a bug or an issue with this app? [Open a new issue](https://github.com/MrDe
 ## Want to contribute?
 Please check issues [here](https://github.com/NikhilNamal17/popular-movie-quotes/issues)
 
+## Testing
+```bash
+$ npm test
+```
 
 ## License
 ![GitHub license](https://img.shields.io/github/license/MrDemonWolf/share.svg?style=for-the-badge&logo=github)
 
 ## Let's get connected
+[![Twitter Follow](https://img.shields.io/twitter/follow/MrDemonWolf.svg?style=for-the-badge&logo=twitter)](https://twitter.com/MrDemonnWolf)
+[![GitHub followers](https://img.shields.io/github/followers/nathanhenniges.svg?label=Follow&style=for-the-badge&logo=github)](https://github.com/nathanhenniges/)
+[![Instagram](https://img.shields.io/static/v1.svg?label=follow&message=@MrDemonWolf&color=grey&logo=instagram&style=for-the-badge&logoColor=white&colorA=critical)](https://www.instagram.com/MrDemonWolf/)

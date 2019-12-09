@@ -7,7 +7,7 @@ $second-font: "Times New Roman", Times, serif;
 
 // Brand Color
 $brand-color: #091533;
-$brand-color-alt: #00ACED;
+$brand-color-alt: #00aced;
 
 // Footer Text
 $footer-color: #ffffff;
@@ -22,7 +22,7 @@ $nav-colHighlight: $brand-color;
 $nav-dropdown: true;
 
 // Buttons
-$buttonBg : '';
-$buttonTextColor : '';
-$buttonBgHover : '';
-$buttonTextColorHover : '';
+$buttonBg: $brand-color-alt;
+$buttonTextColor: #ffffff;
+$buttonBgHover: #091533;
+$buttonTextColorHover: #ffffff;
