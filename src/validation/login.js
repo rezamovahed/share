@@ -1,24 +1,29 @@
 const Validator = require('validator');
 const isEmpty = require('./isEmpty');
 
-module.exports = function validateLoginInput(data) {
+module.exports = (req, res, next) => {
+  let { email, password } = req.body;
+
   // eslint-disable-next-line prefer-const
   let errors = {};
 
-  data.email = !isEmpty(data.email) ? data.email : '';
-  data.password = !isEmpty(data.password) ? data.password : '';
+  email = !isEmpty(email) ? email : '';
+  password = !isEmpty(password) ? password : '';
 
-  if (!Validator.isEmpty(data.email)) {
+  if (Validator.isEmpty(email)) {
     errors.email = 'Email is required.';
   }
-  if (!Validator.isEmpty(data.email)) {
+  if (Validator.isEmpty(password)) {
     errors.password = 'Password is required.';
   }
-  if (!Validator.isEmail(data.email)) {
+  if (!Validator.isEmpty(email) && !Validator.isEmail(email)) {
     errors.email = 'Email is invaild.  Example (example@example.com)';
   }
-  return {
-    errors,
-    isValid: isEmpty(errors)
-  };
+
+  if (!isEmpty(errors)) {
+    req.flash('error', errors);
+    console.log('vaildation error');
+    return res.redirect('/login');
+  }
+  next();
 };

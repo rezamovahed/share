@@ -59,8 +59,7 @@ const userSchema = new Schema(
  * Password hash middleware.
  */
 userSchema.pre('save', function save(next) {
-  const user = this;
-  if (!user.isModified('password')) {
+  if (!this.isModified('password')) {
     return next();
   }
   bcrypt.genSalt(12, (err, salt) => {
@@ -68,11 +67,11 @@ userSchema.pre('save', function save(next) {
       return next(err);
     }
     // eslint-disable-next-line no-shadow
-    bcrypt.hash(user.password, salt, (err, hash) => {
+    bcrypt.hash(this.password, salt, (err, hash) => {
       if (err) {
         return next(err);
       }
-      user.password = hash;
+      this.password = hash;
       next();
     });
   });
@@ -102,13 +101,14 @@ userSchema.pre('save', function save(next) {
 /**
  * Helper method for validating user's password.
  */
-userSchema.methods.verifyPassword = function verifyPassword(candidatePassword) {
-  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    if (err || !isMatch) {
-      return false;
-    }
-    return true;
-  });
+userSchema.methods.verifyPassword = async function verifyPassword(
+  candidatePassword
+) {
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
+  if (!isMatch) {
+    return false;
+  }
+  return true;
 };
 
 module.exports = mongoose.model('User', userSchema);

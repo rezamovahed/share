@@ -33,25 +33,31 @@
   <div class="form-auth">
     <img class="mx-auto d-block mb-4" src="/assets/images/logo_text.png" width="320">
     <% errors = error && error.length > 0 %>
-    <% if (errors){ %>
+    <% if (error && typeof error[0] === 'string'){ %>
     <div class="alert alert-danger" role="alert">
-      <%- error %>
-    </div>
-    <% } %>
-    <% if (success && success.length > 0){ %>
-    <div class="alert alert-success" role="alert">
-      <%= success %>
+      <%= error %>
     </div>
     <% } %>
     <form action="/login" method="POST" novalidate>
       <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
       <div class="form-group">
-        <input name="email" type="email" class="form-control <% if(errors){ %>is-invalid <% } %>" id="email"
-          placeholder="Your email">
+        <input name="email" type="email" class="form-control <% if(errors && error[0].email){ %>is-invalid <% } %>"
+          id="email" placeholder="Your email">
+        <% if (errors && error[0].email) { %>
+        <small class="invalid-feedback">
+          <%= error[0].email %>
+        </small>
+        <% } %>
       </div>
       <div class="form-group">
-        <input name="password" type="password" class="form-control <% if(errors){ %>is-invalid <% } %>" id="password"
+        <input name="password" type="password"
+          class="form-control <% if(errors && error[0].password){ %>is-invalid <% } %>" id="password"
           placeholder="Your password">
+        <% if (errors && error[0].password) { %>
+        <small class="invalid-feedback">
+          <%= error[0].password %>
+        </small>
+        <% } %>
       </div>
       <div class="form-check">
         <input type="checkbox" class="form-check-input" id="rememberMe">

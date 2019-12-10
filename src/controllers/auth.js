@@ -69,7 +69,7 @@ exports.postSignup = async (req, res) => {
  * @param password
  * Current User Password
  */
-exports.postLogin = async (req, res) => {
+exports.postLogin = (req, res) => {
   req.flash('success', `Welcome back, ${req.user.username}`);
   res.redirect('/');
 };

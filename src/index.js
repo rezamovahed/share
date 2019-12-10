@@ -199,6 +199,11 @@ const adminArea = require('./middleware/isAdmin');
 // TODO Add vaildation for the input
 
 /**
+ * Load vaildation middleware
+ */
+const loginVaildation = require('./validation/login');
+
+/**
  * Primary app routes.
  */
 const indexRoutes = require('./routes/index');
@@ -215,7 +220,11 @@ app.get('/logout', authController.getLogout);
 
 app.post(
   '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  loginVaildation,
+  passport.authenticate('local', {
+    failureFlash: true,
+    failureRedirect: '/login'
+  }),
   (req, res) => {
     req.flash('success', `Welcome back ${req.user.username}`);
     res.redirect('/');
