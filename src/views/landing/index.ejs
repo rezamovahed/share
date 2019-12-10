@@ -1,6 +1,11 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/navbar') %>
 
+<!-- Alerts -->
+<div class="container mt-3 pl-0 pr-0">
+  <%- include ('../partials/alerts/success') %>
+</div>
+
 <!-- If signups are disabled and no user logged inn the  display -->
 <% if (!signups &&  !currentUser) { %>
 <%- include ('./partials/signupsDisabled.ejs') %>
@@ -11,5 +16,6 @@
 <% } else { %>
 <%- include ('./partials/notloggedin.ejs') %>
 <% } %>
+
 
 <%- include ('../partials/footer.ejs') %>

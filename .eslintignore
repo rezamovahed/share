@@ -3,6 +3,6 @@ node_modules
 bower_components
 
 # Docs
-src/public/docs
-src/public/lib
-src/public/js
+docs
+src/public/assets/vender
+src/public/assets/js

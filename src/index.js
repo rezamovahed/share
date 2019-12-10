@@ -150,7 +150,11 @@ app.use((req, res, next) => {
   res.locals.credit = process.env.CREDIT === 'true';
   res.locals.showVersion = process.env.SHOW_VERSION === 'true';
   res.locals.signups = process.env.SIGNUPS === 'true';
-  res.locals.version = process.env.npm_package_version;
+  res.locals.signupTerms = process.env.SIGNUP_TERMS === 'true';
+  res.locals.version =
+    process.env.NODE_ENV !== 'development' || process.env.NODE_ENV !== 'test'
+      ? `${process.env.npm_package_version} dev`
+      : process.env.npm_package_version;
   // Pass flash to locals
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
@@ -188,10 +192,16 @@ const limiter = rateLimit({
 /**
  * Load middlewares
  */
-// TODO Add isAlreadyAuth check
-// TODO Add isAccountActivate check
-// TODO Add isVerifyed check
+const isLoggedin = require('./middleware/isLoggedin');
+const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
+const isVerified = require('./middleware/isVerified');
+const adminArea = require('./middleware/isAdmin');
 // TODO Add vaildation for the input
+
+/**
+ * Load vaildation middleware
+ */
+const loginVaildation = require('./validation/login');
 
 /**
  * Primary app routes.
@@ -200,18 +210,23 @@ const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const accountRoutes = require('./routes/account');
 const authController = require('./controllers/auth');
+const userController = require('./controllers/user');
 
 app.use(indexRoutes);
 app.use(authRoutes);
-app.use('/account', accountRoutes);
+app.use('/account', isLoggedin, accountRoutes);
 app.post('/signup', authController.postSignup);
 app.get('/logout', authController.getLogout);
 
 app.post(
   '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  loginVaildation,
+  passport.authenticate('local', {
+    failureFlash: true,
+    failureRedirect: '/login'
+  }),
   (req, res) => {
-    req.flash('error', ['hello world']);
+    req.flash('success', `Welcome back ${req.user.username}`);
     res.redirect('/');
   }
 );
@@ -226,7 +241,7 @@ app.post(
 //   }
 //   // authController
 // );
-app.get('/admin', (req, res) => {
+app.get('/admin', adminArea, (req, res) => {
   res.send('hello world');
 });
 

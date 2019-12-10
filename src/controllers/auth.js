@@ -1,6 +1,10 @@
 const generate = require('nanoid/generate');
 const slugify = require('slugify');
 
+// eslint-disable-next-line operator-linebreak
+const alphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
 /**
  * Load MongoDB models.
  */
@@ -10,11 +14,6 @@ const User = require('../models/User');
  * Load input validators.
  */
 // const validateSingupInput
-
-// eslint-disable-next-line operator-linebreak
-const alphabet =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
 
 /**
  * Signup Controler - Take the users email and password to create there account.
@@ -70,7 +69,7 @@ exports.postSignup = async (req, res) => {
  * @param password
  * Current User Password
  */
-exports.postLogin = async (req, res) => {
+exports.postLogin = (req, res) => {
   req.flash('success', `Welcome back, ${req.user.username}`);
   res.redirect('/');
 };
