@@ -169,8 +169,9 @@ app.use((req, res, next) => {
  */
 app.use((req, res, next) => {
   if (
+    // req.path === '/api/v1' ||
     req.path === '/api' ||
-    req.path === '/api/v1' ||
+    RegExp('/api/.*').test(req.path) ||
     process.env.NODE_ENV === 'test'
   ) {
     // Multer multipart/form-data handling needs to occur before the Lusca CSRF check.
@@ -185,8 +186,8 @@ app.use((req, res, next) => {
  * Rate Limiter
  */
 const limiter = rateLimit({
-  windowMs: 1000 * 60 * 15, // 15 minutes
-  max: 50 // Max of 50 requests
+  windowMs: 1000 * 60, // 1 minutes
+  max: 15 // Max of 15 requests
 });
 
 /**
@@ -208,6 +209,7 @@ const loginVaildation = require('./validation/login');
  */
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const apiRoutes = require('./routes/api/v1/index');
 const accountRoutes = require('./routes/account');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
@@ -244,6 +246,8 @@ app.post(
 app.get('/admin', adminArea, (req, res) => {
   res.send('hello world');
 });
+
+app.use('/api', apiRoutes);
 
 /**
  * API routes.
