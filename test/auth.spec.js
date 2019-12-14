@@ -26,35 +26,35 @@ describe('GET /signup', () => {
   });
 });
 
-describe('POST /signup', () => {
-  it('it should has status code 200', done => {
-    supertest(app)
-      .post('/signup')
-      .send({
-        username: 'testing',
-        email: 'test@example.com',
-        password: 'test@example.com'
-      })
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .expect(200)
-      .end((err, res) => {
-        done();
-      });
-  });
-});
+// describe('POST /signup', () => {
+//   it('it should has status code 200', done => {
+//     supertest(app)
+//       .post('/signup')
+//       .send({
+//         username: 'testing',
+//         email: 'test@example.com',
+//         password: 'test@example.com'
+//       })
+//       .set('Content-Type', 'application/x-www-form-urlencoded')
+//       .expect(200)
+//       .end((err, res) => {
+//         done();
+//       });
+//   });
+// });
 
-describe('POST /login', () => {
-  it('it should has status code 200', done => {
-    agent
-      .post('/login')
-      .send({ email: 'test@example.com', password: 'test@example.com' })
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .expect(302)
-      .expect('Location', '/')
-      .expect('set-cookie', /sessionId/)
-      .end((err, res) => {
-        if (err) return done(err);
-        done();
-      });
-  });
-});
+// describe('POST /login', () => {
+//   it('it should has status code 200', done => {
+//     agent
+//       .post('/login')
+//       .send({ email: 'test@example.com', password: 'test@example.com' })
+//       .set('Content-Type', 'application/x-www-form-urlencoded')
+//       .expect(302)
+//       .expect('Location', '/')
+//       .expect('set-cookie', /sessionId/)
+//       .end((err, res) => {
+//         if (err) return done(err);
+//         done();
+//       });
+//   });
+// });
