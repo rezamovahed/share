@@ -11,23 +11,23 @@ services:
     depends_on:
       - mongodb
     networks:
-      - sharex
+      - share
     ports:
       - 8080:8080
   mongodb:
     image: mongo:latest
     restart: always
     volumes:
-      - mongodb-data:/data/db
+      - share-mongodb-data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: secret
     networks:
-      - sharex
+      - share
 
 networks:
-  sharex:
-    name: sharex
+  share:
+    name: share
 
 volumes:
-  mongodb-data:
+  share-mongodb-data:
