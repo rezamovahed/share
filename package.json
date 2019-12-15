@@ -20,7 +20,8 @@
     "lint": "eslint . --ext .js --fix",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write",
     "apidoc": "apidoc -i ./src/routes/api -f .js -o ./docs",
-    "test": "NODE_ENV=test mocha --exit"
+    "test": "NODE_ENV=test mocha --exit",
+    "travis": "NODE_ENV=test DATABASE_URI=$DATABASE_URI TITLE=TITLE FULL_DOMAIN=$FULL_DOMAIN FOOTER_TITLE=$FOOTER_TITLE DESC=$DESC FILE_CHECK=$FILE_CHECK CREDIT=$CREDIT SHOW_VERSION=$SHOW_VERSION SIGNUPS=$SIGNUPS SIGNUP_TERMS=$SIGNUP_TERMSmocha --exit"
   },
   "repository": {
     "type": "git",
