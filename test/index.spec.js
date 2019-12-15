@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 const supertest = require('supertest');
 // const assert = require('assert');
-console.log(process.env);
 
 const app = require('../src/index');
 
