@@ -20,17 +20,17 @@ env:
   - SIGNUPS=true
   - SIGNUP_TERMS=true
 
-# before_install:
-  # -  echo $DATABASE_URI > ./.env
-  # -  echo $SESSION_SECRET >> ./.env
-  # -  echo $API_SECRET >> ./.env
-  # -  echo $TITLE >> ./.env
-  # -  echo $FOOTER_TITLE >> ./.env
-  # -  echo $FILE_CHECK >> ./.env
-  # -  echo $CREDIT >> ./.env
-  # -  echo $SHOW_VERSION >> ./.env
-  # -  echo $SIGNUPS >> ./.env
-  # -  echo $SIGNUP_TERMS >> ./.env
+before_install:
+  -  echo $DATABASE_URI > ./.env
+  -  echo $SESSION_SECRET >> ./.env
+  -  echo $API_SECRET >> ./.env
+  -  echo $TITLE >> ./.env
+  -  echo $FOOTER_TITLE >> ./.env
+  -  echo $FILE_CHECK >> ./.env
+  -  echo $CREDIT >> ./.env
+  -  echo $SHOW_VERSION >> ./.env
+  -  echo $SIGNUPS >> ./.env
+  -  echo $SIGNUP_TERMS >> ./.env
 
 after_script:
   - rm ./.env
