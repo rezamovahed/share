@@ -23,9 +23,6 @@ const User = require('./models/User');
  */
 require('dotenv').config();
 
-// REMOVE
-console.log(process.env);
-
 /**
  * Created Express server.
  */

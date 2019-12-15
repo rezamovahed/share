@@ -1,8 +1,25 @@
 notifications:
   email: false
-language: node_js
+
+services: mongodb
+
 node_js:
 - 12
+env:
+  global:
+  # - secure: ICzKIF7scLPupsSWWs3OssYTwhqXqL4FlgNA5ThYCnH3zzO3hQ3GCkglhNGhhz7nLkRIC1A8naTBvmI43lvyJtULl73gDYdIACmB5XBB3DR0h9uED9IT1KAtH8cRgEvn+6PG6cwYzSTtyzQfOP2pHZWMT9822PuE2oLNqhkYG2kcG1NIUeSYS3b2tGk3cexesHbYlAtLtuH+ALnUXeu0PCPWhhKDoV/UgS4B7KOfHEHe2rG4EE5C9hXP4jJm9S+8662q3W3Jyri9V02lsSkBVtOJl8AHOO1J9eZs7o2BMi0mKCst9uowf+vJTxsVYAp4PVQohOqLgApjbS6Ao67w2Ly4phHX3AsZDds2qI1RrIvcoTvYLiPZrtxo/vNNGqBpW6MbIpcNl3jZCcEzqyX0ZzGpfrsxgJL/7HfrwYy4dFwC1zv9IejTgKYCd2XihIyPmw5U4xo0iG0izxazvtsMsHw3CuV8kbIFuNlwZMbx9TjYAh0LTHxEvG8u27r7r1N8hrG4+eHXAVBVVt2UQ+/U2Xwm/GMIcgboCrhgT68/YicyV+GIkQUTiZQfdxDoylT19lCWhjc58w8cxZCmxGJMbGKPntf/tKnPb7ulCiEkhoX89GSfwSlJ0iX/Gfb206cFxanBuL+BisfiJT0dkQAy1nLzQQ5Wjr2hXmSy/nzPZ/o=
+  - DATABASE_URI=mongodb://localhost:27017/share
+  - SESSION_SECRET=thisistesting
+  - API_SECRET=thisistesting
+  - TITLE=Share
+  - FOOTER_TITLE=MrDemonWolf
+  - DESC="Advanced uploader with web front-end for images,files,and text. Built with
+    ShareX in mind. Licensed under MIT and is free to use."
+  - FILE_CHECK=true
+  - CREDIT=true
+  - SHOW_VERSION=true
+  - SIGNUPS=true
+  - SIGNUP_TERMS=true
 before_install:
 - echo "DATABASE_URI=$DATABASE_URI" > ./.env
 - echo "SESSION_SECRET=$SESSION_SECRET" >> ./.env
@@ -20,16 +37,3 @@ install:
 - npm install
 script:
 - npm run test
-env:
-  global:
-    secure: Xr6KF79OJ5PpzNQLXJAaD0FYZWPoFbuJFHLBl9kWBNv9J5JYowumWJ7UBiejkupDOPDw6phJQllzMRobp9uq90QGgqxVC5nGmvCSz640CGGSkSw6LakrCC2pnmmQAVBuZhDEgOUxiBIHOb0rW4XnbEi7fSSsdgzVulUMyhhqQk2UTO8ShI3Mx2+H8qu2R8EtGZMz4RFVjnvlPGOLDOmfQFy6+XVuprqY6uQtDU4PD1gNKDos9eTByAVyHYAHpDV1E0sKyye5yV6pkO088IaLBHN7KKSUwihPs5Hc6ydnf9H5UyGi6vmaAkmd7Gj3YVisZXND7CEvjaiqTplO/R+Hfjdpmj22vUedgNz8ZqCFVci9zb4FXviKnEmOKIKyj8Pu1IWPw43Qdp3LnGu4y3+q+evzZFECEIeXszaxjobYs7sdsTKICc5a+bYp2yoV7KjxJM8siM7R3SRaCGq5lo6TpCNT6TMfz91uiAQwMu0LKvq2R0b1GFBbyB1yZ4UoFGAQyw6hnkEm4jv4LzinlnHWv/X3q5unxf+hb1erSbRyujjX8JOiv8EKGHPyukZFkNxK/DxeNVZeU4DcDJpKXPrBsCG3CjP8XgIPjUYjV/E0hQNqMRbfQDOtwc4E6t+D+qyn11eFTL7yKhCmOfH8EjAD1QBZkfbd2n/YgDd1MPy2LSo=
-    - SESSION_SECRET=thisistesting
-    - API_SECRET=thisistesting
-    - TITLE=Share
-    - FOOTER_TITLE=MrDemonWolf
-    - DESC="Advanced uploader with web front-end for images,files,and text. Built with ShareX in mind. Licensed under MIT and is free to use."
-    - FILE_CHECK=true
-    - CREDIT=true
-    - SHOW_VERSION=true
-    - SIGNUPS=true
-    - SIGNUP_TERMS=true
