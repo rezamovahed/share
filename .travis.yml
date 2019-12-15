@@ -1,25 +1,22 @@
 notifications:
   email: false
-
 language: node_js
-
 node_js:
 - 12
-
 env:
   global:
-    - secure: Xr6KF79OJ5PpzNQLXJAaD0FYZWPoFbuJFHLBl9kWBNv9J5JYowumWJ7UBiejkupDOPDw6phJQllzMRobp9uq90QGgqxVC5nGmvCSz640CGGSkSw6LakrCC2pnmmQAVBuZhDEgOUxiBIHOb0rW4XnbEi7fSSsdgzVulUMyhhqQk2UTO8ShI3Mx2+H8qu2R8EtGZMz4RFVjnvlPGOLDOmfQFy6+XVuprqY6uQtDU4PD1gNKDos9eTByAVyHYAHpDV1E0sKyye5yV6pkO088IaLBHN7KKSUwihPs5Hc6ydnf9H5UyGi6vmaAkmd7Gj3YVisZXND7CEvjaiqTplO/R+Hfjdpmj22vUedgNz8ZqCFVci9zb4FXviKnEmOKIKyj8Pu1IWPw43Qdp3LnGu4y3+q+evzZFECEIeXszaxjobYs7sdsTKICc5a+bYp2yoV7KjxJM8siM7R3SRaCGq5lo6TpCNT6TMfz91uiAQwMu0LKvq2R0b1GFBbyB1yZ4UoFGAQyw6hnkEm4jv4LzinlnHWv/X3q5unxf+hb1erSbRyujjX8JOiv8EKGHPyukZFkNxK/DxeNVZeU4DcDJpKXPrBsCG3CjP8XgIPjUYjV/E0hQNqMRbfQDOtwc4E6t+D+qyn11eFTL7yKhCmOfH8EjAD1QBZkfbd2n/YgDd1MPy2LSo=
-    - SESSION_SECRET=thisistesting
-    - API_SECRET=thisistesting
-    - TITLE=Share
-    - FOOTER_TITLE=MrDemonWolf
-    - DESC="Advanced uploader with web front-end for images,files,and text. Built with ShareX in mind. Licensed under MIT and is free to use."
-    - FILE_CHECK=true
-    - CREDIT=true
-    - SHOW_VERSION=true
-    - SIGNUPS=true
-    - SIGNUP_TERMS=true
-
+  - secure: 6QL2VCzhYpHXXxDKeIbXgnIjHlo0MtWCyBgdRxeaChxBpUGBFxLwKmj3br7HDgpkDK/SvrjFmrqqyeG/n5ZVQHQjMb4JbuSWfV+bvE1LLJJvUPgcvleeb7ABBHmtQ1IKEYf9oohO6tDpFqDACKd8z3B4+DelmP01JmHhO7wYlYIam2Djr1VYeh58WtbjzFsJPR3hywie/Shl1b+N7a30gOmjBdldxnO77K96niy2beI5Eiqk0Frr6fLW6MsHe2YGWTUaXPoH5Vpi/85VAfVHFw64IjN9RjNw2T0wDSQIBmxudjfqmY43eyMl9ifGjs9eHoG9hiJ3cAF0bPfQBY7YcyNZi6CLLqpIPSNEQ54kHo4znroDL+cNcCHDM20Eh2kAbihgMTifwb2Q+K/1SGaJnkQp+dRRBzrJ6eZUyL1cLdCAAbX+H2VCT8GBNHrUU21Lzvxc8kTDyLmkRdXhOx0bI8Ctjraz2jUAujORXrw5P3tK0VpmFaz5a1AkrpWxFenJ1orxqe9oe7LsupRm3sCUWquPE7MraO8uodSrvEsa/LMY+nD8uksV+HPoCjTXAh0CpUl5L1LjahLQkMTRKIK3JAqz9zehbvGvSwm48IgNLxoLFjKa+a4HzOm+N4CvNoSVhB4HHoNOOgjQvH54GR1Lv0nRimc1tpgQD6UwCGWioq0=
+  - SESSION_SECRET=thisistesting
+  - API_SECRET=thisistesting
+  - TITLE=Share
+  - FOOTER_TITLE=MrDemonWolf
+  - DESC="Advanced uploader with web front-end for images,files,and text. Built with
+    ShareX in mind. Licensed under MIT and is free to use."
+  - FILE_CHECK=true
+  - CREDIT=true
+  - SHOW_VERSION=true
+  - SIGNUPS=true
+  - SIGNUP_TERMS=true
 before_install:
 - echo "DATABASE_URI=$DATABASE_URI" > ./.env
 - echo "SESSION_SECRET=$SESSION_SECRET" >> ./.env
@@ -31,7 +28,6 @@ before_install:
 - echo "SHOW_VERSION=$SHOW_VERSION" >> ./.env
 - echo "SIGNUPS=$SIGNUPS" >> ./.env
 - echo "SIGNUP_TERMS=$SIGNUP_TERMS" >> ./.env
-
 after_script:
 - rm ./.env
 install:
