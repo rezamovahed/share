@@ -1,22 +1,21 @@
 language: node_js
 node_js:
-- node
-- lts/*
+- 12
 env:
-  - "SESSION_SECRET=thisistesting"
-  - "API_SECRET=thisistesting"
-  - "TITLE=Share"
-  - "FOOTER_TITLE=MrDemonWolf"
-  - "DESC=Advanced uploader with web front-end for images,files,and text. Built with"
-    "ShareX in mind. Licensed under MIT and is free to use."
-  - "FILE_CHECK=true"
-  - "CREDIT=true"
-  - "SHOW_VERSION=true"
-  - "SIGNUPS=true"
-  - "SIGNUP_TERMS=true"
   global:
-    secure: L3ha9a56Obj6w1QVR21/SobvpODALj7cCThRC/4RcByHY+gcxtyRpcCU+TxMb73QbYlRkWXKCf8CydPCwCX8IDQSvAkmCFlbKnYt08TJYcVhQJlm9uP6aOHYDPohfnEUna3+9qQxc4ArtHUBxuWa9kbu1h4pa9ide0HtUy4nauxllIrn5q1JWWTHwaGcURC4JnB13E1G1YQhtrzvml8fp/QU2Wc6xeYZLude3ay/ErbrNXtETL+Y51sWyVKzVBVffrK3v8pnhyB4rq94PypmEIrNKiZBUcWo9EhPVfrBipPHOZV2L4xHUms9zrIGPAkCUcn29Aj3sgyZETjgvFZ0vz6fWBpjPn4m5D3WvYe5Jv4UvgprwOsF8tTnjWUF2Jyn2e49goX/o8iUWTGf3EKLjVK2zz+4AuHNhW1JTDLFOxbuIwS2CQ5rrPUHmJ+8rtm6ZrySo2WbbwLz2m0ZLr5Y2PnPJ0RTBk3tuwILfE7QCZyqfuX1J+wHplhhedYcirKksc19QSngRiqW1Ii7yD8Br3evO+6HGk2vpBSAFaSJDotIsvaPt/JBzYqEZy05AN21/EleazluTBp0aTF3guznuZXKP+EQ3RjXs3pStcmZPi7tKiACGfOSqJtKR5E2e+Np+LQDBEV41qVbn7C5JTTiVB4T3VJhla4LWFkW5hkcthA=
+  - SESSION_SECRET=thisistesting
+  - API_SECRET=thisistesting
+  - TITLE=Share
+  - FOOTER_TITLE=MrDemonWolf
+  - DESC="Advanced uploader with web front-end for images,files,and text. Built with
+    ShareX in mind. Licensed under MIT and is free to use."
+  - FILE_CHECK=true
+  - CREDIT=true
+  - SHOW_VERSION=true
+  - SIGNUPS=true
+  - SIGNUP_TERMS=true
+  - secure: a0n5vSXrw7/JbPt1EAOloBtQhiJZJElircHvJbcg2IWCurnrB7Sv5ND7VbaLZGHeHdIPpJmATQixL/l0jwoy7NnomuUOBA0ZHEC6Ufa9bkErv6ZEhQPEFtfJ9/iFKXZMpsQcacJhfvT3Qqy267P+xsZUaJO8HfYtb/z2JmL31aCLXGgqYxVa+SGX7S4CV5eGJT8wS0ZgjD4D9eTbEb+/pEylKmC4Z/BTwcX1j6VksT7i6x4istNoYnjkjQJjXtDQa8hjKlHAJ8kwDys9URuz4iLTy+uGuROCCwl+h5j7Aw4f91QjFqddYXEoKYXBbhEsPMNHfmFpfIvePkRUEW2nWzW+x5EO0KXpcxYI/iO5a5MO/W/Qxb1bFKAWXbgSjsE7TSj47Mh6gWepfZFMbwWdGSZ35oNXo2A92DaZf7K2niTNjeTTkG7ffx0599hZUiE49epuRYa67yl/Ooduw4Jc+xpJWHD7ck2GViv/dFZcjuUKoPiAK8PgkLQ4/jCQ+JuAFB+cSGtx3sg2A4IWMGt9ChyHL6Ncmp44iW+izueo+ue6cJ6A0bgRlmxzadigYi1KbXsx8n/Fa3RrX3MC0SIlroRZuhGhC6/SsuyFJuTVIV/6P2j2NVq2GCv65SWw1iQtWbmYU3Iw/R0KAdqyq3vf2inBLLRu2OyE+bHwFN1anQU=
 install:
-  - npm install
+- npm install
 script:
-  - npm run test
+- npm run test
