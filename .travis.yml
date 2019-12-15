@@ -1,7 +1,24 @@
 
 language: node_js
 node_js:
-  - "stable"
+  - 'lts/*'
 cache:
   directories:
     - "node_modules"
+env:
+    - SESSION_SECRET=thisistesting
+    - API_SECRET=thisistesting
+    - TITLE=Share
+    - FOOTER_TITLE=MrDemonWolf
+    - DESC=Advanced uploader with web front-end for images,files,and text. Built with ShareX in mind. Licensed under MIT and is free to use.
+    - FILE_CHECK=true
+    - CREDIT=true
+    - SHOW_VERSION=true
+    - SIGNUPS=true
+    - SIGNUP_TERMS=true
+install:
+    - npm install
+script:
+    - npm run test
+
+
