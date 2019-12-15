@@ -3,6 +3,7 @@ node_js:
 - node
 - lts/*
 env:
+  global:
   - SESSION_SECRET=thisistesting
   - API_SECRET=thisistesting
   - TITLE=Share
