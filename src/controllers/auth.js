@@ -72,7 +72,7 @@ exports.postSignup = async (req, res) => {
     );
     res.redirect('/signup');
 
-    // await user.save();
+    await user.save();
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
