@@ -1,5 +1,7 @@
 const generate = require('nanoid/generate');
 const slugify = require('slugify');
+const moment = require('moment');
+const sendgrid = require('../config/sendgrid');
 
 // eslint-disable-next-line operator-linebreak
 const alphabet =
@@ -11,9 +13,9 @@ const alphabet =
 const User = require('../models/User');
 
 /**
- * Load input validators.
+ * Load Email Templates.
  */
-// const validateSingupInput
+const AccountActivationEmail = require('../emails/AccountActivation');
 
 /**
  * Signup Controler - Take the users email and password to create their account.
@@ -27,23 +29,14 @@ const User = require('../models/User');
  * Current User Password
  */
 exports.postSignup = async (req, res) => {
-  // TODO Add vaildation
-  // const { errors, isValid } = validateSingupInput(req.body);
-
-  // if (!isValid) {
-  //   return res.status(400).json(errors);
-  // }
-
   try {
     const { username, email, password } = req.body;
 
     let user = await User.find({ email });
 
     if (user.length > 0) {
-      // TODO Add "This e-mail address is not available"
-      // Status 400
-
-      res.flash('error','Sorry but that email is already used')
+      req.flash('error', 'Sorry but that email is already used.');
+      return res.redirect('/signup');
     }
 
     user = new User({
@@ -51,13 +44,38 @@ exports.postSignup = async (req, res) => {
       email,
       password
     });
-    // TODO Redirect back and say they must verify there
-    // email but there account has been created
+    const token = await generate(alphabet, 24);
+    const tokenExpire = moment().add('1', 'h');
+    user.emailVerificationToken = token;
+    user.emailVerificationTokenExpire = tokenExpire;
 
-    await user.save();
+    const emailTemplate = AccountActivationEmail(token);
+
+    const msg = {
+      to: user.email,
+      from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+      subject: `Activate your account on ${process.env.TITLE}`,
+      html: emailTemplate.html
+    };
+
+    sendgrid
+      // eslint-disable-next-line no-unused-vars
+      .send(msg, (err, res) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Server error');
+        }
+      });
+    req.flash(
+      'success',
+      'Your account has been created but needs to be activated. Check your email.'
+    );
+    res.redirect('/signup');
+
+    // await user.save();
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Server error', status: 500 });
+    res.status(500).send('Server error');
   }
 };
 
