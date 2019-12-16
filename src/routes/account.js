@@ -11,7 +11,8 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.render('account/index', {
     pageTitle: 'My Account',
-    pageDesc: process.env.DESC
+    pageDesc: process.env.DESC,
+    pageName: 'account'
   });
 });
 
