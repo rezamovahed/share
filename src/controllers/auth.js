@@ -16,8 +16,8 @@ const User = require('../models/User');
 // const validateSingupInput
 
 /**
- * Signup Controler - Take the users email and password to create there account.
- * Also will send them aa email to verify there email address
+ * Signup Controler - Take the users email and password to create their account.
+ * Also will send them a email to verify their email address
  *
  * @param username
  * Current User username
@@ -49,11 +49,10 @@ exports.postSignup = async (req, res) => {
       email,
       password
     });
-
-    await user.save();
-
     // TODO Redirect back and say they must verify there
     // email but there account has been created
+
+    await user.save();
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error', status: 500 });

@@ -7,10 +7,14 @@ const router = express.Router();
  */
 
 /**
+ * Load middlewares
+ */
+const isPasswordResetTokenVaild = require('../middleware/isPasswordResetTokenVaild');
+
+/**
  * @route /user/forgot-password
  * @method GET
- * @description Displays landing page or
- *  users uploads if they are logged inn
+ * @description Displays form to send a recover password link.
  * @access Public/Private
  */
 router.get('/forgot-password', (req, res) => {
@@ -23,13 +27,13 @@ router.get('/forgot-password', (req, res) => {
 });
 
 /**
- * @route /user/reset-password
+ * @route /user/reset-password/:token
+ * @param param token Reset token sent in email
  * @method GET
- * @description Displays landing page or
- *  users uploads if they are logged inn
+ * @description Displays form to recover your password.
  * @access Public/Private
  */
-router.get('/reset-password', (req, res) => {
+router.get('/reset-password/:token', isPasswordResetTokenVaild, (req, res) => {
   res.render('auth/reset-password', {
     pageTitle: 'Recover your password',
     pageDesc: 'Reset your password and get access to your ccount',
