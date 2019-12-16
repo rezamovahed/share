@@ -42,6 +42,8 @@ exports.postSignup = async (req, res) => {
     if (user.length > 0) {
       // TODO Add "This e-mail address is not available"
       // Status 400
+
+      res.flash('error','Sorry but that email is already used')
     }
 
     user = new User({
