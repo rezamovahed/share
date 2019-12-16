@@ -198,6 +198,7 @@ const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
 const isVerified = require('./middleware/isVerified');
 const adminArea = require('./middleware/isAdmin');
 // TODO Add vaildation for the input
+const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 
 /**
  * Load vaildation middleware
@@ -218,9 +219,17 @@ app.use(indexRoutes);
 app.use(authRoutes);
 app.use('/user/', userRoutes);
 app.use('/account', isLoggedin, accountRoutes);
+
+app.get('/user/activation/:token', userController.getActivation);
+
+app.post(
+  '/user/reset-password/:token',
+  isPasswordResetTokenVaild,
+  userController.postPasswordReset
+);
+
 app.post('/signup', authController.postSignup);
 app.get('/logout', authController.getLogout);
-
 app.post(
   '/login',
   loginVaildation,
@@ -228,10 +237,8 @@ app.post(
     failureFlash: true,
     failureRedirect: '/login'
   }),
-  (req, res) => {
-    req.flash('success', `Welcome back ${req.user.username}`);
-    res.redirect('/');
-  }
+  authController.postLogin,
+  (req, res) => {}
 );
 
 /**
@@ -239,6 +246,7 @@ app.post(
  */
 // TODO add the API route for uploading under v1
 const apiRoutes = require('./routes/api');
+
 app.use('/api', limiter, apiRoutes);
 
 /**
