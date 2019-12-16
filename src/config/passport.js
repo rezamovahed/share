@@ -17,9 +17,8 @@ module.exports = passport => {
           const user = await User.findOne({ email });
           // If no user
           if (!user) {
-            console.log('NO USER');
             return done(null, false, {
-              message: 'Invaild email or password - 2'
+              message: 'Invaild email or password.'
             });
           }
           const isLoginVaild = await user.verifyPassword(password);

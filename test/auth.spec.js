@@ -26,6 +26,19 @@ describe('GET /signup', () => {
   });
 });
 
+
+describe('GET /user/forgot-password', () => {
+  it('it should has status code 200', done => {
+    supertest(app)
+      .get('/user/forgot-password')
+      .expect(200)
+      .end((err, res) => {
+        if (err) done(err);
+        done();
+      });
+  });
+});
+
 // describe('POST /signup', () => {
 //   it('it should has status code 200', done => {
 //     supertest(app)

@@ -209,13 +209,14 @@ const loginVaildation = require('./validation/login');
  */
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
-const apiRoutes = require('./routes/api/v1/index');
+const userRoutes = require('./routes/user');
 const accountRoutes = require('./routes/account');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 
 app.use(indexRoutes);
 app.use(authRoutes);
+app.use('/user/', userRoutes);
 app.use('/account', isLoggedin, accountRoutes);
 app.post('/signup', authController.postSignup);
 app.get('/logout', authController.getLogout);
@@ -232,29 +233,13 @@ app.post(
     res.redirect('/');
   }
 );
-// app.post(
-//   '/login',
-//   passport.authenticate('local', {
-//     failureRedirect: '/login',
-//     failureFlash: true
-//   }),
-//   (req, res) => {
-//     res.redirect('/');
-//   }
-//   // authController
-// );
-app.get('/admin', adminArea, (req, res) => {
-  res.send('hello world');
-});
-
-app.use('/api', apiRoutes);
 
 /**
  * API routes.
  */
 // TODO add the API route for uploading under v1
-// so it can be updated without breaking older configs
-// const apiV1Routes = require('./routes/api/v1');
+const apiRoutes = require('./routes/api');
+app.use('/api', limiter, apiRoutes);
 
 /**
  * Handle 404 errors
