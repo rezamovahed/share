@@ -45,7 +45,7 @@ const userSchema = new Schema(
     streamerMode: Boolean,
     role: {
       type: String,
-      enum: ['admin', 'user'],
+      enum: ['owner', 'admin', 'mod', 'user'],
       default: 'user'
     },
     lastLogin: Date

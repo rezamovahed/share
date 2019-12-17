@@ -1,10 +1,11 @@
 const User = require('../models/User');
+const moment = require('moment');
 
 module.exports = async (req, res, next) => {
   const user = await User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
+    passwordResetToken: req.params.token,
+    passwordResetTokenExpire: {
+      $gt: moment()
     }
   });
   if (!user) {

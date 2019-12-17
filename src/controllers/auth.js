@@ -71,7 +71,7 @@ exports.postSignup = async (req, res) => {
       });
     req.flash(
       'success',
-      'Your account has been created but needs to be activated. Check your email.'
+      'Your account has been created but needs to be activated. Check your email for further instructions.'
     );
     res.redirect('/signup');
 

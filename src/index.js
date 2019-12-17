@@ -15,7 +15,6 @@ const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
 const lusca = require('lusca');
-// const middleware = require('./middleware');
 const User = require('./models/User');
 
 /**
@@ -223,15 +222,21 @@ app.use('/account', isLoggedin, accountRoutes);
 app.get('/user/activation/:token', userController.getActivation);
 
 app.post(
+  '/user/forgot-password',
+  userController.postPasswordForgot
+);
+
+app.post(
   '/user/reset-password/:token',
   isPasswordResetTokenVaild,
   userController.postPasswordReset
 );
 
-app.post('/signup', authController.postSignup);
+app.post('/signup', isAlreadyAuth, authController.postSignup);
 app.get('/logout', authController.getLogout);
 app.post(
   '/login',
+  isAlreadyAuth,
   isAccounActivated,
   loginVaildation,
   passport.authenticate('local', {
