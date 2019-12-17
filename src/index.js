@@ -195,7 +195,7 @@ const limiter = rateLimit({
  */
 const isLoggedin = require('./middleware/isLoggedin');
 const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
-const isVerified = require('./middleware/isVerified');
+const isAccounActivated = require('./middleware/isAccounActivated');
 const adminArea = require('./middleware/isAdmin');
 // TODO Add vaildation for the input
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
@@ -232,6 +232,7 @@ app.post('/signup', authController.postSignup);
 app.get('/logout', authController.getLogout);
 app.post(
   '/login',
+  isAccounActivated,
   loginVaildation,
   passport.authenticate('local', {
     failureFlash: true,

@@ -44,8 +44,11 @@ exports.postSignup = async (req, res) => {
       email,
       password
     });
+
+    // Set the token and the expire date.
     const token = await generate(alphabet, 24);
-    const tokenExpire = moment().add('1', 'h');
+    const tokenExpire = moment().add('3', 'h');
+
     user.emailVerificationToken = token;
     user.emailVerificationTokenExpire = tokenExpire;
 
@@ -72,7 +75,7 @@ exports.postSignup = async (req, res) => {
     );
     res.redirect('/signup');
 
-    // await user.save();
+    await user.save();
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
