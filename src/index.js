@@ -196,13 +196,13 @@ const isLoggedin = require('./middleware/isLoggedin');
 const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
 const isAccounActivated = require('./middleware/isAccounActivated');
 const adminArea = require('./middleware/isAdmin');
-// TODO Add vaildation for the input
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 
 /**
  * Load vaildation middleware
  */
 const loginVaildation = require('./validation/login');
+const resetPasswordVaildation = require('./validation/reset-password');
 
 /**
  * Primary app routes.
@@ -221,14 +221,12 @@ app.use('/account', isLoggedin, accountRoutes);
 
 app.get('/user/activation/:token', userController.getActivation);
 
-app.post(
-  '/user/forgot-password',
-  userController.postPasswordForgot
-);
+app.post('/user/forgot-password', userController.postPasswordForgot);
 
 app.post(
   '/user/reset-password/:token',
   isPasswordResetTokenVaild,
+  resetPasswordVaildation,
   userController.postPasswordReset
 );
 

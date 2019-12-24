@@ -2,7 +2,7 @@
 <%- include ('../partials/navbar') %>
 <% errors = error && error.length > 0 %>
 <div class="container w-50 pt-5">
-  <form action="/me?_method=PATCH" method="POST">
+  <form action="/account?_method=PUT" method="POST">
     <input type="hidden" name="_csrf" value="<%= _csrf %>" />
     <h1 class="display-3">My Account</h1>
     <div class="form-group">
@@ -18,10 +18,10 @@
     <div class="form-group">
       <label for="email">Email <% if(currentUser.streamerMode) { %> (Your email can't be updated as streamer mode is
         enabled.) <% } %></label>
-      <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>"
-        id="email" value="<% if(currentUser.streamerMode) {%>Streamer Mode is enabled<%} else {%><%= currentUser.email %><%}%>" required>
-      <% if(errors && error[0].email) { %>
-      <small class=" form-text text-danger">
+      <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>
+        id=" email" value="<%- currentUser.streamerMode  ? 'Streamer Mode is enabled' : currentUser.email %>"
+        <% if(currentUser.streamerMode){%> disabled <%}%> required>
+      <% if(errors && error[0].email) { %> <small class=" form-text text-danger">
       <%= error[0].email %></small>
       <% } %>
     </div>
@@ -68,20 +68,11 @@
       <input id="streamerMode" name="streamerMode" value="true" type="checkbox" checked data-toggle="toggle"
         data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger">
     </div>
-    <% if(!currentUser.streamerMode) { %>
     <script>
       $(document).ready(function () {
-        $("#streamerMode").attr('checked', false);
+        $("#streamerMode").attr('checked', <%= currentUser.streamerMode %>);
       });
     </script>
-    <% } else { %>
-
-    <script>
-      $(document).ready(function () {
-        $("#streamerMode").attr('checked', true);
-      });
-    </script>
-    <% }%>
     <hr>
 
     <h2 class="display-4">Basic Info</h2>
@@ -94,6 +85,27 @@
           </div>
         </div>
       </div>
+      <% if(currentUser.passwordChanged !== undefined) { %>
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last password change</h5>
+            <p class="card-text"><%= moment(currentUser.passwordChanged).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+          </div>
+        </div>
+      </div>
+      <% } %>
+      <% if(currentUser.passwordChangedIP !== undefined) { %>
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Last password change</h5>
+            <p class="card-text">
+              <%- currentUser.streamerMode  ? 'Streamer Mode is enabled' : currentUser.passwordChangedIP %></p>
+          </div>
+        </div>
+      </div>
+      <% } %>
       <% if(currentUser.lastActivity !== undefined) { %>
       <div class="col-sm-4">
         <div class="card">
@@ -108,7 +120,7 @@
 </div>
 
 <button type="submit" class="btn btn-primary">Save Account</button>
-<a role=button" class="btn btn-primary text-white" href="/me/keys">View API Keys</a>
+<a role=button" class="btn btn-primary text-white" href="/keys">View API Keys</a>
 <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger" style="color: #ffff;">Delete
   account</a>
 </form>

@@ -19,7 +19,12 @@ const userSchema = new Schema(
       lowercase: true,
       required: true
     },
-    newEmail: String,
+    newEmail: {
+      type: String,
+      match: /^\S+@\S+\.\S+$/,
+      trim: true,
+      lowercase: true
+    },
     password: {
       type: String,
       required: true

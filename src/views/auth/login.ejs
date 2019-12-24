@@ -38,6 +38,11 @@
       <%= error %>
     </div>
     <% } %>
+    <% if (success && typeof success[0] === 'string'){ %>
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+    <% } %>
     <form action="/login" method="POST" novalidate>
       <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
       <div class="form-group">

@@ -8,7 +8,6 @@ module.exports = (req, res, next) => {
   let errors = {};
 
   email = !isEmpty(email) ? email : '';
-  email = !isEmpty(email) ? email : '';
   password = !isEmpty(password) ? password : '';
 
   if (Validator.isEmpty(email)) {

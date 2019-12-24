@@ -19,7 +19,7 @@ const AccountActivationEmail = require('../emails/AccountActivation');
 
 /**
  * Signup Controler - Take the users email and password to create their account.
- * Also will send them a email to verify their email address
+ * Also will send them a email to verify their email address.
  *
  * @param username
  * Current User username
