@@ -1,5 +1,6 @@
 const generate = require('nanoid/generate');
 const moment = require('moment');
+const sendgrid = require('../config/sendgrid');
 
 // eslint-disable-next-line operator-linebreak
 const alphabet =
@@ -11,9 +12,10 @@ const alphabet =
 const User = require('../models/User');
 
 /**
- * Load input validators.
+ * Load Email Templates.
  */
-// const validateSingupInput
+const PasswordForgotEmail = require('../emails/PasswordForgot');
+const PasswordResetEmail = require('../emails/PasswordReset');
 
 /**
  * Forgot password Controler- Takes a user email looks it up.
@@ -36,6 +38,25 @@ exports.postPasswordForgot = async (req, res) => {
     user.passwordResetTokenExpire = tokenExpire;
 
     await user.save();
+
+    const emailTemplate = PasswordForgotEmail(token);
+
+    const msg = {
+      to: user.email,
+      from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+      subject: `Reset your password on ${process.env.TITLE}`,
+      html: emailTemplate.html
+    };
+
+    sendgrid
+      // eslint-disable-next-line no-unused-vars
+      .send(msg, (err, res) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Server error');
+        }
+      });
+
     req.flash(
       'success',
       'Please check your email for further instructions on recovering your password.'
@@ -68,7 +89,24 @@ exports.postPasswordReset = async (req, res) => {
 
     await user.save();
 
-    // TODO Send a email with the IP of the device the password changed from.
+    const emailTemplate = PasswordResetEmail(req.clientIp, req.ipInfo);
+
+    const msg = {
+      to: user.email,
+      from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+      subject: `Password changed on ${process.env.TITLE}`,
+      html: emailTemplate.html
+    };
+
+    sendgrid
+      // eslint-disable-next-line no-unused-vars
+      .send(msg, (err, res) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Server error');
+        }
+      });
+
     req.flash('success', 'Password has been changed.  You may now login.');
     res.redirect('/login');
   } catch (err) {

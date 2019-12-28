@@ -6,15 +6,15 @@ const mjml = require('mjml');
  */
 module.exports = token =>
   mjml(`<mjml>
-  <mj-body background-color="#ffffff" font-size="13px">
+  <mj-body background-color="#ffffff">
     <mj-section>
       <mj-column>
         <mj-text font-style="bold" font-size="24px" color="#626262" align="center">
           Password Reset
         </mj-text>
+        <mj-divider border-color="#4f92ff" />
       </mj-column>
     </mj-section>
-    <mj-divider border-color="#4f92ff" />
     <mj-wrapper padding-top="0">
       <mj-section>
         <mj-column>
@@ -23,7 +23,7 @@ module.exports = token =>
       </mj-section>
       <mj-section>
         <mj-column>
-        <mj-text>Please click on the following link to complete the process:</mj-text>
+          <mj-text>Please click on the following link to complete the process:</mj-text>
           <mj-button href="https://${process.env.FULL_DOMAIN}}/reset-password/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
             Reset Password
           </mj-button>
@@ -31,5 +31,4 @@ module.exports = token =>
       </mj-section>
     </mj-wrapper>
   </mj-body>
-</mjml>
-`);
+</mjml>`);
