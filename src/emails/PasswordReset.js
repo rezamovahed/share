@@ -26,13 +26,13 @@ module.exports = (clientIp, ipInfo) =>
       </mj-section>
     </mj-wrapper>
           <mj-raw>
-        <strong>IP</strong>
+        <strong>IP (Click for more info)</strong>
         <a href="https://whatismyipaddress.com/ip/${clientIp}">
               ${clientIp}
-            </a>
-        <strong>City</strong> ${ipInfo.city}
-        <strong>State</strong> ${ipInfo.region}
-        <strong>Country</strong> ${ipInfo.country}
+            </a>\n
+        <strong>City</strong> ${ipInfo.city}\n
+        <strong>State</strong> ${ipInfo.region}\n
+        <strong>Country</strong> ${ipInfo.country}\n
       </mj-raw>
   </mj-body>
 </mjml>`);

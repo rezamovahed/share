@@ -19,12 +19,6 @@ const userSchema = new Schema(
       lowercase: true,
       required: true
     },
-    newEmail: {
-      type: String,
-      match: /^\S+@\S+\.\S+$/,
-      trim: true,
-      lowercase: true
-    },
     password: {
       type: String,
       required: true
@@ -38,6 +32,14 @@ const userSchema = new Schema(
     emailVerified: {
       type: Boolean,
       default: false
+    },
+    newEmailVerificationToken: String,
+    newEmailVerificationTokenExpire: Date,
+    newEmail: {
+      type: String,
+      match: /^\S+@\S+\.\S+$/,
+      trim: true,
+      lowercase: true
     },
     isBanned: Boolean,
     isSuspended: Boolean,

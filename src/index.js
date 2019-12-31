@@ -178,6 +178,7 @@ app.use((req, res, next) => {
     res.locals._csrf = '';
     next();
   } else {
+    lusca.referrerPolicy('same-origin');
     lusca.csrf()(req, res, next);
   }
 });
@@ -195,7 +196,7 @@ const limiter = rateLimit({
 const isLoggedin = require('./middleware/isLoggedin');
 const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
 const isAccounActivated = require('./middleware/isAccounActivated');
-const adminArea = require('./middleware/isAdmin');
+const isAdmin = require('./middleware/roleCheck/isAdmin');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 
 /**
@@ -213,6 +214,7 @@ const userRoutes = require('./routes/user');
 const accountRoutes = require('./routes/account');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
+const accountController = require('./controllers/account');
 
 app.use(indexRoutes);
 app.use(authRoutes);
@@ -241,12 +243,14 @@ app.post(
     failureFlash: true,
     failureRedirect: '/login'
   }),
-  authController.postLogin,
-  (req, res) => {}
+  authController.postLogin
 );
 
+app.put('/account', isLoggedin, accountController.putAccount);
 /**
  * API routes.
+ * This is the only one that will be split up in
+ * the route files it self.  As it will be easyier to mange the versions
  */
 // TODO add the API route for uploading under v1
 const apiRoutes = require('./routes/api');

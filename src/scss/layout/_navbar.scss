@@ -73,7 +73,6 @@ $dropDown: true;
 
   .navbar-text {
     color: $colDefault;
-
     a {
       color: $colHighlight;
 
@@ -86,6 +85,8 @@ $dropDown: true;
 
   .navbar-nav {
     .nav-link {
+      font-family: $main-font;
+      font-size: 1.05em;
       color: $colDefault;
       border-radius: 0.25rem;
       margin: 0 0.25em;
@@ -105,7 +106,8 @@ $dropDown: true;
 
         .dropdown-item {
           color: $colDefault;
-
+          font-family: $main-font;
+          font-size: 1.05em;
           &:hover,
           &:focus,
           &.active {

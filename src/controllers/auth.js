@@ -3,7 +3,6 @@ const slugify = require('slugify');
 const moment = require('moment');
 const sendgrid = require('../config/sendgrid');
 
-// eslint-disable-next-line operator-linebreak
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
@@ -42,7 +41,8 @@ exports.postSignup = async (req, res) => {
     user = new User({
       username,
       email,
-      password
+      password,
+      slug: slugify(username)
     });
 
     // Set the token and the expire date.

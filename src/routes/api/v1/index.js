@@ -1,12 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
-const alphabet =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate');
-const fs = require('fs-extra');
-const path = require('path');
-const jwt = require('jsonwebtoken');
+
+/**
+ * Routes
+ */
+const uploadRoutes = require('./upload');
 
 /**
  * @api {get} /api//v1/ List Available routes on the api endpoint.
@@ -17,25 +16,20 @@ const jwt = require('jsonwebtoken');
  * @apiSuccess {Object} Path Route Paths
  */
 router.get('/', (req, res) => {
-  res.json({ routes: ['/'], status: 200 });
+  res.json({
+    endpoints: [
+      { method: 'GET', path: '/' },
+      { method: 'POST', path: '/api/v1/upload' }
+    ],
+    status: 200
+  });
 });
 
+router.use('/upload', uploadRoutes);
 /**
  *
  * @api {get} /api/v1/upload/delete Remove a uploaded file.
  * @apiName Remove a uploaded file.
- * @apiGroup Upload
- * @apiVersion 4.0.0
- *
- * @apiParam (query) {String} key Delete key for upload.
- *
- * @apiSuccess {Object} Path Route Paths
- */
-
-/**
- *
- * @api {post} /api/v1/upload Uploads a file.
- * @apiName Uploads a file.
  * @apiGroup Upload
  * @apiVersion 4.0.0
  *
