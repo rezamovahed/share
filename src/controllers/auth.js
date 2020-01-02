@@ -3,7 +3,6 @@ const slugify = require('slugify');
 const moment = require('moment');
 const sendgrid = require('../config/sendgrid');
 
-// eslint-disable-next-line operator-linebreak
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
@@ -19,7 +18,7 @@ const AccountActivationEmail = require('../emails/AccountActivation');
 
 /**
  * Signup Controler - Take the users email and password to create their account.
- * Also will send them a email to verify their email address
+ * Also will send them a email to verify their email address.
  *
  * @param username
  * Current User username
@@ -42,7 +41,8 @@ exports.postSignup = async (req, res) => {
     user = new User({
       username,
       email,
-      password
+      password,
+      slug: slugify(username)
     });
 
     // Set the token and the expire date.
@@ -51,6 +51,7 @@ exports.postSignup = async (req, res) => {
 
     user.emailVerificationToken = token;
     user.emailVerificationTokenExpire = tokenExpire;
+    await user.save();
 
     const emailTemplate = AccountActivationEmail(token);
 
@@ -71,11 +72,9 @@ exports.postSignup = async (req, res) => {
       });
     req.flash(
       'success',
-      'Your account has been created but needs to be activated. Check your email.'
+      'Your account has been created but needs to be activated. Check your email for further instructions.'
     );
     res.redirect('/signup');
-
-    await user.save();
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

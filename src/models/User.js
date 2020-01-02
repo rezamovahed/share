@@ -19,7 +19,6 @@ const userSchema = new Schema(
       lowercase: true,
       required: true
     },
-    newEmail: String,
     password: {
       type: String,
       required: true
@@ -34,6 +33,14 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
+    newEmailVerificationToken: String,
+    newEmailVerificationTokenExpire: Date,
+    newEmail: {
+      type: String,
+      match: /^\S+@\S+\.\S+$/,
+      trim: true,
+      lowercase: true
+    },
     isBanned: Boolean,
     isSuspended: Boolean,
     suspendedExpire: Date,
@@ -45,7 +52,7 @@ const userSchema = new Schema(
     streamerMode: Boolean,
     role: {
       type: String,
-      enum: ['admin', 'user'],
+      enum: ['owner', 'admin', 'mod', 'user'],
       default: 'user'
     },
     lastLogin: Date

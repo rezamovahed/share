@@ -15,7 +15,7 @@ const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
 const middleware = require('./middleware');
-const User = require('./models/user');
+const User = require('./models/User');
 
 // Load enviroment variables from .env file
 require('dotenv').config();

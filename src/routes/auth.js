@@ -3,12 +3,17 @@ const express = require('express');
 const router = express.Router();
 
 /**
+ * Load middlewares
+ */
+const isAlreadyAuth = require('../middleware/isAlreadyLoggedin');
+
+/**
  * @route /login
  * @method GET
  * @description Displays the login form
  * @access Public
  */
-router.get('/login', (req, res) => {
+router.get('/login', isAlreadyAuth, (req, res) => {
   res.render('auth/login', {
     pageTitle: 'Login',
     pageDesc:
@@ -23,7 +28,7 @@ router.get('/login', (req, res) => {
  * @description Displays the login form
  * @access Public
  */
-router.get('/signup', (req, res) => {
+router.get('/signup', isAlreadyAuth, (req, res) => {
   res.render('auth/signup', {
     pageTitle: 'Create account',
     pageDesc:

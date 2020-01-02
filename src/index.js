@@ -15,7 +15,6 @@ const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
 const lusca = require('lusca');
-// const middleware = require('./middleware');
 const User = require('./models/User');
 
 /**
@@ -179,6 +178,7 @@ app.use((req, res, next) => {
     res.locals._csrf = '';
     next();
   } else {
+    lusca.referrerPolicy('same-origin');
     lusca.csrf()(req, res, next);
   }
 });
@@ -196,14 +196,15 @@ const limiter = rateLimit({
 const isLoggedin = require('./middleware/isLoggedin');
 const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
 const isAccounActivated = require('./middleware/isAccounActivated');
-const adminArea = require('./middleware/isAdmin');
-// TODO Add vaildation for the input
+const isAdmin = require('./middleware/roleCheck/isAdmin');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
+const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
 
 /**
  * Load vaildation middleware
  */
 const loginVaildation = require('./validation/login');
+const resetPasswordVaildation = require('./validation/reset-password');
 
 /**
  * Primary app routes.
@@ -214,6 +215,7 @@ const userRoutes = require('./routes/user');
 const accountRoutes = require('./routes/account');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
+const accountController = require('./controllers/account');
 
 app.use(indexRoutes);
 app.use(authRoutes);
@@ -222,28 +224,47 @@ app.use('/account', isLoggedin, accountRoutes);
 
 app.get('/user/activation/:token', userController.getActivation);
 
+app.post('/user/forgot-password', userController.postPasswordForgot);
+
 app.post(
   '/user/reset-password/:token',
   isPasswordResetTokenVaild,
+  resetPasswordVaildation,
   userController.postPasswordReset
 );
 
-app.post('/signup', authController.postSignup);
+app.post('/signup', isAlreadyAuth, authController.postSignup);
 app.get('/logout', authController.getLogout);
 app.post(
   '/login',
+  isAlreadyAuth,
   isAccounActivated,
   loginVaildation,
   passport.authenticate('local', {
     failureFlash: true,
     failureRedirect: '/login'
   }),
-  authController.postLogin,
-  (req, res) => {}
+  authController.postLogin
+);
+
+app.put('/account', isLoggedin, accountController.putAccount);
+app.get(
+  '/account/email-verify/:token',
+  isLoggedin,
+  isEMailVerificationTokenVaild,
+  accountController.emailVeirfy
+);
+
+app.get(
+  '/account/resend/email-verify',
+  isLoggedin,
+  accountController.resendEmailVeirfy
 );
 
 /**
  * API routes.
+ * This is the only one that will be split up in
+ * the route files it self.  As it will be easyier to mange the versions
  */
 // TODO add the API route for uploading under v1
 const apiRoutes = require('./routes/api');

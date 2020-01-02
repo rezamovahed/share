@@ -38,6 +38,11 @@
       <%= error %>
     </div>
     <% } %>
+    <% if (success && typeof success[0] === 'string'){ %>
+    <div class="alert alert-success" role="alert">
+      <%= success %>
+    </div>
+    <% } %>
     <form action="/login" method="POST" novalidate>
       <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
       <div class="form-group">
@@ -59,14 +64,10 @@
         </small>
         <% } %>
       </div>
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="rememberMe">
-        <label class="form-check-label" for="rememberMe">Remember me</label>
-      </div>
       <button type="submit" class="btn btn-auth btn-primary btn-block">login</button>
     </form>
     <div class="info">
-      <a href="/user/forgot">
+      <a href="/user/forgot-password">
         <small class=" info text">Forgot your password?</small>
       </a>
       <a href="/user/activation/resend">
