@@ -198,6 +198,7 @@ const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
 const isAccounActivated = require('./middleware/isAccounActivated');
 const isAdmin = require('./middleware/roleCheck/isAdmin');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
+const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
 
 /**
  * Load vaildation middleware
@@ -247,6 +248,19 @@ app.post(
 );
 
 app.put('/account', isLoggedin, accountController.putAccount);
+app.get(
+  '/account/email-verify/:token',
+  isLoggedin,
+  isEMailVerificationTokenVaild,
+  accountController.emailVeirfy
+);
+
+app.get(
+  '/account/resend/email-verify',
+  isLoggedin,
+  accountController.resendEmailVeirfy
+);
+
 /**
  * API routes.
  * This is the only one that will be split up in

@@ -18,14 +18,17 @@
     </div>
 
     <div class="form-group">
-      <label for="email">Email <% if(currentUser.streamerMode) { %> (Your email can't be updated as streamer mode is
-        enabled.) <% } %></label>
+      <label for="email">Email <% if(currentUser.streamerMode) { %> (Can't be updated as streamer mode is enabled)
+        <% } %></label>
       <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>
-        id=" email" value="<%- currentUser.streamerMode  ? 'Streamer Mode is enabled' : currentUser.email %>"
+        id=" email"
+        value="<%- currentUser.streamerMode  ? `${currentUser.email.substring(0,3)}******`: currentUser.email %>"
         <% if(currentUser.streamerMode){%> disabled <%}%> required>
       <% if(currentUser.newEmail) { %> <small class="form-text text-success pt-2">
-      Your new e-mail address <%= currentUser.newEmail%>, has not yet been verified.
-      <a href="/account/email-verify/resend" class="text-primary" submit>Resend confirmation email</a>
+      Your new e-mail address
+      <%- currentUser.streamerMode  ? `${currentUser.newEmail.substring(0,3)}******`: currentUser.newEmail %>, has not
+      yet been verified.
+      <a href="/account/resend/email-verify" class="text-primary" submit>Resend confirmation email</a>
       </small>
       <% } %>
       <% if(errors && error[0].email) { %>

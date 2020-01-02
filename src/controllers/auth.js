@@ -51,6 +51,7 @@ exports.postSignup = async (req, res) => {
 
     user.emailVerificationToken = token;
     user.emailVerificationTokenExpire = tokenExpire;
+    await user.save();
 
     const emailTemplate = AccountActivationEmail(token);
 
@@ -74,8 +75,6 @@ exports.postSignup = async (req, res) => {
       'Your account has been created but needs to be activated. Check your email for further instructions.'
     );
     res.redirect('/signup');
-
-    await user.save();
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

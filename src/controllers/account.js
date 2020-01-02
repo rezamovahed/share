@@ -1,17 +1,23 @@
 const moment = require('moment');
 const generate = require('nanoid/generate');
+const sendgrid = require('../config/sendgrid');
 
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
- * Load Database Models
+ * Load MongoDB models.
  */
 const User = require('.././models/User');
 
+/**
+ * Load Email Templates.
+ */
+const newEmailVerificationEmail = require('../emails/NewEmailVerify');
+
 exports.putAccount = async (req, res, next) => {
   try {
-    //TODO  Add middleware vaildation for username,email,
+    // TODO  Add middleware vaildation for username,email,
     // password if the old password is there
     const {
       username,
@@ -41,8 +47,7 @@ exports.putAccount = async (req, res, next) => {
     if (streamerMode !== req.user.streamerMode) {
       user.streamerMode = streamerMode;
     }
-
-    if (email !== req.user.email) {
+    if (!req.user.streamerMode && email !== req.user.email) {
       const token = await generate(alphabet, 24);
       const tokenExpire = moment().add('1', 'h');
       user.newEmailVerificationToken = token;
@@ -52,10 +57,82 @@ exports.putAccount = async (req, res, next) => {
       successMsg =
         'Account details has been updated but your new email needs to be verified.';
 
-      // TODO Send email to the newEmail with the token to verify
+      const emailTemplate = newEmailVerificationEmail(
+        user.email,
+        user.newEmail,
+        user.newEmailVerificationToken
+      );
+
+      const msg = {
+        to: user.newEmail,
+        from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+        subject: `New Email Verification for  ${process.env.TITLE}`,
+        html: emailTemplate.html
+      };
+
+      await sendgrid.send(msg);
     }
+
     await user.save();
     req.flash('success', successMsg);
+    res.redirect('/account');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.emailVeirfy = async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      newEmailVerificationToken: req.params.token
+    });
+
+    user.newEmailVerificationToken = undefined;
+    user.newEmailVerificationTokenExpire = undefined;
+    user.email = user.newEmail;
+    user.newEmail = undefined;
+    await user.save();
+
+    let successMsg = `Email has been changed to ${user.email}`;
+    if (user.streamerMode) {
+      successMsg = 'Email has been updated.';
+    }
+
+    req.flash('success', successMsg);
+    res.redirect('/account');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.resendEmailVeirfy = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    const token = await generate(alphabet, 24);
+    const tokenExpire = moment().add('1', 'h');
+    user.newEmailVerificationToken = token;
+    user.newEmailVerificationTokenExpire = tokenExpire;
+    await user.save();
+
+    const emailTemplate = newEmailVerificationEmail(
+      user.email,
+      user.newEmail,
+      user.newEmailVerificationToken
+    );
+
+    const msg = {
+      to: user.newEmail,
+      from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+      subject: `New Email Verification for  ${process.env.TITLE}`,
+      html: emailTemplate.html
+    };
+
+    await sendgrid.send(msg);
+
+    req.flash('success', 'A new email verification link has been sent.');
     res.redirect('/account');
   } catch (err) {
     console.error(err);
