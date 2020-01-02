@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/admin">
       <img class="navbarLogo desktop" src="/assets/images/logo_text.png" alt="<%= siteTitle %>">
       <img class="navbarLogo mobile d-none" src="/assets/images/logo.png" alt="<%= siteTitle %>">
     </a>
@@ -10,20 +10,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="navbar-nav ml-auto">
-        <% if(currentUser) { %>
         <li class="nav-item  <% if(pageName === 'uploads'){%> active <%}%>">
-          <a href="/" class="nav-link">Uploads <% if(pageName === 'uploads'){%><span class=" sr-only">(current)</span><%}%></a>
+          <a href="/admin/uploads" class="nav-link">Uploads <% if(pageName === 'uploads'){%><span class=" sr-only">
+          (current)</span><%}%></a>
         </li>
         <li class="nav-item <% if(pageName === 'gallery'){%> active <%}%>">
-          <a href="/gallery" class="nav-link">Gallery <% if(pageName === 'gallery'){%><span
+          <a href="/admin/gallery" class="nav-link">Gallery <% if(pageName === 'gallery'){%><span
             class=" sr-only">(current)</span><%}%></a>
         </li>
-              <li class="nav-item <% if(pageName === 'tokens'){%> active <%}%>">
-                        <a href="/tokens" class="nav-link">Tokens <% if(pageName === 'tokens'){%><span
+        <li class="nav-item <% if(pageName === 'users'){%> active <%}%>">
+          <a href="/admin/users" class="nav-link">Users <% if(pageName === 'users'){%><span
             class=" sr-only">(current)</span><%}%></a>
-                      </li>
-        <% } %>
-          <%- include ('./navbarUser') %>
+          </li>
+          <li class="nav-item">
+            <a href="/" class="nav-link">Back to User</a>
+          </li>
+          <%- include ('./../navbarUser') %>
       </ul>
     </div>
   </div>
