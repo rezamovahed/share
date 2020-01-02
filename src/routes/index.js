@@ -28,7 +28,8 @@ router.get('/', (req, res) => {
     return res.render('landing/index', {
       pageTitle: 'Welcome',
       pageDesc: process.env.DESC,
-      uploads
+      uploads,
+      pageName: 'uploads'
     });
   }
   res.render('landing/index', {

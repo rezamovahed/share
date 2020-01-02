@@ -213,6 +213,9 @@ const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const accountRoutes = require('./routes/account');
+const tokensRoutes = require('./routes/tokens');
+const galleryRoutes = require('./routes/gallery');
+const adminRoutes = require('./routes/admin');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
@@ -221,6 +224,9 @@ app.use(indexRoutes);
 app.use(authRoutes);
 app.use('/user/', userRoutes);
 app.use('/account', isLoggedin, accountRoutes);
+app.use('/tokens', isLoggedin, tokensRoutes);
+app.use('/gallery', isLoggedin, galleryRoutes);
+app.use('/admin', isLoggedin, isAdmin, adminRoutes);
 
 app.get('/user/activation/:token', userController.getActivation);
 
