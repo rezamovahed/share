@@ -19,13 +19,6 @@ const AccountActivationEmail = require('../emails/AccountActivation');
 /**
  * Signup Controler - Take the users email and password to create their account.
  * Also will send them a email to verify their email address.
- *
- * @param username
- * Current User username
- * @param email
- * Current User email
- * @param password
- * Current User Password
  */
 exports.postSignup = async (req, res) => {
   try {
@@ -84,11 +77,6 @@ exports.postSignup = async (req, res) => {
 /**
  * Login Controler - This verifys the login details then if vaild
  * creates a user session then redirect to there uploads lising pagge
- *
- * @param email
- * Current User email
- * @param password
- * Current User Password
  */
 exports.postLogin = (req, res) => {
   req.flash('success', `Welcome back, ${req.user.username}`);

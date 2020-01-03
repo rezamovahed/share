@@ -7,6 +7,10 @@
       .btn-danger {
         float: right;
       }
+      .btn-success {
+        float: right;
+        margin-right: 1em;
+      }
     }
   }
   .table-wrapper {
@@ -287,7 +291,8 @@
         h2 {
           text-align: center;
         }
-        .btn-danger {
+        .btn-danger,
+        .btn-success {
           margin-top: 1em;
           float: none;
           text-align: center;
