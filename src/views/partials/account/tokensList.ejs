@@ -1,0 +1,78 @@
+<div class="customTable">
+  <div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <h2>Your <strong>Tokens</strong></b>
+          </h2>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger">Delete
+            All</a>
+          <a href="/tokens/new" role="button" class="btn btn-success">Create Token</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Created</th>
+          <th scope="col">Label</th>
+          <th scope="col">Expires</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% const tokensLength = tokens.length; %>
+        <% if (!tokens || tokens.length === 0) { %>
+        <tr class="text-center">
+          <td colspan="4">No Tokens found</td>
+        </tr>
+        <% } else { %>
+
+        <% for(i = 0; i < tokensLength; i++) { %>
+        <tr>
+          <td style="width: 25%">
+            <%= moment(tokens[i].createdAt).format('MMM Do YYYY hh:mm A') %>
+          </td>
+          <td>
+            <%= tokens[i].name %>
+          </td>
+          <td>
+            <%= moment(tokens[i].expiresAt).format('MMM Do YYYY hh:mm A') %>
+          </td>
+          <td>
+            <form class=" d-inline" action="/tokens/<%= tokens[i].id %>?_method=DELETE" method="POST">
+              <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+              <button class="delete" title="Delete" data-toggle="tooltip">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        <% } %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="comfirmDelete"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Remove all tokens</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete all your API tokens, this procedure is irreversible.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <a href="/me/uploads/delete/all" class="btn btn-danger btn-ok">Delete tokens</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

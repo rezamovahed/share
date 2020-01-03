@@ -219,28 +219,11 @@ const adminRoutes = require('./routes/admin');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
+const tokensConroller = require('./controllers/tokens');
 
 app.use(indexRoutes);
 app.use(authRoutes);
-app.use('/user/', userRoutes);
-app.use('/account', isLoggedin, accountRoutes);
-app.use('/tokens', isLoggedin, tokensRoutes);
-app.use('/gallery', isLoggedin, galleryRoutes);
-app.use('/admin', isLoggedin, isAdmin, adminRoutes);
-
-app.get('/user/activation/:token', userController.getActivation);
-
-app.post('/user/forgot-password', userController.postPasswordForgot);
-
-app.post(
-  '/user/reset-password/:token',
-  isPasswordResetTokenVaild,
-  resetPasswordVaildation,
-  userController.postPasswordReset
-);
-
 app.post('/signup', isAlreadyAuth, authController.postSignup);
-app.get('/logout', authController.getLogout);
 app.post(
   '/login',
   isAlreadyAuth,
@@ -252,7 +235,17 @@ app.post(
   }),
   authController.postLogin
 );
-
+app.get('/logout', authController.getLogout);
+app.use('/user/', userRoutes);
+app.get('/user/activation/:token', userController.getActivation);
+app.post('/user/forgot-password', userController.postPasswordForgot);
+app.post(
+  '/user/reset-password/:token',
+  isPasswordResetTokenVaild,
+  resetPasswordVaildation,
+  userController.postPasswordReset
+);
+app.use('/account', isLoggedin, accountRoutes);
 app.put('/account', isLoggedin, accountController.putAccount);
 app.get(
   '/account/email-verify/:token',
@@ -260,12 +253,16 @@ app.get(
   isEMailVerificationTokenVaild,
   accountController.emailVeirfy
 );
-
 app.get(
   '/account/resend/email-verify',
   isLoggedin,
   accountController.resendEmailVeirfy
 );
+
+app.use('/tokens', isLoggedin, tokensRoutes);
+app.post('/tokens', isLoggedin, tokensConroller.postToken);
+app.use('/gallery', isLoggedin, galleryRoutes);
+app.use('/admin', isLoggedin, isAdmin, adminRoutes);
 
 /**
  * API routes.

@@ -7,13 +7,18 @@ const tokenSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
+    name: {
+      type: String,
+      default: 'Default Token Label'
+    },
     hash: {
       type: String,
       required: true
     },
     lastUsed: Date,
     expireAt: {
-      type: Date
+      type: Date,
+      expires: -1
     }
   },
   { timestamps: true }

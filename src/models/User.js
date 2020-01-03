@@ -49,7 +49,10 @@ const userSchema = new Schema(
     passwordChangedIP: String,
     passwordResetToken: String,
     passwordResetTokenExpire: Date,
-    streamerMode: Boolean,
+    streamerMode: {
+      type: Boolean,
+      default: false
+    },
     role: {
       type: String,
       enum: ['owner', 'admin', 'mod', 'user'],
