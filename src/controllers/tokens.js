@@ -13,27 +13,28 @@ const Token = require('.././models/Token');
 exports.postToken = async (req, res, next) => {
   try {
     const { name, expire } = req.body;
+
     let expireAt;
     let expiresIn;
+    let isNever;
 
-    if (expire !== 'custom') {
-      switch (expire) {
-        case '1':
-          expireAt = moment().add('24', 'h');
-          expiresIn = '24h';
-          break;
-        case '7':
-          expireAt = moment().add('7', 'd');
-          expiresIn = '7d';
-          break;
-        case '30':
-          expireAt = moment().add('1', 'm');
-          expiresIn = '1m';
-          break;
-        default:
-          expireAt = moment().add('100', 'y');
-          expiresIn = '100y';
-      }
+    switch (expire) {
+      case '1':
+        expireAt = moment().add('24', 'h');
+        expiresIn = '24h';
+        break;
+      case '7':
+        expireAt = moment().add('7', 'd');
+        expiresIn = '7d';
+        break;
+      case '30':
+        expireAt = moment().add('1', 'M');
+        expiresIn = '31d';
+        break;
+      default:
+        expireAt = moment().add('100', 'y');
+        expiresIn = '36500d';
+        isNever = true;
     }
 
     const jwtToken = jwt.sign({}, process.env.API_SECRET, {
@@ -48,16 +49,15 @@ exports.postToken = async (req, res, next) => {
       user: req.user.id,
       hash: jwtHash,
       name,
-      expireAt
+      expireAt,
+      isNever
     });
 
-    console.log(expireAt);
-    console.log(expiresIn);
     await token.save();
 
     req.flash(
       'success',
-      `Here's your API token ${jwtToken} .  This will not be showed again for security reasons.`
+      `Here's your API Key <p id="apiKey">${jwtToken}<p>This will not be showed again for security reasons.`
     );
     res.redirect('/tokens');
   } catch (err) {

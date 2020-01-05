@@ -41,9 +41,12 @@
             <%= tokens[i].name %>
           </td>
           <td>
-            <%= moment(tokens[i].expiresAt).format('MMM Do YYYY hh:mm A') %>
+            <%= moment(tokens[i].expireAt).format('MMM Do YYYY hh:mm A') %>
           </td>
           <td>
+            <a href="/tokens/<%= tokens[i].id %>/edit" class="edit" title="View and Edit" data-toggle="tooltip">
+              <i class="fas fa-edit"></i>
+            </a>
             <form class=" d-inline" action="/tokens/<%= tokens[i].id %>?_method=DELETE" method="POST">
               <input type="hidden" name="_csrf" value="<%= _csrf %>" />
               <button class="delete" title="Delete" data-toggle="tooltip">

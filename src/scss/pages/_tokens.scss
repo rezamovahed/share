@@ -2,6 +2,9 @@
 // This file contains all styles related to the tokens page.
 // -----------------------------------------------------------------------------
 .tokens {
+  #apiKey {
+    word-break: break-all;
+  }
 }
 .tokens.new {
   width: 40%;

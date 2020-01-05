@@ -19,6 +19,10 @@ const tokenSchema = new mongoose.Schema(
     expireAt: {
       type: Date,
       expires: -1
+    },
+    isNever: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }
