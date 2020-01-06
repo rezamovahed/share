@@ -1,5 +1,5 @@
 ![GitHub release](https://img.shields.io/github/release/mrdemonwolf/share-mrdemonwolf-me.svg?style=for-the-badge)
-[![GitHub last commit](https://img.shields.io/github/last-commit/mrdemonwolf/share.svg?logo=git&style=for-the-badge)](https://github.com/mrdemonwolf/popular-movie-quotes) [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg?logo=npm&style=for-the-badge)](https://github.com/mrdemonnwolf/share)
+[![GitHub last commit](https://img.shields.io/github/last-commit/mrdemonwolf/share.svg?logo=git&style=for-the-badge)](https://github.com/mrdemonwolf/share) [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg?logo=npm&style=for-the-badge)](https://github.com/mrdemonnwolf/share)
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=for-the-badge&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 ![Travis (.com)](https://img.shields.io/travis/com/mrdemonwolf/share?style=for-the-badge)
 
