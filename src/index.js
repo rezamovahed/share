@@ -205,6 +205,8 @@ const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerif
  */
 const loginVaildation = require('./validation/login');
 const resetPasswordVaildation = require('./validation/reset-password');
+const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
+const accountCreateTokenVaildation = require('./validation/tokens/create-token');
 
 /**
  * Primary app routes.
@@ -261,6 +263,13 @@ app.get(
 
 app.use('/tokens', isLoggedin, tokensRoutes);
 app.post('/tokens', isLoggedin, tokensConroller.postToken);
+app.put(
+  '/tokens/:token_id',
+  isLoggedin,
+  accountRenameTokenVaildation,
+  tokensConroller.putToken
+);
+app.delete('/tokens/:token_id', isLoggedin, tokensConroller.deleteToken);
 app.use('/gallery', isLoggedin, galleryRoutes);
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
 

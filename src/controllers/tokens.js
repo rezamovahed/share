@@ -65,3 +65,35 @@ exports.postToken = async (req, res, next) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Rename label Token Controler - Allows users to rename label there tokens
+ */
+exports.putToken = async (req, res, next) => {
+  try {
+    const { label } = req.body;
+    const token = await Token.findById(req.params.token_id);
+    token.label = label;
+    await token.save();
+    req.flash('success', `Token has been to <strong>${label}</strong>.`);
+    res.redirect('/tokens');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete Token Controler - Deletes a token via the token id.
+ */
+
+exports.deleteToken = async (req, res, next) => {
+  try {
+    await Token.findByIdAndDelete(req.params.token_id);
+    req.flash('success', 'Token has been removed');
+    res.redirect('/tokens');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
