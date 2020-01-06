@@ -1,4 +1,4 @@
-const isEmpty = require('../isEmpty');
+const isEmpty = require('../../isEmpty');
 
 module.exports = (req, res, next) => {
   // eslint-disable-next-line prefer-const
