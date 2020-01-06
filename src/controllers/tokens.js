@@ -12,7 +12,7 @@ const Token = require('.././models/Token');
  */
 exports.postToken = async (req, res, next) => {
   try {
-    const { name, expire } = req.body;
+    const { label, expire } = req.body;
 
     let expireAt;
     let expiresIn;
@@ -48,7 +48,7 @@ exports.postToken = async (req, res, next) => {
     const token = new Token({
       user: req.user.id,
       hash: jwtHash,
-      name,
+      label,
       expireAt,
       isNever
     });

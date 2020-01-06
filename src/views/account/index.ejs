@@ -93,7 +93,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Last Login</h5>
-            <p class="card-text"><%= moment(currentUser.lastLog).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+            <p class="card-text"><%= moment(currentUser.lastLog).fromNow() %> </p>
           </div>
         </div>
       </div>
@@ -102,18 +102,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Last password change</h5>
-            <p class="card-text"><%= moment(currentUser.passwordChanged).format('MMM Do YYYY hh:mm A') %> CST %> </p>
-          </div>
-        </div>
-      </div>
-      <% } %>
-      <% if(currentUser.passwordChangedIP !== undefined) { %>
-      <div class="col-sm-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Last password change</h5>
-            <p class="card-text">
-              <%- currentUser.streamerMode  ? 'Streamer Mode is enabled' : currentUser.passwordChangedIP %></p>
+            <p class="card-text"><%= moment(currentUser.passwordChanged).fromNow() %> </p>
           </div>
         </div>
       </div>

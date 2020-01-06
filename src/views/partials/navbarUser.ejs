@@ -3,6 +3,9 @@
   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
     aria-haspopup="true" aria-expanded="false">
     <%= currentUser.username %>
+    <% if(currentUser.isVerified) { %>
+    <%- include ('../partials/verified.ejs') %>
+    <%}%>
     <b class="caret"></b>
   </a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -15,7 +18,7 @@
     <% } %>
     <div class="mt-1 mb-1"></div>
     <a class="dropdown-item" href="/logout">Logout</a>
-  </div>
+    </div>
 </li>
 <% } %>
 <% if(!currentUser && signups) { %>

@@ -42,7 +42,6 @@ const userSchema = new Schema(
     suspendedExpire: Date,
     suspendedReason: String,
     passwordChanged: Date,
-    passwordChangedIP: String,
     passwordResetToken: String,
     passwordResetTokenExpire: Date,
     streamerMode: {
@@ -53,6 +52,10 @@ const userSchema = new Schema(
       type: String,
       enum: ['owner', 'admin', 'mod', 'user'],
       default: 'user'
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
     },
     lastLogin: Date
   },
@@ -81,6 +84,27 @@ userSchema.pre('save', function save(next) {
       next();
     });
   });
+});
+
+/**
+ * Gravtar middleware.
+ */
+userSchema.pre('save', function save(next) {
+  const user = this;
+  if (!user.isModified('email')) {
+    return next();
+  }
+
+  user.avatar = gravatar.url(
+    user.email,
+    {
+      s: '100',
+      r: 'x',
+      d: 'retro'
+    },
+    true
+  );
+  next();
 });
 
 /**

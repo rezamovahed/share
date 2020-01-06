@@ -29,14 +29,15 @@ router.get('/', async (req, res) => {
  * @description Displays form to create new tokens
  * @access Private
  */
-// router.get('/new', async (req, res) => {
-//   const token = await Token.findById(req.params.token_id);
-//   res.render('tokens/edit', {
-//     pageTitle: 'Edit Token',
-//     pageDesc: process.env.DESC,
-//     pageName: 'editToken'
-//   });
-// });
+router.get('/edit/:token_id', async (req, res) => {
+  const token = await Token.findById(req.params.token_id);
+  res.render('tokens/edit', {
+    pageTitle: 'Edit Token',
+    pageDesc: process.env.DESC,
+    pageName: 'editToken',
+    token
+  });
+});
 /**
  * @route /tokens/new
  * @method GET
