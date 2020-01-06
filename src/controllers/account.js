@@ -15,10 +15,14 @@ const User = require('.././models/User');
  */
 const newEmailVerificationEmail = require('../emails/NewEmailVerify');
 
+/**
+ * Update account Controler - Allows users to update basic account details.
+ */
 exports.putAccount = async (req, res, next) => {
   try {
     // TODO  Add middleware vaildation for username,email,
     // password if the old password is there
+    // Add verify people can't change there name
     const {
       username,
       email,

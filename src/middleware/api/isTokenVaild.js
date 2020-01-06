@@ -16,23 +16,22 @@ module.exports = async (req, res, next) => {
     .toString();
 
   const tokenHash = sha512(token);
-  console.log(tokenHash);
-  const tokenUser = await Token.findOne({
-    tokens: {
-      hash: tokenHash,
-      expireAt: {
-        $gt: moment()
-      }
+  const tokenVaild = await Token.findOne({
+    hash: tokenHash,
+    expireAt: {
+      $gt: moment()
     }
-  }).populate('user');
+  }).populate({
+    path: 'user',
+    select: 'username email avatar role streamerMode isVerified id'
+  });
 
-  if (!tokenUser) {
+  if (!tokenVaild) {
     return res.status(401).json({
       error: 'API Token is either expired or is invaild.',
       status: 401
     });
   }
-
-  res.locals.user = tokenUser;
+  req.user = tokenVaild.user;
   next();
 };

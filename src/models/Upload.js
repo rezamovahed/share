@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const uploadSchema = new Schema({
   uploader: {
     type: mongoose.Types.ObjectId,
-    ref: "User"
+    ref: 'User'
   },
   fileName: {
     type: String,
@@ -15,8 +15,12 @@ const uploadSchema = new Schema({
     type: String,
     required: true
   },
-  isImage: Boolean,
-  key: {
+  type: {
+    type: String,
+    enum: ['file', 'image', 'text'],
+    default: 'file'
+  },
+  deleteKey: {
     type: String,
     required: true
   },
@@ -24,10 +28,10 @@ const uploadSchema = new Schema({
     type: String,
     required: true
   },
-  createdAt: {
+  uploadedAt: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model("Upload", uploadSchema);
+module.exports = mongoose.model('Upload', uploadSchema);
