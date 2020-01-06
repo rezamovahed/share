@@ -23,10 +23,6 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
-    avatar: {
-      type: String,
-      default: 'https://www.gravatar.com/avatar'
-    },
     emailVerificationToken: String,
     emailVerificationTokenExpire: Date,
     emailVerified: {
@@ -85,27 +81,6 @@ userSchema.pre('save', function save(next) {
       next();
     });
   });
-});
-
-/**
- * Gravtar middleware.
- */
-userSchema.pre('save', function save(next) {
-  const user = this;
-  if (!user.isModified('email')) {
-    return next();
-  }
-
-  user.avatar = gravatar.url(
-    user.email,
-    {
-      s: '100',
-      r: 'x',
-      d: 'retro'
-    },
-    true
-  );
-  next();
 });
 
 /**
