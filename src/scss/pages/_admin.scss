@@ -1,3 +1,10 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the admin page.
 // -----------------------------------------------------------------------------
+.admin {
+  &.index {
+    .card {
+      background-color: $brand-color-alt-2;
+    }
+  }
+}
