@@ -50,6 +50,7 @@ module.exports.uploadFile = async (req, res, next) => {
     const user = await User.findById(req.user.id);
     user.lastUpload = moment();
     await user.save();
+    await upload.save();
 
     // Move th file to a public directory in u folder for express
     await file.mv(filePath);
