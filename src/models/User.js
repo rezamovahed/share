@@ -23,10 +23,6 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
-    avatar: {
-      type: String,
-      default: 'https://www.gravatar.com/avatar'
-    },
     emailVerificationToken: String,
     emailVerificationTokenExpire: Date,
     emailVerified: {
@@ -46,7 +42,6 @@ const userSchema = new Schema(
     suspendedExpire: Date,
     suspendedReason: String,
     passwordChanged: Date,
-    passwordChangedIP: String,
     passwordResetToken: String,
     passwordResetTokenExpire: Date,
     streamerMode: {
@@ -57,6 +52,10 @@ const userSchema = new Schema(
       type: String,
       enum: ['owner', 'admin', 'mod', 'user'],
       default: 'user'
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
     },
     lastLogin: Date
   },

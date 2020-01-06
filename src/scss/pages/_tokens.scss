@@ -2,34 +2,7 @@
 // This file contains all styles related to the tokens page.
 // -----------------------------------------------------------------------------
 .tokens {
-}
-.tokens.new {
-  width: 40%;
-  height: 75%;
-  .row {
-    height: 75%;
-  }
-}
-
-@media (max-width: 1038px) {
-  .tokens.new {
-    width: 50%;
-    height: 40%;
-    .row {
-      height: 40%;
-    }
-  }
-}
-@media (max-width: 768px) {
-  .tokens.new {
-    width: 85%;
-  }
-}
-@media (max-width: 667px) {
-  .tokens.new {
-    height: 40%;
-    .row {
-      height: 40%;
-    }
+  #apiKey {
+    word-break: break-all;
   }
 }

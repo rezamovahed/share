@@ -1,33 +1,34 @@
 # Changelog
-4.0.0 (Unrelased _Oct 31, 2019_)
+4.0.0 (Unrelased _Jan 31, 2020)
+__This is a fair big of a update but this is a list (all) changes that have been made__
+
 <!-- * Made a lot of the code cleaner and easier to mange for developers -->
 <!-- * You can now upload files via your account on the website. -->
-<!-- *Added API docs -->
-<!-- * Switched to sendgrid offical mailer -->
 <!-- * Changed from express-fileupload to multer  -->
-<!-- * Changed from csurf to lusca  -->
-<!-- * Added last password change IP and time. -->
-<!-- * Added last activity time.
-* Added last login time. -->
-<!-- * Added signup IP. -->
+<!-- * Added last password change IP and date. -->
+<!-- * Added last activity date.
+* Added last login date. -->
 <!-- Added Tests -->
-<!-- Changed the routes a little bit.  /me is now / and account is /account -->
-* Changed from passport-local-monngoose to coding it my self
+* Removed avatars
+* Added API docs
+* Switched to sendgrid offical mailer
+* Changed from csurf to lusca
+* Changed the routes a little bit.  /me is now / and account is /account
+* Changed from passport-local-monngoose to pssword-local.
 * Integrated Docker both for development and production modes.  Thanks to @exia for adding this.
-* Adding a better way to hannel the emails.  As there is so many templates that are just reused.  For easier reuse.
+* Adding a better way to handle the emails.  As there is so many templates that are just reused.  For easier reuse.
 * Added Streamer mode.  It will stop leaks for both the user and if they have admin others as well.
-* Added ban and unban users. Comfirm the ban of a user has been added.
-* Added suspend users 24 hours , a week, and even a month. With unsuspend
 * Now you can make yourself the first admin by going to /admin.  If the email matchs the one in the env then it will change the account to admin (This is safe as the email has to be verifyed anyways which makes sure its yours.)
-* API has changed file and image route to just be as one.
+* API route has been changed file and image route to just be as one.
 * Changed createdAt to uploaded in lisings
 * Changed share to file in the lisings.
 * You can now limit the size of each upload by default its 100M
 * Fixed dashboard so it will add a 's' when there is more the one user or upload
-* Changed terms on users manger page.  Admin is not role which will display there role either admin or user
-* Changed 'Activated' to 'Role' and 'Admin' to 'Status'
 * Added Bannned or Suspended and Activate and Unactivated to status.
-* Removed last login from both database and admin panel.
+* Changed 'Activated' to 'Role' and 'Admin' to 'Status'
+* Added suspend users 24 hours , a week, and even a month. With unsuspend
+* Added ban and unban users. Comfirm the ban of a user has been added.
+* Removed last login IP from both database and admin panel.
 * Changed text from 'Create user' to 'Create new user' in admin users.
 * Fixed the link in the admin nav gallery.  Now it links to the gallery
 * Fixed the navbar in admin gallery as it was linking the wrong one.

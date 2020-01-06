@@ -48,14 +48,7 @@ exports.postPasswordForgot = async (req, res) => {
       html: emailTemplate.html
     };
 
-    sendgrid
-      // eslint-disable-next-line no-unused-vars
-      .send(msg, (err, res) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send('Server error');
-        }
-      });
+    await sendgrid.send(msg);
 
     req.flash(
       'success',
@@ -85,7 +78,6 @@ exports.postPasswordReset = async (req, res) => {
     user.passwordResetTokenExpire = undefined;
     user.password = password;
     user.passwordChanged = moment();
-    user.passwordChangedIP = req.clientIp;
 
     await user.save();
 
@@ -98,14 +90,7 @@ exports.postPasswordReset = async (req, res) => {
       html: emailTemplate.html
     };
 
-    sendgrid
-      // eslint-disable-next-line no-unused-vars
-      .send(msg, (err, res) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send('Server error');
-        }
-      });
+    await sendgrid.send(msg);
 
     req.flash('success', 'Password has been changed.  You may now login.');
     res.redirect('/login');

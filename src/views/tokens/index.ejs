@@ -1,7 +1,11 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/navbar') %>
 
-<div class="container">
+<div class="container mt-3 mb-5 tokens">
+  <%- include ('../partials/alerts/error') %>
+  <%- include ('../partials/alerts/success') %>
+  <%- include ('../partials/alerts/info') %>
+
   <%- include ('../partials/account/tokensList') %>
 </div>
 

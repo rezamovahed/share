@@ -25,8 +25,9 @@ src/tmp
 #docker
 docker-compose.override.yml
 
-# Test javascript file
+# Test javascript file and markdown notes
 test.js
+NOTES.md
 
 # Editors
 .idea

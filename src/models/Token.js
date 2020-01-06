@@ -7,7 +7,7 @@ const tokenSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
-    name: {
+    label: {
       type: String,
       default: 'Default Token Label'
     },
@@ -19,6 +19,10 @@ const tokenSchema = new mongoose.Schema(
     expireAt: {
       type: Date,
       expires: -1
+    },
+    isNever: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }
