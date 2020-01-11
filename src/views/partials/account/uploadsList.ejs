@@ -18,6 +18,7 @@
       <thead>
         <tr>
           <th scope="col">File</th>
+          <th scope="col">Type</th>
           <th scope="col">Size</th>
           <th scope="col">Uploaded</th>
           <th scope="col">Actions</th>
@@ -35,18 +36,22 @@
         <tr>
           <td>
             <a
-              href="<%- uploads[i].isImage ? `/view/${uploads[i].fileName}` : `/u/${uploads[i].fileName}` %>"><%= uploads[i].fileName %></a>
+              href="<%- uploads[i].isImage ? `/view/${uploads[i].fileName}` : `/u/${uploads[i].fileName}` %>" target="_blank">
+             <%- currentUser.streamerMode  ? `${uploads[i].fileName.substring(0,3)}*********************` : uploads[i].fileName %></a>
+          </td>
+               <td>
+            <%= uploads[i].type %>
           </td>
           <td>
             <%= uploads[i].size %>
           </td>
           <td>
-            <%= moment(uploads[i].createdAt).format('MMM Do YYYY hh:mm A') %>
+            <%= moment(uploads[i].createdAt).fromNow() %>
           </td>
           <td>
             <form class=" d-inline"
               action="/me/uploads/<%= uploads[i].id %>?_method=DELETE&name=<%= uploads[i].fileName %>" method="POST">
-              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <input type="hidden" name="_csrf" value="<%= _csrf %>" />
               <button class="delete" title="Delete" data-toggle="tooltip">
                 <i class="fas fa-times-circle"></i>
               </button>

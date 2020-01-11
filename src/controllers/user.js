@@ -117,7 +117,7 @@ exports.getActivation = async (req, res, next) => {
       emailVerificationToken: req.params.token
     })
       .where('emailVerificationTokenExpire')
-      .gt(Date.now());
+      .gt(moment());
 
     if (!user) {
       req.flash(
