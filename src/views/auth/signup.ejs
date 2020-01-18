@@ -46,11 +46,12 @@
         src="/assets/images/logo_text.png"
         width="320"
       />
-      <% errors = error && error.length > 0 %> <% if (errors){ %>
+      <% errors = error && error.length > 0 %> <% if (error && typeof error[0]
+      === 'string'){ %>
       <div class="alert alert-danger" role="alert">
-        <%- error %>
+        <%= error %>
       </div>
-      <% } %> <% if (success && success.length > 0){ %>
+      <% } %> <% if (success && typeof success[0] === 'string'){ %>
       <div class="alert alert-success" role="alert">
         <%= success %>
       </div>
@@ -109,10 +110,10 @@
         </button>
       </form>
       <div class="info">
-        <a href="/user/forgot">
+        <a href="/user/forgot-password">
           <small class=" info text">Forgot your password?</small>
         </a>
-        <a href="/user/activation/resend">
+        <a href="/user/resend-activation">
           <small class=" info text">Resend account activation token</small>
         </a>
         <a href="/login">
