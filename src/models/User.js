@@ -57,7 +57,8 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
-    lastLogin: Date
+    lastLogin: Date,
+    lastUpload: Date
   },
   {
     timestamps: true

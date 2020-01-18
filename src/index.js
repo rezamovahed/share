@@ -182,6 +182,7 @@ app.use((req, res, next) => {
     lusca.csrf()(req, res, next);
   }
 });
+
 /**
  * Rate Limiter
  */
@@ -204,6 +205,8 @@ const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerif
  * Load vaildation middleware
  */
 const loginVaildation = require('./validation/login');
+const signupVaildation = require('./validation/signup');
+const forgotPasswordVaildation = require('./validation/forgot-password');
 const resetPasswordVaildation = require('./validation/reset-password');
 const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
 const accountCreateTokenVaildation = require('./validation/tokens/create-token');
@@ -225,7 +228,7 @@ const tokensConroller = require('./controllers/tokens');
 
 app.use(indexRoutes);
 app.use(authRoutes);
-app.post('/signup', isAlreadyAuth, authController.postSignup);
+app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
 app.post(
   '/login',
   isAlreadyAuth,
@@ -238,9 +241,9 @@ app.post(
   authController.postLogin
 );
 app.get('/logout', authController.getLogout);
-app.use('/user/', userRoutes);
+app.use('/user', userRoutes);
 app.get('/user/activation/:token', userController.getActivation);
-app.post('/user/forgot-password', userController.postPasswordForgot);
+app.post('/user/forgot-password', forgotPasswordVaildation, userController.postPasswordForgot);
 app.post(
   '/user/reset-password/:token',
   isPasswordResetTokenVaild,

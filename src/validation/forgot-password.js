@@ -1,35 +1,34 @@
 const Validator = require('validator');
 const isEmpty = require('./isEmpty');
+const User = require('../models/User');
 
-module.exports = (req, res, next) => {
-  let { username, email, password } = req.body;
+module.exports = async (req, res, next) => {
+  let { email } = req.body;
 
   // eslint-disable-next-line prefer-const
   let errors = {};
 
-  username = !isEmpty(username) ? username : '';
   email = !isEmpty(email) ? email : '';
-  password = !isEmpty(password) ? password : '';
-
-  if (Validator.isEmpty(username)) {
-    errors.username = 'Username is required.';
-  }
 
   if (Validator.isEmpty(email)) {
     errors.email = 'Email is required.';
-  }
-
-  if (Validator.isEmpty(password)) {
-    errors.password = 'Password is required.';
   }
 
   if (!Validator.isEmpty(email) && !Validator.isEmail(email)) {
     errors.email = 'Email is invaild.  Example (example@example.com)';
   }
 
+  // Check if there is a user with that email..
+  if (isEmpty(errors.email)) {
+    const userEmail = await User.findOne({ email });
+    if (!userEmail) {
+      errors.email = 'There is no account with that email.';
+    }
+  }
+
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect('/signup');
+    return res.redirect('/user/forgot-password');
   }
   next();
 };

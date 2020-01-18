@@ -30,12 +30,12 @@ const isTokenVaild = require('../../../middleware/api/isTokenVaild');
 /**
  * Load Controllers
  */
-const uploadController = require('../../../controllers/api/upload');
+const uploadController = require('../../../controllers/api/v1/upload');
 
 /**
  * Load Validation
  */
-const uploadValidation = require('../../../validation/api/upload');
+const uploadValidation = require('../../../validation/api/v1/upload');
 
 /**
  *

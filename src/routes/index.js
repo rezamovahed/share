@@ -14,7 +14,7 @@ const Upload = require('../models/Upload');
  *  users uploads if they are logged inn
  * @access Public/Private
  */
-router.get('/', (req, res) => {
+router.get('/', async  (req, res) => {
   /**
    * If the user is logged in this will add
    * the needed data for the logged in render
@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
   if (req.isAuthenticated()) {
     // Find user uploads
     const limit = 10;
-    const uploads = Upload.find({ uploader: req.user.id })
+    const uploads = await Upload.find({ uploader: req.user.id })
       .limit(limit)
       .sort({ createdAt: -1 });
     return res.render('landing/index', {

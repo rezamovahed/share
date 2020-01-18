@@ -1,3 +1,4 @@
+const moment = require('moment');
 const LocalStrategy = require('passport-local').Strategy;
 
 /**
@@ -27,7 +28,7 @@ module.exports = passport => {
               message: 'Invaild email or password.'
             });
           }
-          user.lastLogin = Date.now();
+          user.lastLogin = moment();
           await user.save();
           done(null, user);
         } catch (err) {

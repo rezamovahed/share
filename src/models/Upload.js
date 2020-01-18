@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const { Schema } = mongoose;
 
@@ -30,7 +31,7 @@ const uploadSchema = new Schema({
   },
   uploadedAt: {
     type: Date,
-    default: Date.now
+    default: moment()
   }
 });
 
