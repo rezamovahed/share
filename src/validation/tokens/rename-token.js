@@ -12,7 +12,6 @@ module.exports = (req, res, next) => {
   if (Validator.isEmpty(label)) {
     errors = 'Token Label is required.';
   }
-
   if (!isEmpty(errors)) {
     req.flash('error', errors);
     return res.redirect('/tokens');

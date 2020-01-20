@@ -210,6 +210,7 @@ const forgotPasswordVaildation = require('./validation/forgot-password');
 const resetPasswordVaildation = require('./validation/reset-password');
 const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
 const accountCreateTokenVaildation = require('./validation/tokens/create-token');
+const ResendActivationEmailVaildation = require('./validation/resend-activation');
 
 /**
  * Primary app routes.
@@ -243,12 +244,21 @@ app.post(
 app.get('/logout', authController.getLogout);
 app.use('/user', userRoutes);
 app.get('/user/activation/:token', userController.getActivation);
-app.post('/user/forgot-password', forgotPasswordVaildation, userController.postPasswordForgot);
+app.post(
+  '/user/forgot-password',
+  forgotPasswordVaildation,
+  userController.postPasswordForgot
+);
 app.post(
   '/user/reset-password/:token',
   isPasswordResetTokenVaild,
   resetPasswordVaildation,
   userController.postPasswordReset
+);
+app.post(
+  '/user/resend-activation',
+  ResendActivationEmailVaildation,
+  userController.postResendActivationEmail
 );
 app.use('/account', isLoggedin, accountRoutes);
 app.put('/account', isLoggedin, accountController.putAccount);

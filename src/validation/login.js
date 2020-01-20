@@ -22,7 +22,6 @@ module.exports = (req, res, next) => {
 
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    console.log('vaildation error');
     return res.redirect('/login');
   }
   next();

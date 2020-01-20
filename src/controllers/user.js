@@ -16,6 +16,7 @@ const User = require('../models/User');
  */
 const PasswordForgotEmail = require('../emails/PasswordForgot');
 const PasswordResetEmail = require('../emails/PasswordReset');
+const AccountActivationEmail = require('../emails/AccountActivation');
 
 /**
  * Forgot password Controler- Takes a user email looks it up.
@@ -101,15 +102,11 @@ exports.postPasswordReset = async (req, res) => {
 };
 
 /**
- * Signup Controler - Take the users email and password to create there account.
- * Also will send them aa email to verify there email address
+ * Account Activation Controler - Checks the token and if it's vaild
+ * activate the users account
  *
- * @param username
- * Current User username
- * @param email
- * Current User email
- * @param password
- * Current User Password
+ * @param token
+ * Account Activation Token
  */
 exports.getActivation = async (req, res, next) => {
   try {
@@ -144,13 +141,50 @@ exports.getActivation = async (req, res, next) => {
 };
 
 /**
- * Signup Controler - Take the users email and password to create there account.
- * Also will send them aa email to verify there email address
+ * Resend Account Activation Controler - Checks if the accunt is activated
+ *  yet if not it will send a new email with new token
  *
- * @param username
- * Current User username
- * @param email
- * Current User email
- * @param password
- * Current User Password
+ * @param token
+ * Account Activation Token
  */
+exports.postResendActivationEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    // Set the token and the expire date.
+    const token = await generate(alphabet, 24);
+    const tokenExpire = moment().add('3', 'h');
+
+    user.emailVerificationToken = token;
+    user.emailVerificationTokenExpire = tokenExpire;
+    await user.save();
+
+    const emailTemplate = AccountActivationEmail(token);
+
+    const msg = {
+      to: user.email,
+      from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+      subject: `Activate your account on ${process.env.TITLE}`,
+      html: emailTemplate.html
+    };
+
+    sendgrid
+      // eslint-disable-next-line no-unused-vars
+      .send(msg, (err, res) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Server error');
+        }
+      });
+
+    req.flash(
+      'success',
+      'Please check your email for a new account activation email.'
+    );
+    res.redirect('/login');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};

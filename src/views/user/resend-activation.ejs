@@ -54,10 +54,15 @@
           <input
             name="email"
             type="email"
-            class="form-control"
+            class="form-control <% if(error && error.length > 0 && error[0].email){ %>is-invalid <% } %>"
             id="email"
             placeholder="Your email"
           />
+          <% if (errors && error[0].email) { %>
+          <small class="invalid-feedback">
+            <%= error[0].email %>
+          </small>
+          <% } %>
         </div>
         <button type="submit" class="btn btn-auth btn-primary btn-block">
           Resend
