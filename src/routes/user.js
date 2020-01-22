@@ -18,7 +18,7 @@ const isPasswordResetTokenVaild = require('../middleware/isPasswordResetTokenVai
  * @access Public/Private
  */
 router.get('/forgot-password', (req, res) => {
-  res.render('auth/forgot-password', {
+  res.render('user/forgot-password', {
     pageTitle: 'Recover password',
     pageDesc:
       'Forgot your password? No problem - you can reset your password on this page.',
@@ -34,7 +34,7 @@ router.get('/forgot-password', (req, res) => {
  * @access Public/Private
  */
 router.get('/reset-password/:token', isPasswordResetTokenVaild, (req, res) => {
-  res.render('auth/reset-password', {
+  res.render('user/reset-password', {
     pageTitle: 'Recover your password',
     pageDesc: 'Reset your password and get access to your account',
     pageName: 'forgotPassword'

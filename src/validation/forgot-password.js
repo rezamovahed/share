@@ -13,11 +13,9 @@ module.exports = async (req, res, next) => {
   if (Validator.isEmpty(email)) {
     errors.email = 'Email is required.';
   }
-
   if (!Validator.isEmpty(email) && !Validator.isEmail(email)) {
     errors.email = 'Email is invaild.  Example (example@example.com)';
   }
-
   // Check if there is a user with that email..
   if (isEmpty(errors.email)) {
     const userEmail = await User.findOne({ email });
@@ -25,7 +23,6 @@ module.exports = async (req, res, next) => {
       errors.email = 'There is no account with that email.';
     }
   }
-
   if (!isEmpty(errors)) {
     req.flash('error', errors);
     return res.redirect('/user/forgot-password');

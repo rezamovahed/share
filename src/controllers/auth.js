@@ -24,14 +24,7 @@ exports.postSignup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    let user = await User.find({ email });
-
-    if (user.length > 0) {
-      req.flash('error', 'Sorry but that email is already used.');
-      return res.redirect('/signup');
-    }
-
-    user = new User({
+    const user = new User({
       username,
       email,
       password,
