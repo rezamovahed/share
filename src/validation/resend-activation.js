@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
   }
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect('/user/resend-activation');
+    return res.redirect(400, '/user/resend-activation');
   }
 
   const user = await User.find({
@@ -34,7 +34,7 @@ module.exports = async (req, res, next) => {
       'error',
       'There is no account with that email or the account is already activated '
     );
-    return res.redirect('/user/resend-activation');
+    return res.redirect(400, '/user/resend-activation');
   }
   next();
 };

@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
   }
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect('/tokens');
+    return res.redirect(400, '/tokens');
   }
   next();
 };

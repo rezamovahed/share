@@ -35,7 +35,7 @@ module.exports = (req, res, next) => {
   }
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect('/account');
+    return res.redirect(400, '/account');
   }
   next();
 };
