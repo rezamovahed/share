@@ -323,24 +323,25 @@ db.on('error', () => {
     new Error('MongoDB connection error. Please make sure MongoDB is running.`')
   );
 });
-
-db.once('open', () => {
-  consola.ready({
-    message: 'Database',
-    badge: true
-  });
-  app.listen(app.get('port'), () => {
+if (process.env.NODE_ENV !== 'test') {
+  db.once('open', () => {
     consola.ready({
-      message: 'Web',
+      message: 'Database',
       badge: true
     });
-    // Log infomation after everything is started.
-    consola.log('----------------------------------------');
-    consola.info(`Environment: ${app.get('env')}`);
-    consola.info(`Base URL: http://localhost:${app.get('port')}`);
-    consola.log('----------------------------------------');
+    app.listen(app.get('port'), () => {
+      consola.ready({
+        message: 'Web',
+        badge: true
+      });
+      // Log infomation after everything is started.
+      consola.log('----------------------------------------');
+      consola.info(`Environment: ${app.get('env')}`);
+      consola.info(`Base URL: http://localhost:${app.get('port')}`);
+      consola.log('----------------------------------------');
+    });
   });
-});
+}
 
 // Cloes connection to mongodb on exit.
 process.on('SIGINT', () => {

@@ -14,8 +14,7 @@ const Token = require('.././models/Token');
  * @access Private
  */
 router.get('/', async (req, res) => {
-  const tokens = await Token.find({ user: req.user.id }).populate('tokens');
-
+  const tokens = await Token.find({ user: req.user.id });
   res.render('tokens/index', {
     pageTitle: 'My Tokens',
     pageDesc: process.env.DESC,

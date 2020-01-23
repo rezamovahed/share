@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
       'error',
       'Your password reset link is either invaild or expired.'
     );
-    return res.redirect('/user/forgot-password');
+    return res.redirect(200, '/user/forgot-password');
   }
   next();
 };

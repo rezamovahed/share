@@ -54,7 +54,7 @@ exports.postSignup = async (req, res) => {
       'success',
       'Your account has been created but needs to be activated. Check your email for further instructions.'
     );
-    res.redirect('/signup');
+    res.redirect(200, '/signup');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -67,7 +67,7 @@ exports.postSignup = async (req, res) => {
  */
 exports.postLogin = (req, res) => {
   req.flash('success', `Welcome back, ${req.user.username}`);
-  res.redirect('/');
+  res.redirect(200, '/');
 };
 
 /**
@@ -76,5 +76,5 @@ exports.postLogin = (req, res) => {
  */
 exports.getLogout = async (req, res) => {
   req.logout();
-  res.redirect('/');
+  res.redirect(200, '/');
 };

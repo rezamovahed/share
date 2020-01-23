@@ -59,7 +59,7 @@ exports.postToken = async (req, res, next) => {
       'success',
       `Here's your API Key <p id="apiKey">${jwtToken}<p>This will not be showed again for security reasons.`
     );
-    res.redirect('/tokens');
+    res.redirect(200, '/tokens');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -76,7 +76,7 @@ exports.putToken = async (req, res, next) => {
     token.label = label;
     await token.save();
     req.flash('success', `Token has been to <strong>${label}</strong>.`);
-    res.redirect('/tokens');
+    res.redirect(200, '/tokens');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -91,7 +91,7 @@ exports.deleteToken = async (req, res, next) => {
   try {
     await Token.findByIdAndDelete(req.params.token_id);
     req.flash('success', 'Token has been removed');
-    res.redirect('/tokens');
+    res.redirect(200, '/tokens');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

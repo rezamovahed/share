@@ -55,7 +55,7 @@ exports.postPasswordForgot = async (req, res) => {
       'success',
       'Please check your email for further instructions on recovering your password.'
     );
-    res.redirect('/login');
+    res.redirect(200, '/login');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -94,7 +94,7 @@ exports.postPasswordReset = async (req, res) => {
     if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
 
     req.flash('success', 'Password has been changed.  You may now login.');
-    res.redirect('/login');
+    res.redirect(200, '/login');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -121,7 +121,7 @@ exports.getActivation = async (req, res, next) => {
         'error',
         'Your account activation token is either expired or your account is already activated'
       );
-      res.redirect('/user/resend-activation');
+      res.redirect(200, '/user/resend-activation');
     } else {
       user.emailVerificationToken = undefined;
       user.emailVerificationTokenExpire = undefined;
@@ -132,7 +132,7 @@ exports.getActivation = async (req, res, next) => {
         'success',
         'Your account has been activated.  You may now login.'
       );
-      res.redirect('/login');
+      res.redirect(200, '/login');
     }
   } catch (err) {
     console.error(err);
@@ -175,7 +175,7 @@ exports.postResendActivationEmail = async (req, res) => {
       'success',
       'Please check your email for a new account activation email.'
     );
-    res.redirect('/login');
+    res.redirect(200, '/login');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

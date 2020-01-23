@@ -31,19 +31,19 @@ describe('GET /signup', () => {
   });
 });
 
-describe('GET /user/forgot-password', () => {
-  it('it should has status code 200', done => {
-    supertest(app)
-      .get('/user/forgot-password/')
-      .expect(200)
-      .end((err, res) => {
-        if (err) {
-          return done(err);
-        }
-        done();
-      });
-  });
-});
+// describe('GET /user/forgot-password', () => {
+//   it('it should has status code 200', done => {
+//     supertest(app)
+//       .get('/user/forgot-password/')
+//       .expect(200)
+//       .end((err, res) => {
+//         if (err) {
+//           return done(err);
+//         }
+//         done();
+//       });
+//   });
+// });
 
 // describe('GET /user/reset-password', () => {
 //   it('it should has status code 200', done => {
@@ -51,28 +51,40 @@ describe('GET /user/forgot-password', () => {
 //       .get('/user/reset-password')
 //       .expect(200)
 //       .end((err, res) => {
-//         if (err) done(err);
+//         if (err) {
+//           return done(err);
+//         }
 //         done();
 //       });
 //   });
 // });
 
-// describe('POST /signup create user', () => {
-//   it('it should has status code 200', done => {
-//     supertest(app)
-//       .post('/signup')
-//       .set('Content-Type', 'application/x-www-form-urlencoded')
-//       .send({
-//         username: 'user@mrdemonwolf.github.io',
-//         email: 'user@mrdemonwolf.github.io',
-//         password: 'user@mrdemonwolf.github.io'
-//       })
-//       .expect(200)
-//       .end((err, res) => {
-//         done();
-//       });
-//   });
-// });
+describe('POST /signup create user', () => {
+  it('it should has status code 200', done => {
+    supertest(app)
+      .post('/signup/')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .send({
+        username: 'user@mrdemonwolf.github.io',
+        email: 'user@mrdemonwolf.github.io',
+        password: 'user@mrdemonwolf.github.io'
+      })
+      .expect(200)
+      .end(async (err, res) => {
+        if (err) {
+          return done(err);
+        }
+        const user = await User.findOne({
+          email: 'user@mrdemonwolf.github.io'
+        });
+        user.emailVerified = true;
+        user.emailVerificationToken = undefined;
+        user.emailVerificationTokenExpire = undefined;
+        await user.save();
+        done();
+      });
+  });
+});
 
 describe('POST /signup create admin', () => {
   it('it should has status code 200', done => {
@@ -102,18 +114,22 @@ describe('POST /signup create admin', () => {
   });
 });
 
-// describe('POST /login', () => {
-//   it('it should has status code 200', done => {
-//     agent
-//       .post('/login')
-//       .send({ email: 'test@example.com', password: 'test@example.com' })
-//       .set('Content-Type', 'application/x-www-form-urlencoded')
-//       .expect(302)
-//       .expect('Location', '/')
-//       .expect('set-cookie', /sessionId/)
-//       .end((err, res) => {
-//         if (err) return done(err);
-//         done();
-//       });
-//   });
-// });
+describe('POST /login', () => {
+  it('it should has status code 200', done => {
+    supertest
+      .agent(app)
+      .post('/login/')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .send({
+        email: 'user@mrdemonwolf.github.io',
+        password: 'user@mrdemonwolf.github.io'
+      })
+      .expect('Location', '/')
+      .expect('set-cookie', /sessionId/)
+      .end((err, res) => {
+        if (err) return done(err);
+
+        done();
+      });
+  });
+});

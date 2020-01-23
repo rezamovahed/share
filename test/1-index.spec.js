@@ -1,7 +1,5 @@
 /* eslint-disable no-undef */
 const supertest = require('supertest');
-// const assert = require('assert');
-
 const app = require('../src/index');
 
 describe('GET /', () => {
@@ -10,7 +8,9 @@ describe('GET /', () => {
       .get('/')
       .expect(200)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) {
+          return done(err);
+        }
         done();
       });
   });
