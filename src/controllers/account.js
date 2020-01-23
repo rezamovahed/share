@@ -41,7 +41,7 @@ exports.putAccount = async (req, res, next) => {
       oldPassword
     ) {
       req.flash('error', 'You have not changed any details');
-      return res.redirect(301, '/account');
+      return res.redirect('/account');
     }
     const user = await User.findById(req.user.id);
 
@@ -79,7 +79,7 @@ exports.putAccount = async (req, res, next) => {
 
     await user.save();
     req.flash('success', successMsg);
-    res.redirect(200, '/account');
+    res.redirect('/account');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -104,7 +104,7 @@ exports.emailVeirfy = async (req, res, next) => {
     }
 
     req.flash('success', successMsg);
-    res.redirect(200, '/account');
+    res.redirect('/account');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -137,7 +137,7 @@ exports.resendEmailVeirfy = async (req, res, next) => {
     if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
 
     req.flash('success', 'A new email verification link has been sent.');
-    res.redirect(200, '/account');
+    res.redirect('/account');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

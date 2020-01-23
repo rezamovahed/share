@@ -9,7 +9,6 @@ const router = express.Router();
  * @access Private
  */
 router.get('/', (req, res) => {
-  console.log('POG')
   res.render('admin/index', {
     pageTitle: 'Admin Area',
     pageDesc: process.env.DESC,

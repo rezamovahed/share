@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
 
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect(400, '/login');
+    return res.redirect('/login');
   }
   next();
 };

@@ -24,7 +24,7 @@ module.exports = (req, res, next) => {
 
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect(400, `/user/reset-password/${req.params.token}`);
+    return res.redirect(`/user/reset-password/${req.params.token}`);
   }
   next();
 };

@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
       'error',
       'Your new email verify link is either invaild or expired.'
     );
-    return res.redirect(200, '/account');
+    return res.redirect('/account');
   }
   next();
 };

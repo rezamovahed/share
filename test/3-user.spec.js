@@ -33,40 +33,40 @@ describe('GET /', () => {
       });
   });
 });
-// describe('GET /gallery', () => {
-//   it('it should has status code 200', done => {
-//     supertest(app)
-//       .get('/gallery/')
-//       .set('Cookie', userCookie)
-//       .expect(200)
-//       .end((err, res) => {
-//         if (err) return done(err);
-//         done();
-//       });
-//   });
-// });
-// describe('GET /tokens', () => {
-//   it('it should has status code 200', done => {
-//     supertest(app)
-//       .get('/tokens/')
-//       .set('Cookie', userCookie)
-//       .expect(200)
-//       .end((err, res) => {
-//         if (err) return done(err);
-//         done();
-//       });
-//   });
-// });
+describe('GET /gallery', () => {
+  it('it should has status code 200', done => {
+    supertest(app)
+      .get('/gallery/')
+      .set('Cookie', userCookie)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});
+describe('GET /tokens', () => {
+  it('it should has status code 200', done => {
+    supertest(app)
+      .get('/tokens/')
+      .set('Cookie', userCookie)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});
 
-// describe('GET /account', () => {
-//   it('it should has status code 200', done => {
-//     supertest(app)
-//       .get('/account/')
-//       .set('Cookie', userCookie)
-//       .expect(200)
-//       .end((err, res) => {
-//         if (err) return done(err);
-//         done();
-//       });
-//   });
-// });
+describe('GET /account', () => {
+  it('it should has status code 200', done => {
+    supertest(app)
+      .get('/account/')
+      .set('Cookie', userCookie)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        done();
+      });
+  });
+});

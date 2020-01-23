@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
   }
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect(400, '/user/forgot-password');
+    return res.redirect('/user/forgot-password');
   }
   next();
 };

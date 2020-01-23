@@ -155,10 +155,17 @@ app.use((req, res, next) => {
       ? `${process.env.npm_package_version} dev`
       : process.env.npm_package_version;
   // Pass flash to locals
+
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
 
+  if (res.locals.error) {
+    res.set('Error', true);
+  }
+  if (res.locals.info) {
+    res.set('Info', true);
+  }
   res.locals.currentYear = new Date().getFullYear();
   next();
 });

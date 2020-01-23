@@ -34,14 +34,14 @@ module.exports = async (req, res, next) => {
 
   if (!isEmpty(errors)) {
     req.flash('error', errors);
-    return res.redirect(400, '/signup');
+    return res.redirect('/signup');
   }
 
   const user = await User.find({ email });
 
   if (user.length > 0) {
     req.flash('error', 'Sorry but that email is already used.');
-    return res.redirect(400, '/signup');
+    return res.redirect('/signup');
   }
   next();
 };
