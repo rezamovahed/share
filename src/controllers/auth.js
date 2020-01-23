@@ -48,7 +48,7 @@ exports.postSignup = async (req, res) => {
       html: emailTemplate.html
     };
 
-    if (process.env.NODE_EV !== 'test') await sendgrid.send(msg);
+    if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
 
     req.flash(
       'success',

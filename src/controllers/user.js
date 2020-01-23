@@ -49,7 +49,7 @@ exports.postPasswordForgot = async (req, res) => {
       html: emailTemplate.html
     };
 
-    if (process.env.NODE_EV !== 'test') await sendgrid.send(msg);
+    if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
 
     req.flash(
       'success',
@@ -91,7 +91,7 @@ exports.postPasswordReset = async (req, res) => {
       html: emailTemplate.html
     };
 
-    if (process.env.NODE_EV !== 'test') await sendgrid.send(msg);
+    if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
 
     req.flash('success', 'Password has been changed.  You may now login.');
     res.redirect('/login');
@@ -169,7 +169,7 @@ exports.postResendActivationEmail = async (req, res) => {
       html: emailTemplate.html
     };
 
-    if (process.env.NODE_EV !== 'test') await sendgrid.send(msg);
+    if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
 
     req.flash(
       'success',
