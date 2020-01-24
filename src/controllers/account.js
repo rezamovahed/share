@@ -41,7 +41,7 @@ exports.putAccount = async (req, res, next) => {
       oldPassword
     ) {
       req.flash('error', 'You have not changed any details');
-      return res.redirect(301, '/account');
+      return res.redirect('/account');
     }
     const user = await User.findById(req.user.id);
 
@@ -74,7 +74,7 @@ exports.putAccount = async (req, res, next) => {
         html: emailTemplate.html
       };
 
-      await sendgrid.send(msg);
+      if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
     }
 
     await user.save();
@@ -134,7 +134,7 @@ exports.resendEmailVeirfy = async (req, res, next) => {
       html: emailTemplate.html
     };
 
-    await sendgrid.send(msg);
+    if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
 
     req.flash('success', 'A new email verification link has been sent.');
     res.redirect('/account');

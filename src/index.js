@@ -72,10 +72,14 @@ app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 
-if (!process.env.NODE_ENV === 'development') {
-  app.use(logger('combined'));
-} else {
-  app.use(logger('dev'));
+switch (process.env.NODE_ENV) {
+  case 'development':
+    app.use(logger('dev'));
+    break;
+  case 'test':
+    break;
+  default:
+    app.use(logger('combined'));
 }
 
 /**
@@ -155,6 +159,7 @@ app.use((req, res, next) => {
       ? `${process.env.npm_package_version} dev`
       : process.env.npm_package_version;
   // Pass flash to locals
+
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
@@ -323,24 +328,25 @@ db.on('error', () => {
     new Error('MongoDB connection error. Please make sure MongoDB is running.`')
   );
 });
-
-db.once('open', () => {
-  consola.ready({
-    message: 'Database',
-    badge: true
-  });
-  app.listen(app.get('port'), () => {
+if (process.env.NODE_ENV !== 'test') {
+  db.once('open', () => {
     consola.ready({
-      message: 'Web',
+      message: 'Database',
       badge: true
     });
-    // Log infomation after everything is started.
-    consola.log('----------------------------------------');
-    consola.info(`Environment: ${app.get('env')}`);
-    consola.info(`Base URL: http://localhost:${app.get('port')}`);
-    consola.log('----------------------------------------');
+    app.listen(app.get('port'), () => {
+      consola.ready({
+        message: 'Web',
+        badge: true
+      });
+      // Log infomation after everything is started.
+      consola.log('----------------------------------------');
+      consola.info(`Environment: ${app.get('env')}`);
+      consola.info(`Base URL: http://localhost:${app.get('port')}`);
+      consola.log('----------------------------------------');
+    });
   });
-});
+}
 
 // Cloes connection to mongodb on exit.
 process.on('SIGINT', () => {

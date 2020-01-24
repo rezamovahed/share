@@ -48,14 +48,8 @@ exports.postSignup = async (req, res) => {
       html: emailTemplate.html
     };
 
-    sendgrid
-      // eslint-disable-next-line no-unused-vars
-      .send(msg, (err, res) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send('Server error');
-        }
-      });
+    if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
+
     req.flash(
       'success',
       'Your account has been created but needs to be activated. Check your email for further instructions.'
