@@ -88,26 +88,6 @@ describe('Auth Routes', () => {
     });
   });
 
-  describe('POST /login (user)', () => {
-    it('it should has status code 200', done => {
-      supertest
-        .agent(app)
-        .post('/login/')
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .send({
-          email: 'user@mrdemonwolf.github.io',
-          password: 'user@mrdemonwolf.github.io'
-        })
-        .expect('Location', '/')
-        // .expect('set-cookie', /sessionId/)
-        .end((err, res) => {
-          if (err) return done(err);
-          done();
-        });
-    });
-  });
-
-
   describe('GET /user/forgot-password', () => {
     it('it should has status code 200', done => {
       supertest(app)

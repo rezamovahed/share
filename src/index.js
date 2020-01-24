@@ -166,6 +166,7 @@ app.use((req, res, next) => {
   if (res.locals.info) {
     res.set('Info', true);
   }
+
   res.locals.currentYear = new Date().getFullYear();
   next();
 });
