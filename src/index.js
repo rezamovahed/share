@@ -72,10 +72,12 @@ app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 
-if (!process.env.NODE_ENV === 'development') {
-  app.use(logger('combined'));
-} else {
-  app.use(logger('dev'));
+if (!process.env.NODE_ENV === 'test') {
+  if (!process.env.NODE_ENV === 'development') {
+    app.use(logger('combined'));
+  } else {
+    app.use(logger('dev'));
+  }
 }
 
 /**
@@ -159,13 +161,6 @@ app.use((req, res, next) => {
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
-
-  if (res.locals.error) {
-    res.set('Error', true);
-  }
-  if (res.locals.info) {
-    res.set('Info', true);
-  }
 
   res.locals.currentYear = new Date().getFullYear();
   next();

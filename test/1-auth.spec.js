@@ -1,11 +1,15 @@
 /* eslint-disable no-undef */
 const supertest = require('supertest');
+const chai = require('chai');
 const app = require('../src/index');
 const User = require('../src/models/User');
 
+const { assert, expect } = chai;
+const should = chai.should();
+
 describe('Auth Routes', () => {
   describe('GET /login', () => {
-    it('it should has status code 200', done => {
+    it('it should return status 200 if rendered', done => {
       supertest(app)
         .get('/login/')
         .expect(200)
@@ -19,7 +23,7 @@ describe('Auth Routes', () => {
   });
 
   describe('GET /signup', () => {
-    it('it should has status code 200', done => {
+    it('it should return status 200 if rendered', done => {
       supertest(app)
         .get('/signup/')
         .expect(200)
@@ -32,9 +36,8 @@ describe('Auth Routes', () => {
     });
   });
 
-
-  describe('POST /signup (user)', () => {
-    it('it should has status code 302', done => {
+  describe('POST /signup to create user', () => {
+    it('it should return status 302', done => {
       supertest(app)
         .post('/signup/')
         .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -61,7 +64,7 @@ describe('Auth Routes', () => {
   });
 
   describe('POST /signup (admin)', () => {
-    it('it should has status code 302', done => {
+    it('it should return status 302', done => {
       supertest(app)
         .post('/signup/')
         .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -87,32 +90,4 @@ describe('Auth Routes', () => {
         });
     });
   });
-
-  describe('GET /user/forgot-password', () => {
-    it('it should has status code 200', done => {
-      supertest(app)
-        .get('/user/forgot-password/')
-        .expect(200)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          done();
-        });
-    });
-  });
-
-  // describe('GET /user/reset-password', () => {
-  //   it('it should has status code 200', done => {
-  //     supertest(app)
-  //       .get('/user/reset-password')
-  //       .expect(200)
-  //       .end((err, res) => {
-  //         if (err) {
-  //           return done(err);
-  //         }
-  //         done();
-  //       });
-  //   });
-  // });
 });
