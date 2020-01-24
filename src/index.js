@@ -72,12 +72,14 @@ app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 
-if (!process.env.NODE_ENV === 'test') {
-  if (!process.env.NODE_ENV === 'development') {
-    app.use(logger('combined'));
-  } else {
+switch (process.env.NODE_ENV) {
+  case 'development':
     app.use(logger('dev'));
-  }
+    break;
+  case 'test':
+    break;
+  default:
+    app.use(logger('combined'));
 }
 
 /**
