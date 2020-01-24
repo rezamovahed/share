@@ -73,13 +73,13 @@ app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 
 switch (process.env.NODE_ENV) {
-  case 'development':
-    app.use(logger('dev'));
+  case 'production ':
+    app.use(logger('combined'));
     break;
   case 'test':
     break;
   default:
-    app.use(logger('combined'));
+    app.use(logger('dev'));
 }
 
 /**
@@ -227,6 +227,7 @@ const accountRoutes = require('./routes/account');
 const tokensRoutes = require('./routes/tokens');
 const galleryRoutes = require('./routes/gallery');
 const adminRoutes = require('./routes/admin');
+const configRoutes = require('./routes/config');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
@@ -288,7 +289,11 @@ app.put(
   tokensConroller.putToken
 );
 app.delete('/tokens/:token_id', isLoggedin, tokensConroller.deleteToken);
+// app.delete('/all/uploads', isLoggedin, tokensConroller.deleteTokens);
+app.delete('/all/tokens', isLoggedin, tokensConroller.deleteTokens);
 app.use('/gallery', isLoggedin, galleryRoutes);
+app.use('/config', isLoggedin, configRoutes);
+
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
 
 /**

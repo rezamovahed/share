@@ -58,10 +58,10 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   </div>
                   <div class="modal-body">
-                    <form action="/tokens/<%= tokens[i].id %>?_method=PUT" method="POST" class="mt-2" id="token">
+                    <form action="/tokens/<%= tokens[i].id %>?_method=PUT" method="POST" class="mt-2">
                       <input type="hidden" name="_csrf" value="<%= _csrf %>" />
                       <div class="form-group">
-                        <input name="label" type="text" class="form-control" id="label" value="<%= tokens[i].label %>">
+                        <input name="label" type="text" class="form-control" value="<%= tokens[i].label %>">
                       </div>
                   </div>
                   <div class="modal-footer">
