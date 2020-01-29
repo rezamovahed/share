@@ -213,7 +213,7 @@ const signupVaildation = require('./validation/signup');
 const forgotPasswordVaildation = require('./validation/forgot-password');
 const resetPasswordVaildation = require('./validation/reset-password');
 const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
-const accountCreateTokenVaildation = require('./validation/tokens/create-token');
+// const accountCreateTokenVaildation = require('./validation/tokens/create-token');
 const ResendActivationEmailVaildation = require('./validation/resend-activation');
 
 /**
@@ -283,6 +283,8 @@ app.get(
 );
 
 app.use('/tokens', isLoggedin, tokensRoutes);
+app.get('/tokens/data', isLoggedin, tokensConroller.getTokenListData);
+
 app.post('/tokens', isLoggedin, tokensConroller.postToken);
 app.put(
   '/tokens/:token_id',

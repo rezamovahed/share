@@ -1,11 +1,16 @@
 <% if(currentUser) { %>
 <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="false">
-    <%= currentUser.username %>
-    <% if(currentUser.isVerified) { %>
-    <%- include ('../partials/verified.ejs') %>
-    <%}%>
+  <a
+    class="nav-link dropdown-toggle"
+    href="#"
+    id="navbarDropdown"
+    role="button"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <% if(currentUser.isVerified) { %> <%- include ('../partials/verified.ejs')
+    %> <%}%> <%= currentUser.username %>
     <b class="caret"></b>
   </a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -18,15 +23,13 @@
     <% } %>
     <div class="mt-1 mb-1"></div>
     <a class="dropdown-item" href="/logout">Logout</a>
-    </div>
+  </div>
 </li>
-<% } %>
-<% if(!currentUser && signups) { %>
+<% } %> <% if(!currentUser && signups) { %>
 <li class="nav-item">
   <a class="nav-link" href="/signup">Signup</a>
 </li>
-<% } %>
-<% if(!currentUser) {%>
+<% } %> <% if(!currentUser) {%>
 <li class="nav-item">
   <a class="nav-link" href="/login">Login</a>
 </li>
