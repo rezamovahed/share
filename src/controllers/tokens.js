@@ -12,6 +12,13 @@ const Token = require('.././models/Token');
  */
 exports.postToken = async (req, res, next) => {
   try {
+    if (req.user.streamerMode) {
+      req.flash(
+        'error',
+        "Your currently in streamer mode.  Which means you can't create tokens"
+      );
+      return res.redirect('/tokens');
+    }
     const { label, expire } = req.body;
 
     let expireAt;

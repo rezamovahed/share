@@ -73,12 +73,30 @@ exports.deleteSingleUpload = async (req, res) => {
     });
 
     if (!upload) {
+      if (req.user.streamerMode) {
+        return res.status(404).json({
+          message: `<strong>${uploadedFileName.substring(
+            0,
+            3
+          )}*********************</strong> was not found.`,
+          status: 404
+        });
+      }
       return res.status(404).json({
         message: `<strong>${uploadedFileName}</strong> was not found.`,
         status: 404
       });
     }
     fs.remove(uploadedFilePath);
+    if (req.user.streamerMode) {
+      return res.json({
+        message: `<strong>${uploadedFileName.substring(
+          0,
+          3
+        )}*********************</strong> has been deleted.`,
+        status: 200
+      });
+    }
     res.json({
       message: `<strong>${uploadedFileName}</strong> has been deleted.`,
       status: 200

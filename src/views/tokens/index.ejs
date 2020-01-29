@@ -1,18 +1,23 @@
 <%- include ('../partials/header') %> <%- include ('../partials/navbar') %>
 
-<div class="container mt-3 mb-5 tokens">
-  <%- include ('../partials/alerts/error') %> <%- include
-  ('../partials/alerts/success') %> <% if (info && info.length > 0){ %>
+<!-- Alerts -->
+<div class="container mt-3 pl-0 pr-0">
+  <%- include ('../partials/streamerMode') %> <%- include
+  ('../partials/alerts/error') %> <%- include ('../partials/alerts/success') %>
+  <% if (info && info.length > 0){ %>
   <div class="alert alert-primary text-wrap" role="alert">
-  <p>Here's your API Key<br>
-  <span id="apiKey"><%= info %></span><br>
-    This will not be showed again for security reasons.</p>
+    <p>
+      Here's your API Key<br />
+      <span id="apiKey"><%= info %></span><br />
+      This will not be showed again for security reasons.
+    </p>
   </div>
-
+</div>
+<div class="container pl-0 pr-0 mb-5 loggedIn">
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
-      const apiKey= document.getElementById('apiKey');
+      const apiKey = document.getElementById('apiKey');
       apiKey.onclick = function() {
         document.execCommand('copy');
       };
