@@ -9,7 +9,7 @@
         <div class="col-xs-12 col-md-6">
           <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger">Delete
             All</a>
-          <a data-toggle="modal" data-target="#create-token" role="button" class="btn btn-success">Create Token</a>
+          <a data-toggle="modal" data-target="#create-token" role="button" class="btn btn-success <% if(currentUser.streamerMode){ %>disabled<%}%>"<% if(currentUser.streamerMode){ %>aria-disabled="true"<%}%>>Create Token</a>
         </div>
       </div>
     </div>
