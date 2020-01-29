@@ -2,12 +2,6 @@
 // This file contains all styles related to the index page.
 // -----------------------------------------------------------------------------
 
-.container {
-  &.loggedIn {
-    width: 75%;
-    max-width: 75%;
-  }
-}
 @media (max-width: 991px) {
   .container {
     &.loggedIn {

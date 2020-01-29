@@ -173,7 +173,6 @@ app.use((req, res, next) => {
  */
 app.use((req, res, next) => {
   if (
-    // req.path === '/api/v1' ||
     req.path === '/api' ||
     RegExp('/api/.*').test(req.path) ||
     process.env.NODE_ENV === 'test'
@@ -228,12 +227,14 @@ const tokensRoutes = require('./routes/tokens');
 const galleryRoutes = require('./routes/gallery');
 const adminRoutes = require('./routes/admin');
 const configRoutes = require('./routes/config');
+const indexController = require('./controllers/index');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
 const tokensConroller = require('./controllers/tokens');
 
 app.use(indexRoutes);
+app.get('/data', isLoggedin, indexController.UploadsListMiniAPI);
 app.use(authRoutes);
 app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
 app.post(
@@ -313,14 +314,11 @@ app.use('/api', limiter, apiRoutes);
 app.use((req, res, next) => {
   res.status(404);
 
-  // respond with json
-  if (req.accepts('json')) {
-    res
+  if (req.path === '/api' || RegExp('/api/.*').test(req.path)) {
+    return res
       .status(404)
       .json({ error: 'Whoops, this resource or route could not be found' });
-    return;
   }
-
   // default to plain-text. send()
   res.type('txt').send('Not found');
 });

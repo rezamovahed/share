@@ -16,6 +16,11 @@ const uploadSchema = new Schema({
     type: String,
     required: true
   },
+  uploaded: {
+    type: String,
+    enum: ['local'],
+    default: 'local'
+  },
   type: {
     type: String,
     enum: ['file', 'image', 'text'],
