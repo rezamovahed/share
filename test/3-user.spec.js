@@ -42,6 +42,36 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
+  describe('GET /data (This is used for the / route for manging the upload list) (asc)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .get('/data?order=asc&offset=0&limit=10')
+        .set('Cookie', userCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+
+  describe('GET /data (This is used for the / route for manging the upload list) (desc)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .get('/data?order=desc&offset=0&limit=10')
+        .set('Cookie', userCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+
   describe('GET /gallery', () => {
     it('it should has status code 200', done => {
       supertest(app)
