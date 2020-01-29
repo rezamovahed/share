@@ -3,16 +3,33 @@ const express = require('express');
 const router = express.Router();
 
 /**
+ * Load MongoDB models.
+ */
+const Upload = require('../models/Upload');
+const User = require('../models/User');
+
+/**
  * @route /admin
  * @method GET
  * @description Displays a admin dashboard
  * @access Private
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const uploads = await Upload.countDocuments();
+  const users = await User.countDocuments();
+  const files = await Upload.countDocuments({ type: 'file' });
+  const images = await Upload.countDocuments({ type: 'image' });
+  const texts = await Upload.countDocuments({ type: 'text' });
+
   res.render('admin/index', {
     pageTitle: 'Admin Area',
     pageDesc: process.env.DESC,
-    pageName: 'admin'
+    pageName: 'admin',
+    uploads,
+    users,
+    files,
+    images,
+    texts
   });
 });
 

@@ -1,14 +1,15 @@
 # Changelog
-4.0.0 (Unrelased _Jan 31, 2020)
-__This is a fair big of a update but this is a list (all) changes that have been made__
+4.0.0 (Unrelased _Feb 8, 2020)
+__This is a fair big of a update but this is a list "all" changes that have been made__
 
-<!-- * Made a lot of the code cleaner and easier to mange for developers -->
+* Made a lot of the code cleaner and easier to mange for developers
 <!-- * You can now upload files via your account on the website. -->
-<!-- * Changed from express-fileupload to multer  -->
 <!-- * Added last password change IP and date. -->
 <!-- * Added last activity date.
 * Added last login date. -->
-<!-- Added Tests -->
+* Added a veirfy checkmark.
+* Redesigned and redo of the upload,token and user lising pages.
+* Added Tests
 * Removed avatars
 * Added API docs
 * Switched to sendgrid offical mailer
