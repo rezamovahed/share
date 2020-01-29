@@ -2,8 +2,29 @@
 
 <div class="container mt-3 mb-5 tokens">
   <%- include ('../partials/alerts/error') %> <%- include
-  ('../partials/alerts/success') %> <%- include ('../partials/alerts/info') %>
-  <%- include ('../partials/account/tokensList') %>
+  ('../partials/alerts/success') %> <% if (info && info.length > 0){ %>
+  <div class="alert alert-primary text-wrap" role="alert">
+  <p>Here's your API Key<br>
+  <span id="apiKey"><%= info %></span><br>
+    This will not be showed again for security reasons.</p>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+      const apiKey= document.getElementById('apiKey');
+      apiKey.onclick = function() {
+        document.execCommand('copy');
+      };
+      apiKey.addEventListener('copy', function(event) {
+        event.preventDefault();
+        if (event.clipboardData) {
+          event.clipboardData.setData('text/plain', apiKey.textContent);
+        }
+      });
+    });
+  </script>
+  <% } %> <%- include ('../partials/account/tokensList') %>
 </div>
 
 <%- include ('../partials/footer.ejs') %>

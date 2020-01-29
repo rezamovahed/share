@@ -55,10 +55,7 @@ exports.postToken = async (req, res, next) => {
 
     await token.save();
 
-    req.flash(
-      'success',
-      `Here's your API Key <p id="apiKey">${jwtToken}<p>This will not be showed again for security reasons.`
-    );
+    req.flash('info', jwtToken);
     res.redirect('/tokens');
   } catch (err) {
     console.error(err);
@@ -86,11 +83,23 @@ exports.putToken = async (req, res, next) => {
 /**
  * Delete Token Controler - Deletes a token via the token id.
  */
-
 exports.deleteToken = async (req, res, next) => {
   try {
     await Token.findByIdAndDelete(req.params.token_id);
     req.flash('success', 'Token has been removed');
+    res.redirect('/tokens');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete All Tokens Controler - Deletes all a users tokens
+ */
+exports.deleteTokens = async (req, res, next) => {
+  try {
+    req.flash('success', 'All your tokens have been removed.');
     res.redirect('/tokens');
   } catch (err) {
     console.error(err);

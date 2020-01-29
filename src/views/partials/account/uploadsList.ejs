@@ -1,3 +1,5 @@
+<div class="alert alert-danger collapse" role="alert" id="error">
+</div>
 <div class="customTable">
   <div class="table-wrapper">
     <div class="table-title">
@@ -13,56 +15,89 @@
       </div>
     </div>
   </div>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">File</th>
-          <th scope="col">Type</th>
-          <th scope="col">Size</th>
-          <th scope="col">Uploaded</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% const uploadsLength = uploads.length; %>
-        <% if (!uploads || uploads.length === 0) { %>
-        <tr class="text-center">
-          <td colspan=5">No uploads found</td>
-        </tr>
-        <% } else { %>
+  <table class="table table-hover" id="table" data-toggle="table" data-pagination="true" data-id-field="id"
+    data-side-pagination="server" data-url="/data" data-sort-order="desc" data-page-size="10"
+    data-page-list="[10, 25, 50, 100, all]">
+    <thead>
+      <tr>
+        <!-- <th data-field="name" scope="col">Name</th> -->
+        <th data-field="file" data-formatter="fileFormater" scope="col">File</th>
+        <th data-field="size" scope="col">Size</th>
+        <th data-field="uploadedAt" data-formatter="uploadedAtFormater" data-sortable="true" scope="col">Uploaded</th>
+        <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents" scope="col"
+          data-width="24px">Actions</th>
+      </tr>
+    </thead>
+  </table>
+  <script>
+    $(document).ready(() => {
+      $('#table').bootstrapTable({
+        formatNoMatches: function () {
+          return 'No uploads found.'
+        }
+      })
+    })
+    var $table = $('#table')
 
-        <% for(i = 0; i < uploadsLength; i++) { %>
-        <tr>
-          <td>
-            <a
-              href="<%- uploads[i].isImage ? `/view/${uploads[i].fileName}` : `/u/${uploads[i].fileName}` %>" target="_blank">
-             <%- currentUser.streamerMode  ? `${uploads[i].fileName.substring(0,3)}*********************` : uploads[i].fileName %></a>
-          </td>
-               <td>
-            <%= uploads[i].type %>
-          </td>
-          <td>
-            <%= uploads[i].size %>
-          </td>
-          <td>
-            <%= moment(uploads[i].createdAt).fromNow() %>
-          </td>
-          <td>
-            <form class=" d-inline"
-              action="/me/uploads/<%= uploads[i].id %>?_method=DELETE&name=<%= uploads[i].fileName %>" method="POST">
-              <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-              <button class="delete" title="Delete" data-toggle="tooltip">
-                <i class="fas fa-times-circle"></i>
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% } %>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
+    // Data formatters
+    function fileFormater(value, row) {
+      if ('<%= currentUser.streamerMode %>' === 'true') {
+        return `<a href="${
+          row.type === 'image'
+            ? `/view/${value}`
+            : `/u/${value + row.extension}`
+          } target="_blank"">${value.substring(0, 3)}*********************</a>`
+      }
+      return `<a href="${
+        row.type === 'image'
+          ? `/view/${value}`
+          : `/u/${value + row.extension}`
+        }" target="_blank">${value}</a>`
+    }
+    function uploadedAtFormater(value, row) {
+      return moment(value).fromNow()
+    }
+    function operateFormatter(value, row, index) {
+      return [
+        // '<a class="link" href="javascript:void(0)" title="Copy link">',
+        // '<i class="fas fa-link"></i>',
+        // '</a> ',
+        '<a class="delete" href="javascript:void(0)" title="delete">',
+        ' <i class="fas fa-times-circle"></i>',
+        '</a>'
+      ].join('')
+    }
+    //Data events
+    window.operateEvents = {
+      // 'click .like': function (e, value, row, index) {
+      // alert('You click like action, row: ' + JSON.stringify(row))
+      // },
+      'click .delete': function (e, value, row, index) {
+        $.ajax({
+          url: `/${row.file + row.extension}?_method=DELETE`,
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' }
+          ,
+          success: function (response) {
+            console.log(response.message)
+            $('#error').show();
+            $('#error').html(response.message);
+
+
+            $table.bootstrapTable('remove', {
+              field: 'id',
+              values: [row.id]
+            })
+          },
+          error: function (response) {
+            console.log(response.message)
+          }
+        });
+
+      }
+    }
+  </script>
+
   <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">

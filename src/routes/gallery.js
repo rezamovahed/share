@@ -9,7 +9,7 @@ const router = express.Router();
  * @access Private
  */
 router.get('/', (req, res) => {
-  res.render('gallery/index', {
+  res.render('comingsoon', {
     pageTitle: 'My gallery',
     pageDesc: process.env.DESC,
     pageName: 'gallery'

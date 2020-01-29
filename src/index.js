@@ -73,13 +73,13 @@ app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 
 switch (process.env.NODE_ENV) {
-  case 'development':
-    app.use(logger('dev'));
+  case 'production ':
+    app.use(logger('combined'));
     break;
   case 'test':
     break;
   default:
-    app.use(logger('combined'));
+    app.use(logger('dev'));
 }
 
 /**
@@ -173,7 +173,6 @@ app.use((req, res, next) => {
  */
 app.use((req, res, next) => {
   if (
-    // req.path === '/api/v1' ||
     req.path === '/api' ||
     RegExp('/api/.*').test(req.path) ||
     process.env.NODE_ENV === 'test'
@@ -227,12 +226,16 @@ const accountRoutes = require('./routes/account');
 const tokensRoutes = require('./routes/tokens');
 const galleryRoutes = require('./routes/gallery');
 const adminRoutes = require('./routes/admin');
+const configRoutes = require('./routes/config');
+const indexController = require('./controllers/index');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
 const tokensConroller = require('./controllers/tokens');
 
 app.use(indexRoutes);
+app.get('/data', isLoggedin, indexController.getUploadListData);
+app.delete('/:uploadedFile', isLoggedin, indexController.deleteSingleUpload);
 app.use(authRoutes);
 app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
 app.post(
@@ -288,7 +291,11 @@ app.put(
   tokensConroller.putToken
 );
 app.delete('/tokens/:token_id', isLoggedin, tokensConroller.deleteToken);
+// app.delete('/all/uploads', isLoggedin, tokensConroller.deleteTokens);
+app.delete('/all/tokens', isLoggedin, tokensConroller.deleteTokens);
 app.use('/gallery', isLoggedin, galleryRoutes);
+app.use('/config', isLoggedin, configRoutes);
+
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
 
 /**
@@ -308,14 +315,11 @@ app.use('/api', limiter, apiRoutes);
 app.use((req, res, next) => {
   res.status(404);
 
-  // respond with json
-  if (req.accepts('json')) {
-    res
+  if (req.path === '/api' || RegExp('/api/.*').test(req.path)) {
+    return res
       .status(404)
       .json({ error: 'Whoops, this resource or route could not be found' });
-    return;
   }
-
   // default to plain-text. send()
   res.type('txt').send('Not found');
 });
