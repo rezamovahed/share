@@ -53,11 +53,15 @@ router.get('/uploads', (req, res) => {
  * @description Displays all the uploads from all users in gallery formate
  * @access Private
  */
-router.get('/gallery', (req, res) => {
-  res.render('comingsoon', {
+router.get('/gallery', async (req, res) => {
+  const images = await Upload.find({ type: 'image' }).select(
+    'fileName fileExtension'
+  );
+  res.render('admin/gallery', {
     pageTitle: 'Gallery',
     pageDesc: process.env.DESC,
-    pageName: 'adminGallery'
+    pageName: 'adminGallery',
+    images
   });
 });
 

@@ -312,7 +312,12 @@ app.delete(
   isAdmin,
   adminConroller.deleteSingleUpload
 );
-
+app.delete(
+  '/admin/uploads/gallery/:uploadedFile',
+  isLoggedin,
+  isAdmin,
+  adminConroller.deleteGallerySingleUpload
+);
 /**
  * API routes.
  * This is the only one that will be split up in

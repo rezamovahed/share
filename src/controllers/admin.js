@@ -107,3 +107,59 @@ exports.deleteSingleUpload = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Delete Upload in gallery - Removes a file from database and filesystem.
+ */
+exports.deleteGallerySingleUpload = async (req, res) => {
+  try {
+    const { uploadedFile } = req.params;
+
+    const uploadedFileExt = path.extname(uploadedFile);
+    const uploadedFileName = uploadedFile.replace(uploadedFileExt, '');
+
+    const uploadedFilePath = `${path.join(
+      __dirname,
+      '../public'
+    )}/u/${uploadedFile}`;
+
+    const upload = await Upload.findOneAndDelete({
+      fileName: uploadedFileName
+    });
+
+    if (!upload) {
+      if (req.user.streamerMode) {
+        req.flash(
+          'error',
+          `<strong>${uploadedFileName.substring(
+            0,
+            3
+          )}*********************</strong> was not found.`
+        );
+        return res.redirect('/admin/gallery');
+      }
+      req.flash('error', `<strong>${uploadedFileName}</strong> was not found.`);
+      return res.redirect('/admin/gallery');
+    }
+    fs.remove(uploadedFilePath);
+    if (req.user.streamerMode) {
+      req.flash(
+        'success',
+        `
+        <strong>${uploadedFileName.substring(
+          0,
+          3
+        )}*********************</strong> has been deleted.`
+      );
+      return res.redirect('/admin/gallery');
+    }
+    req.flash(
+      'success',
+      `<strong>${uploadedFileName}</strong> has been deleted.`
+    );
+    res.redirect('/admin/gallery');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
