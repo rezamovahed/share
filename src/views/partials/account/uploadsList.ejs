@@ -1,3 +1,5 @@
+<div class="alert alert-danger collapse" role="alert" id="error">
+</div>
 <div class="customTable">
   <div class="table-wrapper">
     <div class="table-title">
@@ -14,14 +16,16 @@
     </div>
   </div>
   <table class="table table-hover" id="table" data-toggle="table" data-pagination="true" data-id-field="id"
-    data-side-pagination="server" data-url="/data" data-page-size="10"  data-page-list="[10, 25, 50, 100, all]">
+    data-side-pagination="server" data-url="/data" data-sort-order="desc" data-page-size="10"
+    data-page-list="[10, 25, 50, 100, all]">
     <thead>
       <tr>
         <!-- <th data-field="name" scope="col">Name</th> -->
         <th data-field="file" data-formatter="fileFormater" scope="col">File</th>
         <th data-field="size" scope="col">Size</th>
-        <th data-field="uploadedAt" scope="col">Uploaded</th>
-        <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents" scope="col"  data-width="24px">Actions</th>
+        <th data-field="uploadedAt" data-formatter="uploadedAtFormater" data-sortable="true" scope="col">Uploaded</th>
+        <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents" scope="col"
+          data-width="24px">Actions</th>
       </tr>
     </thead>
   </table>
@@ -34,19 +38,24 @@
       })
     })
     var $table = $('#table')
+
+    // Data formatters
     function fileFormater(value, row) {
       if ('<%= currentUser.streamerMode %>' === 'true') {
         return `<a href="${
           row.type === 'image'
-            ? `/view/${row.file}`
-            : `/u/${row.file + row.extension}`
-          }">${row.file.substring(0, 3)}*********************</a>`
+            ? `/view/${value}`
+            : `/u/${value + row.extension}`
+          } target="_blank"">${value.substring(0, 3)}*********************</a>`
       }
       return `<a href="${
         row.type === 'image'
-          ? `/view/${row.file}`
-          : `/u/${row.file + row.extension}`
-        }">${row.file}</a>`
+          ? `/view/${value}`
+          : `/u/${value + row.extension}`
+        }" target="_blank">${value}</a>`
+    }
+    function uploadedAtFormater(value, row) {
+      return moment(value).fromNow()
     }
     function operateFormatter(value, row, index) {
       return [
@@ -58,16 +67,33 @@
         '</a>'
       ].join('')
     }
-
+    //Data events
     window.operateEvents = {
       // 'click .like': function (e, value, row, index) {
       // alert('You click like action, row: ' + JSON.stringify(row))
       // },
       'click .delete': function (e, value, row, index) {
-        $table.bootstrapTable('remove', {
-          field: 'id',
-          values: [row.id]
-        })
+        $.ajax({
+          url: `/${row.file + row.extension}?_method=DELETE`,
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' }
+          ,
+          success: function (response) {
+            console.log(response.message)
+            $('#error').show();
+            $('#error').html(response.message);
+
+
+            $table.bootstrapTable('remove', {
+              field: 'id',
+              values: [row.id]
+            })
+          },
+          error: function (response) {
+            console.log(response.message)
+          }
+        });
+
       }
     }
   </script>

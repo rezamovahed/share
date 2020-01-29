@@ -234,7 +234,8 @@ const accountController = require('./controllers/account');
 const tokensConroller = require('./controllers/tokens');
 
 app.use(indexRoutes);
-app.get('/data', isLoggedin, indexController.UploadsListMiniAPI);
+app.get('/data', isLoggedin, indexController.getUploadListData);
+app.delete('/:uploadedFile', isLoggedin, indexController.deleteSingleUpload);
 app.use(authRoutes);
 app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
 app.post(

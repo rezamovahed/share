@@ -226,7 +226,6 @@
   }
 
   .pagination li a {
-    // border: none;
     font-size: 13px;
     min-width: 30px;
     min-height: 30px;
@@ -239,7 +238,7 @@
   }
 
   .pagination li a:hover {
-    color: #666;
+    color: #000000;
   }
 
   .pagination li.active a,
@@ -252,7 +251,8 @@
   }
 
   .pagination li.disabled i {
-    color: #ccc;
+    color: #000000;
+
   }
 
   .pagination li i {
@@ -269,6 +269,9 @@
     .btn-group {
       .dropdown-menu {
         min-width: 2rem;
+        .dropdown-item.active {
+          background: $brand-color;
+        }
       }
       .btn.btn-secondary.dropdown-toggle {
         border: none;
