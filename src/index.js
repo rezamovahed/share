@@ -232,6 +232,7 @@ const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
 const tokensConroller = require('./controllers/tokens');
+const adminConroller = require('./controllers/admin');
 
 app.use(indexRoutes);
 app.get('/data', isLoggedin, indexController.getUploadListData);
@@ -299,6 +300,18 @@ app.use('/gallery', isLoggedin, galleryRoutes);
 app.use('/config', isLoggedin, configRoutes);
 
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
+app.get(
+  '/admin/uploads/data',
+  isLoggedin,
+  isAdmin,
+  adminConroller.getUploadListData
+);
+app.delete(
+  '/admin/uploads/:uploadedFile',
+  isLoggedin,
+  isAdmin,
+  adminConroller.deleteSingleUpload
+);
 
 /**
  * API routes.

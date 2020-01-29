@@ -54,7 +54,7 @@ router.get('/uploads', (req, res) => {
  * @access Private
  */
 router.get('/gallery', (req, res) => {
-  res.render('admin/gallery', {
+  res.render('comingsoon', {
     pageTitle: 'Gallery',
     pageDesc: process.env.DESC,
     pageName: 'adminGallery'
@@ -68,7 +68,7 @@ router.get('/gallery', (req, res) => {
  * @access Private
  */
 router.get('/users', (req, res) => {
-  res.render('admin/users/index', {
+  res.render('comingsoon', {
     pageTitle: 'Users',
     pageDesc: process.env.DESC,
     pageName: 'adminUsers'
