@@ -92,9 +92,17 @@ exports.putToken = async (req, res, next) => {
  */
 exports.deleteToken = async (req, res, next) => {
   try {
-    await Token.findByIdAndDelete(req.params.token_id);
-    req.flash('success', 'Token has been removed');
-    res.redirect('/tokens');
+    const token = await Token.findByIdAndDelete(req.params.token_id);
+    if (!token) {
+      return res.status(404).json({
+        message: `<strong>${token.label}</strong> was not found.`,
+        status: 404
+      });
+    }
+    res.json({
+      message: `<strong>${token.label}</strong> has been deleted.`,
+      status: 200
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -108,6 +116,48 @@ exports.deleteTokens = async (req, res, next) => {
   try {
     req.flash('success', 'All your tokens have been removed.');
     res.redirect('/tokens');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Tokens lising mini API Controller- Takes data from lib and returns results.
+ */
+exports.getTokenListData = async (req, res) => {
+  try {
+    const sort = req.query.order === 'asc' ? 1 : -1;
+    const limit = parseFloat(req.query.limit);
+    const offset = parseFloat(req.query.offset);
+    const tokensData = await Token.find({ user: req.user.id })
+      .sort({ createdAt: sort })
+      .limit(limit)
+      .skip(offset)
+      .select('id label expireAt isNever');
+
+    // eslint-disable-next-line prefer-const
+    let tokens = [];
+    let id = 0;
+    tokensData.map(data => {
+      tokens.push({
+        id: (id += 1),
+        _id: data.id,
+        createdAt: data.createdAt,
+        label: data.label,
+        isNever: data.isNever,
+        expires: data.isNever ? moment().add('100', 'y') : data.expireAt
+      });
+    });
+
+    const total = await Token.countDocuments({
+      user: req.user.id
+    });
+
+    res.json({
+      total,
+      rows: tokens
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

@@ -16,4 +16,8 @@ $(document).ready(() => {
         .fadeOut(100);
     }
   );
+  // show the alert
+  setTimeout(function() {
+    $('.alert').alert('close');
+  }, 60000);
 });

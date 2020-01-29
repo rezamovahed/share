@@ -5,15 +5,15 @@
   <%- include ('../partials/streamerMode') %> <%- include
   ('../partials/alerts/error') %> <%- include ('../partials/alerts/success') %>
   <% if (info && info.length > 0){ %>
-  <div class="alert alert-primary text-wrap" role="alert">
+  <div class="alert alert-primary" role="alert">
     <p>
       Here's your API Key<br />
-      <span id="apiKey"><%= info %></span><br />
+      <span class="text-break-all" id="apiKey"><%= info %></span><br />
       This will not be showed again for security reasons.
     </p>
   </div>
 </div>
-<div class="container pl-0 pr-0 mb-5 loggedIn">
+<div class="container pl-0 pr-0 mb-5 tokens">
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
