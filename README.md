@@ -6,7 +6,6 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/mrdemonwolf/share.svg?logo=git&style=for-the-badge)](https://github.com/mrdemonwolf/share)
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=for-the-badge&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 ![Travis (.com)](https://img.shields.io/travis/com/mrdemonwolf/share?style=for-the-badge)
-
 # What is Share?
 Advanced custom uploader with web front-end.  Allows uploads for  images, files, and text. Built with ShareX in mind.
 
