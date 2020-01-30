@@ -15,6 +15,7 @@ const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
 const lusca = require('lusca');
+const fs = require('fs-extra');
 const User = require('./models/User');
 
 /**
@@ -138,7 +139,7 @@ passport.deserializeUser((id, done) => {
 /**
  * Express locals
  */
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   // NodeJS Lib
   res.locals.moment = moment;
   // Pass req infomation to the locals
@@ -163,6 +164,18 @@ app.use((req, res, next) => {
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
+
+  res.locals.logo = (await fs.existsSync(
+    `${__dirname}/public/assets/images/logo_custom.png`
+  ))
+    ? `${process.env.FULL_DOMAIN}/assets/images/custom/logo.png`
+    : `${process.env.FULL_DOMAIN}/assets/images/logo.png`;
+
+  res.locals.favicon = (await fs.existsSync(
+    `${__dirname}/public/assets/images/custom/favicon.ico`
+  ))
+    ? `${process.env.FULL_DOMAIN}/assets/images/custom/favicon.ico`
+    : `${process.env.FULL_DOMAIN}/favicon.ico`;
 
   res.locals.currentYear = new Date().getFullYear();
   next();
@@ -232,6 +245,7 @@ const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
 const tokensConroller = require('./controllers/tokens');
+const adminConroller = require('./controllers/admin');
 
 app.use(indexRoutes);
 app.get('/data', isLoggedin, indexController.getUploadListData);
@@ -299,7 +313,24 @@ app.use('/gallery', isLoggedin, galleryRoutes);
 app.use('/config', isLoggedin, configRoutes);
 
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
-
+app.get(
+  '/admin/uploads/data',
+  isLoggedin,
+  isAdmin,
+  adminConroller.getUploadListData
+);
+app.delete(
+  '/admin/uploads/:uploadedFile',
+  isLoggedin,
+  isAdmin,
+  adminConroller.deleteSingleUpload
+);
+app.delete(
+  '/admin/uploads/gallery/:uploadedFile',
+  isLoggedin,
+  isAdmin,
+  adminConroller.deleteGallerySingleUpload
+);
 /**
  * API routes.
  * This is the only one that will be split up in

@@ -3,16 +3,33 @@ const express = require('express');
 const router = express.Router();
 
 /**
+ * Load MongoDB models.
+ */
+const Upload = require('../models/Upload');
+const User = require('../models/User');
+
+/**
  * @route /admin
  * @method GET
  * @description Displays a admin dashboard
  * @access Private
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const uploads = await Upload.countDocuments();
+  const users = await User.countDocuments();
+  const files = await Upload.countDocuments({ type: 'file' });
+  const images = await Upload.countDocuments({ type: 'image' });
+  const texts = await Upload.countDocuments({ type: 'text' });
+
   res.render('admin/index', {
     pageTitle: 'Admin Area',
     pageDesc: process.env.DESC,
-    pageName: 'admin'
+    pageName: 'admin',
+    uploads,
+    users,
+    files,
+    images,
+    texts
   });
 });
 
@@ -36,11 +53,15 @@ router.get('/uploads', (req, res) => {
  * @description Displays all the uploads from all users in gallery formate
  * @access Private
  */
-router.get('/gallery', (req, res) => {
+router.get('/gallery', async (req, res) => {
+  const images = await Upload.find({ type: 'image' }).select(
+    'fileName fileExtension'
+  );
   res.render('admin/gallery', {
     pageTitle: 'Gallery',
     pageDesc: process.env.DESC,
-    pageName: 'adminGallery'
+    pageName: 'adminGallery',
+    images
   });
 });
 
@@ -51,7 +72,7 @@ router.get('/gallery', (req, res) => {
  * @access Private
  */
 router.get('/users', (req, res) => {
-  res.render('admin/users/index', {
+  res.render('comingsoon', {
     pageTitle: 'Users',
     pageDesc: process.env.DESC,
     pageName: 'adminUsers'

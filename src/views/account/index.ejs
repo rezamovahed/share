@@ -2,12 +2,12 @@
 <%- include ('../partials/navbar') %>
 
 <% errors = error && error.length > 0 %>
-<div class="container w-50 mt-5 mb-5">
+<div class="container w-50 mt-3 mb-5 account">
   <%- include ('../partials/alerts/success') %>
   <%- include ('../partials/alerts/error') %>
   <form action="/account?_method=PUT" method="POST">
     <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-    <h1 class="display-3">My Account</h1>
+    <div class="header">My Account</div>
     <div class="form-group">
       <label for="username">Username</label>
       <input name="username" type="text" class="form-control <% if(errors && error[0].username) { %> is-invalid <% } %>"
@@ -39,8 +39,7 @@
       <% } %>
     </div>
 
-    <h2 class="display-4">Security</h2>
-
+    <div class="info header">Security</div>
     <div class="form-group">
       <label for="oldPassword">Current Password</label>
       <div class="input-group">
@@ -88,7 +87,7 @@
     </script>
     <hr>
 
-    <h2 class="display-4">Basic Info</h2>
+    <div class="info header">Basic Info</div>
     <div class="row pb-5">
       <div class="col-sm-4">
         <div class="card">

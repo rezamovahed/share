@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 const path = require('path');
 const fs = require('fs-extra');
 
@@ -15,12 +14,15 @@ exports.getUploadListData = async (req, res) => {
     const sort = req.query.order === 'asc' ? 1 : -1;
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
-    const uploadsData = await Upload.find({ uploader: req.user.id })
+
+    const uploadsData = await Upload.find({})
       .sort({ uploadedAt: sort })
       .limit(limit)
       .skip(offset)
-      .select('uploaded uploadedAt fileName size type fileExtension');
+      .select('uploaded uploadedAt fileName size type fileExtension uploader')
+      .populate({ path: 'uploader', select: 'username isVerified role' });
 
+    console.log(uploadsData);
     // eslint-disable-next-line prefer-const
     let uploads = [];
     let id = 0;
@@ -31,7 +33,10 @@ exports.getUploadListData = async (req, res) => {
         extension: data.fileExtension,
         type: data.type,
         size: data.size,
-        uploadedAt: data.uploadedAt
+        uploadedAt: data.uploadedAt,
+        uploader: data.uploader.username,
+        role: data.uploader.role,
+        isVerified: data.uploader.isVerified
       });
     });
 
@@ -63,18 +68,6 @@ exports.deleteSingleUpload = async (req, res) => {
       __dirname,
       '../public'
     )}/u/${uploadedFile}`;
-
-    const isOwner = await Upload.findOne({
-      fileName: uploadedFileName,
-      uploader: req.user.id
-    });
-
-    if (!isOwner) {
-      return res.status(404).json({
-        message: `You don't own this upload.`,
-        status: 401
-      });
-    }
 
     const upload = await Upload.findOneAndDelete({
       fileName: uploadedFileName
@@ -109,6 +102,62 @@ exports.deleteSingleUpload = async (req, res) => {
       message: `<strong>${uploadedFileName}</strong> has been deleted.`,
       status: 200
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete Upload in gallery - Removes a file from database and filesystem.
+ */
+exports.deleteGallerySingleUpload = async (req, res) => {
+  try {
+    const { uploadedFile } = req.params;
+
+    const uploadedFileExt = path.extname(uploadedFile);
+    const uploadedFileName = uploadedFile.replace(uploadedFileExt, '');
+
+    const uploadedFilePath = `${path.join(
+      __dirname,
+      '../public'
+    )}/u/${uploadedFile}`;
+
+    const upload = await Upload.findOneAndDelete({
+      fileName: uploadedFileName
+    });
+
+    if (!upload) {
+      if (req.user.streamerMode) {
+        req.flash(
+          'error',
+          `<strong>${uploadedFileName.substring(
+            0,
+            3
+          )}*********************</strong> was not found.`
+        );
+        return res.redirect('/admin/gallery');
+      }
+      req.flash('error', `<strong>${uploadedFileName}</strong> was not found.`);
+      return res.redirect('/admin/gallery');
+    }
+    fs.remove(uploadedFilePath);
+    if (req.user.streamerMode) {
+      req.flash(
+        'success',
+        `
+        <strong>${uploadedFileName.substring(
+          0,
+          3
+        )}*********************</strong> has been deleted.`
+      );
+      return res.redirect('/admin/gallery');
+    }
+    req.flash(
+      'success',
+      `<strong>${uploadedFileName}</strong> has been deleted.`
+    );
+    res.redirect('/admin/gallery');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
