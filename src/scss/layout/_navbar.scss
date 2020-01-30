@@ -2,35 +2,20 @@
 // This file contains all styles related to the navbar of the site/application.
 // -----------------------------------------------------------------------------
 .navbar {
-  .navbarLogo {
-    height: 30px;
-  }
-}
-
-@media (max-width: 408px) {
-  .navbar {
-    .navbarLogo {
-      &.desktop {
-        display: none !important;
-      }
-
-      &.mobile {
-        display: inline-block !important;
-      }
+  .navbar-brand {
+    img {
+      vertical-align: middle;
+    }
+    span {
+      font-family: $main-font;
+      font-weight: 500;
+      display: inline-block;
+      vertical-align: middle;
     }
   }
-}
 
-@media (max-width: 991px) {
-  .navbar {
-    .dropdownMobile {
-      display: block !important;
-    }
-
-    .dropdown-menu {
-      margin-top: 0 !important;
-      box-shadow: none !important;
-    }
+  .navbar-brand .navbar-nav {
+    margin-left: auto;
   }
 }
 

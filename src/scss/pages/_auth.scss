@@ -25,6 +25,18 @@
     margin: auto;
     background-color: #ffffff;
 
+    .branding {
+      img {
+        vertical-align: middle;
+      }
+      span {
+        font-family: $main-font;
+        font-weight: 500;
+        vertical-align: middle;
+        font-size: 32px;
+        line-height: 60px;
+      }
+    }
     .btn-auth {
       border-radius: 8px;
 

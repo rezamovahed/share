@@ -1,3 +1,35 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the account page.
 // -----------------------------------------------------------------------------
+.account {
+  .header {
+    font-size: 2.5em;
+    font-style: $main-font;
+    font-weight: 500;
+    color: $brand-color;
+  }
+  form {
+    label {
+      font-size: 1em;
+      font-style: $second-font;
+      font-weight: 300;
+    }
+  }
+  .info {
+    &.header {
+      font-style: $main-font;
+      font-weight: 500;
+      font-size: 1.5em;
+    }
+  }
+  .card-title {
+    font-style: $main-font;
+    font-weight: 500;
+    font-size: 1.25em;
+  }
+  .card-text {
+    font-size: 1em;
+    font-style: $second-font;
+    font-weight: 300;
+  }
+}

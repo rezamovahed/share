@@ -15,6 +15,7 @@ const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
 const lusca = require('lusca');
+const fs = require('fs-extra');
 const User = require('./models/User');
 
 /**
@@ -138,7 +139,7 @@ passport.deserializeUser((id, done) => {
 /**
  * Express locals
  */
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   // NodeJS Lib
   res.locals.moment = moment;
   // Pass req infomation to the locals
@@ -163,6 +164,18 @@ app.use((req, res, next) => {
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
+
+  res.locals.logo = (await fs.existsSync(
+    `${__dirname}/public/assets/images/logo_custom.png`
+  ))
+    ? `${process.env.FULL_DOMAIN}/assets/images/custom/logo.png`
+    : `${process.env.FULL_DOMAIN}/assets/images/logo.png`;
+
+  res.locals.favicon = (await fs.existsSync(
+    `${__dirname}/public/assets/images/custom/favicon.ico`
+  ))
+    ? `${process.env.FULL_DOMAIN}/assets/images/custom/favicon.ico`
+    : `${process.env.FULL_DOMAIN}/favicon.ico`;
 
   res.locals.currentYear = new Date().getFullYear();
   next();
