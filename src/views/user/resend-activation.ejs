@@ -48,7 +48,7 @@
       <h1>Resend your activation email</h1>
       <% errors = error && error.length > 0 %> <% if (error && typeof error[0]
       === 'string'){ %>
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger alert-timeout" role="alert">
         <%= error %>
       </div>
       <% } %>

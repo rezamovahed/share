@@ -4,12 +4,15 @@
   <%- include ('../partials/streamerMode') %> <%- include
   ('../partials/alerts/error') %> <%- include ('../partials/alerts/success') %>
   <% if (info && info.length > 0){ %>
-  <div class="alert alert-primary" role="alert">
+  <div class="alert alert-primary alert-dismissible" role="alert">
     <p>
       Here's your API Key<br />
       <span class="text-break-all" id="apiKey"><%= info %></span><br />
       This will not be showed again for security reasons.
     </p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
 </div>
 <div class="container pl-0 pr-0 mb-5 tokens">

@@ -3,16 +3,15 @@
 // -----------------------------------------------------------------------------
 .account {
   .header {
-    font-size: 2.5em;
+    font-size: 1.5em;
     font-style: $main-font;
-    font-weight: 500;
+    font-weight: 700;
     color: $brand-color;
   }
   form {
     label {
       font-size: 1em;
       font-style: $second-font;
-      font-weight: 300;
     }
   }
   .info {
@@ -26,10 +25,14 @@
     font-style: $main-font;
     font-weight: 500;
     font-size: 1.25em;
+    color: $brand-color;
+
   }
   .card-text {
     font-size: 1em;
     font-style: $second-font;
-    font-weight: 300;
+    strong {
+      font-weight: 700;
+    }
   }
 }

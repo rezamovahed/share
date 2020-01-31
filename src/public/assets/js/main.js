@@ -16,8 +16,13 @@ $(document).ready(() => {
         .fadeOut(100);
     }
   );
-  // show the alert
+  // hide the alert
   setTimeout(function() {
-    $('.alert').alert('close');
-  }, 60000);
+    $('.alert.alert-timeout').alert('close');
+  }, 30000);
+  setInterval(() => {
+    setTimeout(function() {
+      $('.alert.alert-timeout').alert('close');
+    }, 30000);
+  }, 1000);
 });
