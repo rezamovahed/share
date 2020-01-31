@@ -1,7 +1,7 @@
 <div class="mt-3 pl-0 pr-0">
- <div class="alert alert-danger collapse" role="alert" id="error">
+ <div class="alert alert-danger collapse alert-timeout" role="alert" id="error">
 </div>
-<div class="alert alert-success collapse" role="alert" id="success">
+<div class="alert alert-success collapse alert-timeout" role="alert" id="success">
 </div>
   <%- include ('../streamerMode') %>
 </div>
@@ -91,11 +91,8 @@
           data: { _csrf: '<%= _csrf %>' }
           ,
           success: function (response) {
-            console.log(response.message)
             $('#success').show();
             $('#success').html(response.message);
-
-
             $table.bootstrapTable('remove', {
               field: 'id',
               values: [row.id]

@@ -3,124 +3,17 @@
 
 <% errors = error && error.length > 0 %>
 <div class="container w-50 mt-3 mb-5 account">
+  <div class="alert alert-success collapse alert-timeout" role="alert" id="success">
+</div>
   <%- include ('../partials/alerts/success') %>
   <%- include ('../partials/alerts/error') %>
   <form action="/account?_method=PUT" method="POST">
-    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-    <div class="header">My Account</div>
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input name="username" type="text" class="form-control <% if(errors && error[0].username) { %> is-invalid <% } %>"
-        id="username" value="<%= currentUser.username %>" autocomplete="off" data-lpignore="true" required>
-      <% if(errors && error[0].username) { %>
-      <small class="form-text text-danger">
-        <%= error[0].username %></small>
-      <% } %>
-    </div>
-
-    <div class="form-group">
-      <label for="email">Email <% if(currentUser.streamerMode) { %> (Can't be updated as streamer mode is enabled)
-        <% } %></label>
-      <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>
-        id=" email"
-        value="<%- currentUser.streamerMode  ? `${currentUser.email.substring(0,3)}******`: currentUser.email %>"
-        <% if(currentUser.streamerMode){%> disabled <%}%> required>
-      <% if(currentUser.newEmail) { %> <small class="form-text text-success pt-2">
-      Your new e-mail address
-      <%- currentUser.streamerMode  ? `${currentUser.newEmail.substring(0,3)}******`: currentUser.newEmail %>, has not
-      yet been verified.
-      <a href="/account/resend/email-verify" class="text-primary" submit>Resend confirmation email</a>
-      </small>
-      <% } %>
-      <% if(errors && error[0].email) { %>
-      <small class=" form-text text-danger">
-        <%= error[0].email %>
-      </small>
-      <% } %>
-    </div>
-
-    <div class="info header">Security</div>
-    <div class="form-group">
-      <label for="oldPassword">Current Password</label>
-      <div class="input-group">
-        <input name="oldPassword" data-toggle="password" type="password"
-          class="form-control <% if(errors && error[0].oldPassword) { %> is-invalid <% } %>" id="oldPassword">
-        <% if(errors && error[0].oldPassword) { %>
-        <small class="form-text text-danger">
-          <%= error[0].oldPassword %></small>
-        <% } %>
-      </div>
-
-      <div class="form-group">
-        <label for="newPassword">New Password</label>
-        <div class="input-group">
-          <input name="newPassword" type="password" data-toggle="password"
-            class="form-control <% if(errors && error[0].newPassword | error[0].comfirmNewPassword === 'Both passowrds must match.') { %> is-invalid <% } %>"
-            id="newPassword">
-        </div>
-      </div>
-      <% if(errors && error[0].newPassword) { %>
-      <small class="form-text text-danger">
-        <%= error[0].newPassword %></small>
-      <% } %>
-      <label for="comfirmPassword">Confirm New Password</label>
-      <div class="input-group">
-        <input name="comfirmPassword" type="password" data-toggle="password"
-          class="form-control <% if(errors && error[0].comfirmNewPassword) { %> is-invalid <% } %>"
-          id="comfirmPassword">
-      </div>
-      <% if(errors && error[0].confirmNewPassword) { %>
-      <small class="form-text text-danger">
-        <%= error[0].confirmNewPassword %></small>
-      <% } %>
-    </div>
-    <hr>
-    <div class="form-group d-inline">
-      <label for="streamerMode">Streamer Mode</label>
-      <input id="streamerMode" name="streamerMode" value="true" type="checkbox" checked data-toggle="toggle"
-        data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger">
-    </div>
-    <script>
-      $(document).ready(function () {
-        $("#streamerMode").attr('checked', <%= currentUser.streamerMode %>);
-      });
-    </script>
-    <hr>
-
-    <div class="info header">Basic Info</div>
-    <div class="row pb-5">
-      <div class="col-sm-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Last Login</h5>
-            <p class="card-text"><%= moment(currentUser.lastLog).fromNow() %> </p>
-          </div>
-        </div>
-      </div>
-      <% if(currentUser.passwordChanged !== undefined) { %>
-      <div class="col-sm-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Last password change</h5>
-            <p class="card-text"><%= moment(currentUser.passwordChanged).fromNow() %> </p>
-          </div>
-        </div>
-      </div>
-      <% } %>
-      <% if(currentUser.lastActivity !== undefined) { %>
-      <div class="col-sm-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Last Activity</h5>
-            <p class="card-text"><%= moment(currentUser.lastActivity).format('MMM Do YYYY hh:mm A') %> CST %> </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <% } %>
+  <%- include ('../partials/account/account') %>
+  <%- include ('../partials/account/security') %>
+  <%- include ('../partials/account/toggles') %>
+  <%- include ('../partials/account/basicInfo') %>
 
     <div class="container mt-3">
-
       <button type="submit" class="btn btn-primary">Save Account</button>
       <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
         style="color: #ffff;">Delete

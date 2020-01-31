@@ -47,11 +47,11 @@
       </div>
       <% errors = error && error.length > 0 %> <% if (error && typeof error[0]
       === 'string'){ %>
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger alert-timeout" role="alert">
         <%= error %>
       </div>
       <% } %> <% if (success && typeof success[0] === 'string'){ %>
-      <div class="alert alert-success" role="alert">
+      <div class="alert alert-success alert-timeout" role="alert">
         <%= success %>
       </div>
       <% } %>
