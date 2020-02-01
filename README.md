@@ -7,7 +7,7 @@
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=for-the-badge&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 ![Travis (.com)](https://img.shields.io/travis/com/mrdemonwolf/share?style=for-the-badge)
 # What is Share?
-Advanced custom uploader with web front-end.  Allows uploads for  images, files, and text. Built with ShareX in mind.
+Simple yet advanced **NodeJS**, **MongoDB** and **Express** based uploader.  Allows users to upload files,images, and text with moderation tools for admins.  Plus users can see uploads for there account and simple remove ones.  Admins can view all and remove ones that don't follow the rules. Can be used for friends and family or just for you.  Built for [ShareX]() at the moment but more uploaders will be supported.
 
 ## Getting started
 
