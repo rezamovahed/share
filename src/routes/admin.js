@@ -66,16 +66,30 @@ router.get('/gallery', async (req, res) => {
 });
 
 /**
- * @route /admin
+ * @route /admin/users
  * @method GET
  * @description Displays a admin dashboard
  * @access Private
  */
 router.get('/users', (req, res) => {
-  res.render('comingsoon', {
+  res.render('admin/comingsoon', {
     pageTitle: 'Users',
     pageDesc: process.env.DESC,
     pageName: 'adminUsers'
+  });
+});
+
+/**
+ * @route /admin/settings
+ * @method GET
+ * @description Displays a page to create configs for supported uplaoders
+ * @access Private
+ */
+router.get('/settings', async (req, res) => {
+  res.render('admin/comingsoon', {
+    pageTitle: 'Settings',
+    pageDesc: process.env.DESC,
+    pageName: 'adminSettings'
   });
 });
 
