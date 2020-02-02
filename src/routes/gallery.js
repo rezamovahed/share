@@ -3,16 +3,26 @@ const express = require('express');
 const router = express.Router();
 
 /**
+ * Load MongoDB models.
+ */
+const Upload = require('../models/Upload');
+
+/**
  * @route /gallery
  * @method GET
  * @description Displays users images in gallery formate with simple tools.
  * @access Private
  */
-router.get('/', (req, res) => {
-  res.render('comingsoon', {
+router.get('/', async (req, res) => {
+  const images = await Upload.find({ uploader: req.user.id }).sort({
+    uploadedAt: -1
+  });
+  console.log(images);
+  res.render('gallery/index', {
     pageTitle: 'My gallery',
     pageDesc: process.env.DESC,
-    pageName: 'gallery'
+    pageName: 'gallery',
+    images
   });
 });
 

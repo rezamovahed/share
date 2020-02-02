@@ -10,16 +10,16 @@
     aria-expanded="false"
   >
     <% if(currentUser.isVerified) { %> <%- include ('../partials/verified.ejs')
-    %> <%}%>  <strong><%= currentUser.username %></strong>
+    %> <%}%> <strong><%= currentUser.username %></strong>
     <b class="caret"></b>
   </a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
     <h6 class="dropdown-header">
       Role: <strong><%- include ('./userRoles') %></strong>
     </h6>
-    <hr class="mt-1 mb-1">
+    <hr class="mt-1 mb-1" />
     <a class="dropdown-item" href="/account">Account</a>
-    <% if(currentUser.role === 'admin') { %>
+    <% if( currentUser.role === 'owner' || currentUser.role === 'admin') { %>
     <a class="dropdown-item" href="/admin">Admin</a>
     <% } %>
     <div class="mt-1 mb-1"></div>

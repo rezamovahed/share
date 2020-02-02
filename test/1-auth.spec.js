@@ -90,4 +90,31 @@ describe('Auth Routes', () => {
         });
     });
   });
+  describe('POST /signup (owner)', () => {
+    it('it should return status 302', done => {
+      supertest(app)
+        .post('/signup/')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          username: 'owner@mrdemonwolf.github.io',
+          email: 'owner@mrdemonwolf.github.io',
+          password: 'owner@mrdemonwolf.github.io'
+        })
+        .expect(302)
+        .end(async (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          const user = await User.findOne({
+            email: 'owner@mrdemonwolf.github.io'
+          });
+          user.emailVerified = true;
+          user.emailVerificationToken = undefined;
+          user.emailVerificationTokenExpire = undefined;
+          user.role = 'owner';
+          await user.save();
+          done();
+        });
+    });
+  });
 });

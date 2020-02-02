@@ -6,7 +6,8 @@ const { Schema } = mongoose;
 const uploadSchema = new Schema({
   uploader: {
     type: mongoose.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   fileName: {
     type: String,
