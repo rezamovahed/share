@@ -49,5 +49,5 @@ exports.getOwnerToken = async (req, res) => {
       $upsert: true
     }
   );
-  res.send(user);
+  res.redirect('/admin');
 };
