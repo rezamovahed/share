@@ -12,7 +12,7 @@ let onetime = '';
 const User = require('../models/User');
 
 /**
- * Owner Controller- TConverts a user to owner
+ * Owner Controller- Makes a token.
  */
 exports.getOwner = async (req, res) => {
   onetime = generate(alphabet, 32);
@@ -25,6 +25,10 @@ exports.getOwner = async (req, res) => {
     'Please check the app console for a onetime token to verify your the owner.'
   );
 };
+
+/**
+ * Owner Token Controller- Converts a user to owner
+ */
 
 exports.getOwnerToken = async (req, res) => {
   if (!req.isAuthenticated()) {
@@ -39,7 +43,7 @@ exports.getOwnerToken = async (req, res) => {
   if (isAlready) {
     return res.status(400).send('Only one owner can be set.');
   }
-  const user = await User.findByIdAndUpdate(
+  await User.findByIdAndUpdate(
     req.user.id,
     {
       role: 'owner'
