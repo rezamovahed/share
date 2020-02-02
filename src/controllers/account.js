@@ -143,3 +143,26 @@ exports.resendEmailVeirfy = async (req, res, next) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Streamer Mode Controller - Turns on or off stremaer mode via a ajax or fetch request.
+ */
+exports.putStreamerMode = async (req, res, next) => {
+  try {
+    const boolean = req.params.boolean === 'true';
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        streamerMode: boolean
+      },
+      { $safe: true, $upsert: true }
+    );
+    await user.save();
+    res.json({
+      message: `Streamer mode has been turned ${boolean ? 'on' : 'off'}`
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};

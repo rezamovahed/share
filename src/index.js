@@ -295,6 +295,11 @@ app.get(
   isLoggedin,
   accountController.resendEmailVeirfy
 );
+app.put(
+  '/account/streamer-mode/:boolean',
+  isLoggedin,
+  accountController.putStreamerMode
+);
 
 app.use('/tokens', isLoggedin, tokensRoutes);
 app.get('/tokens/data', isLoggedin, tokensConroller.getTokenListData);

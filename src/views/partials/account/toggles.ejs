@@ -1,16 +1,81 @@
-   <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-    <div class="info header mt-3 mb-2">Toggles</div>
-    <div class="form-group d-inline">
-      <label for="streamerMode">Streamer Mode</label>
-      <input id="streamerMode" name="streamerMode" value="true" type="checkbox" checked data-toggle="toggle"
-        data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger">
-    </div>
-    <script>
-   $(function() {
-    $('#streamerMode').change(function() {
-      console.log($(this).prop('checked'))
-       $('#success').show();
-            $('#success').html($(this).prop('checked').toString());
-    })
-  })
-    </script>
+<input type="hidden" name="_csrf" value="<%= _csrf %>" />
+<div class="info header mt-3 mb-2">Toggles</div>
+<div class="form-group d-inline">
+  <label for="streamerMode">Streamer Mode</label>
+  <input
+    id="streamerMode"
+    name="streamerMode"
+    value="true"
+    type="checkbox"
+    checked
+    data-toggle="toggle"
+    data-on="On"
+    data-off="Off"
+    data-onstyle="success"
+    data-offstyle="danger"
+  />
+</div>
+<script>
+  $(document).ready(function () {
+  $('#streamerMode').attr(
+    'checked',
+    '<%= currentUser.streamerMode %>' === 'true' ? true : false
+  );
+  $('#streamerMode').change(function () {
+      $('#success').show();
+      if ($(this).prop('checked') === true) {
+        $.ajax({
+            url: `/account/streamer-mode/true`,
+            type: 'PUT',
+            data: {
+              _csrf: '<%= _csrf %>'
+            },
+            success: function (response) {
+              $('#success').show();
+              $('#success').html(response.message);
+              $('#streamerModeBanner').show();
+
+              // Email
+              $('#email').attr(
+                'value',
+                '<%- currentUser.email.substring(0,3) %>' + '******'
+              );
+              $('#email').attr('disabled', true);
+              <%if (currentUser.newEmail) {%>
+                $('#newEmail').html(
+                  '<%- currentUser.newEmail.substring(0,3) %>' + '******'
+                );
+             <%} %>
+          },
+          error: function (response) {
+            $('#error').show();
+            $('#error').html(response);
+          }
+        });
+    } else {
+      $.ajax({
+          url: `/account/streamer-mode/false`,
+          type: 'PUT',
+          data: {
+            _csrf: '<%= _csrf %>'
+          },
+          success: function (response) {
+            $('#success').show();
+            $('#success').html(response.message);
+            $('#streamerModeBanner').hide();
+            // Email
+            $('#email').attr('value', '<%- currentUser.email %>');
+            $('#email').attr('disabled', false);
+             <% if (currentUser.newEmail) {%>
+              $('#newEmail').html('<%- currentUser.newEmail %>');
+              <%} %>
+        },
+        error: function (response) {
+          $('#error').show();
+          $('#error').html(response);
+        }
+      });
+  }
+  });
+  });
+</script>
