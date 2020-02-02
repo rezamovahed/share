@@ -9,6 +9,11 @@ const Upload = require('../models/Upload');
 const User = require('../models/User');
 
 /**
+ * Load middlewares
+ */
+const isOwner = require('../middleware/roleCheck/isOwner');
+
+/**
  * @route /admin
  * @method GET
  * @description Displays a admin dashboard
@@ -85,7 +90,7 @@ router.get('/users', (req, res) => {
  * @description Displays a page to create configs for supported uplaoders
  * @access Private
  */
-router.get('/settings', async (req, res) => {
+router.get('/settings', isOwner, async (req, res) => {
   res.render('admin/comingsoon', {
     pageTitle: 'Settings',
     pageDesc: process.env.DESC,

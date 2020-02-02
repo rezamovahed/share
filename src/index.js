@@ -215,6 +215,7 @@ const isLoggedin = require('./middleware/isLoggedin');
 const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
 const isAccounActivated = require('./middleware/isAccounActivated');
 const isAdmin = require('./middleware/roleCheck/isAdmin');
+const isOwner = require('./middleware/roleCheck/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
 
@@ -240,14 +241,18 @@ const tokensRoutes = require('./routes/tokens');
 const galleryRoutes = require('./routes/gallery');
 const adminRoutes = require('./routes/admin');
 const configRoutes = require('./routes/config');
+const ownerController = require('./controllers/owner');
 const indexController = require('./controllers/index');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
 const tokensConroller = require('./controllers/tokens');
+const galleryConroller = require('./controllers/gallery');
 const adminConroller = require('./controllers/admin');
 
 app.use(indexRoutes);
+app.get('/owner', ownerController.getOwner);
+app.get('/owner/:token', ownerController.getOwnerToken);
 app.get('/data', isLoggedin, indexController.getUploadListData);
 app.delete('/:uploadedFile', isLoggedin, indexController.deleteSingleUpload);
 app.use(authRoutes);
@@ -315,6 +320,11 @@ app.delete('/tokens/:token_id', isLoggedin, tokensConroller.deleteToken);
 // app.delete('/all/uploads', isLoggedin, tokensConroller.deleteTokens);
 app.delete('/all/tokens', isLoggedin, tokensConroller.deleteTokens);
 app.use('/gallery', isLoggedin, galleryRoutes);
+app.delete(
+  '/gallery/:uploadedFile',
+  isLoggedin,
+  galleryConroller.deleteSingleUpload
+);
 app.use('/config', isLoggedin, configRoutes);
 
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
