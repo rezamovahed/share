@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   const images = await Upload.find({ uploader: req.user.id }).sort({
     uploadedAt: -1
   });
-  console.log(images)
+  console.log(images);
   res.render('gallery/index', {
     pageTitle: 'My gallery',
     pageDesc: process.env.DESC,
