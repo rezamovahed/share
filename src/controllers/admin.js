@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 /**
  * Load MongoDB models.
  */
+const User = require('.././models/User');
 const Upload = require('.././models/Upload');
 
 /**
@@ -23,7 +24,6 @@ exports.getUploadListData = async (req, res) => {
       .select('uploaded uploadedAt fileName size type fileExtension uploader')
       .populate({ path: 'uploader', select: 'username isVerified role' });
 
-    console.log(uploadsData);
     // eslint-disable-next-line prefer-const
     let uploads = [];
     let id = 0;
@@ -102,6 +102,55 @@ exports.deleteSingleUpload = async (req, res) => {
     res.json({
       message: `<strong>${uploadedFileName}</strong> has been deleted.`,
       status: 200
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Upoloads lising mini API Controller- Takes data from lib and returns results.
+ */
+exports.getUserListData = async (req, res) => {
+  try {
+    const sort = req.query.order === 'asc' ? 1 : -1;
+    const limit = parseFloat(req.query.limit);
+    const offset = parseFloat(req.query.offset);
+
+    const userData = await User.find({})
+      .sort({ createdAt: sort })
+      .limit(limit)
+      .skip(offset)
+      .select(
+        'username email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
+      );
+
+    // eslint-disable-next-line prefer-const
+    let users = [];
+    let id = 0;
+    userData.map(data => {
+      users.push({
+        id: (id += 1),
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        emailVerified: data.emailVerified,
+        newEmail: data.newEmail,
+        createdAt: data.createdAt,
+        streamerMode: data.streamerMode,
+        isVerified: data.isVerified,
+        lastLogin: data.lastLogin
+      });
+    });
+
+    const total = await Upload.countDocuments({
+      uploader: req.user.id
+    });
+
+    res.json({
+      total,
+      rows: users
     });
   } catch (err) {
     console.error(err);

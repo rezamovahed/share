@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const gravatar = require('gravatar');
 const bcrypt = require('bcrypt');
+const slugify = require('slugify');
 
 const { Schema } = mongoose;
 
@@ -8,6 +8,12 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
+      unique: true,
+      required: true
+    },
+    slug: {
+      type: String,
+      lowercase: true,
       unique: true,
       required: true
     },
@@ -88,23 +94,16 @@ userSchema.pre('save', function save(next) {
 });
 
 /**
- * Gravtar middleware.
+ * Password hash middleware.
  */
 userSchema.pre('save', function save(next) {
-  const user = this;
-  if (!user.isModified('email')) {
+  if (!this.isModified('username')) {
     return next();
   }
-
-  user.avatar = gravatar.url(
-    user.email,
-    {
-      s: '100',
-      r: 'x',
-      d: 'retro'
-    },
-    true
-  );
+  this.slug = slugify(this.username, {
+    remove: /[*+~.()'"!:@]/g,
+    lowercase: true
+  });
   next();
 });
 

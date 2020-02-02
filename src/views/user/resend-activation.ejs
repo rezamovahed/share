@@ -43,7 +43,9 @@
   <body class="auth mb-0">
     <div class="form-auth">
       <div class="branding text-center mb-4">
-        <img src="<%= logo %>" height="60" /><span><%= siteTitle %></span>
+        <img alt="<%= siteTitle %> Logo" src="<%= logo %>" height="60" /><span
+          ><%= siteTitle %></span
+        >
       </div>
       <h1>Resend your activation email</h1>
       <% errors = error && error.length > 0 %> <% if (error && typeof error[0]
@@ -81,15 +83,10 @@
         </a>
       </div>
     </div>
+
+    <!-- Bootstrap Javascript -->
+    <script src="/assets/vender/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom -->
+    <script src="/assets/js/main.js"></script>
   </body>
-
-  <!-- Bootstrap Javascript -->
-  <script
-    type="text/javascript"
-    src="/assets/vender/bootstrap/js/bootstrap.bundle.min.js"
-  ></script>
-  <!-- Custom -->
-  <script type="text/javascript" src="/assets/js/main.js"></script>
 </html>
-
-<form action="/user/forgot" method="POST"></form>

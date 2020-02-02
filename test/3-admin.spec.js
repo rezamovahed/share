@@ -39,4 +39,41 @@ describe('LOGGED IN (admin)', () => {
         });
     });
   });
+
+  describe('GET /admin/uploads', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .get('/admin/uploads/')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+  describe('GET /admin/gallery', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .get('/admin/gallery')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+  describe('GET /admin/users', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .get('/admin/users/')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
 });

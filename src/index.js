@@ -346,6 +346,15 @@ app.delete(
   isAdmin,
   adminConroller.deleteGallerySingleUpload
 );
+// app.get('/admin/users/:slug', isLoggedin, isAdmin, adminRoutes);
+
+app.get(
+  '/admin/users/data',
+  isLoggedin,
+  isAdmin,
+  adminConroller.getUserListData
+);
+
 /**
  * API routes.
  * This is the only one that will be split up in
