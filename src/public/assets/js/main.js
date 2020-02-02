@@ -19,10 +19,10 @@ $(document).ready(() => {
   // hide the alert
   setTimeout(function() {
     $('.alert.alert-timeout').alert('close');
-  }, 30000);
+  }, 15000);
   setInterval(() => {
     setTimeout(function() {
       $('.alert.alert-timeout').alert('close');
-    }, 30000);
+    }, 15000);
   }, 1000);
 });
