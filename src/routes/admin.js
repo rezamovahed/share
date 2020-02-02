@@ -77,10 +77,24 @@ router.get('/gallery', async (req, res) => {
  * @access Private
  */
 router.get('/users', (req, res) => {
-  res.render('admin/comingsoon', {
+  res.render('admin/users/index', {
     pageTitle: 'Users',
     pageDesc: process.env.DESC,
     pageName: 'adminUsers'
+  });
+});
+
+/**
+ * @route /admin/users/:slug
+ * @method GET
+ * @description Displays a users details.
+ * @access Private
+ */
+router.get('/user/:slug', (req, res) => {
+  res.render('admin/comingsoon', {
+    pageTitle: 'View User',
+    pageDesc: process.env.DESC,
+    pageName: 'adminUsersView'
   });
 });
 
