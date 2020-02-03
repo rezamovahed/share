@@ -25,10 +25,9 @@
 @import "components/notloggedin";
 
 // 6. Page-specific styles
+@import "pages/index";
+@import "pages/auth";
 @import "pages/account";
+@import "pages/view";
 @import "pages/tokens";
 @import "pages/admin";
-@import "pages/view";
-@import "pages/auth";
-@import "pages/index";
-

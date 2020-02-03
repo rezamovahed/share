@@ -90,11 +90,16 @@ router.get('/users', (req, res) => {
  * @description Displays a users details.
  * @access Private
  */
-router.get('/user/:slug', (req, res) => {
-  res.render('admin/comingsoon', {
+router.get('/users/:slug', async (req, res) => {
+  const user = await User.findOne({ slug: req.params.slug });
+  if (!user) {
+    return res.send('Not found');
+  }
+  res.render('admin/users/view', {
     pageTitle: 'View User',
     pageDesc: process.env.DESC,
-    pageName: 'adminUsersView'
+    pageName: 'adminUsersView',
+    user
   });
 });
 

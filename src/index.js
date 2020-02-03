@@ -201,14 +201,6 @@ app.use((req, res, next) => {
 });
 
 /**
- * Rate Limiter
- */
-const limiter = rateLimit({
-  windowMs: 1000 * 60, // 1 minutes
-  max: 15 // Max of 15 requests
-});
-
-/**
  * Load middlewares
  */
 const isLoggedin = require('./middleware/isLoggedin');
@@ -253,7 +245,7 @@ const adminConroller = require('./controllers/admin');
 app.use(indexRoutes);
 app.get('/owner', ownerController.getOwner);
 app.get('/owner/:token', ownerController.getOwnerToken);
-app.get('/data', isLoggedin, indexController.getUploadListData);
+app.get('/upload-data', isLoggedin, indexController.getUploadListData);
 app.delete('/:uploadedFile', isLoggedin, indexController.deleteSingleUpload);
 app.use(authRoutes);
 app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
@@ -307,7 +299,7 @@ app.put(
 );
 
 app.use('/tokens', isLoggedin, tokensRoutes);
-app.get('/tokens/data', isLoggedin, tokensConroller.getTokenListData);
+app.get('/tokens-data', isLoggedin, tokensConroller.getTokenListData);
 
 app.post('/tokens', isLoggedin, tokensConroller.postToken);
 app.put(
@@ -329,7 +321,7 @@ app.use('/config', isLoggedin, configRoutes);
 
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
 app.get(
-  '/admin/uploads/data',
+  '/admin/uploads-data',
   isLoggedin,
   isAdmin,
   adminConroller.getUploadListData
@@ -346,10 +338,8 @@ app.delete(
   isAdmin,
   adminConroller.deleteGallerySingleUpload
 );
-// app.get('/admin/users/:slug', isLoggedin, isAdmin, adminRoutes);
-
 app.get(
-  '/admin/users/data',
+  '/admin/users-data',
   isLoggedin,
   isAdmin,
   adminConroller.getUserListData
@@ -360,10 +350,9 @@ app.get(
  * This is the only one that will be split up in
  * the route files it self.  As it will be easyier to mange the versions
  */
-// TODO add the API route for uploading under v1
 const apiRoutes = require('./routes/api');
 
-app.use('/api', limiter, apiRoutes);
+app.use('/api', apiRoutes);
 
 /**
  * Handle 404 errors

@@ -42,10 +42,10 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
-  describe('GET /data (This is used for the / route for manging the upload list) (asc)', () => {
+  describe('GET /upload-data (This is used for the / route for manging the upload list) (asc)', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/data?order=asc&offset=0&limit=10')
+        .get('/upload-data?order=asc&offset=0&limit=10')
         .set('Cookie', userCookie)
         .expect(200)
         .end((err, res) => {
@@ -57,10 +57,10 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
-  describe('GET /data (This is used for the / route for manging the upload list) (desc)', () => {
+  describe('GET /upload-data (This is used for the / route for manging the upload list) (desc)', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/data?order=desc&offset=0&limit=10')
+        .get('/upload-data?order=desc&offset=0&limit=10')
         .set('Cookie', userCookie)
         .expect(200)
         .end((err, res) => {
@@ -97,10 +97,10 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
-  describe('GET /data (This is used for the / route for manging the upload list) (asc)', () => {
+  describe('GET /tokens-data (This is used for the / route for manging the upload list) (asc)', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/tokens/data?order=asc&offset=0&limit=10')
+        .get('/tokens-data?order=asc&offset=0&limit=10')
         .set('Cookie', userCookie)
         .expect(200)
         .end((err, res) => {
@@ -112,10 +112,10 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
-  describe('GET /data (This is used for the / route for manging the upload list) (desc)', () => {
+  describe('GET /tokens-data (This is used for the / route for manging the upload list) (desc)', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/tokens/data?order=desc&offset=0&limit=10')
+        .get('/tokens-data?order=desc&offset=0&limit=10')
         .set('Cookie', userCookie)
         .expect(200)
         .end((err, res) => {

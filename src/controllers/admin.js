@@ -22,7 +22,7 @@ exports.getUploadListData = async (req, res) => {
       .limit(limit)
       .skip(offset)
       .select('uploaded uploadedAt fileName size type fileExtension uploader')
-      .populate({ path: 'uploader', select: 'username isVerified role' });
+      .populate({ path: 'uploader', select: 'username isVerified role slug' });
 
     // eslint-disable-next-line prefer-const
     let uploads = [];
@@ -36,6 +36,7 @@ exports.getUploadListData = async (req, res) => {
         size: data.size,
         uploadedAt: data.uploadedAt,
         uploader: data.uploader.username,
+        slug: data.uploader.slug,
         role: data.uploader.role,
         isVerified: data.uploader.isVerified
       });
@@ -123,7 +124,7 @@ exports.getUserListData = async (req, res) => {
       .limit(limit)
       .skip(offset)
       .select(
-        'username email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
+        'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
       );
 
     // eslint-disable-next-line prefer-const
@@ -133,6 +134,7 @@ exports.getUserListData = async (req, res) => {
       users.push({
         id: (id += 1),
         username: data.username,
+        slug: data.slug,
         email: data.email,
         role: data.role,
         emailVerified: data.emailVerified,
