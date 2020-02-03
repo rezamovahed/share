@@ -9,6 +9,11 @@ const User = require('.././models/User');
 const Upload = require('.././models/Upload');
 
 /**
+ * Load vaildation middleware
+ */
+const isEmpty = require('../validation/isEmpty');
+
+/**
  * Upoloads lising mini API Controller- Takes data from lib and returns results.
  */
 exports.getUploadListData = async (req, res) => {
@@ -17,7 +22,9 @@ exports.getUploadListData = async (req, res) => {
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
 
-    const uploadsData = await Upload.find({})
+    const uploadsData = await Upload.find({
+      $or: [{ _id: param }, { name: param }, { nickname: param }]
+    })
       .sort({ uploadedAt: sort })
       .limit(limit)
       .skip(offset)
@@ -118,14 +125,26 @@ exports.getUserListData = async (req, res) => {
     const sort = req.query.order === 'asc' ? 1 : -1;
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
+    const search = req.query.search !== undefined && !isEmpty(req.query.search);
 
-    const userData = await User.find({})
-      .sort({ createdAt: sort })
-      .limit(limit)
-      .skip(offset)
-      .select(
-        'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
-      );
+    let userData = [];
+    if (search) {
+      userData = await User.find({ $text: { $search: req.query.search } })
+        .sort({ createdAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(
+          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
+        );
+    } else {
+      userData = await User.find({})
+        .sort({ createdAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(
+          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
+        );
+    }
 
     // eslint-disable-next-line prefer-const
     let users = [];
