@@ -1,0 +1,18 @@
+<%- include ('../../partials/header') %> <%- include
+('../../partials/admin/navbar') %>
+
+<div class="container w-50 mt-3 mb-5 admin user">
+  <%- include ('../../partials/admin/users/view/account') %> <%- include
+  ('../../partials/admin/users/view/security') %> <%- include
+  ('../../partials/admin/users/view/toggles') %> <%- include
+  ('../../partials/admin/users/view/basicInfo') %>
+  <a
+    href="/admin/user/edit/<%= user.slug %>"
+    role="button"
+    class="btn btn-primary"
+    style="color: #ffff;"
+    >Edit account</a
+  >
+</div>
+
+<%- include ('../../partials/footer') %>

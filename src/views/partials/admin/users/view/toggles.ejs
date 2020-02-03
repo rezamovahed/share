@@ -1,0 +1,25 @@
+<div class="info header mt-3 mb-2">Toggles</div>
+<div class="form-group d-inline">
+  <label for="streamerMode">Streamer Mode</label>
+  <input
+    id="streamerMode"
+    name="streamerMode"
+    value="true"
+    type="checkbox"
+    checked
+    data-toggle="toggle"
+    data-on="On"
+    data-off="Off"
+    data-onstyle="success"
+    data-offstyle="danger"
+    disabled
+  />
+</div>
+<script>
+  $(document).ready(function() {
+    $('#streamerMode').attr(
+      'checked',
+      '<%= user.streamerMode %>' === 'true' ? true : false
+    );
+  });
+</script>
