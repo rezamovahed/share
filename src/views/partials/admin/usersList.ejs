@@ -36,7 +36,12 @@
     <thead>
       <tr>
         <!-- <th data-field="name" scope="col">Name</th> -->
-        <th data-field="username" data-searchable="false" scope="col">
+        <th
+          data-field="username"
+          data-formatter="usernameFormatter"
+          data-searchable="false"
+          scope="col"
+        >
           Username
         </th>
         <th data-field="role" data-formatter="roleFormatter" scope="col">
@@ -73,6 +78,9 @@
     var $table = $('#table');
 
     // Data formatters
+    function usernameFormatter(value, row) {
+      return `<a href="/admin/users/${row.slug}" target="_blank">${value}</a>`;
+    }
     function createdAtFormatter(value, row) {
       return moment(value).fromNow();
     }
@@ -91,7 +99,7 @@
     }
     function actionsFormatter(value, row, index) {
       return [
-        `<a class="edit" href="/admin/users/${row.id}" title="Edit User">`,
+        `<a class="edit" href="/admin/users/edit/${row.slug}" title="Edit User">`,
         '<i class="fas fa-edit"></i>',
         '</a> ',
         '<a class="delete" href="javascript:void(0)" title="Delete User">',
