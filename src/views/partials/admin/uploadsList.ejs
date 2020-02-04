@@ -61,9 +61,6 @@
         >
           Uploaded
         </th>
-        <th data-field="role" data-formatter="roleFormater" scope="col">
-          Role
-        </th>
         <th data-field="uploader" data-formatter="uploaderFormater" scope="col">
           Uploader
         </th>
@@ -101,19 +98,6 @@
       return `<a href="${
         row.type === 'image' ? `/view/${value}` : `/u/${value + row.extension}`
       }" target="_blank">${value}</a>`;
-    }
-    function roleFormater(value, row) {
-      switch (value) {
-        case 'owner':
-          return 'Owner';
-        case 'admin':
-          return 'Admin';
-        default:
-          if (row.isVerified === true) {
-            return 'Verified';
-          }
-          return 'User';
-      }
     }
     function uploaderFormater(value, row) {
       return `<a href="/admin/users/${row.slug}" target="_blank">${value}</a>`;

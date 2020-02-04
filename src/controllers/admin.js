@@ -22,9 +22,7 @@ exports.getUploadListData = async (req, res) => {
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
 
-    const uploadsData = await Upload.find({
-      $or: [{ _id: param }, { name: param }, { nickname: param }]
-    })
+    const uploadsData = await Upload.find({})
       .sort({ uploadedAt: sort })
       .limit(limit)
       .skip(offset)
@@ -44,7 +42,6 @@ exports.getUploadListData = async (req, res) => {
         uploadedAt: data.uploadedAt,
         uploader: data.uploader.username,
         slug: data.uploader.slug,
-        role: data.uploader.role,
         isVerified: data.uploader.isVerified
       });
     });
