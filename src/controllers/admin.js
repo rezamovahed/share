@@ -162,9 +162,7 @@ exports.getUserListData = async (req, res) => {
       });
     });
 
-    const total = await Upload.countDocuments({
-      uploader: req.user.id
-    });
+    const total = await User.countDocuments({});
 
     res.json({
       total,
