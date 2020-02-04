@@ -120,4 +120,9 @@ userSchema.methods.verifyPassword = async function verifyPassword(
   return true;
 };
 
+userSchema.index(
+  { username: 'text', email: 'text' },
+  { weights: { username: 1, email: 2 } }
+);
+
 module.exports = mongoose.model('User', userSchema);

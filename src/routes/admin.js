@@ -104,6 +104,25 @@ router.get('/users/:slug', async (req, res) => {
 });
 
 /**
+ * @route /admin/users/edit/:slug
+ * @method GET
+ * @description Displays a users details to edit.
+ * @access Private
+ */
+router.get('/users/edit/:slug', async (req, res) => {
+  const user = await User.findOne({ slug: req.params.slug });
+  if (!user) {
+    return res.send('Not found');
+  }
+  res.render('admin/users/view', {
+    pageTitle: 'Edit User',
+    pageDesc: process.env.DESC,
+    pageName: 'adminUsersEdit',
+    user
+  });
+});
+
+/**
  * @route /admin/settings
  * @method GET
  * @description Displays a page to create configs for supported uplaoders

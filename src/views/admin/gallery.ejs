@@ -4,7 +4,6 @@
   <div class="mb-2">
     <%- include ('../partials/alerts/error') %> <%- include ('../partials/alerts/success') %>
   </div>
-  <div class="display-4 text-center">Images Gallery</div>
 </div>
 <div class="container-fluid">
   <% if(images.length > 0) { %>
@@ -24,7 +23,7 @@
   <%- index % 4 == 3 ? "</div>" : "" %>
   <% }) %>
   <% } else { %>
-  <h2 class="font-weight-bold text-center">No images found</h2>
+  <h2 class="mt-5 mb-5 font-weight-bold text-center">No images found</h2>
   <% } %>
 </div>
 </div>
