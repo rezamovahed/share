@@ -114,7 +114,7 @@ router.get('/users/edit/:slug', async (req, res) => {
   if (!user) {
     return res.send('Not found');
   }
-  res.render('admin/users/view', {
+  res.render('admin/users/edit', {
     pageTitle: 'Edit User',
     pageDesc: process.env.DESC,
     pageName: 'adminUsersEdit',

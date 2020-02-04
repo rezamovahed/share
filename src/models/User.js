@@ -43,8 +43,14 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true
     },
-    isBanned: Boolean,
-    isSuspended: Boolean,
+    isBanned: {
+      type: Boolean,
+      default: false
+    },
+    isSuspended: {
+      type: Boolean,
+      default: false
+    },
     suspendedExpire: Date,
     suspendedReason: String,
     passwordChanged: Date,
