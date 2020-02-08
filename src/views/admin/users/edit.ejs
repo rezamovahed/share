@@ -2,7 +2,15 @@
 ('../../partials/admin/navbar') %>
 
 <div class="container w-50 mt-3 mb-3 admin user">
-  <%- include ('../../partials/admin/users/edit/account') %> <%- include
+  <% if (user.role === 'owner' && currentUser.role !== 'owner') { %>
+  <!-- Blocks owners from being edited -->
+  <%- include ('../../partials/admin/users/view/account') %> <%- include
+  ('../../partials/admin/users/view/roles') %> <%- include
+  ('../../partials/admin/users/view/security') %> <%- include
+  ('../../partials/admin/users/view/toggles') %> <%- include
+  ('../../partials/admin/users/view/basicInfo') %> <% } else { %> <%- include
+  <!-- Allows admins to edit users -->
+  ('../../partials/admin/users/edit/account') %> <%- include
   ('../../partials/admin/users/edit/roles') %> <%- include
   ('../../partials/admin/users/edit/security') %> <%- include
   ('../../partials/admin/users/edit/toggles') %> <%- include
@@ -14,6 +22,7 @@
     style="color: #ffff;"
     >Save account</a
   >
+  <% } %>
 </div>
 
 <%- include ('../../partials/footer.ejs') %>

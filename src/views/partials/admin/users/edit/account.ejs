@@ -13,16 +13,10 @@
 </div>
 <div class="form-group">
   <label for="email">Email</label>
-  <input
-    name="email"
-    type="text"
-    class="form-control"
-    id="email"
-    value="<%-
-  currentUser.streamerMode ? `${user.email.substring(0,3)}******`:
-  user.email %>"
-  />
-  <% if(currentUser.newEmail) { %>
+  <input name="email" type="text" class="form-control" id="email" value="<%-
+  currentUser.streamerMode ? `${user.email.substring(0,3)}******`: user.email
+  %>" <%- currentUser.streamerMode ? `disabled`: '' %> /> <%
+  if(currentUser.newEmail) { %>
   <small class="form-text text-success pt-2">
     Your new e-mail address
     <span id="newEmail"
