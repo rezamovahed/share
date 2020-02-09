@@ -210,6 +210,7 @@ const isAdmin = require('./middleware/roleCheck/isAdmin');
 const isOwner = require('./middleware/roleCheck/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
+const isMfa = require('./middleware/isMfa');
 
 /**
  * Load vaildation middleware
@@ -254,6 +255,7 @@ app.post(
   isAlreadyAuth,
   isAccounActivated,
   loginVaildation,
+  isMfa,
   passport.authenticate('local', {
     failureFlash: true,
     failureRedirect: '/login'

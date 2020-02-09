@@ -43,6 +43,11 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true
     },
+    mfaSecret: String,
+    mfa: {
+      type: Boolean,
+      default: false
+    },
     isBanned: {
       type: Boolean,
       default: false

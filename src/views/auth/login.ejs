@@ -84,6 +84,21 @@
           </small>
           <% } %>
         </div>
+        <div class="form-group">
+          <input
+            name="mfa"
+            type="mfa"
+            class="form-control <% if(errors && error[0].mfa){ %>is-invalid <% } %>"
+            id="text"
+            placeholder="Your MFA Token"
+
+          />
+          <% if (errors && error[0].mfa) { %>
+          <small class="invalid-feedback">
+            <%= error[0].mfa %>
+          </small>
+          <% } %>
+        </div>
         <button type="submit" class="btn btn-auth btn-primary btn-block">
           login
         </button>
