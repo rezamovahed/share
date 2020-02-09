@@ -13,8 +13,6 @@ router.use(
   fileUpload({
     safeFileNames: true,
     preserveExtension: true,
-    useTempFiles: true,
-    tempFileDir: '../../../tmp/',
     limits: {
       fileSize: process.env.UPLOAD_LIMIT || 100000000
     },
