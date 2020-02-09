@@ -1,6 +1,13 @@
-<a id="btn-enable-mfa" class="btn btn-danger" style="color: #ffff;"
+<% if(currentUser.mfa) { %>
+    <a id="btn-enable-mfa" class="btn btn-success disabled" style="color: #ffff;"
+  >MFA is enabled</a
+>
+
+<% } else { %>
+  <a id="btn-enable-mfa" class="btn btn-danger" style="color: #ffff;"
   >Enable MFA</a
 >
+<% }%>
 <div
   class="modal fade"
   id="enable-mfa"
@@ -134,13 +141,9 @@ $(document).ready(() => {
       error: function(response) {
         console.log(response);
       $("#mfa-error").addClass("d-block");
-      $("#mfa-error").html(response.message);
+      $("#mfa-error").html(response.responseJSON.message);
       }
     });
-  });
-
-  $("#btn-enable-mfa").on("click", function() {
-
   });
 });
 </script>

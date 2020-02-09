@@ -205,10 +205,11 @@ exports.postMfaSetupVerify = async (req, res, next) => {
     const { token, secret } = req.body;
     const isValid = authenticator.verify({ token, secret });
 
+    console.log(isValid);
     if (!isValid) {
-      return res.json({
+      return res.status(400).json({
         message: 'Invaild token.  Please try again.',
-        status: 200
+        status: 400
       });
     }
 
@@ -217,6 +218,24 @@ exports.postMfaSetupVerify = async (req, res, next) => {
     await user.save();
 
     res.json({ message: 'MFA has been enabled.', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Update account Controler - Allows users to update basic account details.
+ */
+exports.deleteMFA = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    user.mfa = false;
+    user.mfaSecret = undefined;
+    await user.save();
+
+    res.json({ message: 'MFA has been disabled.', status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

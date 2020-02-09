@@ -103,11 +103,18 @@
 
 
     } else {
-          $("#btn-enable-mfa").html("Enable MFA");
+       $.ajax({
+      url: "/account/mfa?_method=delete",
+      type: "POST",
+      data: { _csrf: "<%= _csrf %>" },
+      success: function(response) {
+                  $("#btn-enable-mfa").html("Enable MFA");
     $("#btn-enable-mfa").addClass("btn-danger");
     $("#btn-enable-mfa").removeClass("btn-success");
     $("#btn-enable-mfa").removeClass("disabled");
         $('#mfa').bootstrapToggle('disable')
+      }
+    })
     }
   });
     });

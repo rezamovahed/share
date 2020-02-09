@@ -300,7 +300,12 @@ app.put(
   accountController.putStreamerMode
 );
 app.post('/account/mfa/setup', isLoggedin, accountController.postMfaSetup);
-app.post('/account/mfa/setup/verify', isLoggedin, accountController.postMfaSetupVerify);
+app.post(
+  '/account/mfa/setup/verify',
+  isLoggedin,
+  accountController.postMfaSetupVerify
+);
+app.delete('/account/mfa', isLoggedin, accountController.deleteMFA);
 
 app.use('/tokens', isLoggedin, tokensRoutes);
 app.get('/tokens-data', isLoggedin, tokensConroller.getTokenListData);
