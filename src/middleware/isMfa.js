@@ -26,9 +26,7 @@ module.exports = async (req, res, next) => {
     }
     next();
   } catch (err) {
-    // Possible errors
-    // - options validation
-    // - "Invalid input - it is not base32 encoded string" (if thiry-two is used)
     console.error(err);
+    res.status(500).send('Server error');
   }
 };

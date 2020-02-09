@@ -1,4 +1,7 @@
 const moment = require('moment');
+const qrcode = require('qrcode');
+const { authenticator } = require('otplib');
+
 const generate = require('nanoid/generate');
 const sendgrid = require('../config/sendgrid');
 
@@ -161,6 +164,59 @@ exports.putStreamerMode = async (req, res, next) => {
     res.json({
       message: `Streamer mode has been turned ${boolean ? 'on' : 'off'}`
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Update account Controler - Allows users to update basic account details.
+ */
+exports.postMfaSetup = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const secret = authenticator.generateSecret();
+
+    const otpauth = authenticator.keyuri(user.email, process.env.TITLE, secret);
+    qrcode.toDataURL(otpauth, (err, imageUrl) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
+      res.json({
+        qrcode: imageUrl,
+        mfaSecret: secret,
+        status: 200
+      });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Update account Controler - Allows users to update basic account details.
+ */
+exports.postMfaSetupVerify = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const { token, secret } = req.body;
+    const isValid = authenticator.verify({ token, secret });
+
+    if (!isValid) {
+      return res.json({
+        message: 'Invaild token.  Please try again.',
+        status: 200
+      });
+    }
+
+    user.mfa = true;
+    user.mfaSecret = secret;
+    await user.save();
+
+    res.json({ message: 'MFA has been enabled.', status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
