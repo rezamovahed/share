@@ -12,7 +12,7 @@
   <%- include ('../streamerMode') %>
 </div>
 <div class="customTable">
-  <div class="table-wrapper">
+  <div class="table-wrapper mb-0">
     <div class="table-title">
       <div class="row">
         <div class="col-xs-12 col-md-6">
@@ -61,9 +61,9 @@
           data-formatter="actionsFormatter"
           data-events="actionEvents"
           scope="col"
-          data-width="100px"
+          data-width="250px"
         >
-          Actions
+          Quick Actions
         </th>
       </tr>
     </thead>
@@ -100,10 +100,20 @@
     }
     function actionsFormatter(value, row, index) {
       return [
-        `<a class="edit" href="/admin/users/edit/${row.slug}" title="Edit User">`,
+        `<a class="${
+          row.isBanned ? 'ban' : 'unban'
+        }"  href="javascript:void(0)" title="Ban" data-toggle="tooltip">`,
+        '<i class="fas fa-gavel"></i>',
+        '</a> ',
+        `<a class="${
+          row.isSuspended ? 'unsuspend' : 'suspend'
+        }"  href="javascript:void(0)" title="Ban" data-toggle="tooltip">`,
+        `<i class="fas fas ${row.isSuspended ? 'fa-pause' : 'fa-play'}"></i>`,
+        '</a> ',
+        `<a class="edit" href="/admin/users/edit/${row.slug}" title="Edit">`,
         '<i class="fas fa-edit"></i>',
         '</a> ',
-        '<a class="delete" href="javascript:void(0)" title="Delete User">',
+        '<a class="delete" href="javascript:void(0)" title="Delete">',
         ' <i class="fas fa-times-circle"></i>',
         '</a>'
       ].join('');

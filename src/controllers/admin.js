@@ -131,7 +131,7 @@ exports.getUserListData = async (req, res) => {
         .limit(limit)
         .skip(offset)
         .select(
-          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
+          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin lastLoginIP isBanned isSuspended'
         );
     } else {
       userData = await User.find({})
@@ -139,7 +139,7 @@ exports.getUserListData = async (req, res) => {
         .limit(limit)
         .skip(offset)
         .select(
-          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin'
+          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin lastLoginIP isBanned isSuspended'
         );
     }
 
@@ -162,9 +162,7 @@ exports.getUserListData = async (req, res) => {
       });
     });
 
-    const total = await Upload.countDocuments({
-      uploader: req.user.id
-    });
+    const total = await User.countDocuments({});
 
     res.json({
       total,

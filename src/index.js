@@ -210,6 +210,7 @@ const isAdmin = require('./middleware/roleCheck/isAdmin');
 const isOwner = require('./middleware/roleCheck/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
+const isMfa = require('./middleware/isMfa');
 
 /**
  * Load vaildation middleware
@@ -254,6 +255,7 @@ app.post(
   isAlreadyAuth,
   isAccounActivated,
   loginVaildation,
+  isMfa,
   passport.authenticate('local', {
     failureFlash: true,
     failureRedirect: '/login'
@@ -297,6 +299,13 @@ app.put(
   isLoggedin,
   accountController.putStreamerMode
 );
+app.post('/account/mfa/setup', isLoggedin, accountController.postMfaSetup);
+app.post(
+  '/account/mfa/setup/verify',
+  isLoggedin,
+  accountController.postMfaSetupVerify
+);
+app.delete('/account/mfa', isLoggedin, accountController.deleteMFA);
 
 app.use('/tokens', isLoggedin, tokensRoutes);
 app.get('/tokens-data', isLoggedin, tokensConroller.getTokenListData);

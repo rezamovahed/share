@@ -33,6 +33,10 @@
 </div>
 <script>
   $(document).ready(function() {
+    $('#streamerMode').attr(
+      'checked',
+      '<%= user.streamerMode %>' === 'true' ? true : false
+    );
     $('#emailVerified').attr(
       'checked',
       '<%= user.emailVerified %>' === 'true' ? true : false

@@ -43,8 +43,19 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true
     },
-    isBanned: Boolean,
-    isSuspended: Boolean,
+    mfaSecret: String,
+    mfa: {
+      type: Boolean,
+      default: false
+    },
+    isBanned: {
+      type: Boolean,
+      default: false
+    },
+    isSuspended: {
+      type: Boolean,
+      default: false
+    },
     suspendedExpire: Date,
     suspendedReason: String,
     passwordChanged: Date,
