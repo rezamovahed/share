@@ -15,6 +15,7 @@ const userSchema = new Schema(
       type: String,
       lowercase: true,
       unique: true,
+      required: true
     },
     email: {
       type: String,
@@ -82,6 +83,20 @@ const userSchema = new Schema(
 );
 
 /**
+ * Username to slug gen.
+ */
+userSchema.pre('save', function save(next) {
+  if (!this.isModified('username')) {
+    return next();
+  }
+  this.slug = slugify(this.username, {
+    remove: /[*+~.()'"!:@]/g,
+    lowercase: true
+  });
+  next();
+});
+
+/**
  * Password hash middleware.
  */
 userSchema.pre('save', function save(next) {
@@ -101,20 +116,6 @@ userSchema.pre('save', function save(next) {
       next();
     });
   });
-});
-
-/**
- * Password hash middleware.
- */
-userSchema.pre('save', function save(next) {
-  if (!this.isModified('username')) {
-    return next();
-  }
-  this.slug = slugify(this.username, {
-    remove: /[*+~.()'"!:@]/g,
-    lowercase: true
-  });
-  next();
 });
 
 /**
