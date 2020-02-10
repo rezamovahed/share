@@ -21,20 +21,18 @@ const AccountActivationEmail = require('../emails/AccountActivation');
  * Also will send them a email to verify their email address.
  */
 exports.postSignup = async (req, res) => {
+  console.log(req.body)
   try {
-    console.log(req.body)
     const { username, email, password } = req.body;
-
-    const slug = slugify(username, {
-      remove: /[*+~.()'"!:@]/g,
-      lower: true
-    });
 
     const user = new User({
       username,
       email,
       password,
-      slug
+      slug: slugify(username, {
+        remove: /[*+~.()'"!:@]/g,
+        lower: true
+      })
     });
 
     // Set the token and the expire date.
