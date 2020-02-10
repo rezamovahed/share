@@ -26,7 +26,7 @@ exports.postSignup = async (req, res) => {
 
     const slug = slugify(username, {
       remove: /[*+~.()'"!:@]/g,
-      lowercase: true
+      lower: true
     });
 
     console.log(slug)
