@@ -85,7 +85,8 @@ const userSchema = new Schema(
  * Password hash middleware.
  */
 userSchema.pre('save', function save(next) {
-  if (!this.isModified('password')) {
+  const user = this;
+  if (!user.isModified('password')) {
     return next();
   }
   bcrypt.genSalt(12, (err, salt) => {
@@ -93,11 +94,11 @@ userSchema.pre('save', function save(next) {
       return next(err);
     }
     // eslint-disable-next-line no-shadow
-    bcrypt.hash(this.password, salt, (err, hash) => {
+    bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) {
         return next(err);
       }
-      this.password = hash;
+      user.password = hash;
       next();
     });
   });
@@ -107,12 +108,14 @@ userSchema.pre('save', function save(next) {
  * Username to slug.
  */
 userSchema.pre('save', function save(next) {
-  if (!this.isModified('username') || !this.isModified('slug')) {
+  const user = this;
+
+  if (!user.isModified('username') || !user.isModified('slug')) {
     return next();
   }
-  this.slug = slugify(this.username, {
+  user.slug = slugify(user.username, {
     remove: /[*+~.()'"!:@]/g,
-    lowercase: true
+    lower: true
   });
   next();
 });
