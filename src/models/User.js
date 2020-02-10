@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const slugify = require('slugify');
 
 const { Schema } = mongoose;
 
@@ -12,9 +13,8 @@ const userSchema = new Schema(
     },
     slug: {
       type: String,
-      unique: true,
       lowercase: true,
-      required: true
+      unique: true
     },
     email: {
       type: String,
@@ -101,6 +101,20 @@ userSchema.pre('save', function save(next) {
       next();
     });
   });
+});
+
+/**
+ * Username to slug.
+ */
+userSchema.pre('save', function save(next) {
+  if (!this.isModified('username') || !this.isModified('slug')) {
+    return next();
+  }
+  this.slug = slugify(this.username, {
+    remove: /[*+~.()'"!:@]/g,
+    lowercase: true
+  });
+  next();
 });
 
 /**
