@@ -3,6 +3,6 @@
   <% if (currentUser.role === 'owner') { %>
   <option>Owner</option>
   <% } %>
-  <option>Admin</option>
-  <option>User</option>
+  <option <% if(user.role === 'admin') { %> selected <% } %>>Admin</option>
+  <option <% if(user.role === 'user') { %> selected <% } %>>User</option>
 </select>
