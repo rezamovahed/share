@@ -24,11 +24,12 @@ exports.postSignup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const slug = await slugify(username, {
+    const slug = slugify(username, {
       remove: /[*+~.()'"!:@]/g,
       lowercase: true
     });
 
+    console.log(slug)
     const user = new User({
       username,
       email,
