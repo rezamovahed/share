@@ -122,16 +122,16 @@ describe('LOGGED IN (admin)', () => {
     });
   });
 
-  // describe('GET /admin/users/edit/slug', () => {
-  //   it('it should has status code 200', done => {
-  //     supertest(app)
-  //       .get('/admin/users/edit/usermrdemonwolfgithubio')
-  //       .set('Cookie', adminCookie)
-  //       .expect(200)
-  //       .end((err, res) => {
-  //         if (err) return done(err);
-  //         done();
-  //       });
-  //   });
-  // });
+  describe('GET /admin/users/edit/slug', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .get('/admin/users/edit/usermrdemonwolfgithubio')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
 });
