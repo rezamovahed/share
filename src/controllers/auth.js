@@ -22,6 +22,7 @@ const AccountActivationEmail = require('../emails/AccountActivation');
  */
 exports.postSignup = async (req, res) => {
   try {
+    console.log(req.body)
     const { username, email, password } = req.body;
 
     const slug = slugify(username, {
@@ -29,7 +30,6 @@ exports.postSignup = async (req, res) => {
       lower: true
     });
 
-    console.log(slug)
     const user = new User({
       username,
       email,

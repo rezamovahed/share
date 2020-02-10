@@ -4,6 +4,15 @@ const chai = require('chai');
 const app = require('../src/index');
 const User = require('../src/models/User');
 
+const slugify = require('slugify');
+
+const slug = slugify('user@mrdemonwolf.github.io', {
+  remove: /[*+~.()'"!:@]/g,
+  lower: true
+});
+
+console.log('Your slug' + slug);
+
 const { assert, expect } = chai;
 const should = chai.should();
 
