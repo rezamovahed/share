@@ -17,10 +17,10 @@ addons:
     - mrdemonwolf.me
     - mrdemonwolf.local
 
-branches:
-  only:
-    - master
-    - development
+# branches:
+#   only:
+#     - master
+#     - development
 
 env:
   global:
