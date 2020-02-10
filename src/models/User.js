@@ -83,20 +83,6 @@ const userSchema = new Schema(
 );
 
 /**
- * Username to slug gen.
- */
-userSchema.pre('save', function save(next) {
-  if (!this.isModified('username')) {
-    return next();
-  }
-  this.slug = slugify(this.username, {
-    remove: /[*+~.()'"!:@]/g,
-    lowercase: true
-  });
-  next();
-});
-
-/**
  * Password hash middleware.
  */
 userSchema.pre('save', function save(next) {
