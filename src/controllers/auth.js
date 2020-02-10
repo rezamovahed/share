@@ -28,7 +28,10 @@ exports.postSignup = async (req, res) => {
       username,
       email,
       password,
-      slug: 'jkgjenjnegjngenjeg'
+      slug: slugify(username, {
+        remove: /[*+~.()'"!:@]/g,
+        lower: true
+      })
     });
 
     // Set the token and the expire date.
