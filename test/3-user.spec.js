@@ -75,7 +75,7 @@ describe('LOGGED IN (user)', () => {
   describe('GET /gallery', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/gallery/')
+        .get('/gallery')
         .set('Cookie', userCookie)
         .expect(200)
         .end((err, res) => {
@@ -87,7 +87,7 @@ describe('LOGGED IN (user)', () => {
   describe('GET /tokens', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/tokens/')
+        .get('/tokens')
         .set('Cookie', userCookie)
         .expect(200)
         .end((err, res) => {
@@ -130,7 +130,7 @@ describe('LOGGED IN (user)', () => {
   describe('GET /account', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/account/')
+        .get('/account')
         .set('Cookie', userCookie)
         .expect(200)
         .end((err, res) => {
@@ -145,7 +145,7 @@ describe('User actions', () => {
   describe('GET /user/forgot-password', () => {
     it('it should return status 302.', done => {
       supertest(app)
-        .get('/user/forgot-password/')
+        .get('/user/forgot-password')
         .expect(200)
         .end((err, res) => {
           if (err) {

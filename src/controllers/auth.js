@@ -24,11 +24,13 @@ exports.postSignup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
+    const slug = username;
+
     const user = new User({
       username,
       email,
       password,
-      slug: slugify(username)
+      slug
     });
 
     // Set the token and the expire date.

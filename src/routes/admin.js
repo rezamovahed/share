@@ -93,7 +93,7 @@ router.get('/users', (req, res) => {
 router.get('/users/:slug', async (req, res) => {
   const user = await User.findOne({ slug: req.params.slug });
   if (!user) {
-    return res.send('Not found');
+    return res.status(404).send('Not found');
   }
   res.render('admin/users/view', {
     pageTitle: 'View User',
@@ -112,7 +112,7 @@ router.get('/users/:slug', async (req, res) => {
 router.get('/users/edit/:slug', async (req, res) => {
   const user = await User.findOne({ slug: req.params.slug });
   if (!user) {
-    return res.send('Not found');
+    return res.status(404).send('Not found');
   }
   res.render('admin/users/edit', {
     pageTitle: 'Edit User',

@@ -11,7 +11,7 @@ describe('Auth Routes', () => {
   describe('GET /login', () => {
     it('it should return status 200 if rendered', done => {
       supertest(app)
-        .get('/login/')
+        .get('/login')
         .expect(200)
         .end((err, res) => {
           if (err) {
@@ -25,7 +25,7 @@ describe('Auth Routes', () => {
   describe('GET /signup', () => {
     it('it should return status 200 if rendered', done => {
       supertest(app)
-        .get('/signup/')
+        .get('/signup')
         .expect(200)
         .end((err, res) => {
           if (err) {
@@ -39,7 +39,7 @@ describe('Auth Routes', () => {
   describe('POST /signup to create user', () => {
     it('it should return status 302', done => {
       supertest(app)
-        .post('/signup/')
+        .post('/signup')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({
           username: 'user@mrdemonwolf.github.io',
@@ -66,7 +66,7 @@ describe('Auth Routes', () => {
   describe('POST /signup (admin)', () => {
     it('it should return status 302', done => {
       supertest(app)
-        .post('/signup/')
+        .post('/signup')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({
           username: 'admin@mrdemonwolf.github.io',
@@ -93,7 +93,7 @@ describe('Auth Routes', () => {
   describe('POST /signup (owner)', () => {
     it('it should return status 302', done => {
       supertest(app)
-        .post('/signup/')
+        .post('/signup')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({
           username: 'owner@mrdemonwolf.github.io',
