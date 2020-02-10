@@ -14,7 +14,8 @@ const userSchema = new Schema(
     slug: {
       type: String,
       lowercase: true,
-      unique: true
+      unique: true,
+      required: true
     },
     email: {
       type: String,
@@ -109,8 +110,7 @@ userSchema.pre('save', function save(next) {
  */
 userSchema.pre('save', function save(next) {
   const user = this;
-
-  if (!user.isModified('username') || !user.isModified('slug')) {
+  if (!user.isModified('username')) {
     return next();
   }
   user.slug = slugify(user.username, {
