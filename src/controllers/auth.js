@@ -33,7 +33,7 @@ exports.postSignup = async (req, res) => {
       username,
       email,
       password,
-      slug
+      slug: username
     });
 
     // Set the token and the expire date.
