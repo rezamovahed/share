@@ -55,6 +55,7 @@ describe('Auth Routes', () => {
             email: 'user@mrdemonwolf.github.io'
           });
           console.log(user.slug);
+          console.log(user);
           user.emailVerified = true;
           user.emailVerificationToken = undefined;
           user.emailVerificationTokenExpire = undefined;
