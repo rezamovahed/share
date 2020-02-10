@@ -2,10 +2,26 @@ notifications:
   email: false
 
 language: node_js
-services: mongodb
 
 node_js:
   - 12
+cache: npm
+
+services: mongodb
+
+git:
+  quiet: true
+
+addons:
+  hosts:
+    - mrdemonwolf.me
+    - mrdemonwolf.local
+
+branches:
+  only:
+    - master
+    - development
+
 env:
   global:
     - DATABASE_URI=mongodb://localhost:27017/share
@@ -20,6 +36,7 @@ env:
     - SHOW_VERSION=true
     - SIGNUPS=true
     - SIGNUP_TERMS=true
+
 before_install:
   - echo "DATABASE_URI=$DATABASE_URI" > ./.env
   - echo "SESSION_SECRET=$SESSION_SECRET" >> ./.env
@@ -33,7 +50,9 @@ before_install:
   - echo "SIGNUP_TERMS=$SIGNUP_TERMS" >> ./.env
 after_script:
   - rm ./.env
+
 install:
   - npm install
+
 script:
   - npm run test
