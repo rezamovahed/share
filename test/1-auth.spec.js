@@ -54,6 +54,7 @@ describe('Auth Routes', () => {
           const user = await User.findOne({
             email: 'user@mrdemonwolf.github.io'
           });
+          console.log(user.slug);
           user.emailVerified = true;
           user.emailVerificationToken = undefined;
           user.emailVerificationTokenExpire = undefined;
