@@ -99,7 +99,7 @@ describe('LOGGED IN (admin)', () => {
   describe('GET /admin/users', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .get('/admin/users/')
+        .get('/admin/users')
         .set('Cookie', adminCookie)
         .expect(200)
         .end((err, res) => {
