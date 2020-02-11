@@ -24,6 +24,7 @@ router.use(
  * Load Middleware
  */
 const isTokenVaild = require('../../../middleware/api/isTokenVaild');
+const fileCheck = require('../../../middleware/api/fileCheck');
 
 /**
  * Load Controllers
@@ -46,6 +47,12 @@ const uploadValidation = require('../../../validation/api/v1/upload');
  *
  * @apiSuccess {Object} Path Route Paths
  */
-router.post('/', isTokenVaild, uploadValidation, uploadController.uploadFile);
+router.post(
+  '/',
+  isTokenVaild,
+  uploadValidation,
+  fileCheck,
+  uploadController.uploadFile
+);
 
 module.exports = router;
