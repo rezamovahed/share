@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const filesize = require('filesize');
 const moment = require('moment');
+const mineTypes = require('../../../config/mineTypes');
 
 /**
  * Load MongoDB models.
@@ -34,6 +35,13 @@ module.exports.uploadFile = async (req, res, next) => {
 
     const size = filesize(file.size);
 
+    // Image check to label as image.
+    const isImage = mineTypes.images.includes(fileMineType);
+    const isText = mineTypes.text.includes(fileMineType);
+
+    // Sets type based on above.
+    const type = isImage ? 'image' : isText ? 'text' : 'file';
+
     /**
      * Adds the file to the database with basic infomation plus a
      * deleteKey which allows users to remove the file with one click
@@ -43,7 +51,8 @@ module.exports.uploadFile = async (req, res, next) => {
       fileName,
       fileExtension,
       deleteKey,
-      size
+      size,
+      type
     });
 
     // Log the upload in lastUpload.
