@@ -14,9 +14,14 @@ const Upload = require('../models/Upload');
  * @access Private
  */
 router.get('/', async (req, res) => {
-  const images = await Upload.find({ uploader: req.user.id }).sort({
-    uploadedAt: -1
-  });
+  const images = await Upload.find({
+    uploader: req.user.id,
+    type: 'image'
+  })
+    .sort({
+      uploadedAt: -1
+    })
+    .select('fileName fileExtension');
   res.render('gallery/index', {
     pageTitle: 'My gallery',
     pageDesc: process.env.DESC,
