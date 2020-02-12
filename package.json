@@ -51,7 +51,6 @@
     "express-ip": "^1.0.3",
     "express-rate-limit": "^5.0.0",
     "express-session": "^1.17.0",
-    "faker": "^4.1.0",
     "file-exists": "^5.0.1",
     "filesize": "^6.0.1",
     "fs-extra": "^8.1.0",
