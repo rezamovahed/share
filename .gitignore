@@ -69,3 +69,10 @@ pids
 logs
 results
 tmp
+
+# Docs
+docs/*.gem
+docs/.bundle
+docs/.sass-cache
+docs/_site
+docs/Gemfile.lock
