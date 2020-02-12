@@ -12,7 +12,21 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Last Login</h5>
-        <p class="card-text"><%= moment(currentUser.lastLog).fromNow() %> </p>
+        <p class="card-text"><%= moment(currentUser.lastLog).fromNow() %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Last Login Location</h5>
+        <p class="card-text d-inline">
+          <a
+            href="https://whatismyipaddress.com/ip/<%= currentUser.lastLoginIP %>" target="_blank" rel="nofollow"
+          >
+            <%= currentUser.lastLoginLocation %>
+          </a>
+        </p>
       </div>
     </div>
   </div>
@@ -21,7 +35,9 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Last password change</h5>
-        <p class="card-text"><%= moment(currentUser.passwordChanged).fromNow() %> </p>
+        <p class="card-text">
+          <%= moment(currentUser.passwordChanged).fromNow() %>
+        </p>
       </div>
     </div>
   </div>
@@ -32,10 +48,25 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Last Activity</h5>
-          <p class="card-text"><%= moment(currentUser.lastActivity).format('MMM Do YYYY hh:mm A') %> CST %> </p>
+          <p class="card-text">
+            <%= moment(currentUser.lastActivity).format('MMM Do YYYY hh:mm A')
+            %> CST %>
+          </p>
         </div>
       </div>
     </div>
+    <% if(currentUser.passwordChanged !== undefined) { %>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Last password change</h5>
+          <p class="card-text">
+            <%= moment(currentUser.passwordChanged).fromNow() %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <% } %>
   </div>
   <% } %>
 </div>

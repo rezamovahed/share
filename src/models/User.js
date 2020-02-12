@@ -75,6 +75,8 @@ const userSchema = new Schema(
       default: false
     },
     lastLogin: Date,
+    lastLoginIP: String,
+    lastLoginLocation: String,
     lastUpload: Date
   },
   {
