@@ -67,7 +67,29 @@ exports.postSignup = async (req, res) => {
  * Login Controler - This verifys the login details then if vaild
  * creates a user session then redirect to there uploads lising pagge
  */
-exports.postLogin = (req, res) => {
+exports.postLogin = async (req, res) => {
+  const ip =
+    req.clientIp === '::1' || req.clientIp === '127.0.0.1'
+      ? 'localhost'
+      : req.clientIp;
+  const location =
+    req.ipInfo.error !== undefined
+      ? 'localhost'
+      : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
+
+  await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: {
+        lastLoginIP: ip,
+        lastLoginLocation: location
+      }
+    },
+    {
+      $safe: true,
+      $upsert: true
+    }
+  );
   req.flash('success', `Welcome back, ${req.user.username}`);
   res.redirect('/');
 };
