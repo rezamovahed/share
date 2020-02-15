@@ -171,7 +171,7 @@ exports.putStreamerMode = async (req, res, next) => {
 };
 
 /**
- * Update account Controler - Allows users to update basic account details.
+ * Setup MFA Controller - Allows users to setup MFA for there account
  */
 exports.postMfaSetup = async (req, res, next) => {
   try {
@@ -197,7 +197,7 @@ exports.postMfaSetup = async (req, res, next) => {
 };
 
 /**
- * Update account Controler - Allows users to update basic account details.
+ * Verify MFA Controller - Users must verify MFA before it can be enabled
  */
 exports.postMfaSetupVerify = async (req, res, next) => {
   try {
@@ -225,7 +225,7 @@ exports.postMfaSetupVerify = async (req, res, next) => {
 };
 
 /**
- * Update account Controler - Allows users to update basic account details.
+ * Update MFA Controller - Allows users to update MFA
  */
 exports.deleteMFA = async (req, res, next) => {
   try {

@@ -1,11 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
     <a class="navbar-brand " href="#">
-      <img
-        alt="Logo"
-        src="<%= logo %>"
-     height="40"
-      />
+      <img alt="Logo" src="<%= logo %>" height="40" />
       <span><%= siteTitle %></span>
     </a>
     <button
@@ -36,13 +32,13 @@
             ><%}%></a
           >
         </li>
-        <li class="nav-item <% if(pageName === 'config'){%> active <%}%>">
-          <a href="/config" class="nav-link"
-            >Config <% if(pageName === 'config'){%><span class=" sr-only"
-              >(current)</span
-            ><%}%></a
-          >
-        </li>
+        <!-- <li class="nav-item <% if(pageName === 'config'){%> active <%}%>"> -->
+        <!-- <a href="/config" class="nav-link" -->
+        <!-- >Config <% if(pageName === 'config'){%><span class=" sr-only" -->
+        <!-- >(current)</span -->
+        <!-- ><%}%></a -->
+        <!-- > -->
+        <!-- </li> -->
         <li class="nav-item <% if(pageName === 'tokens'){%> active <%}%>">
           <a href="/tokens" class="nav-link"
             >Tokens <% if(pageName === 'tokens'){%><span class=" sr-only"

@@ -8,6 +8,7 @@
   <%- include ('../partials/alerts/success') %>
   <%- include ('../partials/alerts/error') %>
   <form action="/account?_method=PUT" method="POST">
+  <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
   <%- include ('../partials/account/account') %>
   <%- include ('../partials/account/security') %>
   <%- include ('../partials/account/mfa') %>
@@ -46,5 +47,6 @@
     </div>
   </div>
 </div>
+<%- include ('../partials/account/modal/mfa') %>
 
 <%- include ('../partials/footer') %>
