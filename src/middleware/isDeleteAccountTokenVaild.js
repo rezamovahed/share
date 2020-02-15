@@ -6,7 +6,8 @@ module.exports = async (req, res, next) => {
     emailVerificationToken: req.params.token,
     emailVerificationTokenExpire: {
       $gt: moment()
-    }
+    },
+    emailVerified: { $ne: true }
   });
   if (!user) {
     req.flash('error', 'Account has been activated or the token is invaild.');

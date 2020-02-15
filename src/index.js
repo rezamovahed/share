@@ -329,8 +329,8 @@ app.put(
   tokensConroller.putToken
 );
 app.delete('/tokens/:token_id', isLoggedin, tokensConroller.deleteToken);
-// app.delete('/all/uploads', isLoggedin, tokensConroller.deleteTokens);
-app.delete('/all/tokens', isLoggedin, tokensConroller.deleteTokens);
+app.delete('/all/uploads', isLoggedin, indexController.deleteAllUploads);
+app.delete('/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
 app.use('/gallery', isLoggedin, galleryRoutes);
 app.delete(
   '/gallery/:uploadedFile',

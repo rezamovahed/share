@@ -112,7 +112,7 @@ exports.deleteToken = async (req, res, next) => {
 /**
  * Delete All Tokens Controler - Deletes all a users tokens
  */
-exports.deleteTokens = async (req, res, next) => {
+exports.deleteAllTokens = async (req, res, next) => {
   try {
     const tokens = await Token.find({ user: req.user.id });
 
