@@ -229,3 +229,55 @@ exports.deleteGallerySingleUpload = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
+ */
+exports.deleteAllUploads = async (req, res) => {
+  try {
+    const uploads = await Upload.find({});
+
+    if (uploads.length === 0) {
+      req.flash('error', 'No files have been uploaded yet.');
+      return res.redirect('/admin/uploads');
+    }
+
+    uploads.map(async data => {
+      const uploadedFileExt = data.fileExtension;
+      const uploadedFileName = data.fileName;
+
+      const uploadedFilePath = `${path.join(
+        __dirname,
+        '../public'
+      )}/u/${uploadedFileName + uploadedFileExt}`;
+
+      await Upload.findOneAndDelete({
+        fileName: uploadedFileName
+      });
+      await fs.remove(uploadedFilePath);
+    });
+
+    await Upload.deleteMany({});
+
+    req.flash('success', 'All users uploads have been removed.');
+    res.redirect('/admin/uploads');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
+ */
+// exports.deleteAllToken = async (req, res) => {
+//   try {
+//     const uploads = await Upload.find({});
+
+//     req.flash('success', 'All users uploads have been removed.');
+//     res.redirect('/');
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Server error');
+//   }
+// };

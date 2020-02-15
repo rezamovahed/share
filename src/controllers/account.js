@@ -1,5 +1,7 @@
 const moment = require('moment');
 const qrcode = require('qrcode');
+const path = require('path');
+const fs = require('fs-extra');
 const { authenticator } = require('otplib');
 
 const generate = require('nanoid/generate');
@@ -12,6 +14,8 @@ const alphabet =
  * Load MongoDB models.
  */
 const User = require('.././models/User');
+const Upload = require('.././models/Upload');
+const Token = require('.././models/Token');
 
 /**
  * Load Email Templates.
@@ -236,6 +240,48 @@ exports.deleteMFA = async (req, res, next) => {
     await user.save();
 
     res.json({ message: 'MFA has been disabled.', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete account Controller - Allows the user to delete there accunt and all data with it.  #GDPR
+ */
+exports.deleteAccount = async (req, res, next) => {
+  try {
+    await Token.deleteMany({ user: req.user.id });
+
+    const uploads = await Upload.find({
+      uploader: req.user.id
+    });
+
+    uploads.map(async data => {
+      try {
+        const uploadedFileExt = data.fileExtension;
+        const uploadedFileName = data.fileName;
+
+        const uploadedFilePath = `${path.join(
+          __dirname,
+          '../public'
+        )}/u/${uploadedFileName + uploadedFileExt}`;
+
+        await Upload.findOneAndDelete({
+          fileName: uploadedFileName
+        });
+        await fs.remove(uploadedFilePath);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
+    });
+
+    await User.findByIdAndDelete(req.user.id);
+
+    req.logout();
+    req.flash('success', 'Your account and all data with it has been removed');
+    res.redirect('/');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
