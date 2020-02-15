@@ -4,16 +4,18 @@
   <input
     name="username"
     type="text"
-    class="form-control"
+    class="form-control <% if(errors && error[0].username) { %> is-invalid <% } %>"
     id="username"
     value="<%= user.username %>"
     autocomplete="off"
-    data-lpignore="true"
-  />
+    data-lpignore="true"/>
+  <% if(errors && error[0].username) { %>
+  <small class="form-text text-danger"> <%= error[0].username %></small>
+  <% } %>
 </div>
 <div class="form-group">
   <label for="email">Email</label>
-  <input name="email" type="text" class="form-control" id="email" value="<%-
+  <input name="email" type="text" class="form-control <% if(errors && error[0].email) { %> is-invalid <% } %>" id="email" value="<%-
   currentUser.streamerMode ? `${user.email.substring(0,3)}******`: user.email
   %>" <%- currentUser.streamerMode ? `disabled`: '' %> /> <%
   if(currentUser.newEmail) { %>
@@ -25,5 +27,7 @@
       %></span
     >, has not yet been verified.
   </small>
+  <% } %> <% if(errors && error[0].email) { %>
+  <small class="form-text text-danger"> <%= error[0].email %></small>
   <% } %>
 </div>

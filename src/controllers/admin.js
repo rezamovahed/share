@@ -14,6 +14,52 @@ const Upload = require('.././models/Upload');
 const isEmpty = require('../validation/isEmpty');
 
 /**
+ * Edit user Controller - Allows admins to update users accounts.
+ */
+exports.putEditUser = async (req, res) => {
+  try {
+    // eslint-disable-next-line object-curly-newline
+    const { username, email, role, newPassword } = req.body;
+
+    const streamerMode = !isEmpty(req.body.streamerMode);
+    const emailVerified = !isEmpty(req.body.emailVerified);
+    const mfa = !isEmpty(req.body.mfa);
+    console.log(streamerMode);
+    console.log(streamerMode);
+    console.log(emailVerified);
+    console.log(req.body);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete users mfa Controller - Allows admins to update users mfa.
+ */
+exports.deleteUserMFA = async (req, res) => {
+  try {
+    await User.findOneAndUpdate(
+      {
+        slug: req.params.slug
+      },
+      {
+        mfa: false,
+        mfaSecret: undefined
+      },
+      { $safe: true, $upsert: true }
+    );
+    res.json({
+      message: 'MFA has been disabled.'
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
  * Upoloads lising mini API Controller- Takes data from lib and returns results.
  */
 exports.getUploadListData = async (req, res) => {

@@ -1,29 +1,8 @@
 <%- include ('../partials/header') %>
 <%- include ('../partials/navbar') %>
 
-<% errors = error && error.length > 0 %>
-<div class="container w-50 mt-3 mb-5 account">
-  <div class="alert alert-success collapse alert-timeout" role="alert" id="success">
-</div>
-  <%- include ('../partials/alerts/success') %>
-  <%- include ('../partials/alerts/error') %>
-  <form action="/account?_method=PUT" method="POST">
-  <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
-  <%- include ('../partials/account/account') %>
-  <%- include ('../partials/account/security') %>
-  <%- include ('../partials/account/mfa') %>
-  <%- include ('../partials/account/toggles') %>
-  <%- include ('../partials/account/basicInfo') %>
+<%- include ('../partials/account/modal/mfa') %>
 
-    <div class="container mt-3">
-      <button type="submit" class="btn btn-primary">Save Account</button>
-      <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
-        style="color: #ffff;">Delete
-        account</a>
-    </div>
-  </form>
-</div>
-</div>
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="accountDeletion"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -47,6 +26,30 @@
     </div>
   </div>
 </div>
-<%- include ('../partials/account/modal/mfa') %>
+
+<% errors = error && error.length > 0 %>
+<div class="container w-50 mt-3 mb-5 account">
+  <div class="alert alert-success collapse alert-timeout" role="alert" id="success">
+</div>
+  <%- include ('../partials/alerts/success') %>
+  <%- include ('../partials/alerts/error') %>
+  <form action="/account?_method=PUT" method="POST">
+  <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
+  <%- include ('../partials/account/account') %>
+  <%- include ('../partials/account/security') %>
+  <%- include ('../partials/account/mfa') %>
+  <%- include ('../partials/account/toggles') %>
+  <%- include ('../partials/account/basicInfo') %>
+
+    <div class="container mt-3">
+      <button type="submit" class="btn btn-primary">Save Account</button>
+      <a data-toggle="modal" data-target="#confirm-delete" role=button" class="btn btn-danger"
+        style="color: #ffff;">Delete
+        account</a>
+    </div>
+  </form>
+</div>
+</div>
+
 
 <%- include ('../partials/footer') %>

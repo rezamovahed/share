@@ -42,10 +42,12 @@
     data-off="Off"
     data-onstyle="success"
     data-offstyle="danger"
-  />
+    <% if(!user.mfa){ %>
+  disabled <% } %> />
 </div>
 <script>
   $(document).ready(function() {
+    const mfa = '<%= user.mfa %>' === 'true' ? true : false;
     $('#streamerMode').attr(
       'checked',
       '<%= user.streamerMode %>' === 'true' ? true : false
@@ -54,9 +56,28 @@
       'checked',
       '<%= user.emailVerified %>' === 'true' ? true : false
     );
-    $('#mfa').attr(
-      'checked',
-      '<%= user.mfa %>' === 'true' ? true : false
-    );
+    $('#mfa').attr('checked', mfa);
+
+    $('#mfa').change(function() {
+      if ($(this).prop('checked') === false) {
+        $.ajax({
+          url: '/admin/users/edit/<%= user.slug %>/mfa?_method=delete',
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#mfa').bootstrapToggle('disable');
+            $('#success').show();
+            $('#success').html(response.message);
+          },
+          error: function(response) {
+            console.log(response);
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
+            $('#mfa').bootstrapToggle(mfa ? 'on' : 'off');
+            $('#mfa').bootstrapToggle(mfa ? 'enable' : 'disable');
+          }
+        });
+      }
+    });
   });
 </script>

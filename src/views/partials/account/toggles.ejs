@@ -98,10 +98,7 @@
 
 
     $("#mfa").change(function() {
-    if ($(this).prop("checked") === true) {
-
-
-    } else {
+    if ($(this).prop("checked") === false) {
        $.ajax({
       url: "/account/mfa?_method=delete",
       type: "POST",
