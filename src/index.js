@@ -249,7 +249,11 @@ app.use(indexRoutes);
 app.get('/owner', ownerController.getOwner);
 app.get('/owner/:token', ownerController.getOwnerToken);
 app.get('/upload-data', isLoggedin, indexController.getUploadListData);
-app.delete('/:uploadedFile', isLoggedin, indexController.deleteSingleUpload);
+app.delete(
+  '/upload-data/:uploadedFile',
+  isLoggedin,
+  indexController.deleteSingleUpload
+);
 app.use(authRoutes);
 app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
 app.post(
@@ -294,6 +298,7 @@ app.post(
 );
 app.use('/account', isLoggedin, accountRoutes);
 app.put('/account', isLoggedin, accountController.putAccount);
+app.delete('/account', isLoggedin, accountController.deleteAccount);
 app.get(
   '/account/email-verify/:token',
   isLoggedin,
@@ -340,6 +345,13 @@ app.delete(
 app.use('/config', isLoggedin, configRoutes);
 
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
+app.delete(
+  '/admin/all/uploads',
+  isLoggedin,
+  isAdmin,
+  adminConroller.deleteAllUploads
+);
+// app.delete('/admin/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
 app.get(
   '/admin/uploads-data',
   isLoggedin,

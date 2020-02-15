@@ -95,7 +95,7 @@ exports.deleteSingleUpload = async (req, res) => {
         status: 404
       });
     }
-    fs.remove(uploadedFilePath);
+    await fs.remove(uploadedFilePath);
     if (req.user.streamerMode) {
       return res.json({
         message: `<strong>${uploadedFileName.substring(
@@ -142,7 +142,7 @@ exports.deleteAllUploads = async (req, res) => {
         await Upload.findOneAndDelete({
           fileName: uploadedFileName
         });
-        fs.remove(uploadedFilePath);
+        await fs.remove(uploadedFilePath);
       } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
