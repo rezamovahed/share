@@ -114,3 +114,44 @@ exports.deleteSingleUpload = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Delete all uploads - Remove all files  rom database and filesystem uplaoded by the user.
+ */
+exports.deleteAllUploads = async (req, res) => {
+  try {
+    const uploads = await Upload.find({
+      uploader: req.user.id
+    });
+
+    if (uploads.length === 0) {
+      req.flash('error', 'You have not uploaded any files.');
+      return res.redirect('/');
+    }
+
+    uploads.map(async data => {
+      try {
+        const uploadedFileExt = data.fileExtension;
+        const uploadedFileName = data.fileName;
+
+        const uploadedFilePath = `${path.join(
+          __dirname,
+          '../public'
+        )}/u/${uploadedFileName + uploadedFileExt}`;
+
+        await Upload.findOneAndDelete({
+          fileName: uploadedFileName
+        });
+        fs.remove(uploadedFilePath);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
+    });
+    req.flash('success', 'All your uploads have been removed.');
+    res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};

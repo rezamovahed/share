@@ -112,8 +112,16 @@ exports.deleteToken = async (req, res, next) => {
 /**
  * Delete All Tokens Controler - Deletes all a users tokens
  */
-exports.deleteTokens = async (req, res, next) => {
+exports.deleteAllTokens = async (req, res, next) => {
   try {
+    const tokens = await Token.find({ user: req.user.id });
+
+    if (tokens.length === 0) {
+      req.flash('error', 'You have not created any tokens.');
+      return res.redirect('/tokens');
+    }
+
+    await Token.deleteMany({ user: req.user.id });
     req.flash('success', 'All your tokens have been removed.');
     res.redirect('/tokens');
   } catch (err) {

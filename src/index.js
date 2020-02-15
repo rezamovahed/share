@@ -209,6 +209,8 @@ const isAccounActivated = require('./middleware/isAccounActivated');
 const isAdmin = require('./middleware/roleCheck/isAdmin');
 const isOwner = require('./middleware/roleCheck/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
+const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVaild');
+const isAccountActivationTokenVaild = require('./middleware/isAccountActivationTokenVaild');
 const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
 const isMfa = require('./middleware/isMfa');
 
@@ -264,7 +266,16 @@ app.post(
 );
 app.get('/logout', authController.getLogout);
 app.use('/user', userRoutes);
-app.get('/user/activation/:token', userController.getActivation);
+app.get(
+  '/user/activation/:token',
+  isAccountActivationTokenVaild,
+  userController.getActivation
+);
+app.get(
+  '/user/delete-account/:token',
+  isDeleteAccountTokenVaild,
+  userController.deleteUser
+);
 app.post(
   '/user/forgot-password',
   forgotPasswordVaildation,
@@ -318,8 +329,8 @@ app.put(
   tokensConroller.putToken
 );
 app.delete('/tokens/:token_id', isLoggedin, tokensConroller.deleteToken);
-// app.delete('/all/uploads', isLoggedin, tokensConroller.deleteTokens);
-app.delete('/all/tokens', isLoggedin, tokensConroller.deleteTokens);
+app.delete('/all/uploads', isLoggedin, indexController.deleteAllUploads);
+app.delete('/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
 app.use('/gallery', isLoggedin, galleryRoutes);
 app.delete(
   '/gallery/:uploadedFile',

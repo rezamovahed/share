@@ -145,11 +145,14 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <p>Are you sure you want to delete all your API tokens, this procedure is irreversible.</p>
+                <form action="/all/tokens?_method=delete" method="POST" class="mt-2">
+                  <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+                  <p>Are you sure you want to delete all your API tokens, this procedure is irreversible.</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a href="/me/uploads/delete/all" class="btn btn-danger btn-ok">Delete tokens</a>
+                <button type="submit" class="btn btn-danger btn-ok text-white">Delete all tokens</button>
+                </form>
               </div>
             </div>
           </div>

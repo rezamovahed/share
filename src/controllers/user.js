@@ -181,3 +181,17 @@ exports.postResendActivationEmail = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Delete user account - Takes a token the user provides and if the email has not been verifyed yet.  It  will delete there whole account
+ */
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findOneAndDelete({ emailVerificationToken: req.params.token });
+    req.flash('success', 'Your account has been deleted.');
+    res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
