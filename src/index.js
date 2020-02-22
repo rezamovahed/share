@@ -213,6 +213,7 @@ const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVail
 const isAccountActivationTokenVaild = require('./middleware/isAccountActivationTokenVaild');
 const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
 const isMfa = require('./middleware/isMfa');
+const deleteUserMFA = require('./middleware/admin/deleteUserMFA');
 
 /**
  * Load vaildation middleware
@@ -224,6 +225,7 @@ const resetPasswordVaildation = require('./validation/reset-password');
 const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
 // const accountCreateTokenVaildation = require('./validation/tokens/create-token');
 const ResendActivationEmailVaildation = require('./validation/resend-activation');
+const userUpdateVaildation = require('./validation/admin/userUpdate');
 
 /**
  * Primary app routes.
@@ -375,6 +377,20 @@ app.get(
   isLoggedin,
   isAdmin,
   adminConroller.getUserListData
+);
+app.put(
+  '/admin/users/edit/:slug',
+  isLoggedin,
+  isAdmin,
+  userUpdateVaildation,
+  adminConroller.putEditUser
+);
+app.delete(
+  '/admin/users/edit/:slug/mfa',
+  isLoggedin,
+  isAdmin,
+  deleteUserMFA,
+  adminConroller.deleteUserMFA
 );
 
 /**
