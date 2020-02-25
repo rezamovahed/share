@@ -3,14 +3,13 @@ const isEmpty = require('../isEmpty');
 
 module.exports = (req, res, next) => {
   // eslint-disable-next-line object-curly-newline
-  let { username, email, role, newPassword } = req.body;
+  let { username, email, newPassword } = req.body;
 
   // eslint-disable-next-line prefer-const
   let errors = {};
 
   username = !isEmpty(username) ? username : '';
   email = !isEmpty(email) ? email : '';
-  role = !isEmpty(role) ? role : '';
   newPassword = !isEmpty(newPassword) ? newPassword : '';
 
   if (Validator.isEmpty(username)) {
@@ -21,9 +20,6 @@ module.exports = (req, res, next) => {
   }
   if (!Validator.isEmpty(email) && !Validator.isEmail(email)) {
     errors.email = 'Email is invaild.  Example (example@example.com)';
-  }
-  if (Validator.isEmpty(role)) {
-    errors.role = 'Role is required.';
   }
 
   if (!isEmpty(errors)) {

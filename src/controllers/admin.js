@@ -23,16 +23,31 @@ exports.putEditUser = async (req, res) => {
 
     const streamerMode = !isEmpty(req.body.streamerMode);
     const emailVerified = !isEmpty(req.body.emailVerified);
-    const mfa = !isEmpty(req.body.mfa);
-    console.log(streamerMode);
-    console.log(streamerMode);
-    console.log(emailVerified);
-    console.log(req.body);
+
+    const user = await User.findOne({ slug: req.params.slug });
+
+    if (req.user.role === 'owner' && user.role === 'owner') {
+    }
+
+    if (req.user.role === 'owner') {
+    }
+
+    console.log(`Streamer Mode ${streamerMode}`);
+    console.log(`Email Verified ${emailVerified}`);
+    console.log(`Body${req.body}`);
+    console.log(`User editing ${user}`);
+    console.log(`Current User ${req.user}`);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Toggle users streamer mode Controller - Allows admins to update users streamer mode status.
+ */
+
+exports.postStreamerMode = async (req, res) => {};
 
 /**
  * Delete users mfa Controller - Allows admins to update users mfa.
@@ -52,7 +67,6 @@ exports.deleteUserMFA = async (req, res) => {
     res.json({
       message: 'MFA has been disabled.'
     });
-
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
