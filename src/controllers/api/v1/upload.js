@@ -24,7 +24,7 @@ module.exports.uploadFile = async (req, res, next) => {
     const { file } = req.files;
     const fileExtension = path.extname(file.name);
     const fileMineType = file.mimetype;
-    const fileName = generate(alphabet, 24);
+    const fileName = generate(alphabet, 32);
     const fileNameWithExt = fileName + fileExtension;
     const filePath = `${path.join(
       __dirname,
