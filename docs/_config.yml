@@ -14,12 +14,27 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Share
-description: A Jekyll theme for documentation
-baseurl: "/just-the-docs" # the subpath of your site, e.g. /blog
-url: "https://pmarsceill.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+description: Simple yet advanced uploader. Allows users to upload files,images, and text with moderation tools for admins. Can be used for friends and family or just for you. Built for ShareX at the moment but more uploaders will be supported
+baseurl: '/share' # the subpath of your site, e.g. /blog
+url: 'https://mrdemonwolf.github.io' # the base hostname & protocol for your site, e.g. http://example.com
 
 permalink: pretty
-exclude: ["node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "README.md", "Rakefile"]
+exclude:
+  [
+    'node_modules/',
+    '*.gemspec',
+    '*.gem',
+    'Gemfile',
+    'Gemfile.lock',
+    'package.json',
+    'package-lock.json',
+    'script/',
+    'LICENSE.txt',
+    'lib/',
+    'bin/',
+    'README.md',
+    'Rakefile',
+  ]
 
 # Set a path/url to a logo that will be displayed instead of the title
 #logo: "/assets/images/just-the-docs.png"
@@ -35,18 +50,20 @@ heading_anchors: true
 
 # Aux links for the upper right navigation
 aux_links:
-  "Just the Docs on GitHub":
-    - "//github.com/pmarsceill/just-the-docs"
+  'Follow the creator':
+    - 'https://www.github.com/nathanhenniges'
+  'Creators Website':
+    - 'https://www.mrdemonwolf.me'
 
 # Footer content appears at the bottom of every page's main content
-footer_content: "Copyright &copy; 2017-2019 Patrick Marsceill. Distributed by an <a href=\"https://github.com/pmarsceill/just-the-docs/tree/master/LICENSE.txt\">MIT license.</a>"
+footer_content: 'Copyright &copy; 2020 <a href="https://www.mrdemonwolf.me">MrDemonWolf</a>"'
 
 # Color scheme currently only supports "dark" or nil (default)
-color_scheme: "dark"
+color_scheme: 'dark'
 
 # Google Analytics Tracking (optional)
 # e.g, UA-1234567-89
-ga_tracking: UA-2709176-10
+# ga_tracking: UA-2709176-10
 
 plugins:
   - jekyll-seo-tag
