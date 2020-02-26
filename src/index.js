@@ -150,7 +150,8 @@ app.use(async (req, res, next) => {
   res.locals.siteDesc = process.env.DESC;
   res.locals.sitePowered = `Uploader Powered by ${process.env.TITLE}`;
   res.locals.siteURL = process.env.FULL_DOMAIN;
-  res.locals.footerTitle = process.env.FOOTER_TITLE;
+  res.locals.footerText = process.env.FOOTER_TEXT;
+  res.locals.footerLink = process.env.FOOTER_LINK;
   res.locals.credit = process.env.CREDIT === 'true';
   res.locals.showVersion = process.env.SHOW_VERSION === 'true';
   res.locals.signups = process.env.SIGNUPS === 'true';
