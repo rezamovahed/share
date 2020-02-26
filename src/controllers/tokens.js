@@ -44,7 +44,7 @@ exports.postToken = async (req, res, next) => {
         isNever = true;
     }
 
-    const jwtToken = jwt.sign({}, process.env.API_SECRET, {
+    const jwtToken = jwt.sign({}, process.env.JWT_SECRET, {
       issuer: process.env.TITLE,
       subject: req.user.id.toString(),
       expiresIn

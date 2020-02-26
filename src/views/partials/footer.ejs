@@ -7,7 +7,7 @@
         <p> Copyright ©
           <%= currentYear %>
           <strong>
-            <a href="<%= siteURL %>"><%= footerTitle %></a>
+            <a href="<%- footerLink ? footerLink : siteURL %>"><%= footerText %></a>
           </strong>
           <% if(credit) { %>
           <span class="display-hidden">
