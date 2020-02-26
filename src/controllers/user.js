@@ -35,10 +35,13 @@ exports.postPasswordForgot = async (req, res) => {
     const token = await generate(alphabet, 24);
     const tokenExpire = moment().add('3', 'h');
 
+    // Saves the token and expire date to the database
     user.passwordResetToken = token;
     user.passwordResetTokenExpire = tokenExpire;
 
     await user.save();
+
+    // Setups the email which is sent to the user.
 
     const emailTemplate = PasswordForgotEmail(token);
 
@@ -75,13 +78,20 @@ exports.postPasswordReset = async (req, res) => {
     const user = await User.findOne({
       passwordResetToken: req.params.token
     });
+
+    // Sets the token and expire date to undfined which removes them from the database
     user.passwordResetToken = undefined;
     user.passwordResetTokenExpire = undefined;
+
+    // Sets the new account password
     user.password = password;
+    // Adds a last password change date to database
     user.passwordChanged = moment();
 
     await user.save();
 
+    // Setups the email which is sent to the user.
+    // Which includes the IP used to changed the password so the user knows if it's theres or not.
     const emailTemplate = PasswordResetEmail(req.clientIp, req.ipInfo);
 
     const msg = {
@@ -116,6 +126,7 @@ exports.getActivation = async (req, res, next) => {
       .where('emailVerificationTokenExpire')
       .gt(moment());
 
+    // If no user that needs to be activated then it will ask them to resend
     if (!user) {
       req.flash(
         'error',
@@ -123,6 +134,7 @@ exports.getActivation = async (req, res, next) => {
       );
       res.redirect('/user/resend-activation');
     } else {
+      // Sets all the data to undfined which removes it from the database
       user.emailVerificationToken = undefined;
       user.emailVerificationTokenExpire = undefined;
       user.emailVerified = true;
@@ -156,10 +168,12 @@ exports.postResendActivationEmail = async (req, res) => {
     const token = await generate(alphabet, 24);
     const tokenExpire = moment().add('3', 'h');
 
+    // Sets the token and expire date in the database.
     user.emailVerificationToken = token;
     user.emailVerificationTokenExpire = tokenExpire;
     await user.save();
 
+    // Setups the email which is sent to the user.
     const emailTemplate = AccountActivationEmail(token);
 
     const msg = {

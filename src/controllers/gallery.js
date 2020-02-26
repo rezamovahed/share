@@ -13,14 +13,17 @@ exports.deleteSingleUpload = async (req, res) => {
   try {
     const { uploadedFile } = req.params;
 
+    // Gets the uplaoded file ext and file name
     const uploadedFileExt = path.extname(uploadedFile);
     const uploadedFileName = uploadedFile.replace(uploadedFileExt, '');
 
+    // Creats the file path
     const uploadedFilePath = `${path.join(
       __dirname,
       '../public'
     )}/u/${uploadedFile}`;
 
+    // Deletes the upload from database
     const upload = await Upload.findOneAndDelete({
       uploader: req.user.id,
       fileName: uploadedFileName
@@ -40,7 +43,8 @@ exports.deleteSingleUpload = async (req, res) => {
       req.flash('error', `<strong>${uploadedFileName}</strong> was not found.`);
       return res.redirect('/gallery');
     }
-    fs.remove(uploadedFilePath);
+    // Deletess uploaded file from disk
+    await fs.remove(uploadedFilePath);
     if (req.user.streamerMode) {
       req.flash(
         'success',

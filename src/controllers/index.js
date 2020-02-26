@@ -12,6 +12,7 @@ const Upload = require('.././models/Upload');
  */
 exports.getUploadListData = async (req, res) => {
   try {
+    // Simple query params used by table to sort,limit, and offet.
     const sort = req.query.order === 'asc' ? 1 : -1;
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
@@ -56,26 +57,30 @@ exports.deleteSingleUpload = async (req, res) => {
   try {
     const { uploadedFile } = req.params;
 
+    // Gets the uploaded file ext and the file names
     const uploadedFileExt = path.extname(uploadedFile);
     const uploadedFileName = uploadedFile.replace(uploadedFileExt, '');
 
+    // Creats the paths
     const uploadedFilePath = `${path.join(
       __dirname,
       '../public'
     )}/u/${uploadedFile}`;
 
+    // Checks if they are owner of the uplaoded file.
     const isOwner = await Upload.findOne({
       fileName: uploadedFileName,
       uploader: req.user.id
     });
 
+    // If not owner it returns you don't own this uplaod
     if (!isOwner) {
       return res.status(404).json({
-        message: `You don't own this upload.`,
-        status: 401
+        message: `Not Found`,
+        status: 404
       });
     }
-
+    // Finds and removes the upload from the database
     const upload = await Upload.findOneAndDelete({
       fileName: uploadedFileName
     });
@@ -95,6 +100,7 @@ exports.deleteSingleUpload = async (req, res) => {
         status: 404
       });
     }
+    // Removes the uploaded file from disk
     await fs.remove(uploadedFilePath);
     if (req.user.streamerMode) {
       return res.json({
@@ -120,15 +126,18 @@ exports.deleteSingleUpload = async (req, res) => {
  */
 exports.deleteAllUploads = async (req, res) => {
   try {
+    // Find all the uploads for the user
     const uploads = await Upload.find({
       uploader: req.user.id
     });
 
+    // If none say they can't remove due to not uplaoding anything
     if (uploads.length === 0) {
       req.flash('error', 'You have not uploaded any files.');
       return res.redirect('/');
     }
-
+    // For each upload we will find the ext and the file name
+    // Use this data to remove from both the database and disk
     uploads.map(async data => {
       try {
         const uploadedFileExt = data.fileExtension;
