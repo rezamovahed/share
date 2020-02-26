@@ -1,11 +1,12 @@
 ---
 layout: default
 title: Changelog
-nav_order: 3
+nav_order: 10
 ---
 
 # Changelog
 4.0.0 (Unrelased _Feb 8, 2020)
+
 __This is a fair big of a update but this is a list "all" changes that have been made__
 
 * Made a lot of the code cleaner and easier to mange for developers
