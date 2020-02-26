@@ -8,7 +8,7 @@ nav_order: 2
 {: .no_toc }
 
 
-Just the Docs has some specific configuration parameters that can be defined in your Jekyll site's _config.yml file.
+All of Shares configuration is saved in the .env and the database as well.
 {: .fs-6 .fw-300 }
 
 ## Table of contents
@@ -20,57 +20,20 @@ Just the Docs has some specific configuration parameters that can be defined in 
 ---
 
 
-View this site's [_config.yml](https://github.com/pmarsceill/just-the-docs/tree/master/_config.yml) file as an example.
+View [.env.example](https://github.com/MrDemonWolf/share/blob/master/.env.example) file as an example.
 
-## Site logo
+## Session Secret
 
 ```yaml
-# Set a path/url to a logo that will be displayed instead of the title
-logo: "/assets/images/just-the-docs.png"
+# Set signing key cookie based sessions.
+# This is to ensure the cookies are created from this app.
+SESSION_SECRET=HKfUWFCeRdAaIhqHL6aQ6aX1
 ```
 
-## Search
+## JWT Secret
 
 ```yaml
-# Enable or disable the site search
-# Supports true (default) or false
-search_enabled: true
-
-# Enable support for hyphenated search words:
-search_tokenizer_separator: /[\s/]+/
-
-```
-
-## Aux links
-
-```yaml
-# Aux links for the upper right navigation
-aux_links:
-  "Just the Docs on GitHub":
-    - "//github.com/pmarsceill/just-the-docs"
-```
-
-## Heading anchor links
-
-```yaml
-# Heading anchor links appear on hover over h1-h6 tags in page content
-# allowing users to deep link to a particular heading on a page.
-#
-# Supports true (default) or false/nil
-heading_anchors: true
-```
-
-## Footer content
-
-```yaml
-# Footer content appears at the bottom of every page's main content
-footer_content: "Copyright &copy; 2017-2019 Patrick Marsceill. Distributed by an <a href=\"https://github.com/pmarsceill/just-the-docs/tree/master/LICENSE.txt\">MIT license.</a>"
-```
-
-## Google Analytics
-
-```yaml
-# Google Analytics Tracking (optional)
-# e.g, UA-1234567-89
-ga_tracking: UA-5555555-55
+# Set signing key for JWT (jsonwebtokens)
+# Which is used for making sure the API tokens are created from this app it self and they can't be modifyed.
+JWT_SECRET=HKfUWFCeRdAaIhqHL6aQ6aX1
 ```
