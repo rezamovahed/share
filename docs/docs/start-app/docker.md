@@ -1,14 +1,20 @@
-___
+---
+layout: default
+title: Docker
+parent: Start App
+nav_order: 2
+---
 
-## Want help develop?
-You can use this command to start up with nodemon so you can work on it and test.
+# Running app with Docker
 
+{: .fs-6 .fw-300 }
+
+## Install node packages
 ```sh
-npm run dev-web
+npm install
 ```
 
-To get started with Docker do the following...
-
+## Start the app in docker
 ```sh
 $ cp docker-compose.override.yml.example docker-compose.override.yml
 ```

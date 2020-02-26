@@ -8,7 +8,7 @@ nav_order: 2
 {: .no_toc }
 
 
-Just the Docs has some specific configuration parameters that can be defined in your Jekyll site's _config.yml file.
+All of Share configuration is saved in the .env and the database as well.
 {: .fs-6 .fw-300 }
 
 ## Table of contents
@@ -20,69 +20,143 @@ Just the Docs has some specific configuration parameters that can be defined in 
 ---
 
 
-View this site's [_config.yml](https://github.com/pmarsceill/just-the-docs/tree/master/_config.yml) file as an example.
+View [.env.example](https://github.com/MrDemonWolf/share/blob/master/.env.example) file as an example.
 
-## Site logo
-
-```yaml
-# Set a path/url to a logo that will be displayed instead of the title
-logo: "/assets/images/just-the-docs.png"
-```
-
-## Search
+## Site Title
 
 ```yaml
-# Enable or disable the site search
-# Supports true (default) or false
-search_enabled: true
-
-# Enable support for hyphenated search words:
-search_tokenizer_separator: /[\s/]+/
-
+# Set the site/app title
+# This is used for title on html pages and also for sending of emails
+TITLE=Share
 ```
 
-## Aux links
+## Site Description
 
 ```yaml
-# Aux links for the upper right navigation
-aux_links:
-  "Just the Docs on GitHub":
-    - "//github.com/pmarsceill/just-the-docs"
+# Set the description of the site/app for SEO
+DESC=Advanced uploader with web front-end for images,files,and text. Built with ShareX in mind. Licensed under MIT and is free to use.
 ```
 
-## Heading anchor links
+## Email (First install ONLY)
 
 ```yaml
-# Heading anchor links appear on hover over h1-h6 tags in page content
-# allowing users to deep link to a particular heading on a page.
-#
-# Supports true (default) or false/nil
-heading_anchors: true
+# Set a email to become the first owner/admin.
+# This is used to convert the owner to owner role for the first time install.
+EMAIL=example@example.com
 ```
 
-## Footer content
+## Footer
 
 ```yaml
-# Footer content appears at the bottom of every page's main content
-footer_content: "Copyright &copy; 2017-2019 Patrick Marsceill. Distributed by an <a href=\"https://github.com/pmarsceill/just-the-docs/tree/master/LICENSE.txt\">MIT license.</a>"
+# Set the footer text
+# This is the branding name of who is running the site/app.
+FOOTER_TEXT=Share
 ```
 
-## Color scheme
+## Footer Link
 
 ```yaml
-# Color scheme currently only supports "dark" or nil (default)
-color_scheme: "dark"
+# Set the footer text link
+# This is the footer text URL which it should link to.
+FOOTER_LINK=Share
 ```
-<button class="btn js-toggle-dark-mode">Preview dark color scheme</button>
 
-<script type="text/javascript" src="{{ "/assets/js/dark-mode-preview.js" | absolute_url }}"></script>
-
-See [Customization]({{ site.baseurl }}{% link docs/customization.md %}) for more information.
-
-## Google Analytics
+## Signups
 
 ```yaml
-# Google Analytics Tracking (optional)
-# e.g, UA-1234567-89
-ga_tracking: UA-5555555-55
+# Set if you want other users to be able to signup.
+# If you are setting this up just for yourself.  Then keep this false
+# But if you want to let anyone signup and use the site/app then set this to true.
+# Only supports true or false
+SIGNUPS=false
 ```
+
+## Credit
+
+```yaml
+# Choose if you want to support the developer by adding a link back to the github repo.
+# Only supports true or false
+CREDIT=false
+```
+
+## Sendgrid
+
+```yaml
+# Set the API key for sendgrid
+# This is used for sending emails for account activation, password resets, and much more.
+# This is required.
+SENDGRID_API_KEY=sg......
+```
+
+## Sendgrid Domain
+
+```yaml
+# Set the domain sendgrid will send emails from.
+# This is the domain emails will be sent from (noreply@yourdomain.com)
+# This is required.
+EMAIL_DOMAIN=example.com
+```
+
+## Filecheck
+
+```yaml
+# Set rather or not to check all files uploaded if they are on the safe whitelist.
+# Files will be checked for images and or text rather or not you disable this.  This is for the gallery
+FILE_CHECK=true
+```
+
+## Session Secret
+
+```yaml
+# Set signing key cookie based sessions.
+# This is to ensure the cookies are created from this app.
+SESSION_SECRET=HKfUWFCeRdAaIhqHL6aQ6aX1
+```
+
+## JWT Secret
+
+```yaml
+# Set signing key for JWT (jsonwebtokens)
+# Which is used for making sure the API tokens are created from this app it self and
+# they can't be modifyed.
+JWT_SECRET=HKfUWFCeRdAaIhqHL6aQ6aX1
+```
+
+## Database URIs
+
+```yaml
+# Set the database connection URI
+# This is where all the user data will be stored. (Only MongoDB is supported)
+DATABASE_URI=mongodb://localhost:27017/share
+```
+
+## Env
+
+```yaml
+# Set nodejs env.  Make sure to set this to production if your hosing it.   If your helping development then change to development
+NODE_ENV=production
+```
+
+## IP
+
+```yaml
+# Sets the IP that the site/app will run on.
+IP=127.0.0.1
+```
+
+## Port
+
+```yaml
+# Sets the PORT that the site/app will run on.
+PORT=8080
+```
+
+## ShareX Config
+Here's the sharex config templates for you
+
+[ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
+
+Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
+After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
+
+Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin
