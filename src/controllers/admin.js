@@ -26,6 +26,9 @@ exports.putEditUser = async (req, res) => {
 
     const user = await User.findOne({ slug: req.params.slug });
 
+    // This is a object that will include only which has been updated.
+    const updatedInfomation = {};
+
     if (req.user.role === 'owner' && user.role === 'owner') {
     }
 
@@ -54,6 +57,7 @@ exports.postStreamerMode = async (req, res) => {};
  */
 exports.deleteUserMFA = async (req, res) => {
   try {
+    // Remove another users MFA
     await User.findOneAndUpdate(
       {
         slug: req.params.slug
@@ -78,6 +82,7 @@ exports.deleteUserMFA = async (req, res) => {
  */
 exports.getUploadListData = async (req, res) => {
   try {
+    // Simple query params used by table to sort,limit, and offet.
     const sort = req.query.order === 'asc' ? 1 : -1;
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
@@ -87,11 +92,15 @@ exports.getUploadListData = async (req, res) => {
       .limit(limit)
       .skip(offset)
       .select('uploaded uploadedAt fileName size type fileExtension uploader')
-      .populate({ path: 'uploader', select: 'username isVerified role slug' });
+      .populate({
+        path: 'uploader',
+        select: 'username isVerified role slug'
+      });
 
     // eslint-disable-next-line prefer-const
     let uploads = [];
     let id = 0;
+    // Creates uploadsData object which is used to return for the table.
     uploadsData.map(data => {
       uploads.push({
         id: (id += 1),
@@ -127,14 +136,17 @@ exports.deleteSingleUpload = async (req, res) => {
   try {
     const { uploadedFile } = req.params;
 
+    // Gets the file ext and file name.
     const uploadedFileExt = path.extname(uploadedFile);
     const uploadedFileName = uploadedFile.replace(uploadedFileExt, '');
 
+    // Creates the file path
     const uploadedFilePath = `${path.join(
       __dirname,
       '../public'
     )}/u/${uploadedFile}`;
 
+    // Removes the file from the database
     const upload = await Upload.findOneAndDelete({
       fileName: uploadedFileName
     });
@@ -154,7 +166,8 @@ exports.deleteSingleUpload = async (req, res) => {
         status: 404
       });
     }
-    fs.remove(uploadedFilePath);
+    // Removes the file form the disk
+    await fs.remove(uploadedFilePath);
     if (req.user.streamerMode) {
       return res.json({
         message: `<strong>${uploadedFileName.substring(
@@ -179,33 +192,35 @@ exports.deleteSingleUpload = async (req, res) => {
  */
 exports.getUserListData = async (req, res) => {
   try {
+    // Simple query params used by table to sort,limit, and offet.
+    // Plus with a username and email serach.
     const sort = req.query.order === 'asc' ? 1 : -1;
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
     const search = req.query.search !== undefined && !isEmpty(req.query.search);
 
+    const userSelect =
+      'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin lastLoginIP isBanned isSuspended';
     let userData = [];
     if (search) {
       userData = await User.find({ $text: { $search: req.query.search } })
         .sort({ createdAt: sort })
         .limit(limit)
         .skip(offset)
-        .select(
-          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin lastLoginIP isBanned isSuspended'
-        );
+        .select(userSelect);
     } else {
       userData = await User.find({})
         .sort({ createdAt: sort })
         .limit(limit)
         .skip(offset)
-        .select(
-          'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin lastLoginIP isBanned isSuspended'
-        );
+        .select(userSelect);
     }
 
     // eslint-disable-next-line prefer-const
     let users = [];
     let id = 0;
+
+    // Creates userData object to return to the table.
     userData.map(data => {
       users.push({
         id: (id += 1),
@@ -241,14 +256,17 @@ exports.deleteGallerySingleUpload = async (req, res) => {
   try {
     const { uploadedFile } = req.params;
 
+    // Gets the file ext and file name
     const uploadedFileExt = path.extname(uploadedFile);
     const uploadedFileName = uploadedFile.replace(uploadedFileExt, '');
 
+    // Gets the file path
     const uploadedFilePath = `${path.join(
       __dirname,
       '../public'
     )}/u/${uploadedFile}`;
 
+    // Removes upload from the database
     const upload = await Upload.findOneAndDelete({
       fileName: uploadedFileName
     });
@@ -267,7 +285,8 @@ exports.deleteGallerySingleUpload = async (req, res) => {
       req.flash('error', `<strong>${uploadedFileName}</strong> was not found.`);
       return res.redirect('/admin/gallery');
     }
-    fs.remove(uploadedFilePath);
+    // Removes upload from disk
+    await fs.remove(uploadedFilePath);
     if (req.user.streamerMode) {
       req.flash(
         'success',
@@ -295,13 +314,16 @@ exports.deleteGallerySingleUpload = async (req, res) => {
  */
 exports.deleteAllUploads = async (req, res) => {
   try {
+    // Finds all the uploads
     const uploads = await Upload.find({});
 
+    // If none then return that there is no uploaded files.
     if (uploads.length === 0) {
       req.flash('error', 'No files have been uploaded yet.');
       return res.redirect('/admin/uploads');
     }
 
+    // Deletes uploads one by one.
     uploads.map(async data => {
       const uploadedFileExt = data.fileExtension;
       const uploadedFileName = data.fileName;
@@ -316,8 +338,6 @@ exports.deleteAllUploads = async (req, res) => {
       });
       await fs.remove(uploadedFilePath);
     });
-
-    await Upload.deleteMany({});
 
     req.flash('success', 'All users uploads have been removed.');
     res.redirect('/admin/uploads');
