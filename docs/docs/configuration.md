@@ -79,6 +79,32 @@ SIGNUPS=false
 CREDIT=false
 ```
 
+## Sendgrid
+
+```yaml
+# Set the API key for sendgrid
+# This is used for sending emails for account activation, password resets, and much more.
+# This is required.
+SENDGRID_API_KEY=sg......
+```
+
+## Sendgrid Domain
+
+```yaml
+# Set the domain sendgrid will send emails from.
+# This is the domain emails will be sent from (noreply@yourdomain.com)
+# This is required.
+EMAIL_DOMAIN=example.com
+```
+
+## Filecheck
+
+```yaml
+# Set rather or not to check all files uploaded if they are on the safe whitelist.
+# Files will be checked for images and or text rather or not you disable this.  This is for the gallery
+FILE_CHECK=true
+```
+
 ## Session Secret
 
 ```yaml
@@ -103,3 +129,34 @@ JWT_SECRET=HKfUWFCeRdAaIhqHL6aQ6aX1
 # This is where all the user data will be stored. (Only MongoDB is supported)
 DATABASE_URI=mongodb://localhost:27017/share
 ```
+
+## Env
+
+```yaml
+# Set nodejs env.  Make sure to set this to production if your hosing it.   If your helping development then change to development
+NODE_ENV=production
+```
+
+## IP
+
+```yaml
+# Sets the IP that the site/app will run on.
+IP=127.0.0.1
+```
+
+## Port
+
+```yaml
+# Sets the PORT that the site/app will run on.
+PORT=8080
+```
+
+## ShareX Config
+Here's the sharex config templates for you
+
+[ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
+
+Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
+After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
+
+Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin
