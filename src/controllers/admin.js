@@ -29,17 +29,42 @@ exports.putEditUser = async (req, res) => {
     // This is a object that will include only which has been updated.
     const updatedInfomation = {};
 
-    if (req.user.role === 'owner' && user.role === 'owner') {
+    // Allow owner to edit all.
+    if (req.user.role === 'owner') {
+      if (user.username !== username) {
+        updatedInfomation.username = username;
+      }
+      if (!req.user.streamerMode) {
+        if (user.email !== email) {
+          updatedInfomation.email = email;
+        }
+      }
+      if (user.role !== role) {
+        updatedInfomation.role = role;
+      }
     }
 
-    if (req.user.role === 'owner') {
+    if (req.user.role === 'admin') {
+      if (user.username !== username) {
+        updatedInfomation.username = username;
+      }
+      if (!req.user.streamerMode) {
+        if (user.email !== email) {
+          updatedInfomation.email = email;
+        }
+      }
     }
+
+    await User.findOneAndUpdate(
+      {
+        slug: req.params.slug
+      },
+      updatedInfomation,
+      { $safe: true, $upsert: true }
+    );
 
     console.log(`Streamer Mode ${streamerMode}`);
     console.log(`Email Verified ${emailVerified}`);
-    console.log(`Body${req.body}`);
-    console.log(`User editing ${user}`);
-    console.log(`Current User ${req.user}`);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

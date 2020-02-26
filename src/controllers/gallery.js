@@ -50,9 +50,9 @@ exports.deleteSingleUpload = async (req, res) => {
         'success',
         `
         <strong>${uploadedFileName.substring(
-          0,
-          3
-        )}*********************</strong> has been deleted.`
+    0,
+    3
+  )}*********************</strong> has been deleted.`
       );
       return res.redirect('/admin/gallery');
     }
