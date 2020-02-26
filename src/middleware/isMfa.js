@@ -11,6 +11,10 @@ module.exports = async (req, res, next) => {
 
     const user = await User.findOne({ email });
 
+    if (!user) {
+      return next();
+    }
+
     if (user.mfa) {
       if (Validator.isEmpty(mfa)) {
         req.flash('error', { mfa: 'MFA is required.' });
