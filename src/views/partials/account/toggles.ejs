@@ -35,7 +35,6 @@
       '<%= currentUser.streamerMode %>' === 'true' ? true : false
     );
     $('#streamerMode').change(function () {
-        $('#success').show();
         if ($(this).prop('checked') === true) {
           $.ajax({
               url: `/account/streamer-mode/true`,

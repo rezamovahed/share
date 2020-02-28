@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
       message: 'User does not have MFA enabled at this moment.'
     });
   }
-  if (user.role === 'owner' || req.user.role === 'owner') {
+  if (user.role === 'owner') {
     return res.status(401).json({
       message: "MFA can't be disabled for this user."
     });

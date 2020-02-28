@@ -42,20 +42,18 @@
     data-off="Off"
     data-onstyle="success"
     data-offstyle="danger"
-    <% if(!user.mfa){ %>
-  disabled <% } %> />
+    <% if(!user.mfa){%>
+     disabled
+    <% } %>
+  />
 </div>
 <script>
   $(document).ready(function() {
+    const streamerMode = '<%= user.streamerMode %>' === 'true' ? true : false;
+    const emailVerified = '<%= user.emailVerified %>' === 'true' ? true : false;
     const mfa = '<%= user.mfa %>' === 'true' ? true : false;
-    $('#streamerMode').attr(
-      'checked',
-      '<%= user.streamerMode %>' === 'true' ? true : false
-    );
-    $('#emailVerified').attr(
-      'checked',
-      '<%= user.emailVerified %>' === 'true' ? true : false
-    );
+    // $('#streamerMode').attr('checked', streamerMode);
+    $('#emailVerified').attr('checked', emailVerified);
     $('#mfa').attr('checked', mfa);
 
     $('#mfa').change(function() {
@@ -65,6 +63,7 @@
           type: 'POST',
           data: { _csrf: '<%= _csrf %>' },
           success: function(response) {
+            console.log(response);
             $('#mfa').bootstrapToggle('disable');
             $('#success').show();
             $('#success').html(response.message);
@@ -75,6 +74,44 @@
             $('#error').html(response.responseJSON.message);
             $('#mfa').bootstrapToggle(mfa ? 'on' : 'off');
             $('#mfa').bootstrapToggle(mfa ? 'enable' : 'disable');
+          }
+        });
+      }
+    });
+    $('#streamerMode').change(function() {
+      console.log($(this).prop('checked'));
+      if ($(this).prop('checked') === true) {
+        $.ajax({
+          url:
+            '/admin/users/edit/<%= user.slug %>/streamermode/true?_method=PUT',
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#success').show();
+            $('#success').html(response.message);
+          },
+          error: function(response) {
+            console.log(response);
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
+            $('#streamerMode').bootstrapToggle(streamerMode ? 'on' : 'off');
+          }
+        });
+      } else {
+        $.ajax({
+          url:
+            '/admin/users/edit/<%= user.slug %>/streamermode/false?_method=PUT',
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#success').show();
+            $('#success').html(response.message);
+          },
+          error: function(response) {
+            console.log(response);
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
+            $('#streamerMode').bootstrapToggle(streamerMode ? 'on' : 'off');
           }
         });
       }

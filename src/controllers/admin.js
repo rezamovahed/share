@@ -34,6 +34,8 @@ exports.putEditUser = async (req, res) => {
       if (user.username !== username) {
         updatedInfomation.username = username;
       }
+      // Check if streamer mode is enabled
+      // This is so it will skip if they are in streamer mode.
       if (!req.user.streamerMode) {
         if (user.email !== email) {
           updatedInfomation.email = email;
@@ -48,6 +50,9 @@ exports.putEditUser = async (req, res) => {
       if (user.username !== username) {
         updatedInfomation.username = username;
       }
+      // Check if streamer mode is enabled
+      // This is so it will skip if they are in streamer mode.
+
       if (!req.user.streamerMode) {
         if (user.email !== email) {
           updatedInfomation.email = email;
@@ -75,7 +80,29 @@ exports.putEditUser = async (req, res) => {
  * Toggle users streamer mode Controller - Allows admins to update users streamer mode status.
  */
 
-exports.postStreamerMode = async (req, res) => {};
+exports.putStreamerMode = async (req, res) => {
+  try {
+    const { boolean, slug } = req.params;
+    // Toggle streamer mode
+    await User.findOneAndUpdate(
+      {
+        slug
+      },
+      {
+        streamerMode: boolean
+      },
+      { $safe: true, $upsert: true }
+    );
+    res.json({
+      message: `Streamer mode has been ${
+        boolean === 'false' ? 'disabled' : 'enabled'
+      } for this user`
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
 
 /**
  * Delete users mfa Controller - Allows admins to update users mfa.
@@ -94,7 +121,7 @@ exports.deleteUserMFA = async (req, res) => {
       { $safe: true, $upsert: true }
     );
     res.json({
-      message: 'MFA has been disabled.'
+      message: 'MFA has been disabled for this user.'
     });
   } catch (err) {
     console.error(err);

@@ -393,6 +393,12 @@ app.delete(
   deleteUserMFA,
   adminConroller.deleteUserMFA
 );
+app.put(
+  '/admin/users/edit/:slug/streamermode/:boolean',
+  isLoggedin,
+  isAdmin,
+  adminConroller.putStreamerMode
+);
 
 /**
  * API routes.
