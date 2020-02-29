@@ -1,5 +1,8 @@
 <%- include ('../../partials/header') %> <%- include
 ('../../partials/admin/navbar') %> <% errors = error && error.length > 0 %>
+<% successs = error && error.length > 0 %>
+
+
 
 <div class="container w-50 mt-3 mb-3 admin user">
   <div
@@ -13,6 +16,17 @@
     id="error"
   >
   </div>
+   <% if (errors && typeof error[0] === 'string'){ %>
+      <div class="alert alert-danger alert-timeout" role="alert">
+        <%= error %>
+      </div>
+      <% } %>
+       <% if (successs && typeof success[0] === 'string'){ %>
+      <div class="alert alert-success alert-timeout" role="alert">
+        <%= success %>
+      </div>
+      <% } %>
+
     <form action="/admin/users/edit/<%= user.slug %>?_method=PUT" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
       <% if (admin = user.role === 'admin' && currentUser.role === 'admin') { %>

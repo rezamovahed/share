@@ -1,6 +1,11 @@
 /* eslint-disable indent */
 const path = require('path');
 const fs = require('fs-extra');
+const generate = require('nanoid/generate');
+const moment = require('moment');
+
+const alphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
  * Load MongoDB models.
@@ -68,8 +73,12 @@ exports.putEditUser = async (req, res) => {
       { $safe: true, $upsert: true }
     );
 
-    console.log(`Streamer Mode ${streamerMode}`);
-    console.log(`Email Verified ${emailVerified}`);
+    if (isEmpty(updatedInfomation)) {
+      req.flash('error', "You didn't change any of the user infomation.");
+      return res.redirect(`/admin/users/edit/${user.slug}`);
+    }
+    req.flash('success', 'User has been updated.');
+    res.redirect(`/admin/users/${user.slug}`);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -79,7 +88,6 @@ exports.putEditUser = async (req, res) => {
 /**
  * Toggle users streamer mode Controller - Allows admins to update users streamer mode status.
  */
-
 exports.putStreamerMode = async (req, res) => {
   try {
     const { boolean, slug } = req.params;
@@ -97,6 +105,55 @@ exports.putStreamerMode = async (req, res) => {
       message: `Streamer mode has been ${
         boolean === 'false' ? 'disabled' : 'enabled'
       } for this user`
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+/**
+ * Toggle users email verified Controller - Allows admins to update users email verified status.
+ */
+
+exports.putEmailVerified = async (req, res) => {
+  try {
+    const { boolean, slug } = req.params;
+    // Toggle email verifyied
+    if (boolean === 'true') {
+      await User.findOneAndUpdate(
+        {
+          slug
+        },
+        {
+          emailVerified: true,
+          emailVerificationToken: undefined,
+          emailVerificationTokenExpire: undefined
+        },
+        { $safe: true, $upsert: true }
+      );
+    } else {
+      // Set the token and the expire date.
+      const token = await generate(alphabet, 24);
+      const tokenExpire = moment().add('3', 'h');
+
+      await User.findOneAndUpdate(
+        {
+          slug
+        },
+        {
+          emailVerified: false,
+          emailVerificationToken: token,
+          emailVerificationTokenExpire: tokenExpire
+        },
+        { $safe: true, $upsert: true }
+      );
+    }
+
+    res.json({
+      message:
+        boolean === 'false'
+          ? 'User must now verify there email before they can login.'
+          : 'User can now login even if they did not verify there email.'
     });
   } catch (err) {
     console.error(err);

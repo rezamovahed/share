@@ -16,6 +16,7 @@ const requestIp = require('request-ip');
 const moment = require('moment');
 const lusca = require('lusca');
 const fs = require('fs-extra');
+const cors = require('cors');
 const User = require('./models/User');
 
 /**
@@ -73,9 +74,14 @@ app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 
+const corsOptions = {
+  origin: process.env.FULL_DOMAIN
+};
+
 switch (process.env.NODE_ENV) {
   case 'production ':
     app.use(logger('combined'));
+    app.use(cors(corsOptions));
     break;
   case 'test':
     break;
@@ -169,14 +175,14 @@ app.use(async (req, res, next) => {
   res.locals.logo = (await fs.existsSync(
     `${__dirname}/public/assets/images/logo_custom.png`
   ))
-    ? `${process.env.FULL_DOMAIN}/assets/images/custom/logo.png`
-    : `${process.env.FULL_DOMAIN}/assets/images/logo.png`;
+    ? '/assets/images/custom/logo.png'
+    : '/assets/images/logo.png';
 
   res.locals.favicon = (await fs.existsSync(
     `${__dirname}/public/assets/images/custom/favicon.ico`
   ))
-    ? `${process.env.FULL_DOMAIN}/assets/images/custom/favicon.ico`
-    : `${process.env.FULL_DOMAIN}/favicon.ico`;
+    ? '/assets/images/custom/favicon.ico'
+    : '/favicon.ico';
 
   res.locals.currentYear = new Date().getFullYear();
   next();
@@ -208,6 +214,7 @@ const isLoggedin = require('./middleware/isLoggedin');
 const isAlreadyAuth = require('./middleware/isAlreadyLoggedin');
 const isAccounActivated = require('./middleware/isAccounActivated');
 const isAdmin = require('./middleware/roleCheck/isAdmin');
+const putEmailVerified = require('./middleware/admin/putEmailVerified');
 const isOwner = require('./middleware/roleCheck/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVaild');
@@ -394,10 +401,17 @@ app.delete(
   adminConroller.deleteUserMFA
 );
 app.put(
-  '/admin/users/edit/:slug/streamermode/:boolean',
+  '/admin/users/edit/:slug/streamer-mode/:boolean',
   isLoggedin,
   isAdmin,
   adminConroller.putStreamerMode
+);
+app.put(
+  '/admin/users/edit/:slug/email-verified/:boolean',
+  isLoggedin,
+  isAdmin,
+  putEmailVerified,
+  adminConroller.putEmailVerified
 );
 
 /**
