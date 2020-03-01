@@ -17,12 +17,7 @@ $(document).ready(() => {
     }
   );
   // hide the alert
-  setTimeout(function() {
-    $('.alert.alert-timeout').alert('close');
-  }, 15000);
   setInterval(() => {
-    setTimeout(function() {
-      $('.alert.alert-timeout').alert('close');
-    }, 15000);
-  }, 1000);
+    $('.alert.alert-timeout').hide();
+  }, 15000);
 });

@@ -66,9 +66,12 @@
       window.actionEvents = {
         'click .edit': function (e, value, row, index) {
           $('#rename-token form').attr('action', `/tokens/${row._id}?_method=PUT`);
+          console.log('test')
+          console.log(row.label)
+          $("#renameTokenLabel").attr('value', row.label);
+          $("#renameTokenLabel").val(row.label);
           $("#renameTokenLabel").attr('value', row.label);
           $('#rename-token').modal('show');
-
         },
         'click .delete': function (e, value, row, index) {
           $.ajax({
@@ -84,7 +87,10 @@
             }
           });
         }
-      } </script> <div class="modal fade" id="create-token" tabindex="-1" role="dialog">
+      }
+                  $('#rename-token').on('hidden.bs.modal', function() {
+      $(':input', this).val('');
+    }); </script> <div class="modal fade" id="create-token" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -127,7 +133,7 @@
               <div class="modal-body">
                 <form action="" method="POST" class="mt-2">
                   <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-                  <input id="renameTokenLabel" name="label" type="text" class="form-control" value="Test">
+                  <input id="renameTokenLabel" name="label" type="text" class="form-control" value="renameTokenLabel">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
