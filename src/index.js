@@ -9,6 +9,7 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
 const expressip = require('express-ip');
@@ -48,9 +49,13 @@ app.set('host', process.env.IP || '127.0.0.1');
 app.set('port', process.env.PORT || 8080);
 
 /**
- * Serve Public Folder.
+ * Serve Public Folder and bower components
  */
 app.use(express.static(`${__dirname}/public`));
+app.use(
+  '/bower_components',
+  express.static(path.join(__dirname, '../bower_components'))
+);
 
 /**
  * Set the view directory

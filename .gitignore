@@ -3,6 +3,12 @@ node_modules/
 npm-debug.log*
 package-lock.json
 
+#Bower
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
+
 # sass
 .sass-cache
 
