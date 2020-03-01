@@ -1,0 +1,29 @@
+{
+  "name": "share",
+  "description": "Advanced custom uploader with web front-end.  Allows uploads for  images, files, and text. Built with ShareX in mind.",
+  "main": "src/index.js",
+  "authors": [
+    "Nathan Henniges"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "sharex",
+    "custom-uploader",
+    "uploader",
+    "files",
+    "images",
+    "text",
+    "custom"
+  ],
+  "homepage": "https://github.com/MrDemonWolf/share",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^4.4.1"
+  }
+}
