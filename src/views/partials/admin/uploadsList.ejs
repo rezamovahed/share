@@ -134,7 +134,7 @@
           },
           error: function(response) {
             $('#error').show();
-            $('#error').html(response.message);
+            $('#error').html(response.responseJSON.message);
           }
         });
       }

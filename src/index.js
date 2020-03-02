@@ -226,7 +226,11 @@ const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVail
 const isAccountActivationTokenVaild = require('./middleware/isAccountActivationTokenVaild');
 const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
 const isMfa = require('./middleware/isMfa');
+const isBanned = require('./middleware/isBanned');
+const isBannedAPI = require('./middleware/api/isBanned');
 const deleteUserMFA = require('./middleware/admin/deleteUserMFA');
+const putBan = require('./middleware/admin/putBan');
+const putUnban = require('./middleware/admin/putUnban');
 
 /**
  * Load vaildation middleware
@@ -263,7 +267,12 @@ const adminConroller = require('./controllers/admin');
 app.use(indexRoutes);
 app.get('/owner', ownerController.getOwner);
 app.get('/owner/:token', ownerController.getOwnerToken);
-app.get('/upload-data', isLoggedin, indexController.getUploadListData);
+app.get(
+  '/upload-data',
+  isLoggedin,
+  isBannedAPI,
+  indexController.getUploadListData
+);
 app.delete(
   '/upload-data/:uploadedFile',
   isLoggedin,
@@ -311,18 +320,20 @@ app.post(
   ResendActivationEmailVaildation,
   userController.postResendActivationEmail
 );
-app.use('/account', isLoggedin, accountRoutes);
-app.put('/account', isLoggedin, accountController.putAccount);
-app.delete('/account', isLoggedin, accountController.deleteAccount);
+app.use('/account', isLoggedin, isBanned, accountRoutes);
+app.put('/account', isLoggedin, isBanned, accountController.putAccount);
+app.delete('/account', isLoggedin, isBanned, accountController.deleteAccount);
 app.get(
   '/account/email-verify/:token',
   isLoggedin,
+  isBanned,
   isEMailVerificationTokenVaild,
   accountController.emailVeirfy
 );
 app.get(
   '/account/resend/email-verify',
   isLoggedin,
+  isBanned,
   accountController.resendEmailVeirfy
 );
 app.put(
@@ -330,34 +341,67 @@ app.put(
   isLoggedin,
   accountController.putStreamerMode
 );
-app.post('/account/mfa/setup', isLoggedin, accountController.postMfaSetup);
+app.post(
+  '/account/mfa/setup',
+  isLoggedin,
+  isBannedAPI,
+  accountController.postMfaSetup
+);
 app.post(
   '/account/mfa/setup/verify',
   isLoggedin,
+  isBannedAPI,
   accountController.postMfaSetupVerify
 );
-app.delete('/account/mfa', isLoggedin, accountController.deleteMFA);
+app.delete(
+  '/account/mfa',
+  isLoggedin,
+  isBannedAPI,
+  accountController.deleteMFA
+);
 
-app.use('/tokens', isLoggedin, tokensRoutes);
-app.get('/tokens-data', isLoggedin, tokensConroller.getTokenListData);
+app.use('/tokens', isLoggedin, isBanned, tokensRoutes);
+app.get(
+  '/tokens-data',
+  isLoggedin,
+  isBannedAPI,
+  tokensConroller.getTokenListData
+);
 
-app.post('/tokens', isLoggedin, tokensConroller.postToken);
+app.post('/tokens', isLoggedin, isBannedAPI, tokensConroller.postToken);
 app.put(
   '/tokens/:token_id',
   isLoggedin,
+  isBannedAPI,
   accountRenameTokenVaildation,
   tokensConroller.putToken
 );
-app.delete('/tokens/:token_id', isLoggedin, tokensConroller.deleteToken);
-app.delete('/all/uploads', isLoggedin, indexController.deleteAllUploads);
-app.delete('/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
-app.use('/gallery', isLoggedin, galleryRoutes);
+app.delete(
+  '/tokens/:token_id',
+  isLoggedin,
+  isBannedAPI,
+  tokensConroller.deleteToken
+);
+app.delete(
+  '/all/uploads',
+  isLoggedin,
+  isBannedAPI,
+  indexController.deleteAllUploads
+);
+app.delete(
+  '/all/tokens',
+  isLoggedin,
+  isBannedAPI,
+  tokensConroller.deleteAllTokens
+);
+app.use('/gallery', isLoggedin, isBanned, galleryRoutes);
 app.delete(
   '/gallery/:uploadedFile',
   isLoggedin,
+  isBannedAPI,
   galleryConroller.deleteSingleUpload
 );
-app.use('/config', isLoggedin, configRoutes);
+app.use('/config', isLoggedin, isBanned, configRoutes);
 
 app.use('/admin', isLoggedin, isAdmin, adminRoutes);
 app.delete(
@@ -418,6 +462,20 @@ app.put(
   putEmailVerified,
   adminConroller.putEmailVerified
 );
+app.put(
+  '/admin/users/ban/:slug',
+  isLoggedin,
+  isAdmin,
+  putBan,
+  adminConroller.putBan
+);
+app.put(
+  '/admin/users/unban/:slug',
+  isLoggedin,
+  isAdmin,
+  putUnban,
+  adminConroller.putUnban
+);
 
 /**
  * API routes.
@@ -426,7 +484,7 @@ app.put(
  */
 const apiRoutes = require('./routes/api');
 
-app.use('/api', apiRoutes);
+app.use('/api', apiRoutes, isBannedAPI);
 
 /**
  * Handle 404 errors

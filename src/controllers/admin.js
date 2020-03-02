@@ -355,6 +355,10 @@ exports.getUserListData = async (req, res) => {
         createdAt: data.createdAt,
         streamerMode: data.streamerMode,
         isVerified: data.isVerified,
+        isBanned: data.isBanned,
+        isSuspended: data.isSuspended,
+        suspendedReason: data.suspendedReason,
+        suspendedExpire: data.suspendedExpire,
         lastLogin: data.lastLogin
       });
     });
@@ -463,6 +467,67 @@ exports.deleteAllUploads = async (req, res) => {
 
     req.flash('success', 'All users uploads have been removed.');
     res.redirect('/admin/uploads');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Ban user Controller - Allows admins ti ban users.
+ */
+exports.putBan = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    await User.findOneAndUpdate(
+      { slug },
+      {
+        $set: {
+          isBanned: true,
+          isSuspended: false,
+          role: 'user'
+        },
+        $unset: {
+          suspendedExpire: undefined,
+          suspendedReason: undefined
+        }
+      },
+      {
+        $safe: true
+      }
+    );
+    res.json({ message: 'User has been banned.', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Unban user Controller - Allows admins ti unban users.
+ */
+exports.putUnban = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    await User.findOneAndUpdate(
+      { slug },
+      {
+        $set: {
+          isBanned: false,
+          isSuspended: false,
+        },
+        $unset: {
+          suspendedExpire: undefined,
+          suspendedReason: undefined
+        }
+      },
+      {
+        $safe: true
+      }
+    );
+    res.json({ message: 'User has been unbanned.', status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

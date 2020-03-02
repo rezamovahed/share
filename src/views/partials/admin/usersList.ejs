@@ -101,8 +101,10 @@
     function actionsFormatter(value, row, index) {
       return [
         `<a class="${
-          row.isBanned ? 'ban' : 'unban'
-        }"  href="javascript:void(0)" title="Ban" data-toggle="tooltip">`,
+          row.isBanned ? 'unban' : 'ban'
+        }"  href="javascript:void(0)" title="${
+          row.isBanned ? 'Unban' : 'Ban'
+        }" data-toggle="tooltip">`,
         '<i class="fas fa-gavel"></i>',
         '</a> ',
         `<a class="${
@@ -120,25 +122,57 @@
     }
     //Data events
     window.actionEvents = {
-      'click .delete': function(e, value, row, index) {
+      'click .ban': function(e, value, row, index) {
         $.ajax({
-          url: `/${row.file + row.extension}?_method=DELETE`,
+          url: `/admin/users/ban/${row.slug}?_method=PUT`,
           type: 'POST',
           data: { _csrf: '<%= _csrf %>' },
           success: function(response) {
             $('#success').show();
             $('#success').html(response.message);
-            $table.bootstrapTable('remove', {
-              field: 'id',
-              values: [row.id]
-            });
+            $table.bootstrapTable('refresh', { silent: true });
           },
           error: function(response) {
             $('#error').show();
-            $('#error').html(response.message);
+            $('#error').html(response.responseJSON.message);
+          }
+        });
+      },
+      'click .unban': function(e, value, row, index) {
+        $.ajax({
+          url: `/admin/users/unban/${row.slug}?_method=PUT`,
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#success').show();
+            $('#success').html(response.message);
+            $table.bootstrapTable('refresh', { silent: true });
+          },
+          error: function(response) {
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
           }
         });
       }
+      // 'click .delete': function(e, value, row, index) {
+      //   $.ajax({
+      //     url: `/${row.file + row.extension}?_method=DELETE`,
+      //     type: 'POST',
+      //     data: { _csrf: '<%= _csrf %>' },
+      //     success: function(response) {
+      //       $('#success').show();
+      //       $('#success').html(response.message);
+      //       $table.bootstrapTable('remove', {
+      //         field: 'id',
+      //         values: [row.id]
+      //       });
+      //     },
+      //     error: function(response) {
+      //       $('#error').show();
+      //       $('#error').html(response.responseJSON.message);
+      //     }
+      //   });
+      // }
     };
   </script>
 
