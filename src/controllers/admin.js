@@ -26,34 +26,40 @@ exports.putEditUser = async (req, res) => {
     // eslint-disable-next-line object-curly-newline
     const { username, email, role, newPassword } = req.body;
 
-    const streamerMode = !isEmpty(req.body.streamerMode);
-    const emailVerified = !isEmpty(req.body.emailVerified);
-
     const user = await User.findOne({ slug: req.params.slug });
 
-    // This is a object that will include only which has been updated.
-    const updatedInfomation = {};
+    // eslint-disable-next-line prefer-const
+    let updatedInfomation = {};
 
     // Allow owner to edit all.
     if (req.user.role === 'owner') {
       if (user.username !== username) {
         updatedInfomation.username = username;
+        user.username = username;
       }
       // Check if streamer mode is enabled
       // This is so it will skip if they are in streamer mode.
       if (!req.user.streamerMode) {
         if (user.email !== email) {
           updatedInfomation.email = email;
+          user.email = email;
         }
       }
       if (user.role !== role) {
         updatedInfomation.role = role;
+        user.role = role;
+      }
+      // If the new password is entered it will change the password
+      if (!isEmpty(newPassword)) {
+        updatedInfomation.password = newPassword;
+        user.password = newPassword;
       }
     }
 
     if (req.user.role === 'admin') {
       if (user.username !== username) {
         updatedInfomation.username = username;
+        user.username = username;
       }
       // Check if streamer mode is enabled
       // This is so it will skip if they are in streamer mode.
@@ -61,18 +67,12 @@ exports.putEditUser = async (req, res) => {
       if (!req.user.streamerMode) {
         if (user.email !== email) {
           updatedInfomation.email = email;
+          user.email = email;
         }
       }
     }
 
-    await User.findOneAndUpdate(
-      {
-        slug: req.params.slug
-      },
-      updatedInfomation,
-      { $safe: true, $upsert: true }
-    );
-
+    await user.save();
     if (isEmpty(updatedInfomation)) {
       req.flash('error', "You didn't change any of the user infomation.");
       return res.redirect(`/admin/users/edit/${user.slug}`);
@@ -90,7 +90,9 @@ exports.putEditUser = async (req, res) => {
  */
 exports.putStreamerMode = async (req, res) => {
   try {
-    const { boolean, slug } = req.params;
+    const { slug } = req.params;
+    const boolean = req.params.boolean === 'true';
+
     // Toggle streamer mode
     await User.findOneAndUpdate(
       {
@@ -99,11 +101,11 @@ exports.putStreamerMode = async (req, res) => {
       {
         streamerMode: boolean
       },
-      { $safe: true, $upsert: true }
+      { $safe: true }
     );
     res.json({
       message: `Streamer mode has been ${
-        boolean === 'false' ? 'disabled' : 'enabled'
+        !boolean ? 'disabled' : 'enabled'
       } for this user`
     });
   } catch (err) {
@@ -117,35 +119,42 @@ exports.putStreamerMode = async (req, res) => {
 
 exports.putEmailVerified = async (req, res) => {
   try {
-    const { boolean, slug } = req.params;
-    // Toggle email verifyied
-    if (boolean === 'true') {
-      await User.findOneAndUpdate(
-        {
-          slug
-        },
-        {
-          emailVerified: true,
-          emailVerificationToken: undefined,
-          emailVerificationTokenExpire: undefined
-        },
-        { $safe: true, $upsert: true }
-      );
-    } else {
-      // Set the token and the expire date.
-      const token = await generate(alphabet, 24);
-      const tokenExpire = moment().add('3', 'h');
+    const { slug } = req.params;
 
+    const boolean = req.params.boolean === 'true';
+
+    // Toggle email verifyied
+    if (boolean) {
+      console.log('hit true');
+      // Set the token and the expire date.
       await User.findOneAndUpdate(
         {
           slug
         },
         {
           emailVerified: false,
-          emailVerificationToken: token,
-          emailVerificationTokenExpire: tokenExpire
+          emailVerificationToken: generate(alphabet, 24),
+          emailVerificationTokenExpire: moment().add('3', 'h')
         },
         { $safe: true, $upsert: true }
+      );
+    } else {
+      console.log('hit false');
+
+      await User.findOneAndUpdate(
+        {
+          slug
+        },
+        {
+          $set: {
+            emailVerified: true
+          },
+          $unset: {
+            emailVerificationToken: undefined,
+            emailVerificationTokenExpire: undefined
+          }
+        },
+        { $safe: true }
       );
     }
 
@@ -172,10 +181,14 @@ exports.deleteUserMFA = async (req, res) => {
         slug: req.params.slug
       },
       {
-        mfa: false,
-        mfaSecret: undefined
+        $set: {
+          mfa: false
+        },
+        $unset: {
+          mfaSecret: undefined
+        }
       },
-      { $safe: true, $upsert: true }
+      { $safe: true }
     );
     res.json({
       message: 'MFA has been disabled for this user.'
