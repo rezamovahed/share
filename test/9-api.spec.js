@@ -46,11 +46,13 @@ describe('API Routes', () => {
       });
     });
 
-    describe('GET /api/v1/delete (Remove the image we uplaoded)'), () => {
+    describe('GET /api/v1/delete (Remove the image we uplaoded)', () => {
       it('it should has status code 200', done => {
         // eslint-disable-next-line global-require
+        const { token } = require('./3-user.spec');
         supertest(app)
           .get(`/api/v1/delete?key=${this.deleteKey}`)
+
           .expect(200)
           .end((err, res) => {
             if (err) return done(err);
