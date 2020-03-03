@@ -68,6 +68,10 @@ exports.postToken = async (req, res, next) => {
     await token.save();
 
     req.flash('info', jwtToken);
+    if (process.env.NODE_ENV === 'test') {
+    res.set('API-Token', jwtToken);
+    res.set('API-Token-ID', token.id);
+    }
     res.redirect('/tokens');
   } catch (err) {
     console.error(err);
