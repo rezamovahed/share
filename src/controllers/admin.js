@@ -561,7 +561,6 @@ exports.putSuspend = async (req, res) => {
         break;
     }
 
-
     const user = await User.findOneAndUpdate(
       { slug },
       {
@@ -617,6 +616,20 @@ exports.putUnsuspend = async (req, res) => {
   }
 };
 
+/**
+ * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
+ */
+exports.deleteUser = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+
+    res.json({ message: 'User has been unsuspended.', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
 /**
  * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
  */
