@@ -7,7 +7,7 @@
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=for-the-badge&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 ![Travis (.com)](https://img.shields.io/travis/com/mrdemonwolf/share?style=for-the-badge)
 # What is Share?
-Simple yet advanced **NodeJS**, **MongoDB** and **Express** based uploader.  Allows users to upload files,images, and text with moderation tools for admins.  Plus users can see uploads for there account and simple remove ones.  Admins can view all and remove ones that don't follow the rules. Can be used for friends and family or just for you.  Built for [ShareX]() at the moment but more uploaders will be supported.
+Simple yet advanced **NodeJS**, **MongoDB** and **Express** based uploader.  Allows users to upload files,images, and text with moderation tools for admins.  Plus users can see uploads for there account and simple remove ones.  Admins can view all and remove ones that don't follow the rules. Can be used for friends and family or just for you.  Built for [ShareX](https://getsharex.com/) at the moment but more uploaders will be supported.
 
 ## Getting started
 
@@ -28,17 +28,22 @@ If you want to help out development read this here.
 <!-- Add other helps in the code base here -->
 
 ## Changelog
-Check the changelogs [here](/CHANGELOG.md)
+Check the changelogs [here](https://mrdemonwolf.github.io/share/docs/changelog/)
 
 ## Issues
-Have a bug or an issue with this app? [Open a new issue](https://github.com/MrDemonWolf/share-mrdemonwolf-me/issues) here on GitHub.
+Have a bug or an issue with this app? [Open a new issue](/issues) here on GitHub.
 
 ## Contributing
-Want to contribute? Check out our [Code of Conduct]() and [Contributing]() docs. Please check issues [here](https://github.com/MrDemonWolf/share/issues)
+Want to contribute? Check out our [Code of Conduct]() and [Contributing]() docs. Please check issues [here](/issues)
 
 ## Testing
 ```bash
-$ npm test
+$ npm run test
+```
+
+## Linting
+```bash
+$ npm run lint
 ```
 
 ## License
