@@ -3,12 +3,10 @@ module.exports = {
     {
       name: 'MrDemonWolf-Share',
       script: 'npm start',
-
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
-      instances: 1,
+      instances: 4,
       autorestart: true,
-      watch: false,
-      max_memory_restart: '1G',
+      max_memory_restart: '300M',
       env: {
         NODE_ENV: 'development'
       },
