@@ -1,3 +1,48 @@
+
+<div class="modal fade" id="suspend-user" tabindex="-1" role="dialog" aria-labelledby="suspend-user">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Suspend <strong id="suspendUsername"></strong></h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+      <form id="suspendUser">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>"/>
+    <input type="hidden" id="suspendSlug" name="slug"/>
+    <div class="form-group">
+      <label for="suspendExpire">How long?</label>
+      <select name="suspendExpire" id="suspendExpire" class="selectpicker" data-style="btn-primary">
+        <option value="1">24 Hours</option>
+        <option value="7">A Week</option>
+        <option value="30">A Month</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+        <div class="form-group conditional" data-condition="suspendExpire === 'custom'">
+      <label for="suspendExpireCustom">Custom Date</label>
+      <div class="input-group date" id="suspendExpireDatepicker" data-target-input="nearest">
+        <input type="text" class="form-control datetimepicker-input" id="suspendExpireCustom" name="suspendExpireCustom"data-target="#suspendExpireDatepicker"/>
+        <div class="input-group-append" data-target="#suspendExpireDatepicker" data-toggle="datetimepicker">
+          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+      </div>
+      <small id="suspendExpireCustom-error" class="invalid-feedback"> </small>
+    </div>
+       <div class="form-group">
+        <label for="suspendReasonLabel">Reason</label>
+        <input name="label" type="text" class="form-control" id="suspendReason" value=""
+          required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary text-white" id="btn-suspend-user">Suspend</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="mt-3 pl-0 pr-0">
   <div
     class="alert alert-danger collapse alert-timeout"
@@ -101,13 +146,17 @@
     function actionsFormatter(value, row, index) {
       return [
         `<a class="${
-          row.isBanned ? 'ban' : 'unban'
-        }"  href="javascript:void(0)" title="Ban" data-toggle="tooltip">`,
+          row.isBanned ? 'unban' : 'ban'
+        }"  href="javascript:void(0)" title="${
+          row.isBanned ? 'Unban' : 'Ban'
+        }" data-toggle="tooltip">`,
         '<i class="fas fa-gavel"></i>',
         '</a> ',
         `<a class="${
           row.isSuspended ? 'unsuspend' : 'suspend'
-        }"  href="javascript:void(0)" title="Ban" data-toggle="tooltip">`,
+        }"  href="javascript:void(0)" title="${
+          row.isSuspended ? 'Unsuspend' : 'Suspend'
+        }" data-toggle="tooltip">`,
         `<i class="fas fas ${row.isSuspended ? 'fa-pause' : 'fa-play'}"></i>`,
         '</a> ',
         `<a class="edit" href="/admin/users/edit/${row.slug}" title="Edit">`,
@@ -120,26 +169,134 @@
     }
     //Data events
     window.actionEvents = {
-      'click .delete': function(e, value, row, index) {
+      'click .ban': function(e, value, row, index) {
         $.ajax({
-          url: `/${row.file + row.extension}?_method=DELETE`,
+          url: `/admin/users/ban/${row.slug}?_method=PUT`,
           type: 'POST',
           data: { _csrf: '<%= _csrf %>' },
           success: function(response) {
             $('#success').show();
             $('#success').html(response.message);
-            $table.bootstrapTable('remove', {
-              field: 'id',
-              values: [row.id]
-            });
+            $table.bootstrapTable('refresh', { silent: true });
           },
           error: function(response) {
             $('#error').show();
-            $('#error').html(response.message);
+            $('#error').html(response.responseJSON.message);
           }
         });
-      }
+      },
+      'click .unban': function(e, value, row, index) {
+        $.ajax({
+          url: `/admin/users/unban/${row.slug}?_method=PUT`,
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#success').show();
+            $('#success').html(response.message);
+            $table.bootstrapTable('refresh', { silent: true });
+          },
+          error: function(response) {
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
+          }
+        });
+      },
+      'click .suspend': function(e, value, row, index) {
+        $('#suspendExpireCustom').val(moment().add('24', 'hours').format('MM/DD/YYYY h:mm A'));
+        $('#suspendReason').val('For breaking the rules you have been issued a suspension from our site.');
+        $('#suspendSlug').val(row.slug);
+        $('#suspendUsername').html(row.username);
+        $('#suspend-user').modal('show');
+      },
+     'click .unsuspend': function(e, value, row, index) {
+        $.ajax({
+          url: `/admin/users/unsuspend/${row.slug}?_method=PUT`,
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#success').show();
+            $('#success').html(response.message);
+            $table.bootstrapTable('refresh', { silent: true });
+          },
+          error: function(response) {
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
+          }
+        });
+      },
+      // 'click .delete': function(e, value, row, index) {
+      //   $.ajax({
+      //     url: `/${row.file + row.extension}?_method=DELETE`,
+      //     type: 'POST',
+      //     data: { _csrf: '<%= _csrf %>' },
+      //     success: function(response) {
+      //       $('#success').show();
+      //       $('#success').html(response.message);
+      //       $table.bootstrapTable('remove', {
+      //         field: 'id',
+      //         values: [row.id]
+      //       });
+      //     },
+      //     error: function(response) {
+      //       $('#error').show();
+      //       $('#error').html(response.responseJSON.message);
+      //     }
+      //   });
+      // }
     };
+    $('#suspend-user').on('hide.bs.modal', function() {
+      $('#suspendExpire').selectpicker('val', '1');
+      $('#suspendReason').val('For breaking the rules you have been issued a suspension from our site.');
+    });
+    $('#suspendUser').on('submit', function(e) {
+      e.preventDefault();
+    });
+    $('#btn-suspend-user').on('click', function(e) {
+      e.preventDefault();
+    let suspendErrors = false;
+    const suspendReason = $('#suspendReason')
+    .val()
+    .trim();
+    if ($('#suspendExpire').val() === 'custom'){
+          const suspendExpireCustom = $('#suspendExpireCustom')
+        .val()
+        .trim();
+        if(suspendExpireCustom === '') {
+          suspendErrors = true;
+          $('#suspendExpireCustom-error').addClass('d-block');
+          $('#suspendExpireCustom-error').html('You must enter a vaild date and time.');
+        }
+    }
+    if (suspendReason === ''){
+      suspendErrors = true;
+      $('#suspendExpireCustom-error').addClass('d-block');
+      $('#suspendExpireCustom-error').html('You must enter a vaild date and time.');
+    }
+    if(suspendErrors) {
+      return;
+    }
+    const suspendSlug = $('#suspendSlug').val()
+    const suspendExpireVal = $('#suspendExpire').val()
+    const suspendExpireCustomVal =$('#suspendExpireCustom').val()
+    const suspendReasonVal =$('#suspendReason').val()
+      $.ajax({
+        url: `/admin/users/suspend/${suspendSlug}?_method=PUT`,
+        type: 'POST',
+        data: { _csrf: '<%= _csrf %>', reason: suspendReasonVal, expire: suspendExpireVal,expireCustom: suspendExpireCustomVal},
+        success: function(response) {
+          $('#suspend-user').modal('hide');
+          $('#success').show();
+          $('#success').html(response.message);
+          $table.bootstrapTable('refresh', { silent: true });
+        },
+        error: function(response) {
+          console.log(response);
+          $('#suspend-user').modal('hide');
+          $('#error').show();
+          $('#error').html(response.responseJSON.message);
+        }
+      });
+    });
   </script>
 
   <div

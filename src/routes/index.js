@@ -19,7 +19,16 @@ router.get('/', async (req, res) => {
    * If the user is logged in this will add
    * the needed data for the logged in render
    */
+
   if (req.isAuthenticated()) {
+    // If user is banned.
+    if (req.user.isBanned) {
+      return res.render('landing/index', {
+        pageTitle: 'Your currently banned',
+        pageDesc: process.env.DESC,
+        pageName: 'uploads'
+      });
+    }
     // Find user uploads
     // Per page limit.
     const limit = 10;
