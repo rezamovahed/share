@@ -474,7 +474,7 @@ exports.deleteAllUploads = async (req, res) => {
 };
 
 /**
- * Ban user Controller - Allows admins ti ban users.
+ * Ban user Controller - Allows admins to ban users.
  */
 exports.putBan = async (req, res) => {
   try {
@@ -505,7 +505,7 @@ exports.putBan = async (req, res) => {
 };
 
 /**
- * Unban user Controller - Allows admins ti unban users.
+ * Unban user Controller - Allows admins to unban users.
  */
 exports.putUnban = async (req, res) => {
   try {
@@ -516,7 +516,7 @@ exports.putUnban = async (req, res) => {
       {
         $set: {
           isBanned: false,
-          isSuspended: false,
+          isSuspended: false
         },
         $unset: {
           suspendedExpire: undefined,
@@ -528,6 +528,89 @@ exports.putUnban = async (req, res) => {
       }
     );
     res.json({ message: 'User has been unbanned.', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Suspend user Controller - Allows admins to suspend users.
+ */
+exports.putSuspend = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    // eslint-disable-next-line prefer-const
+    let suspendedExpire = moment();
+
+    const { reason, expire, expireCustom } = req.body;
+
+    switch (expire) {
+      case '1':
+        suspendedExpire = moment().add('24', 'hours');
+        break;
+      case '7':
+        suspendedExpire = moment().add('7', 'days');
+        break;
+      case '30':
+        suspendedExpire = moment().add('1', 'month');
+        break;
+      default:
+        suspendedExpire = moment(expireCustom);
+        break;
+    }
+
+
+    const user = await User.findOneAndUpdate(
+      { slug },
+      {
+        isSuspended: true,
+        isBanned: false,
+        suspendedExpire,
+        suspendedReason: reason
+      },
+      {
+        $safe: true
+      }
+    );
+
+    res.json({
+      message: `${user.username} has been suspended for ${moment(
+        suspendedExpire
+      ).fromNow(true)}`,
+      status: 200
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * unsuspended user Controller - Allows admins to unsuspend users.
+ */
+exports.putUnsuspend = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    await User.findOneAndUpdate(
+      { slug },
+      {
+        $set: {
+          isBanned: false,
+          isSuspended: false
+        },
+        $unset: {
+          suspendedExpire: undefined,
+          suspendedReason: undefined
+        }
+      },
+      {
+        $safe: true
+      }
+    );
+    res.json({ message: 'User has been unsuspended.', status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

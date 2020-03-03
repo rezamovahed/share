@@ -231,6 +231,8 @@ const isBannedAPI = require('./middleware/api/isBanned');
 const deleteUserMFA = require('./middleware/admin/deleteUserMFA');
 const putBan = require('./middleware/admin/putBan');
 const putUnban = require('./middleware/admin/putUnban');
+const putSuspend = require('./middleware/admin/putSuspend');
+const putUnsuspend = require('./middleware/admin/putUnsuspend');
 
 /**
  * Load vaildation middleware
@@ -243,6 +245,7 @@ const accountRenameTokenVaildation = require('./validation/tokens/rename-token')
 // const accountCreateTokenVaildation = require('./validation/tokens/create-token');
 const ResendActivationEmailVaildation = require('./validation/resend-activation');
 const userUpdateVaildation = require('./validation/admin/userUpdate');
+const suspendUserVaildation = require('./validation/admin/suspendUser');
 
 /**
  * Primary app routes.
@@ -475,6 +478,21 @@ app.put(
   isAdmin,
   putUnban,
   adminConroller.putUnban
+);
+app.put(
+  '/admin/users/suspend/:slug',
+  isLoggedin,
+  isAdmin,
+  putSuspend,
+  suspendUserVaildation,
+  adminConroller.putSuspend
+);
+app.put(
+  '/admin/users/unsuspend/:slug',
+  isLoggedin,
+  isAdmin,
+  putUnsuspend,
+  adminConroller.putUnsuspend
 );
 
 /**
