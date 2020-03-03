@@ -26,7 +26,7 @@ env:
   global:
     - DATABASE_URI=mongodb://localhost:27017/share
     - SESSION_SECRET=thisistesting
-    - API_SECRET=thisistesting
+    - JWT_SECRET=thisistesting
     - TITLE=Share
     - FOOTER_TITLE=MrDemonWolf
     - DESC="Advanced uploader with web front-end for images,files,and text. Built with
@@ -40,7 +40,7 @@ env:
 before_install:
   - echo "DATABASE_URI=$DATABASE_URI" > ./.env
   - echo "SESSION_SECRET=$SESSION_SECRET" >> ./.env
-  - echo "API_SECRET=$API_SECRET" >> ./.env
+  - echo "JWT_SECRET=$JWT_SECRET" >> ./.env
   - echo "TITLE=$TITLE" >> ./.env
   - echo "FOOTER_TITLE=$FOOTER_TITLE" >> ./.env
   - echo "FILE_CHECK=$FILE_CHECK" >> ./.env

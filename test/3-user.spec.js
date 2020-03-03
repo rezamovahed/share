@@ -84,6 +84,7 @@ describe('LOGGED IN (user)', () => {
         });
     });
   });
+
   describe('GET /tokens', () => {
     it('it should has status code 200', done => {
       supertest(app)
@@ -127,6 +128,86 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
+  describe('POST /tokens (this will create a token which we will save and use later)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .post('/tokens')
+        .set('Cookie', userCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          label: 'user@mrdemonwolf.github.io test token',
+          expire: '1'
+        })
+        .expect(302)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          module.exports.token = {
+            jwt: res.header['api-token'],
+            id: res.header['api-token-id']
+          };
+          done();
+        });
+    });
+  });
+
+  describe('POST /tokens (this create a token that be removed.', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .post('/tokens')
+        .set('Cookie', userCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          label: 'To be removed',
+          expire: '1'
+        })
+        .expect(302)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          module.exports.tokenRemovel = res.header['api-token-id'];
+
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /tokens', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .delete(`/tokens/${this.tokenRemovel}`)
+        .set('Cookie', userCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+
+  describe('PUT /token (renaming token)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .put(`/tokens/${this.token.id}`)
+        .set('Cookie', userCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          label: 'user@mrdemonwolf.github.io'
+        })
+        .expect(302)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+
   describe('GET /account', () => {
     it('it should has status code 200', done => {
       supertest(app)
@@ -147,6 +228,23 @@ describe('User actions', () => {
       supertest(app)
         .get('/user/forgot-password')
         .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+  describe('POST /user/forgot-password', () => {
+    it('it should return status 302.', done => {
+      supertest(app)
+        .post('/user/forgot-password')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          email: 'user@mrdemonwolf.github.io'
+        })
+        .expect(302)
         .end((err, res) => {
           if (err) {
             return done(err);

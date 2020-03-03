@@ -68,8 +68,12 @@ module.exports.uploadFile = async (req, res, next) => {
       auth: true,
       success: true,
       file: {
+        name: fileName,
+        ext: fileExtension,
+        size,
         url: `${process.env.FULL_DOMAIN}/u/${fileNameWithExt}`,
-        delete: `${process.env.FULL_DOMAIN}/api/v1/delete?key=${deleteKey}`
+        delete: `${process.env.FULL_DOMAIN}/api/v1/delete?key=${deleteKey}`,
+        deleteKey
       },
       status: 200
     });
