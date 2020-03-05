@@ -9,10 +9,12 @@ module.exports = async (req, res, next) => {
       message: "You can't ban yourself."
     });
   }
-  if (req.user.role === 'owner' && user.role === 'admin') {
+  if (req.user.role === 'owner') {
     return next();
   }
-  if (user.role === 'owner') {
+  const owner = user.role === 'owner';
+  const admin = user.role === 'admin';
+  if (owner || admin) {
     return res.status(401).json({
       message: "This user can't be banned."
     });

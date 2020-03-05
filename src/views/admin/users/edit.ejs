@@ -29,7 +29,12 @@
 
     <form action="/admin/users/edit/<%= user.slug %>?_method=PUT" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
-      <% if (admin = user.role === 'admin' && currentUser.role === 'admin') { %>
+      <% owner = currentUser.role === 'owner'; %>
+      <% userOwner = user.role === 'owner'; %>
+      <% userAdmin = user.role === 'admin'; %>
+      <% userOwnerOrAdmin = userOwner || userAdmin; %>
+      <% userSelf = user.id === currentUser.id; %>
+      <% if (!owner && !userSelf &&  userOwnerOrAdmin) { %>
       <!-- Blocks owners from being edited -->
       <%- include ('../../partials/admin/users/view/account') %> <%- include
       ('../../partials/admin/users/view/status') %> <%- include

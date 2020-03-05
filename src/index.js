@@ -233,6 +233,7 @@ const putBan = require('./middleware/admin/putBan');
 const putUnban = require('./middleware/admin/putUnban');
 const putSuspend = require('./middleware/admin/putSuspend');
 const putUnsuspend = require('./middleware/admin/putUnsuspend');
+const putEditUser = require('./middleware/admin/putEditUser');
 
 /**
  * Load vaildation middleware
@@ -406,82 +407,71 @@ app.delete(
 );
 app.use('/config', isLoggedin, isBanned, configRoutes);
 
-app.use('/admin', isLoggedin, isAdmin, adminRoutes);
+app.use('/admin', isAdmin, adminRoutes);
 app.delete(
   '/admin/all/uploads',
-  isLoggedin,
   isAdmin,
   adminConroller.deleteAllUploads
 );
 // app.delete('/admin/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
 app.get(
   '/admin/uploads-data',
-  isLoggedin,
   isAdmin,
   adminConroller.getUploadListData
 );
 app.delete(
   '/admin/uploads/:uploadedFile',
-  isLoggedin,
   isAdmin,
   adminConroller.deleteSingleUpload
 );
 app.delete(
   '/admin/uploads/gallery/:uploadedFile',
-  isLoggedin,
   isAdmin,
   adminConroller.deleteGallerySingleUpload
 );
 app.get(
   '/admin/users-data',
-  isLoggedin,
   isAdmin,
   adminConroller.getUserListData
 );
 app.put(
   '/admin/users/edit/:slug',
-  isLoggedin,
   isAdmin,
+  putEditUser,
   userUpdateVaildation,
   adminConroller.putEditUser
 );
 app.delete(
   '/admin/users/edit/:slug/mfa',
-  isLoggedin,
   isAdmin,
   deleteUserMFA,
   adminConroller.deleteUserMFA
 );
 app.put(
   '/admin/users/edit/:slug/streamer-mode/:boolean',
-  isLoggedin,
   isAdmin,
   adminConroller.putStreamerMode
 );
 app.put(
   '/admin/users/edit/:slug/email-verified/:boolean',
-  isLoggedin,
   isAdmin,
   putEmailVerified,
   adminConroller.putEmailVerified
 );
 app.put(
   '/admin/users/ban/:slug',
-  isLoggedin,
   isAdmin,
   putBan,
   adminConroller.putBan
 );
 app.put(
   '/admin/users/unban/:slug',
-  isLoggedin,
   isAdmin,
   putUnban,
   adminConroller.putUnban
 );
 app.put(
   '/admin/users/suspend/:slug',
-  isLoggedin,
   isAdmin,
   putSuspend,
   suspendUserVaildation,
@@ -489,7 +479,6 @@ app.put(
 );
 app.put(
   '/admin/users/unsuspend/:slug',
-  isLoggedin,
   isAdmin,
   putUnsuspend,
   adminConroller.putUnsuspend
