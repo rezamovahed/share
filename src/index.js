@@ -234,6 +234,7 @@ const putUnban = require('./middleware/admin/putUnban');
 const putSuspend = require('./middleware/admin/putSuspend');
 const putUnsuspend = require('./middleware/admin/putUnsuspend');
 const putEditUser = require('./middleware/admin/putEditUser');
+const deleteUser = require('./middleware/admin/deleteUser');
 
 /**
  * Load vaildation middleware
@@ -483,6 +484,13 @@ app.put(
   putUnsuspend,
   adminConroller.putUnsuspend
 );
+app.delete(
+  '/admin/users/:slug',
+  isAdmin,
+  deleteUser,
+  adminConroller.deleteUser
+);
+
 
 /**
  * API routes.

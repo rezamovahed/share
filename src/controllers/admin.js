@@ -12,6 +12,7 @@ const alphabet =
  */
 const User = require('.././models/User');
 const Upload = require('.././models/Upload');
+const Token = require('.././models/Token');
 
 /**
  * Load vaildation middleware
@@ -125,7 +126,6 @@ exports.putEmailVerified = async (req, res) => {
 
     // Toggle email verifyied
     if (boolean) {
-      console.log('hit true');
       // Set the token and the expire date.
       await User.findOneAndUpdate(
         {
@@ -139,8 +139,6 @@ exports.putEmailVerified = async (req, res) => {
         { $safe: true, $upsert: true }
       );
     } else {
-      console.log('hit false');
-
       await User.findOneAndUpdate(
         {
           slug
@@ -617,14 +615,45 @@ exports.putUnsuspend = async (req, res) => {
 };
 
 /**
- * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
+ * Delete a users account  - REmoves both all the users data such as tokens and uploaded data.
  */
 exports.deleteUser = async (req, res) => {
   try {
     const { slug } = req.params;
 
+    const user = await User.findOne({ slug });
 
-    res.json({ message: 'User has been unsuspended.', status: 200 });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found', status: 404 });
+    }
+
+    // Loop uploads to delete one by one;
+
+    const uploads = Upload.find({ uploader: user.id });
+
+    uploads.map(async data => {
+      const uploadedFileExt = data.fileExtension;
+      const uploadedFileName = data.fileName;
+
+      const uploadedFilePath = `${path.join(
+        __dirname,
+        '../public'
+      )}/u/${uploadedFileName + uploadedFileExt}`;
+
+      await Upload.findOneAndDelete({
+        fileName: uploadedFileName
+      });
+      await fs.remove(uploadedFilePath);
+    });
+
+    const tokens = await Token.find({ user: user.id });
+    tokens.map(async data => {
+      await Token.findByIdAndDelete(data.id);
+    });
+
+    await User.findByIdAndDelete(user.id);
+
+    res.json({ message: `${user.username} has been deleted`, status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

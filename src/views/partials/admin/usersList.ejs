@@ -59,13 +59,53 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         <form class="d-inline">
           <input type="hidden" name="_csrf" value="<%= _csrf %>"/>
-          <button type="submit" class="btn btn-danger btn-ok" style="color: #ffff;">Delete
+          <input type="hidden" id="deleteSlug" name="slug"/>
+          <button type="submit" class="btn btn-danger btn-ok text-white" id="btn-delete-user">Delete
             User Account</a>
         </form>
       </div>
     </div>
   </div>
 </div>
+  <div
+    class="modal fade"
+    id="confirm-delete"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="confirm-delete"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Remove all uploads</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete all of your uploads account, this
+            procedure is irreversible.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Cancel
+          </button>
+          <a href="/me/uploads/delete/all" class="btn btn-danger btn-ok"
+            >Delete uploads</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
 <div class="mt-3 pl-0 pr-0">
   <div
     class="alert alert-danger collapse alert-timeout"
@@ -248,7 +288,7 @@
         });
       },
       'click .delete': function(e, value, row, index) {
-        // $('#suspendSlug').val(row.slug);
+        $('#deleteSlug').val(row.slug);
         $('#deleteUsername').html(row.username);
         $('#confirm-delete-user').modal('show');
       }
@@ -263,9 +303,9 @@
 
     $('#btn-delete-user').on('click', function(e) {
     e.preventDefault();
-    const suspendSlug = $('#suspendSlug').val()
+    const deleteSlug = $('#deleteSlug').val()
       $.ajax({
-        url: `/admin/users/suspend/${suspendSlug}?_method=PUT`,
+        url: `/admin/users/${deleteSlug}?_method=DELETE`,
         type: 'POST',
         data: { _csrf: '<%= _csrf %>'},
         success: function(response) {
@@ -329,43 +369,4 @@
       });
     });
   </script>
-
-  <div
-    class="modal fade"
-    id="confirm-delete"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="confirm-delete"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Remove all uploads</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-hidden="true"
-          >
-            &times;
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>
-            Are you sure you want to delete all of your uploads account, this
-            procedure is irreversible.
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">
-            Cancel
-          </button>
-          <a href="/me/uploads/delete/all" class="btn btn-danger btn-ok"
-            >Delete uploads</a
-          >
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

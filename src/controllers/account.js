@@ -209,7 +209,6 @@ exports.postMfaSetupVerify = async (req, res, next) => {
     const { token, secret } = req.body;
     const isValid = authenticator.verify({ token, secret });
 
-    console.log(isValid);
     if (!isValid) {
       return res.status(400).json({
         message: 'Invaild token.  Please try again.',
