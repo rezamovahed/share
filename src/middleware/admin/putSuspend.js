@@ -5,13 +5,20 @@ module.exports = async (req, res, next) => {
     slug: req.params.slug
   });
 
+  if (req.user.id === user.id) {
+    return res.status(400).json({
+      message: "You can't suspened yourself."
+    });
+  }
   if (req.user.role === 'owner') {
     return next();
   }
 
-  if (user.role === 'admin') {
+  const owner = user.role === 'owner';
+  const admin = user.role === 'admin';
+  if (owner || admin) {
     return res.status(401).json({
-      message: "You don't have permission to suspend a admin."
+      message: "This user can't be suspened."
     });
   }
   next();

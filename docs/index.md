@@ -11,7 +11,7 @@ permalink: /
 Simple yet advanced **NodeJS**, **MongoDB** and **Express** based uploader.  Allows users to upload files,images, and text with moderation tools for admins. Can be used for friends and family or just for you.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View it on GitHub](https://github.com/pmarsceill/just-the-docs){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View it on GitHub](https://github.com/MrDemonWolf/share){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
@@ -27,7 +27,7 @@ You can now download the release [here](https://github.com/MrDemonWolf/share/rel
 
 You can also fork,clone,download from github for pre release builds and development.
 * Clone the repo: `git clone https://github.com/MrDemonWolf/share.git`
-* [Fork, Clone, or Download on GitHub](/)
+* [Fork, Clone, or Download on GitHub](https://github.com/MrDemonWolf/share)
 
 ### Installation
 Before installing, [download and install Node.js](https://nodejs.org/en/download/).

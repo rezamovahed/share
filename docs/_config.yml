@@ -50,8 +50,8 @@ heading_anchors: true
 
 # Aux links for the upper right navigation
 aux_links:
-  'Follow the creator':
-    - 'https://www.github.com/nathanhenniges'
+  'Repo':
+    - 'https://www.github.com/mrdemonwolf/share'
   'Creators Website':
     - 'https://www.mrdemonwolf.me'
 
