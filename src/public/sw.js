@@ -3,24 +3,20 @@ self.addEventListener('install', function(e) {
     caches.open('share').then(function(cache) {
       return cache.addAll([
         '/',
-        '/upload-data?order=desc&offset=0&limit=10',
         '/login',
         '/signup',
-        '/gallery',
-        '/account',
-        '/user/forgot-password',
-        '/user/resend-activation',
-        '/admin',
-        '/admin/uploads',
-        '/admin/gallery',
-        '/admin/users',
-        '/admin/settings',
         '/bower_components/jquery/dist/jquery.min.js',
         '/bower_components/moment/min/moment.min.js',
         '/bower_components/font-awsome/css/all.min.css',
-        '/bower_components/font-awsome/webfonts/fa-brands-400.ttf',        '/bower_components/font-awsome/webfonts/fa-brands-400.ttf',
-        '/bower_components/font-awsome/webfonts/fa-brands-400.woff'        '/bower_components/font-awsome/webfonts/fa-brands-400.woff',,
-        '/bower_components/font-awsome/webfonts/fa-brands-400.woff2        '/bower_components/font-awsome/webfonts/fa-brands-400.woff2',',
+        '/bower_components/font-awsome/webfonts/fa-regular-400.ttf',
+        '/bower_components/font-awsome/webfonts/fa-regular-400.woff',
+        '/bower_components/font-awsome/webfonts/fa-regular-400.woff2',
+        '/bower_components/font-awsome/webfonts/fa-brands-400.ttf',
+        '/bower_components/font-awsome/webfonts/fa-brands-400.woff',
+        '/bower_components/font-awsome/webfonts/fa-brands-400.woff2',
+        '/bower_components/font-awsome/webfonts/fa-solid-900.ttf',
+        '/bower_components/font-awsome/webfonts/fa-solid-900.woff',
+        '/bower_components/font-awsome/webfonts/fa-solid-900.woff2',
         '/bower_components/bootstrap/dist/css/bootstrap.min.css',
         '/bower_components/bootstrap4-toggle/css/bootstrap4-toggle.min.css',
         '/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css',
@@ -41,8 +37,6 @@ self.addEventListener('install', function(e) {
   );
 });
 self.addEventListener('fetch', function(event) {
-  console.log(event.request.url);
-
   event.respondWith(
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
