@@ -11,7 +11,7 @@
           </strong>
           <% if(credit) { %>
           <span class="display-hidden">
-            - Github Repo <a href="https://github.com/MrDemonWolf/share/" target="_blank" rel="nofollow"><i
+            - Github Repo <a href="https://github.com/MrDemonWolf/share/" target="_blank" rel="noopener"><i
                 class="fab fa-github"></i></a></span>
           <% } %>
         </p>
@@ -36,5 +36,12 @@
 <script src="/bower_components/conditionize2.js/jquery.conditionize2.min.js"></script>
 <!-- Custom -->
 <script src="/assets/js/main.js"></script>
+<script>
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+  .register('/sw.js')
+  .then(function() { console.log("Service Worker Registered"); });
+}
+</script>
 </body>
 </html>
