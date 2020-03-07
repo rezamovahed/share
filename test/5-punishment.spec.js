@@ -62,4 +62,18 @@ describe('Punishment', () => {
         });
     });
   });
+  // describe('GET / (With user that is banned)', () => {
+  // it('it should has status code 401', done => {
+  // supertest(app)
+  // .get('/')
+  // .set('Cookie', userCookie)
+  // .expect(401)
+  // .end((err, res) => {
+  // if (err) {
+  // return done(err);
+  // }
+  // done();
+  // });
+  // });
+  // });
 });

@@ -3,6 +3,7 @@ const supertest = require('supertest');
 const app = require('../src/index');
 
 let adminCookie = null;
+let ownerCookie = null;
 
 describe('LOGGED IN (admin)', () => {
   describe('LOGIN as admin.', () => {
@@ -130,6 +131,40 @@ describe('LOGGED IN (admin)', () => {
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
+          done();
+        });
+    });
+  });
+
+  describe('PUT /admin/users/ban/slug', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .put('/admin/users/ban/usermrdemonwolfgithubio')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+  describe('LOGIN as owner.', () => {
+    it('it should has status code 200', done => {
+      supertest
+        .agent(app)
+        .post('/login/')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          email: 'owner@mrdemonwolf.github.io',
+          password: 'owner@mrdemonwolf.github.io'
+        })
+        .expect(302)
+        .expect('Location', '/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          ownerCookie = res.header['set-cookie'];
           done();
         });
     });
