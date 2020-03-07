@@ -51,7 +51,7 @@ describe('Remove punishments', () => {
   describe('PUT /admin/users/unban/slug', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .put('/admin/users/unban/usermrdemonwolfgithubio')
+        .put('/admin/users/unban/aexampleuser')
         .set('Cookie', adminCookie)
         .expect(200)
         .end((err, res) => {
