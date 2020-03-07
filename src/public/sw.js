@@ -4,8 +4,6 @@ self.addEventListener('install', function(event) {
     caches.open('cacheName').then(function(cache) {
       return cache.addAll([
         '/',
-        '/login',
-        '/signup',
         '/bower_components/jquery/dist/jquery.min.js',
         '/bower_components/moment/min/moment.min.js',
         '/bower_components/font-awsome/css/all.min.css',
