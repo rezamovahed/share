@@ -52,6 +52,7 @@
                   'value',
                   '<%- currentUser.email.substring(0,3) %>' + '******'
                 );
+                $('#emailLabel').html(`Email (Can't be updated as streamer mode is enabled )`)
                 $('#email').attr('disabled', true);
                 <%if (currentUser.newEmail) {%>
                   $('#newEmail').html(
@@ -77,6 +78,7 @@
               $('#streamerModeBanner').hide();
               // Email
               $('#email').attr('value', '<%- currentUser.email %>');
+              $('#emailLabel').html("Email")
               $('#email').attr('disabled', false);
                <% if (currentUser.newEmail) {%>
                 $('#newEmail').html('<%- currentUser.newEmail %>');
