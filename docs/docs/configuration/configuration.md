@@ -2,6 +2,7 @@
 layout: default
 title: Configuration
 nav_order: 2
+has_children: true
 ---
 
 # Configuration
@@ -80,6 +81,7 @@ CREDIT=false
 ```
 
 ## Sendgrid
+[Sendgrid Help]({{ site.baseurl }}{% link docs/configuration/sendgrid.md %})
 
 ```yaml
 # Set the API key for sendgrid
@@ -89,6 +91,7 @@ SENDGRID_API_KEY=sg......
 ```
 
 ## Sendgrid Domain
+[Sendgrid Help]({{ site.baseurl }}{% link docs/configuration/sendgrid.md %})
 
 ```yaml
 # Set the domain sendgrid will send emails from.
@@ -150,13 +153,3 @@ IP=127.0.0.1
 # Sets the PORT that the site/app will run on.
 PORT=8080
 ```
-
-## ShareX Config
-Here's the sharex config templates for you
-
-[ShareX Config](https://github.com/MrDemonWolf/share-mrdemonwolf-me/blob/master/sharex.sxcu)
-
-Just edit the domain to fit your needs and input into sharex you can read more [here](https://getsharex.com/docs/custom-uploader)
-After you done that you will have to get your API key from your account and paste it with Bear ${token} <-- the token
-
-Now what you want to do is go to /admin if the email matchs the one in the *.env* then it will change your user to a admin
