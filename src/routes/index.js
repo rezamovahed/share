@@ -49,6 +49,11 @@ router.get('/', async (req, res) => {
   });
 });
 
+router.get('/sw.js', (req, res) => {
+  res.set('Content-Type', 'application/javascript');
+  res.send('sw', { siteURL: process.env.FULL_DOMAIN });
+});
+
 router.get('/manifest.json', (req, res) => {
   res.json({
     name: process.env.TITLE,
@@ -56,7 +61,7 @@ router.get('/manifest.json', (req, res) => {
     start_url: process.env.FULL_DOMAIN,
     display: 'standalone',
     background_color: '#fff',
-    theme_color: "blue",
+    theme_color: 'blue',
     description: process.env.DESC,
     serviceworker: {
       src: './sw.js'

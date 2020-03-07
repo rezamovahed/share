@@ -21,6 +21,7 @@
     "lint": "eslint . --ext .js --fix",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write",
     "bower": "bower",
+    "docs": "cd docs; bundle exec jekyll serve",
     "test": "NODE_ENV=test mocha --exit"
   },
   "repository": {

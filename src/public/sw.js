@@ -1,6 +1,7 @@
-self.addEventListener('install', function(e) {
-  e.waitUntil(
-    caches.open('share').then(function(cache) {
+var cacheName = 'share';
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open('cacheName').then(function(cache) {
       return cache.addAll([
         '/',
         '/login',
@@ -35,11 +36,37 @@ self.addEventListener('install', function(e) {
       ]);
     })
   );
+  console.log('Service Worker Installed');
 });
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
+self.addEventListener('activate', function(e) {
+  console.log('[Service Worker] Activate');
+  e.waitUntil(
+    caches.keys().then(function(keyList) {
+      return Promise.all(
+        keyList.map(function(key) {
+          if (key != cacheName) {
+            console.log('Removing old cache', key);
+            return caches.delete(key);
+          }
+        })
+      );
     })
   );
+});
+self.addEventListener('fetch', function(event) {
+  if (navigator.onLine) {
+    console.log('[Service Worker] Fetch', event.request.url);
+    caches.open(cacheName).then(function(cache) {
+      return fetch(event.request).then(function(response) {
+        cache.put(event.request, response.clone());
+        return response;
+      });
+    });
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(function(response) {
+        return response || fetch(event.request);
+      })
+    );
+  }
 });
