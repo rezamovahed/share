@@ -39,7 +39,7 @@ $ cp .env.example .env
 
 ### Configure Share
 
-- [See configuration options]({{ site.baseurl }}{% link docs/configuration.md %})
+- [See configuration options]({{ site.baseurl }}{% link docs/configuration/configuration.md %})
 
 
 ## Changelog
