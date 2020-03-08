@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {
     // If user is banned.
     if (req.user.isBanned) {
-      return res.render('landing/index', {
+      return res.status('401').render('landing/index', {
         pageTitle: 'Your currently banned',
         pageDesc: process.env.DESC,
         pageName: 'uploads'

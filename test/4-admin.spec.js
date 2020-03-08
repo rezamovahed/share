@@ -3,6 +3,7 @@ const supertest = require('supertest');
 const app = require('../src/index');
 
 let adminCookie = null;
+let ownerCookie = null;
 
 describe('LOGGED IN (admin)', () => {
   describe('LOGIN as admin.', () => {
@@ -130,6 +131,85 @@ describe('LOGGED IN (admin)', () => {
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
+          done();
+        });
+    });
+  });
+
+  describe('PUT /admin/users/edit/slug', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .put('/admin/users/edit/usermrdemonwolfgithubio')
+        .set('Cookie', adminCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          username: 'aexampleuser',
+          email: 'user@mrdemonwolf.github.io'
+        })
+        .expect(302)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+
+  describe('PUT /admin/users/edit/slug/streamer-mode/true (Enable)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .put('/admin/users/edit/usermrdemonwolfgithubio/streamer-mode/true')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+
+  describe('PUT /admin/users/edit/slug/streamer-mode/false (Disable)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .put('/admin/users/edit/usermrdemonwolfgithubio/streamer-mode/false')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+
+  describe('PUT /admin/users/ban/slug', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .put('/admin/users/ban/aexampleuser')
+        .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+
+  describe('LOGIN as owner.', () => {
+    it('it should has status code 200', done => {
+      supertest
+        .agent(app)
+        .post('/login/')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          email: 'owner@mrdemonwolf.github.io',
+          password: 'owner@mrdemonwolf.github.io'
+        })
+        .expect(302)
+        .expect('Location', '/')
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          ownerCookie = res.header['set-cookie'];
           done();
         });
     });
