@@ -129,10 +129,12 @@ router.get('/users/edit/:slug', async (req, res) => {
  * @access Private
  */
 router.get('/settings', isOwner, async (req, res) => {
-  res.render('admin/comingsoon', {
+  const users = await User.find({ role: { $ne: 'owner' } });
+  res.render('admin/settings/index', {
     pageTitle: 'Settings',
     pageDesc: process.env.DESC,
-    pageName: 'adminSettings'
+    pageName: 'adminSettings',
+    users
   });
 });
 

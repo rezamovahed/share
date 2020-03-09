@@ -52,19 +52,21 @@ self.addEventListener('activate', function(e) {
   );
 });
 self.addEventListener('fetch', function(event) {
-  if (navigator.onLine) {
-    console.log('[Service Worker] Fetch', event.request.url);
-    caches.open(cacheName).then(function(cache) {
-      return fetch(event.request).then(function(response) {
-        cache.put(event.request, response.clone());
-        return response;
+  if (event.request.method === 'GET') {
+    if (navigator.onLine) {
+      console.log('[Service Worker] Fetch', event.request.url);
+      caches.open(cacheName).then(function(cache) {
+        return fetch(event.request).then(function(response) {
+          cache.put(event.request, response.clone());
+          return response;
+        });
       });
-    });
-  } else {
-    event.respondWith(
-      caches.match(event.request).then(function(response) {
-        return response || fetch(event.request);
-      })
-    );
+    } else {
+      event.respondWith(
+        caches.match(event.request).then(function(response) {
+          return response || fetch(event.request);
+        })
+      );
+    }
   }
 });
