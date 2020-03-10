@@ -9,7 +9,7 @@ nav_order: 10
 
 __This is a fair big of a update but this is a list "all" changes that have been made__
 
-* Made a lot of the code cleaner and easier to mange for developers
+* Made a lot of the code cleaner and easier to manage for developers
 <!-- * Added last password change IP and date. -->
 <!-- * Added last activity date.-->
 <!-- * Added last login date. -->
@@ -17,25 +17,25 @@ __This is a fair big of a update but this is a list "all" changes that have been
 * Switched to bower for frameworks (Must npm i again).
 * Added transfer ownership.
 * Added MFA.
-* Added a veirfy checkmark.
+* Added a verify checkmark.
 * Redesigned and redo of the upload,token and user lising pages.
 * Added Tests.
 * Removed avatars.
 * Added new docs.
-* Switched to sendgrid offical mailer
+* Switched to sendgrid official mailer
 * Changed from csurf to lusca.
 * Changed the routes.
-* Changed from passport-local-monngoose to passport-local.
+* Changed from passport-local-mongoose to passport-local.
 * Integrated Docker both for development and production modes.  Thanks to @exia for adding this.
 * Adding a better way to handle the emails.  As there is so many templates that are just reused.  For easier reuse.
 * Added Streamer mode.  It will stop leaks for both the user and if they have admin others as well.
-* Now you can make yoursel owner  by going to /owner.  If the email matchs the one in the env then it will change the account to owner (This is safe as the email has to be verifyed anyways which makes sure its yours.).
+* Now you can make yourself owner  by going to /owner.  If the email matches the one in the env then it will change the account to owner (This is safe as the email has to be verified anyways which makes sure its yours.).
 * API route has been changed file and image route to just be as one.
 * All upload lists have been reworked to be faster.
 * You can now limit the size of each upload by default its 100M.
 * Fixed dashboard so it will add a 's' when there is more the one user or upload.
 * Added suspend users 24 hours , a week, and even a month. With unsuspend.
-* Added ban and unban users. Comfirm the ban of a user has been added.
+* Added ban and unban users. Confirm the ban of a user has been added.
 * Changed text from 'Create user' to 'Create new user' in admin users.
 * Fixed the link in the admin nav gallery.  Now it links to the gallery.
 * Fixed the navbar in admin gallery as it was linking the wrong one.
