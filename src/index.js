@@ -469,6 +469,13 @@ app.delete(
   adminConroller.deleteUser
 );
 
+app.post(
+  '/admin/settings/ownership',
+  isAdmin,
+  // deleteUser,
+  adminConroller.postOwnership
+);
+
 /**
  * API routes.
  * This is the only one that will be split up in

@@ -44,9 +44,9 @@
             Once the transfer is complate you will be converted to
             <strong>admin</strong> and the user selected will be owner. Be sure you want to do this as the procedure is irreversible
           </p>
-          <form action="/admin/settings/transfer" method="POST">
+          <form action="/admin/settings/ownership" method="POST">
             <div class="form-group mt-2">
-            <select class="selectpicker" data-live-search="true" data-width="100%">
+            <select class="selectpicker" name="slug" data-live-search="true" data-width="100%">
               <% users.map(data=>{ %>
                   <option value="<%= data.slug %>"><%= data.username %></option>
               <% }) %>
