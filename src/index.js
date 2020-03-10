@@ -248,7 +248,7 @@ const accountRenameTokenVaildation = require('./validation/tokens/rename-token')
 const ResendActivationEmailVaildation = require('./validation/resend-activation');
 const userUpdateVaildation = require('./validation/admin/userUpdate');
 const suspendUserVaildation = require('./validation/admin/suspendUser');
-
+const postOwnershipVaildation = require('./validation/admin/transferOwnership');
 /**
  * Primary app routes.
  */
@@ -471,8 +471,8 @@ app.delete(
 
 app.post(
   '/admin/settings/ownership',
-  isAdmin,
-  // deleteUser,
+  isOwner,
+  postOwnershipVaildation,
   adminConroller.postOwnership
 );
 
