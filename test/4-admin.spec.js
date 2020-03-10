@@ -184,8 +184,26 @@ describe('LOGGED IN (admin)', () => {
   describe('PUT /admin/users/ban/slug', () => {
     it('it should has status code 200', done => {
       supertest(app)
-        .put('/admin/users/ban/aexampleuser')
+        .put('/admin/users/ban/bannedmrdemonwolfgithubio')
         .set('Cookie', adminCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+  describe('PUT /admin/users/suspend/slug', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .put('/admin/users/suspend/suspendedmrdemonwolfgithubio')
+        .set('Cookie', adminCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          reason:
+            'For breaking the rules you have been issued a suspension from our site.',
+          expire: 1
+        })
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
