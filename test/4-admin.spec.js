@@ -144,7 +144,8 @@ describe('LOGGED IN (admin)', () => {
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({
           username: 'aexampleuser',
-          email: 'user@mrdemonwolf.github.io'
+          email: 'user@mrdemonwolf.github.io',
+          role: 'user'
         })
         .expect(302)
         .end((err, res) => {
