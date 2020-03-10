@@ -659,6 +659,32 @@ exports.deleteUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Transfer Ownership Controller - Allows owner to move ownership.
+ */
+exports.postOwnership = async (req, res) => {
+  try {
+    const { slug } = req.body;
+    const newOwner = await User.findOne({ slug });
+    const oldOwner = await User.findById(req.user.id);
+
+    newOwner.role = 'owner';
+    oldOwner.role = 'admin';
+
+    await newOwner.save();
+    await oldOwner.save();
+    req.flash(
+      'success',
+      `Ownership of the app has been transfered to ${newOwner.username}`
+    );
+    res.redirect('/admin');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
 /**
  * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
  */

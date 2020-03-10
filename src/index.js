@@ -248,7 +248,7 @@ const accountRenameTokenVaildation = require('./validation/tokens/rename-token')
 const ResendActivationEmailVaildation = require('./validation/resend-activation');
 const userUpdateVaildation = require('./validation/admin/userUpdate');
 const suspendUserVaildation = require('./validation/admin/suspendUser');
-
+const postOwnershipVaildation = require('./validation/admin/transferOwnership');
 /**
  * Primary app routes.
  */
@@ -409,17 +409,9 @@ app.delete(
 app.use('/config', isLoggedin, isBanned, configRoutes);
 
 app.use('/admin', isAdmin, adminRoutes);
-app.delete(
-  '/admin/all/uploads',
-  isAdmin,
-  adminConroller.deleteAllUploads
-);
+app.delete('/admin/all/uploads', isAdmin, adminConroller.deleteAllUploads);
 // app.delete('/admin/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
-app.get(
-  '/admin/uploads-data',
-  isAdmin,
-  adminConroller.getUploadListData
-);
+app.get('/admin/uploads-data', isAdmin, adminConroller.getUploadListData);
 app.delete(
   '/admin/uploads/:uploadedFile',
   isAdmin,
@@ -430,11 +422,7 @@ app.delete(
   isAdmin,
   adminConroller.deleteGallerySingleUpload
 );
-app.get(
-  '/admin/users-data',
-  isAdmin,
-  adminConroller.getUserListData
-);
+app.get('/admin/users-data', isAdmin, adminConroller.getUserListData);
 app.put(
   '/admin/users/edit/:slug',
   isAdmin,
@@ -459,18 +447,8 @@ app.put(
   putEmailVerified,
   adminConroller.putEmailVerified
 );
-app.put(
-  '/admin/users/ban/:slug',
-  isAdmin,
-  putBan,
-  adminConroller.putBan
-);
-app.put(
-  '/admin/users/unban/:slug',
-  isAdmin,
-  putUnban,
-  adminConroller.putUnban
-);
+app.put('/admin/users/ban/:slug', isAdmin, putBan, adminConroller.putBan);
+app.put('/admin/users/unban/:slug', isAdmin, putUnban, adminConroller.putUnban);
 app.put(
   '/admin/users/suspend/:slug',
   isAdmin,
@@ -491,6 +469,12 @@ app.delete(
   adminConroller.deleteUser
 );
 
+app.post(
+  '/admin/settings/ownership',
+  isOwner,
+  postOwnershipVaildation,
+  adminConroller.postOwnership
+);
 
 /**
  * API routes.
@@ -539,7 +523,7 @@ if (process.env.NODE_ENV !== 'test') {
       // Log infomation after everything is started.
       consola.log('----------------------------------------');
       consola.info(`Environment: ${app.get('env')}`);
-      consola.info(`Base URL: http://localhost:${app.get('port')}`);
+      consola.info(`App URL: http://localhost:${app.get('port')}`);
       consola.log('----------------------------------------');
     });
   });
