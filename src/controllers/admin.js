@@ -659,6 +659,12 @@ exports.deleteUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Transfer Ownership Controller - Allows owner to move ownership.
+ */
+exports.postOwnership = async (req, res) => {};
+
 /**
  * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
  */
