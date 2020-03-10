@@ -227,7 +227,9 @@ const isAccountActivationTokenVaild = require('./middleware/isAccountActivationT
 const isEMailVerificationTokenVaild = require('./middleware/account/isEMailVerificationTokenVaild');
 const isMfa = require('./middleware/isMfa');
 const isBanned = require('./middleware/isBanned');
+const isSuspended = require('./middleware/isSuspended');
 const isBannedAPI = require('./middleware/api/isBanned');
+const isSuspendedAPI = require('./middleware/api/isSuspended');
 const deleteUserMFA = require('./middleware/admin/deleteUserMFA');
 const putBan = require('./middleware/admin/putBan');
 const putUnban = require('./middleware/admin/putUnban');
@@ -276,11 +278,15 @@ app.get(
   '/upload-data',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
+
   indexController.getUploadListData
 );
 app.delete(
   '/upload-data/:uploadedFile',
   isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
   indexController.deleteSingleUpload
 );
 app.use(authRoutes);
@@ -325,13 +331,26 @@ app.post(
   ResendActivationEmailVaildation,
   userController.postResendActivationEmail
 );
-app.use('/account', isLoggedin, isBanned, accountRoutes);
-app.put('/account', isLoggedin, isBanned, accountController.putAccount);
-app.delete('/account', isLoggedin, isBanned, accountController.deleteAccount);
+app.use('/account', isLoggedin, isBanned, isSuspended, accountRoutes);
+app.put(
+  '/account',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  accountController.putAccount
+);
+app.delete(
+  '/account',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  accountController.deleteAccount
+);
 app.get(
   '/account/email-verify/:token',
   isLoggedin,
   isBanned,
+  isSuspended,
   isEMailVerificationTokenVaild,
   accountController.emailVeirfy
 );
@@ -339,37 +358,43 @@ app.get(
   '/account/resend/email-verify',
   isLoggedin,
   isBanned,
+  isSuspended,
   accountController.resendEmailVeirfy
 );
 app.put(
   '/account/streamer-mode/:boolean',
   isLoggedin,
+  isBanned,
+  isSuspended,
   accountController.putStreamerMode
 );
 app.post(
   '/account/mfa/setup',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   accountController.postMfaSetup
 );
 app.post(
   '/account/mfa/setup/verify',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   accountController.postMfaSetupVerify
 );
 app.delete(
   '/account/mfa',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   accountController.deleteMFA
 );
-
-app.use('/tokens', isLoggedin, isBanned, tokensRoutes);
+app.use('/tokens', isLoggedin, isBanned, isSuspended, tokensRoutes);
 app.get(
   '/tokens-data',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   tokensConroller.getTokenListData
 );
 
@@ -378,6 +403,7 @@ app.put(
   '/tokens/:token_id',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   accountRenameTokenVaildation,
   tokensConroller.putToken
 );
@@ -385,28 +411,32 @@ app.delete(
   '/tokens/:token_id',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   tokensConroller.deleteToken
 );
 app.delete(
   '/all/uploads',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   indexController.deleteAllUploads
 );
 app.delete(
   '/all/tokens',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   tokensConroller.deleteAllTokens
 );
-app.use('/gallery', isLoggedin, isBanned, galleryRoutes);
+app.use('/gallery', isLoggedin, isBanned, isSuspended, galleryRoutes);
 app.delete(
   '/gallery/:uploadedFile',
   isLoggedin,
   isBannedAPI,
+  isSuspendedAPI,
   galleryConroller.deleteSingleUpload
 );
-app.use('/config', isLoggedin, isBanned, configRoutes);
+app.use('/config', isLoggedin, isBanned, isSuspended, configRoutes);
 
 app.use('/admin', isAdmin, adminRoutes);
 app.delete('/admin/all/uploads', isAdmin, adminConroller.deleteAllUploads);

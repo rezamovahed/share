@@ -63,6 +63,60 @@ describe('Auth Routes', () => {
     });
   });
 
+  describe('POST /signup to create banned', () => {
+    it('it should return status 302', done => {
+      supertest(app)
+        .post('/signup')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          username: 'banned@mrdemonwolf.github.io',
+          email: 'banned@mrdemonwolf.github.io',
+          password: 'banned@mrdemonwolf.github.io'
+        })
+        .expect(302)
+        .end(async (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          const user = await User.findOne({
+            email: 'banned@mrdemonwolf.github.io'
+          });
+          user.emailVerified = true;
+          user.emailVerificationToken = undefined;
+          user.emailVerificationTokenExpire = undefined;
+          await user.save();
+          done();
+        });
+    });
+  });
+
+  describe('POST /signup to create suspended', () => {
+    it('it should return status 302', done => {
+      supertest(app)
+        .post('/signup')
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          username: 'suspended@mrdemonwolf.github.io',
+          email: 'suspended@mrdemonwolf.github.io',
+          password: 'suspended@mrdemonwolf.github.io'
+        })
+        .expect(302)
+        .end(async (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          const user = await User.findOne({
+            email: 'suspended@mrdemonwolf.github.io'
+          });
+          user.emailVerified = true;
+          user.emailVerificationToken = undefined;
+          user.emailVerificationTokenExpire = undefined;
+          await user.save();
+          done();
+        });
+    });
+  });
+
   describe('POST /signup (admin)', () => {
     it('it should return status 302', done => {
       supertest(app)

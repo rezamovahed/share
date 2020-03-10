@@ -29,11 +29,21 @@ router.get('/', async (req, res) => {
         pageName: 'uploads'
       });
     }
+    // If user is suspended
+    if (req.user.isSuspended) {
+      return res.status('401').render('landing/index', {
+        pageTitle: 'Your currently suspended',
+        pageDesc: process.env.DESC,
+        pageName: 'uploads'
+      });
+    }
     // Find user uploads
     // Per page limit.
     const limit = 10;
 
-    const uploads = await Upload.find({ uploader: req.user.id })
+    const uploads = await Upload.find({
+      uploader: req.user.id
+    })
       .limit(limit)
       .sort({ createdAt: -1 });
     return res.render('landing/index', {

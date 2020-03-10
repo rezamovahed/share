@@ -564,6 +564,7 @@ exports.putSuspend = async (req, res) => {
       {
         isSuspended: true,
         isBanned: false,
+        role: 'user',
         suspendedExpire,
         suspendedReason: reason
       },
