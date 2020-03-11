@@ -15,7 +15,7 @@ Simple yet advanced **NodeJS**, **MongoDB** and **Express** based uploader.  All
 
 ---
 
-![GitHub release](https://img.shields.io/github/release/mrdemonwolf/share-mrdemonwolf-me.svg?style=for-the-badge)
+![GitHub release](https://img.shields.io/github/release/mrdemonwolf/sharesvg?style=for-the-badge)
 [![GitHub last commit](https://img.shields.io/github/last-commit/mrdemonwolf/share.svg?logo=git&style=for-the-badge)](https://github.com/mrdemonwolf/share)
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=for-the-badge&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 ![Travis (.com)](https://img.shields.io/travis/com/mrdemonwolf/share?style=for-the-badge)
@@ -46,7 +46,7 @@ $ cp .env.example .env
 Check the changelogs [here](/CHANGELOG.md)
 
 ## Issues
-Have a bug or an issue with this app? [Open a new issue](https://github.com/MrDemonWolf/share-mrdemonwolf-me/issues) here on GitHub.
+Have a bug or an issue with this app? [Open a new issue](https://github.com/MrDemonWolf/share/issues) here on GitHub.
 
 ## Contributing
 Want to contribute? Check out our [Code of Conduct]() and [Contributing]() docs. Please check issues [here](https://github.com/MrDemonWolf/share/issues)
