@@ -253,7 +253,9 @@ const putUnsuspend = require('./middleware/admin/putUnsuspend');
 const putEditUser = require('./middleware/admin/putEditUser');
 const deleteUser = require('./middleware/admin/deleteUser');
 const postUploadLogo = require('./middleware/admin/postUploadLogo');
-const deleteUploadLogo = require('./middleware/admin/deleteUploadLogo')
+const deleteUploadLogo = require('./middleware/admin/deleteUploadLogo');
+const postUploadFavicon = require('./middleware/admin/postUploadFavicon');
+const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
 
 /**
  * Load vaildation middleware
@@ -536,6 +538,21 @@ app.delete(
   deleteUploadLogo,
   adminConroller.deleteUploadLogo
 );
+
+app.post(
+  '/admin/settings/favicon',
+  isOwner,
+  postUploadFavicon,
+  adminConroller.postUploadFavicon
+);
+
+app.delete(
+  '/admin/settings/favicon',
+  isOwner,
+  deleteUploadFavicon,
+  adminConroller.deleteUploadFavicon
+);
+
 /**
  * API routes.
  * This is the only one that will be split up in

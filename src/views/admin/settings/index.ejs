@@ -10,8 +10,8 @@
     <div class="row pt-0">
       <div class="col-6">
         <div class="info header mb-2">Logo</div>
-      <input id="logo-upload" type="file" name ="logo" class="file" data-show-upload-stats="false" data-theme="fas" data-show-remove="false" data-show-preview="false" data-el-error-container="#errorBlock" data-show-cancel="false" data-upload-url="/admin/settings/logo" data-upload-extra-data='{ "_csrf": "<%= _csrf %>"}' data-allowed-file-types='["image"]' data-allowed-file-extensions='["png"]' data-delete-url="/admin/settings/logo?_method=DELETE">
-      <div id="errorBlock" class="help-block"></div>
+      <input id="logo-upload" type="file" name ="logo" class="file" data-show-upload-stats="false" data-theme="fas" data-show-remove="false" data-show-preview="false" data-el-error-container="#logoError" data-show-cancel="false" data-upload-url="/admin/settings/logo" data-upload-extra-data='{ "_csrf": "<%= _csrf %>"}' data-allowed-file-types='["image"]' data-allowed-file-extensions='["png"]'>
+      <div id="logoError" class="help-block"></div>
        <button
        id="revert-logo"
     type="button"
@@ -23,9 +23,10 @@
     </div>
     <div class="col-6">
       <div class="info header mb-2">Favicon</div>
-      <input id="favicon-upload" type="file" name ="logo" class="file" data-show-upload-stats="false" data-theme="fas" data-show-remove="false" data-show-preview="false" data-el-error-container="#errorBlock" data-show-cancel="false" data-upload-url="/admin/settings/logo" data-upload-extra-data='{ "_csrf": "<%= _csrf %>"}' data-allowed-file-types='["image"]' data-allowed-file-extensions='["png"]' data-delete-url="/admin/settings/logo?_method=DELETE">
+      <input id="favicon-upload" type="file" name ="favicon" class="file" data-show-upload-stats="false" data-theme="fas" data-show-remove="false" data-show-preview="false" data-el-error-container="#faviconError" data-show-cancel="false" data-upload-url="/admin/settings/favicon" data-upload-extra-data='{ "_csrf": "<%= _csrf %>"}' data-allowed-file-types='["image"]' data-allowed-file-extensions='["ico"]'>
+      <div id="faviconError" class="help-block"></div>
       <button
-       id="revert-logo"
+       id="revert-favicon"
     type="button"
     class="btn btn-primary mt-3 mb-2"
     style="color: #ffff;"
@@ -110,6 +111,27 @@
               $('#success').show();
               $('#success').html(response.message);
               $('.navbar-brand img').attr('src','/assets/images/logo.png')
+            },
+            error: function(response) {
+              console.log(response)
+              $('#error').show();
+              $('#error').html(response.responseJSON.message);
+            }
+          })
+        })
+        $('#favicon-upload').on('fileuploaded', function(event, previewId, index, fileId) {
+          $('#favicon-upload').fileinput('reset');
+           $('link[rel="shortcut icon"]').attr('href', '/assets/images/custom/favicon.ico')
+        });
+        $('#revert-favicon').on('click',function(e){
+          $.ajax({
+            url: '/admin/settings/favicon?_method=DELETE',
+            type: 'POST',
+            data: { _csrf: '<%= _csrf %>' },
+            success: function(response) {
+              $('#success').show();
+              $('#success').html(response.message);
+             $('link[rel="shortcut icon"]').attr('href', '/favicon.ico')
             },
             error: function(response) {
               console.log(response)

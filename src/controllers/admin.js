@@ -715,7 +715,7 @@ exports.postUploadLogo = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Server error', status: 500 });
   }
 };
 
@@ -731,6 +731,61 @@ exports.deleteUploadLogo = async (req, res) => {
     await fs.remove(customLogo);
     res.json({
       message: 'Logo has been reverted to default.',
+      status: 200
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error', status: 500 });
+  }
+};
+
+/**
+ * Upload Favicon Controller - Allows owner upload a custom logo for the app.
+ */
+exports.postUploadFavicon = async (req, res) => {
+  try {
+    const { favicon } = req.files;
+    const filePath = path.join(
+      __dirname,
+      '../public/assets/images/custom/favicon.ico'
+    );
+
+    await favicon.mv(filePath);
+
+    res.json({
+      success:
+        'Favicon has been uploaded.  Please allow few moments for it to update on the site.',
+      initialPreview: [
+        // initial preview thumbnails for server uploaded files if you want it displayed immediately after upload
+      ],
+      initialPreviewConfig: [
+        // configuration for each item in initial preview
+      ],
+      initialPreviewThumbTags: [
+        // initial preview thumbnail tags configuration that will be replaced dynamically while rendering
+      ],
+      append: true // whether to append content to the initial preview (or set false to overwrite)
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error', status: 500 });
+  }
+};
+
+/**
+ * Delete Favicon Controller - Allows owner revert/delete custom favicon for the app.
+ */
+exports.deleteUploadFavicon = async (req, res) => {
+  try {
+    const customFavicon = path.join(
+      __dirname,
+      '../public/assets/images/custom/favicon.ico'
+    );
+
+    await fs.remove(customFavicon);
+
+    res.json({
+      message: 'Favicon has been reverted to default.',
       status: 200
     });
   } catch (err) {
