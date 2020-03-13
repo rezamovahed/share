@@ -1,16 +1,44 @@
 <%- include ('../../partials/header') %> <%- include
 ('../../partials/admin/navbar') %>
 
-<div class="container mt-3 mb-3">
-  <div class="mb-2">
+<div class="container w-50 mt-3 mb-3 admin user">
+  <div class="alert alert-success collapse alert-timeout" role="alert" id="success"></div>
+  <div class="alert alert-danger collapse alert-timeout" role="alert" id="error"></div>
     <%- include ('../../partials/alerts/error') %> <%- include
     ('../../partials/alerts/success') %>
-  </div>
-</div>
-<div class="container">
-  <button
+    <div class="header mb-2">Branding</div>
+    <div class="row pt-0">
+      <div class="col-6">
+        <div class="info header mb-2">Logo</div>
+      <input id="logo-upload" type="file" name ="logo" class="file" data-show-upload-stats="false" data-theme="fas" data-show-remove="false" data-show-preview="false" data-el-error-container="#logoError" data-show-cancel="false" data-upload-url="/admin/settings/logo" data-upload-extra-data='{ "_csrf": "<%= _csrf %>"}' data-allowed-file-types='["image"]' data-allowed-file-extensions='["png"]'>
+      <div id="logoError" class="help-block"></div>
+       <button
+       id="revert-logo"
     type="button"
-    class="btn btn-primary"
+    class="btn btn-primary mt-3 mb-2"
+    style="color: #ffff;"
+  >
+    Revert to default
+  </button>
+    </div>
+    <div class="col-6">
+      <div class="info header mb-2">Favicon</div>
+      <input id="favicon-upload" type="file" name ="favicon" class="file" data-show-upload-stats="false" data-theme="fas" data-show-remove="false" data-show-preview="false" data-el-error-container="#faviconError" data-show-cancel="false" data-upload-url="/admin/settings/favicon" data-upload-extra-data='{ "_csrf": "<%= _csrf %>"}' data-allowed-file-types='["image"]' data-allowed-file-extensions='["ico"]'>
+      <div id="faviconError" class="help-block"></div>
+      <button
+       id="revert-favicon"
+    type="button"
+    class="btn btn-primary mt-3 mb-2"
+    style="color: #ffff;"
+  >
+    Revert to default
+  </button>
+    </div>
+  </div>
+  <hr>
+ <button
+    type="button"
+    class="btn btn-primary mt-3 mb-2"
     data-toggle="modal"
     data-target="#transfer-ownership"
     style="color: #ffff;"
@@ -64,8 +92,56 @@
           </form>
         </div>
       </div>
+      </div>
     </div>
-  </div>
 </div>
+</div>
+
+      <script>
+        $('#logo-upload').on('fileuploaded', function(event, previewId, index, fileId) {
+          $('#logo-upload').fileinput('reset');
+          $('.navbar-brand img').attr('src','/assets/images/custom/logo.png')
+        });
+        $('#revert-logo').on('click',function(e){
+          $.ajax({
+            url: '/admin/settings/logo?_method=DELETE',
+            type: 'POST',
+            data: { _csrf: '<%= _csrf %>' },
+            success: function(response) {
+              $('#success').show();
+              $('#success').html(response.message);
+              $('.navbar-brand img').attr('src','/assets/images/logo.png')
+            },
+            error: function(response) {
+              console.log(response)
+              $('#error').show();
+              $('#error').html(response.responseJSON.message);
+            }
+          })
+        })
+        $('#favicon-upload').on('fileuploaded', function(event, previewId, index, fileId) {
+          $('#favicon-upload').fileinput('reset');
+           $('link[rel="shortcut icon"]').attr('href', '/assets/images/custom/favicon.ico')
+        });
+        $('#revert-favicon').on('click',function(e){
+          $.ajax({
+            url: '/admin/settings/favicon?_method=DELETE',
+            type: 'POST',
+            data: { _csrf: '<%= _csrf %>' },
+            success: function(response) {
+              $('#success').show();
+              $('#success').html(response.message);
+             $('link[rel="shortcut icon"]').attr('href', '/favicon.ico')
+            },
+            error: function(response) {
+              console.log(response)
+              $('#error').show();
+              $('#error').html(response.responseJSON.message);
+            }
+          })
+        })
+
+
+     </script>
 
 <%- include ('../../partials/footer.ejs') %>
