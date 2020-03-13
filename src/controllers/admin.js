@@ -720,17 +720,22 @@ exports.postUploadLogo = async (req, res) => {
 };
 
 /**
- * Revert logo Controller - Allows owner revert logo for the app.
+ * Delete logo Controller - Allows owner revert/delete custom logo for the app.
  */
-exports.postRevertLogo = async (req, res) => {
+exports.deleteUploadLogo = async (req, res) => {
   try {
-    const filePath = path.join(
+    const customLogo = path.join(
       __dirname,
       '../public/assets/images/custom/logo.png'
     );
+    await fs.remove(customLogo);
+    res.json({
+      message: 'Logo has been reverted to default.',
+      status: 200
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Server error', status: 500 });
   }
 };
 

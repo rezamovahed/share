@@ -253,6 +253,7 @@ const putUnsuspend = require('./middleware/admin/putUnsuspend');
 const putEditUser = require('./middleware/admin/putEditUser');
 const deleteUser = require('./middleware/admin/deleteUser');
 const postUploadLogo = require('./middleware/admin/postUploadLogo');
+const deleteUploadLogo = require('./middleware/admin/deleteUploadLogo')
 
 /**
  * Load vaildation middleware
@@ -533,7 +534,7 @@ app.delete(
   '/admin/settings/logo',
   isOwner,
   deleteUploadLogo,
-  adminConroller.postUploadLogo
+  adminConroller.deleteUploadLogo
 );
 /**
  * API routes.
