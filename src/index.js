@@ -212,7 +212,6 @@ app.use(
  * CSRF
  */
 app.use((req, res, next) => {
-
   if (
     req.path === '/api' ||
     RegExp('/api/.*').test(req.path) ||
@@ -530,6 +529,12 @@ app.post(
   adminConroller.postUploadLogo
 );
 
+app.delete(
+  '/admin/settings/logo',
+  isOwner,
+  deleteUploadLogo,
+  adminConroller.postUploadLogo
+);
 /**
  * API routes.
  * This is the only one that will be split up in
