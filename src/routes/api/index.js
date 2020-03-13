@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
   res.json({
     endpoints: [
       { deprecated: false, removed: false, version: '1.0.0', path: '/api/v1' },
-      { deprecated: true, removed: true, version: '0.0.0', path: '/api/v0' }
+      { deprecated: true, removed: true, version: '0.0.0', path: '/api' }
     ],
     status: 200
   });

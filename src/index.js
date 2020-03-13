@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
+const fileUpload = require('express-fileupload');
 const MongoStore = require('connect-mongo')(session);
 const rateLimit = require('express-rate-limit');
 const path = require('path');
@@ -178,7 +179,7 @@ app.use(async (req, res, next) => {
   res.locals.error = req.flash('error');
 
   res.locals.logo = (await fs.existsSync(
-    `${__dirname}/public/assets/images/logo_custom.png`
+    `${__dirname}/public/assets/images/custom/logo.png`
   ))
     ? '/assets/images/custom/logo.png'
     : '/assets/images/logo.png';
@@ -192,11 +193,26 @@ app.use(async (req, res, next) => {
   res.locals.currentYear = new Date().getFullYear();
   next();
 });
+/**
+ * Express Fileupload
+ */
+
+app.use(
+  fileUpload({
+    safeFileNames: true,
+    preserveExtension: true,
+    limits: {
+      fileSize: process.env.UPLOAD_LIMIT || 100000000
+    },
+    abortOnLimit: true
+  })
+);
 
 /**
  * CSRF
  */
 app.use((req, res, next) => {
+
   if (
     req.path === '/api' ||
     RegExp('/api/.*').test(req.path) ||
@@ -237,6 +253,7 @@ const putSuspend = require('./middleware/admin/putSuspend');
 const putUnsuspend = require('./middleware/admin/putUnsuspend');
 const putEditUser = require('./middleware/admin/putEditUser');
 const deleteUser = require('./middleware/admin/deleteUser');
+const postUploadLogo = require('./middleware/admin/postUploadLogo');
 
 /**
  * Load vaildation middleware
@@ -504,6 +521,13 @@ app.post(
   isOwner,
   postOwnershipVaildation,
   adminConroller.postOwnership
+);
+
+app.post(
+  '/admin/settings/logo',
+  isOwner,
+  postUploadLogo,
+  adminConroller.postUploadLogo
 );
 
 /**

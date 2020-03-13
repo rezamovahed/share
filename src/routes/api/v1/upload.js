@@ -7,18 +7,6 @@ const alphabet =
 const generate = require('nanoid/generate');
 const fs = require('fs-extra');
 const path = require('path');
-const fileUpload = require('express-fileupload');
-
-router.use(
-  fileUpload({
-    safeFileNames: true,
-    preserveExtension: true,
-    limits: {
-      fileSize: process.env.UPLOAD_LIMIT || 100000000
-    },
-    abortOnLimit: true
-  })
-);
 
 /**
  * Load Middleware

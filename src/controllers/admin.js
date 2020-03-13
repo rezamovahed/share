@@ -687,6 +687,54 @@ exports.postOwnership = async (req, res) => {
 };
 
 /**
+ * Upload logo Controller - Allows owner upload a custom logo for the app.
+ */
+exports.postUploadLogo = async (req, res) => {
+  try {
+    const { logo } = req.files;
+    const filePath = path.join(
+      __dirname,
+      '../public/assets/images/custom/logo.png'
+    );
+
+    await logo.mv(filePath);
+
+    res.json({
+      success:
+        'Logo has been uploaded.  Please allow few moments for it to update on the site.',
+      initialPreview: [
+        // initial preview thumbnails for server uploaded files if you want it displayed immediately after upload
+      ],
+      initialPreviewConfig: [
+        // configuration for each item in initial preview
+      ],
+      initialPreviewThumbTags: [
+        // initial preview thumbnail tags configuration that will be replaced dynamically while rendering
+      ],
+      append: true // whether to append content to the initial preview (or set false to overwrite)
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Revert logo Controller - Allows owner revert logo for the app.
+ */
+exports.postRevertLogo = async (req, res) => {
+  try {
+    const filePath = path.join(
+      __dirname,
+      '../public/assets/images/custom/logo.png'
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
  * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
  */
 // exports.deleteAllToken = async (req, res) => {
