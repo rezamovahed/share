@@ -3,12 +3,12 @@ const fs = require('fs-extra');
 
 module.exports = async (req, res, next) => {
   try {
-    const customLogo = await fs.existsSync(
-      path.join(__dirname, '../../public/assets/images/custom/logo.png')
+    const customFavicon = await fs.existsSync(
+      path.join(__dirname, '../../public/assets/images/custom/favicon.ico')
     );
-    if (!customLogo) {
+    if (!customFavicon) {
       return res.status(400).json({
-        message: 'There is no custom logo currentlty uploaded.',
+        message: 'There is no custom favico currentlty uploaded.',
         status: 200
       });
     }
