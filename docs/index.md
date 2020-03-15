@@ -15,7 +15,7 @@ Simple yet advanced **NodeJS**, **MongoDB** and **Express** based uploader.  All
 
 ---
 
-![GitHub release](https://img.shields.io/github/release/mrdemonwolf/sharesvg?style=for-the-badge)
+![GitHub release](https://img.shields.io/github/release/mrdemonwolf/share.svg?style=for-the-badge)
 [![GitHub last commit](https://img.shields.io/github/last-commit/mrdemonwolf/share.svg?logo=git&style=for-the-badge)](https://github.com/mrdemonwolf/share)
 [![Trello](https://img.shields.io/badge/Project%20Progress-blue?style=for-the-badge&logo=trello)](https://trello.com/b/uljnYGOg "Follow the project progress here.")
 ![Travis (.com)](https://img.shields.io/travis/com/mrdemonwolf/share?style=for-the-badge)
