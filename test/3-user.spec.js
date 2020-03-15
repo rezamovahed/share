@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 const supertest = require('supertest');
+const { authenticator } = require('otplib');
+
 const app = require('../src/index');
 
 let userCookie = null;
@@ -213,6 +215,44 @@ describe('LOGGED IN (user)', () => {
       supertest(app)
         .get('/account')
         .set('Cookie', userCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+  describe('GET /account/mfa/setup', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .post('/account/mfa/setup')
+        .set('Cookie', userCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          label: 'To be removed',
+          expire: '1'
+        })
+        .expect(200)
+        .end(async (err, res) => {
+          if (err) return done(err);
+          module.exports.mfaSecret = res.body.mfaSecret;
+          module.exports.mfaToken = await authenticator.generate(
+            this.mfaSecret
+          );
+          done();
+        });
+    });
+  });
+  describe('GET /account/mfa/setup/verify', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .post('/account/mfa/setup/verify')
+        .set('Cookie', userCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          secret: this.mfaSecret,
+          token: this.mfaToken
+        })
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
