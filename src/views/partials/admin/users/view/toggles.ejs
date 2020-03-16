@@ -86,7 +86,7 @@
     $('#mfa').attr('checked', '<%= user.mfa %>' === 'true' ? true : false);
     $('#verified').attr(
       'checked',
-      '<%= user.verified %>' === 'true' ? true : false
+      '<%= user.isVerified %>' === 'true' ? true : false
     );
   });
 </script>

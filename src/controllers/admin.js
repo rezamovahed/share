@@ -183,16 +183,13 @@ exports.putVerified = async (req, res) => {
         slug
       },
       {
-        verified: boolean
+        isVerified: boolean
       },
       { $safe: true, $upsert: true }
     );
 
     res.json({
-      message:
-        boolean === 'false'
-          ? 'User is now a verified.'
-          : 'User is now a unverified.'
+      message: boolean ? 'User is now a verified.' : 'User is now a unverified.'
     });
   } catch (err) {
     console.error(err);

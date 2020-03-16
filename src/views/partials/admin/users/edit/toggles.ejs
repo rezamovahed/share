@@ -75,7 +75,7 @@
     const streamerMode = '<%= user.streamerMode %>' === 'true' ? true : false;
     const emailVerified = '<%= user.emailVerified %>' === 'true' ? true : false;
     const mfa = '<%= user.mfa %>' === 'true' ? true : false;
-    const verified = '<%= user.verified %>' === 'true' ? true : false;
+    const verified = '<%= user.isVerified %>' === 'true' ? true : false;
     $('#streamerMode').attr('checked', streamerMode);
     $('#emailVerified').attr('checked', emailVerified);
     $('#mfa').attr('checked', mfa);
