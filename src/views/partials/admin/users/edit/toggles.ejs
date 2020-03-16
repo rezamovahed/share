@@ -1,60 +1,85 @@
 <div class="info header mt-3 mb-2">Toggles</div>
-<div class="form-group d-inline">
-  <label for="streamerMode">Streamer Mode</label>
-  <input
-    id="streamerMode"
-    name="streamerMode"
-    value="true"
-    type="checkbox"
-    checked
-    data-toggle="toggle"
-    data-on="On"
-    data-off="Off"
-    data-onstyle="success"
-    data-offstyle="danger"
-  />
-</div>
-<div class="form-group d-inline">
-  <label for="emailVerified">Email Verified</label>
-  <input
-    id="emailVerified"
-    name="emailVerified"
-    value="true"
-    type="checkbox"
-    checked
-    data-toggle="toggle"
-    data-on="On"
-    data-off="Off"
-    data-onstyle="success"
-    data-offstyle="danger"
-  />
-</div>
-<div class="form-group d-inline">
-  <label for="mfa"> Multi Factor Authentication </label>
-  <input
-    id="mfa"
-    name="mfa"
-    value="true"
-    type="checkbox"
-    checked
-    data-toggle="toggle"
-    data-on="On"
-    data-off="Off"
-    data-onstyle="success"
-    data-offstyle="danger"
-    <% if(!user.mfa){ %>
-      disabled
-    <% } %>
-    />
+<div class="row">
+  <div class="col-sm-6 col-xl-3 mt-2">
+    <div class="form-group d-inline">
+      <label for="streamerMode">SStreamer Mode</label>
+      <input
+        id="streamerMode"
+        name="streamerMode"
+        value="true"
+        type="checkbox"
+        checked
+        data-toggle="toggle"
+        data-on="On"
+        data-off="Off"
+        data-onstyle="success"
+        data-offstyle="danger"
+      />
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3 mt-2">
+    <div class="form-group d-inline">
+      <label for="verified">Verified</label>
+      <input
+        id="verified"
+        name="verified"
+        value="true"
+        type="checkbox"
+        checked
+        data-toggle="toggle"
+        data-on="On"
+        data-off="Off"
+        data-onstyle="success"
+        data-offstyle="danger"
+      />
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3 mt-2">
+    <div class="form-group d-inline">
+      <label for="emailVerified">Email Verified</label>
+      <input
+        id="emailVerified"
+        name="emailVerified"
+        value="true"
+        type="checkbox"
+        checked
+        data-toggle="toggle"
+        data-on="On"
+        data-off="Off"
+        data-onstyle="success"
+        data-offstyle="danger"
+      />
+    </div>
+  </div>
+    <div class="col-sm-6 col-xl-3 mt-2">
+      <div class="form-group d-inline">
+      <label for="mfa">MFA</label>
+      <input
+        id="mfa"
+        name="mfa"
+        value="true"
+        type="checkbox"
+        checked
+        data-toggle="toggle"
+        data-on="On"
+        data-off="Off"
+        data-onstyle="success"
+        data-offstyle="danger"
+        <%   if(!user.mfa) {%>
+      disabled <% } %> />
+    </div>
+    </div>
 </div>
 <script>
   $(document).ready(function() {
     const streamerMode = '<%= user.streamerMode %>' === 'true' ? true : false;
     const emailVerified = '<%= user.emailVerified %>' === 'true' ? true : false;
     const mfa = '<%= user.mfa %>' === 'true' ? true : false;
+    const verified = '<%= user.isVerified %>' === 'true' ? true : false;
     $('#streamerMode').attr('checked', streamerMode);
     $('#emailVerified').attr('checked', emailVerified);
     $('#mfa').attr('checked', mfa);
+    $('#verified').attr('checked', verified);
 
     $('#streamerMode').change(function() {
       if ($(this).prop('checked') === true) {
@@ -71,7 +96,10 @@
             console.log(response);
             $('#error').show();
             $('#error').html(response.responseJSON.message);
-            $('#streamerMode').bootstrapToggle(streamerMode ? 'on' : 'off',true);
+            $('#streamerMode').bootstrapToggle(
+              streamerMode ? 'on' : 'off',
+              true
+            );
           }
         });
       } else {
@@ -88,12 +116,56 @@
             console.log(response);
             $('#error').show();
             $('#error').html(response.responseJSON.message);
-            $('#streamerMode').bootstrapToggle(streamerMode ? 'on' : 'off',true);
+            $('#streamerMode').bootstrapToggle(
+              streamerMode ? 'on' : 'off',
+              true
+            );
           }
         });
       }
     });
 
+    $('#verified').change(function() {
+      if ($(this).prop('checked') === true) {
+        $.ajax({
+          url: '/admin/users/edit/<%= user.slug %>/verified/true?_method=PUT',
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#success').show();
+            $('#success').html(response.message);
+          },
+          error: function(response) {
+            console.log(response);
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
+            $('#emailVerified').bootstrapToggle(
+              emailVerified ? 'on' : 'off',
+              true
+            );
+          }
+        });
+      } else {
+        $.ajax({
+          url: '/admin/users/edit/<%= user.slug %>/verified/false?_method=PUT',
+          type: 'POST',
+          data: { _csrf: '<%= _csrf %>' },
+          success: function(response) {
+            $('#success').show();
+            $('#success').html(response.message);
+          },
+          error: function(response) {
+            console.log(response);
+            $('#error').show();
+            $('#error').html(response.responseJSON.message);
+            $('#emailVerified').bootstrapToggle(
+              emailVerified ? 'on' : 'off',
+              true
+            );
+          }
+        });
+      }
+    });
     $('#emailVerified').change(function() {
       if ($(this).prop('checked') === true) {
         $.ajax({
@@ -109,7 +181,10 @@
             console.log(response);
             $('#error').show();
             $('#error').html(response.responseJSON.message);
-            $('#emailVerified').bootstrapToggle(emailVerified ? 'on' : 'off',true);
+            $('#emailVerified').bootstrapToggle(
+              emailVerified ? 'on' : 'off',
+              true
+            );
           }
         });
       } else {
@@ -126,7 +201,10 @@
             console.log(response);
             $('#error').show();
             $('#error').html(response.responseJSON.message);
-            $('#emailVerified').bootstrapToggle(emailVerified ? 'on' : 'off',true);
+            $('#emailVerified').bootstrapToggle(
+              emailVerified ? 'on' : 'off',
+              true
+            );
           }
         });
       }
