@@ -114,10 +114,10 @@ exports.putStreamerMode = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
 /**
  * Toggle users email verified Controller - Allows admins to update users email verified status.
  */
-
 exports.putEmailVerified = async (req, res) => {
   try {
     const { slug } = req.params;
@@ -161,6 +161,38 @@ exports.putEmailVerified = async (req, res) => {
         boolean === 'false'
           ? 'User must now verify there email before they can login.'
           : 'User can now login even if they did not verify there email.'
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Toggle users verified Controller - Allows admins to update users verified status.
+ */
+
+exports.putVerified = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    const boolean = req.params.boolean === 'true';
+
+    await User.findOneAndUpdate(
+      {
+        slug
+      },
+      {
+        verified: boolean
+      },
+      { $safe: true, $upsert: true }
+    );
+
+    res.json({
+      message:
+        boolean === 'false'
+          ? 'User is now a verified.'
+          : 'User is now a unverified.'
     });
   } catch (err) {
     console.error(err);

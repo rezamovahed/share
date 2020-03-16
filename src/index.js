@@ -291,8 +291,11 @@ const galleryConroller = require('./controllers/gallery');
 const adminConroller = require('./controllers/admin');
 
 app.use(indexRoutes);
+
 app.get('/owner', ownerController.getOwner);
+
 app.get('/owner/:token', ownerController.getOwnerToken);
+
 app.get(
   '/upload-data',
   isLoggedin,
@@ -301,6 +304,7 @@ app.get(
 
   indexController.getUploadListData
 );
+
 app.delete(
   '/upload-data/:uploadedFile',
   isLoggedin,
@@ -309,7 +313,9 @@ app.delete(
   indexController.deleteSingleUpload
 );
 app.use(authRoutes);
+
 app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
+
 app.post(
   '/login',
   isAlreadyAuth,
@@ -322,35 +328,44 @@ app.post(
   }),
   authController.postLogin
 );
+
 app.get('/logout', authController.getLogout);
+
 app.use('/user', userRoutes);
+
 app.get(
   '/user/activation/:token',
   isAccountActivationTokenVaild,
   userController.getActivation
 );
+
 app.get(
   '/user/delete-account/:token',
   isDeleteAccountTokenVaild,
   userController.deleteUser
 );
+
 app.post(
   '/user/forgot-password',
   forgotPasswordVaildation,
   userController.postPasswordForgot
 );
+
 app.post(
   '/user/reset-password/:token',
   isPasswordResetTokenVaild,
   resetPasswordVaildation,
   userController.postPasswordReset
 );
+
 app.post(
   '/user/resend-activation',
   ResendActivationEmailVaildation,
   userController.postResendActivationEmail
 );
+
 app.use('/account', isLoggedin, isBanned, isSuspended, accountRoutes);
+
 app.put(
   '/account',
   isLoggedin,
@@ -358,6 +373,7 @@ app.put(
   isSuspended,
   accountController.putAccount
 );
+
 app.delete(
   '/account',
   isLoggedin,
@@ -365,6 +381,7 @@ app.delete(
   isSuspended,
   accountController.deleteAccount
 );
+
 app.get(
   '/account/email-verify/:token',
   isLoggedin,
@@ -373,6 +390,7 @@ app.get(
   isEMailVerificationTokenVaild,
   accountController.emailVeirfy
 );
+
 app.get(
   '/account/resend/email-verify',
   isLoggedin,
@@ -380,6 +398,7 @@ app.get(
   isSuspended,
   accountController.resendEmailVeirfy
 );
+
 app.put(
   '/account/streamer-mode/:boolean',
   isLoggedin,
@@ -387,6 +406,7 @@ app.put(
   isSuspended,
   accountController.putStreamerMode
 );
+
 app.post(
   '/account/mfa/setup',
   isLoggedin,
@@ -394,6 +414,7 @@ app.post(
   isSuspendedAPI,
   accountController.postMfaSetup
 );
+
 app.post(
   '/account/mfa/setup/verify',
   isLoggedin,
@@ -401,6 +422,7 @@ app.post(
   isSuspendedAPI,
   accountController.postMfaSetupVerify
 );
+
 app.delete(
   '/account/mfa',
   isLoggedin,
@@ -409,6 +431,7 @@ app.delete(
   accountController.deleteMFA
 );
 app.use('/tokens', isLoggedin, isBanned, isSuspended, tokensRoutes);
+
 app.get(
   '/tokens-data',
   isLoggedin,
@@ -418,6 +441,7 @@ app.get(
 );
 
 app.post('/tokens', isLoggedin, isBannedAPI, tokensConroller.postToken);
+
 app.put(
   '/tokens/:token_id',
   isLoggedin,
@@ -426,6 +450,7 @@ app.put(
   accountRenameTokenVaildation,
   tokensConroller.putToken
 );
+
 app.delete(
   '/tokens/:token_id',
   isLoggedin,
@@ -433,6 +458,7 @@ app.delete(
   isSuspendedAPI,
   tokensConroller.deleteToken
 );
+
 app.delete(
   '/all/uploads',
   isLoggedin,
@@ -440,6 +466,7 @@ app.delete(
   isSuspendedAPI,
   indexController.deleteAllUploads
 );
+
 app.delete(
   '/all/tokens',
   isLoggedin,
@@ -448,6 +475,7 @@ app.delete(
   tokensConroller.deleteAllTokens
 );
 app.use('/gallery', isLoggedin, isBanned, isSuspended, galleryRoutes);
+
 app.delete(
   '/gallery/:uploadedFile',
   isLoggedin,
@@ -458,9 +486,13 @@ app.delete(
 app.use('/config', isLoggedin, isBanned, isSuspended, configRoutes);
 
 app.use('/admin', isAdmin, adminRoutes);
+
 app.delete('/admin/all/uploads', isAdmin, adminConroller.deleteAllUploads);
+
 // app.delete('/admin/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
+
 app.get('/admin/uploads-data', isAdmin, adminConroller.getUploadListData);
+
 app.delete(
   '/admin/uploads/:uploadedFile',
   isAdmin,
@@ -472,6 +504,7 @@ app.delete(
   adminConroller.deleteGallerySingleUpload
 );
 app.get('/admin/users-data', isAdmin, adminConroller.getUserListData);
+
 app.put(
   '/admin/users/edit/:slug',
   isAdmin,
@@ -496,8 +529,15 @@ app.put(
   putEmailVerified,
   adminConroller.putEmailVerified
 );
+app.put(
+  '/admin/users/edit/:slug/verified/:boolean',
+  isAdmin,
+  adminConroller.putVerified
+);
 app.put('/admin/users/ban/:slug', isAdmin, putBan, adminConroller.putBan);
+
 app.put('/admin/users/unban/:slug', isAdmin, putUnban, adminConroller.putUnban);
+
 app.put(
   '/admin/users/suspend/:slug',
   isAdmin,
