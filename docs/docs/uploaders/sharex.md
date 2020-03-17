@@ -21,7 +21,7 @@ parent: Supported Uploaders
 ```json
 {
   "Name": "Share",
-  "DestinationType": "ImageUploader, FileUploader",
+  "DestinationType": "ImageUploader, FileUploader,TextUploader",
   "RequestMethod": "POST",
   "RequestURL": "https://[YOUR_DOMAIN]/api/[VERSION]upload/",
   "Headers": {
