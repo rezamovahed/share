@@ -1,4 +1,5 @@
 const express = require('express');
+const password = require('generate-password');
 
 const router = express.Router();
 
@@ -73,7 +74,7 @@ router.get('/gallery', async (req, res) => {
 /**
  * @route /admin/users
  * @method GET
- * @description Displays a admin dashboard
+ * @description Displays users from the database
  * @access Private
  */
 router.get('/users', (req, res) => {
@@ -82,6 +83,33 @@ router.get('/users', (req, res) => {
     pageDesc: process.env.DESC,
     pageName: 'adminUsers'
   });
+});
+
+/**
+ * @route /admin/users/new
+ * @method GET
+ * @description Allows the admins to creat ea new user.
+ * @access Private
+ */
+router.get('/users/new', async (req, res) => {
+  try {
+    const generatePassword = await password.generate({
+      length: 18,
+      numbers: true,
+      symbols: true,
+      lowercase: true,
+      uppercase: true
+    });
+    res.render('admin/users/new', {
+      pageTitle: 'Create User',
+      pageDesc: process.env.DESC,
+      pageName: 'adminNewUsers',
+      generatePassword
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
 });
 
 /**
