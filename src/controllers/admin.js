@@ -25,6 +25,8 @@ const isEmpty = require('../validation/isEmpty');
  * Load email templates
  */
 const AdminCreateUserActivation = require('../emails/AdminCreateUserActivation');
+const AdminCreateUser = require('../emails/AdminCreateUser');
+
 /**
  * Edit user Controller - Allows admins to update users accounts.
  */
@@ -63,7 +65,7 @@ exports.postUser = async (req, res) => {
       const msg = {
         to: newUser.email,
         from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
-        subject: `Activate your account on ${process.env.TITLE}`,
+        subject: `New account created on ${process.env.TITLE}`,
         html: emailTemplate.html
       };
 
@@ -72,21 +74,13 @@ exports.postUser = async (req, res) => {
     }
 
     if (sendEmail && emailVerified) {
-      // TODO send a email here
-      newUser.emailVerified = false;
-      newUser.emailVerificationToken = generate(alphabet, 24);
-      newUser.emailVerificationTokenExpire = moment().add('3', 'h');
-
       // Setups the email which is sent to the user.
-      const emailTemplate = AdminCreateUserActivation(
-        newUser.emailVerificationToken,
-        password
-      );
+      const emailTemplate = AdminCreateUser(password);
 
       const msg = {
         to: newUser.email,
         from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
-        subject: `Activate your account on ${process.env.TITLE}`,
+        subject: `New account created on ${process.env.TITLE}`,
         html: emailTemplate.html
       };
 
