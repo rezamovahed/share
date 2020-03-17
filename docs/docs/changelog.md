@@ -5,14 +5,13 @@ nav_order: 10
 ---
 
 # Changelog
-4.0.0 (Unrelased _March 12, 2020)
+4.0.0
 
 __This is a fair big of a update but this is a list "all" changes that have been made__
 
-* Made a lot of the code cleaner and easier to manage for developers
-<!-- * Added last password change IP and date. -->
-<!-- * Added last activity date.-->
-<!-- * Added last login date. -->
+* Made a lot of the code cleaner and easier to mange for developers
+* Added last login date and location
+* Added logo and favicon support
 * Added Service worker and PWA support (this is in very beta).
 * Switched to bower for frameworks (Must npm i again).
 * Added transfer ownership.
