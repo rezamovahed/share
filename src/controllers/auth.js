@@ -1,5 +1,4 @@
 const generate = require('nanoid/generate');
-const slugify = require('slugify');
 const moment = require('moment');
 const sendgrid = require('../config/sendgrid');
 

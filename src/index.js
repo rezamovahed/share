@@ -246,6 +246,7 @@ const isSuspended = require('./middleware/isSuspended');
 const isBannedAPI = require('./middleware/api/isBanned');
 const isSuspendedAPI = require('./middleware/api/isSuspended');
 const deleteUserMFA = require('./middleware/admin/deleteUserMFA');
+// const postUser = require('./middleware/admin/postUser');
 const putBan = require('./middleware/admin/putBan');
 const putUnban = require('./middleware/admin/putUnban');
 const putSuspend = require('./middleware/admin/putSuspend');
@@ -262,6 +263,7 @@ const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
  */
 const loginVaildation = require('./validation/login');
 const signupVaildation = require('./validation/signup');
+const adminNewUserVaildation = require('./validation/admin/newUser');
 const forgotPasswordVaildation = require('./validation/forgot-password');
 const resetPasswordVaildation = require('./validation/reset-password');
 const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
@@ -504,6 +506,13 @@ app.delete(
   adminConroller.deleteGallerySingleUpload
 );
 app.get('/admin/users-data', isAdmin, adminConroller.getUserListData);
+
+app.post(
+  '/admin/users',
+  isAdmin,
+  adminNewUserVaildation,
+  adminConroller.postUser
+);
 
 app.put(
   '/admin/users/edit/:slug',
