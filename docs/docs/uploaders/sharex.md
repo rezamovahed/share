@@ -20,7 +20,6 @@ parent: Supported Uploaders
 
 ```json
 {
-  "Version": "4.0.0",
   "Name": "Share",
   "DestinationType": "ImageUploader, FileUploader",
   "RequestMethod": "POST",
