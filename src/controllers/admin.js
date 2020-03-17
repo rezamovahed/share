@@ -4,6 +4,8 @@ const fs = require('fs-extra');
 const generate = require('nanoid/generate');
 const moment = require('moment');
 
+const sendgrid = require('../config/sendgrid');
+
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
@@ -18,6 +20,82 @@ const Token = require('.././models/Token');
  * Load vaildation middleware
  */
 const isEmpty = require('../validation/isEmpty');
+
+/**
+ * Load email templates
+ */
+const AdminCreateUserActivation = require('../emails/AdminCreateUserActivation');
+const AdminCreateUser = require('../emails/AdminCreateUser');
+
+/**
+ * Edit user Controller - Allows admins to update users accounts.
+ */
+exports.postUser = async (req, res) => {
+  try {
+    console.log(req.body);
+    const {
+      username,
+      email,
+      role,
+      password,
+      verified,
+      emailVerified,
+      sendEmail
+    } = req.body;
+
+    const newUser = await new User({
+      username,
+      email,
+      role,
+      password,
+      isVerified: verified
+    });
+    if (sendEmail && !emailVerified) {
+      // TODO send a email here
+      newUser.emailVerified = false;
+      newUser.emailVerificationToken = generate(alphabet, 24);
+      newUser.emailVerificationTokenExpire = moment().add('3', 'h');
+
+      // Setups the email which is sent to the user.
+      const emailTemplate = AdminCreateUserActivation(
+        newUser.emailVerificationToken,
+        password
+      );
+
+      const msg = {
+        to: newUser.email,
+        from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+        subject: `New account created on ${process.env.TITLE}`,
+        html: emailTemplate.html
+      };
+
+      // If testing mode then don't send the email.
+      if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
+    }
+
+    if (sendEmail && emailVerified) {
+      // Setups the email which is sent to the user.
+      const emailTemplate = AdminCreateUser(password);
+
+      const msg = {
+        to: newUser.email,
+        from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+        subject: `New account created on ${process.env.TITLE}`,
+        html: emailTemplate.html
+      };
+
+      // If testing mode then don't send the email.
+      if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
+    }
+
+    await newUser.save();
+    req.flash('success', `${newUser.username} has been created`);
+    res.redirect('/admin');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
 
 /**
  * Edit user Controller - Allows admins to update users accounts.
