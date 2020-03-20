@@ -257,6 +257,7 @@ const postUploadLogo = require('./middleware/admin/postUploadLogo');
 const deleteUploadLogo = require('./middleware/admin/deleteUploadLogo');
 const postUploadFavicon = require('./middleware/admin/postUploadFavicon');
 const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
+const isSignupsDisabled = require('./middleware/isSignupsDisabled');
 
 /**
  * Load vaildation middleware
@@ -316,7 +317,13 @@ app.delete(
 );
 app.use(authRoutes);
 
-app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
+app.post(
+  '/signup',
+  isSignupsDisabled,
+  signupVaildation,
+  isAlreadyAuth,
+  authController.postSignup
+);
 
 app.post(
   '/login',
