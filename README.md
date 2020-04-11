@@ -27,6 +27,9 @@ If you want to help out development read this here.
 
 <!-- Add other helps in the code base here -->
 
+## CLI
+Share now has a officially has a CLI tool for both Linux and Windows.  (Linux may work on macOS) Check out the project [here](https://www.github.com/mrdemonwolf/share-cli)
+
 ## Changelog
 Check the changelogs [here](https://mrdemonwolf.github.io/share/docs/changelog/)
 
