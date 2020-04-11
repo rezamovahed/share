@@ -169,11 +169,10 @@ app.use(async (req, res, next) => {
   res.locals.signups = process.env.SIGNUPS === 'true';
   res.locals.signupTerms = process.env.SIGNUP_TERMS === 'true';
   res.locals.version =
-    process.env.NODE_ENV !== 'development' || process.env.NODE_ENV !== 'test'
-      ? `${process.env.npm_package_version} dev`
+    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+      ? `${process.env.npm_package_version}dev`
       : process.env.npm_package_version;
   // Pass flash to locals
-
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
