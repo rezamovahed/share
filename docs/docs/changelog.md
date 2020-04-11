@@ -5,6 +5,9 @@ nav_order: 10
 ---
 
 # Changelog
+4.0.1
+* Fixed a bug where users can still create accounts even when signups are disabled (Hotfix)
+
 4.0.0
 
 __This is a fair big of a update but this is a list "all" changes that have been made__
