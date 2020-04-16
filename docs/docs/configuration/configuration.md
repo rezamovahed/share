@@ -81,6 +81,14 @@ SIGNUPS=false
 CREDIT=false
 ```
 
+## Owner
+
+```yaml
+# Set to false to disable the /owner route for setting your self as owner.
+# Only supports true or false
+OWNER=true
+```
+
 ## Sendgrid
 [Sendgrid Help]({{ site.baseurl }}{% link docs/configuration/sendgrid.md %})
 
