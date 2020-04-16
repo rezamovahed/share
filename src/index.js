@@ -167,6 +167,7 @@ app.use(async (req, res, next) => {
   res.locals.credit = process.env.CREDIT === 'true';
   res.locals.showVersion = process.env.SHOW_VERSION === 'true';
   res.locals.signups = process.env.SIGNUPS === 'true';
+  res.locals.owner = process.env.OWNER === 'true';
   res.locals.signupTerms = process.env.SIGNUP_TERMS === 'true';
   res.locals.version =
     process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
@@ -235,6 +236,7 @@ const isAccounActivated = require('./middleware/isAccounActivated');
 const isAdmin = require('./middleware/roleCheck/isAdmin');
 const putEmailVerified = require('./middleware/admin/putEmailVerified');
 const isOwner = require('./middleware/roleCheck/isOwner');
+const isOwnerDisabled = require('./middleware/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVaild');
 const isAccountActivationTokenVaild = require('./middleware/isAccountActivationTokenVaild');
@@ -295,9 +297,9 @@ const adminConroller = require('./controllers/admin');
 
 app.use(indexRoutes);
 
-app.get('/owner', ownerController.getOwner);
+app.get('/owner', isOwnerDisabled, ownerController.getOwner);
 
-app.get('/owner/:token', ownerController.getOwnerToken);
+app.get('/owner/:token', isOwnerDisabled, ownerController.getOwnerToken);
 
 app.get(
   '/upload-data',
