@@ -5,6 +5,14 @@ nav_order: 10
 ---
 
 # Changelog
+4.1.0 (pre release)
+- Fixed bug in pm2 echosystem file.
+- Fixed missing UPLOAD_LIMIT env.
+- Fixed bug where it shows dev even in prod in footer.
+- Fixed signup disabled middleware.
+- Removed the display of signup links on all pages if they are disabled.
+- You can now disable the /owner route to make it return a 404.
+
 4.0.1
 * Fixed a bug where users can still create accounts even when signups are disabled (Hotfix)
 

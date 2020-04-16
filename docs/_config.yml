@@ -50,10 +50,10 @@ heading_anchors: true
 
 # Aux links for the upper right navigation
 aux_links:
-  'Repo':
-    - 'https://www.github.com/mrdemonwolf/share'
-  'Creators Website':
+  'Creator':
     - 'https://www.mrdemonwolf.me'
+  'Discord':
+    - 'https://l.demonwolf.dev/discord'
 
 # Footer content appears at the bottom of every page's main content
 footer_content: 'Copyright &copy; 2020 <a href="https://www.mrdemonwolf.me">MrDemonWolf</a>'
