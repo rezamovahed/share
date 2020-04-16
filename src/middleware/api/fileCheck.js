@@ -1,7 +1,9 @@
 const mineTypes = require('../../config/mineTypes');
 
 module.exports = async (req, res, next) => {
-  if (process.env.FILE_CHECK) {
+  const fileCheck = process.env.FILE_CHECK === 'true';
+
+  if (fileCheck) {
     const allowedMineTypes = mineTypes.files.concat(
       mineTypes.images.concat(mineTypes.text)
     );
