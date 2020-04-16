@@ -113,9 +113,11 @@
         <a href="/user/resend-activation">
           <small class=" info text">Resend account activation token</small>
         </a>
-        <a href="/signup">
-          <small class="info text">Create a account</small>
-        </a>
+        <% if(signups) { %>
+          <a href="/signup">
+            <small class="info text">Create a account</small>
+          </a>
+        <% } %>
       </div>
     </div>
 
