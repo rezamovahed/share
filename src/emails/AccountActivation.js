@@ -4,7 +4,8 @@ const mjml = require('mjml');
  *  @param token
  *  Express is the domain from the request.
  */
-module.exports = token => mjml(`<mjml>
+module.exports = token =>
+  mjml(`<mjml>
   <mj-head>
        <mj-attributes>
       <mj-text font-size="13px"/>

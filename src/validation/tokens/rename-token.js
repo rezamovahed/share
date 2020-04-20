@@ -4,7 +4,6 @@ const isEmpty = require('../isEmpty');
 module.exports = (req, res, next) => {
   let { label } = req.body;
 
-  // eslint-disable-next-line prefer-const
   let errors = {};
 
   label = !isEmpty(label) ? label : '';

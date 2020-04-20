@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 const path = require('path');
 const fs = require('fs-extra');
 
@@ -22,8 +21,7 @@ exports.getUploadListData = async (req, res) => {
       .skip(offset)
       .select('uploaded uploadedAt fileName size type fileExtension');
 
-    // eslint-disable-next-line prefer-const
-    let uploads = [];
+    const uploads = [];
     let id = 0;
     uploadsData.map(data => {
       uploads.push({

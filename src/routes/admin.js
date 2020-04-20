@@ -93,7 +93,7 @@ router.get('/users', (req, res) => {
  */
 router.get('/users/new', async (req, res) => {
   try {
-    const generatePassword = await password.generate({
+    const generatePassword = await password.customAlphabet({
       length: 18,
       numbers: true,
       symbols: true,

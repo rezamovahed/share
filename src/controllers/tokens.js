@@ -164,8 +164,7 @@ exports.getTokenListData = async (req, res) => {
       .skip(offset)
       .select('id label expireAt isNever');
 
-    // eslint-disable-next-line prefer-const
-    let tokens = [];
+    const tokens = [];
     let id = 0;
     // Creates a tokensData object to return in a json reply.
     tokensData.map(data => {

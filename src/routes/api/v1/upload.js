@@ -2,12 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 
-const alphabet =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate');
-const fs = require('fs-extra');
-const path = require('path');
-
 /**
  * Load Middleware
  */

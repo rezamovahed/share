@@ -5,8 +5,8 @@ const isEmpty = require('./../validation/isEmpty');
 
 module.exports = async (req, res, next) => {
   try {
-    // eslint-disable-next-line prefer-const
-    let { email, mfa } = req.body;
+    const email = req.body;
+    let { mfa } = req.body;
     mfa = !isEmpty(mfa) ? mfa : '';
 
     const user = await User.findOne({ email });

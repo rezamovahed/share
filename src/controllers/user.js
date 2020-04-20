@@ -1,8 +1,7 @@
-const generate = require('nanoid/generate');
+const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
 const sendgrid = require('../config/sendgrid');
 
-// eslint-disable-next-line operator-linebreak
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
@@ -32,7 +31,7 @@ exports.postPasswordForgot = async (req, res) => {
 
     // TODO Send a email link to reset password
     // Set the token and the expire date.
-    const token = await generate(alphabet, 24);
+    const token = await customAlphabet(alphabet, 24);
     const tokenExpire = moment().add('3', 'h');
 
     // Saves the token and expire date to the database
@@ -165,7 +164,7 @@ exports.postResendActivationEmail = async (req, res) => {
     const user = await User.findOne({ email });
 
     // Set the token and the expire date.
-    const token = await generate(alphabet, 24);
+    const token = await customAlphabet(alphabet, 24);
     const tokenExpire = moment().add('3', 'h');
 
     // Sets the token and expire date in the database.

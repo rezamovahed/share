@@ -4,7 +4,6 @@ const path = require('path');
 /**
  * Load MongoDB models.
  */
-const User = require('../../../models/User');
 const Upload = require('../../../models/Upload');
 
 /**

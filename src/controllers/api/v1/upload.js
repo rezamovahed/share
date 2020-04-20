@@ -1,7 +1,6 @@
 const alphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const generate = require('nanoid/generate');
-const fs = require('fs-extra');
+const { customAlphabet } = require('nanoid/async');
 const path = require('path');
 const filesize = require('filesize');
 const moment = require('moment');
@@ -24,14 +23,14 @@ module.exports.uploadFile = async (req, res, next) => {
     const { file } = req.files;
     const fileExtension = path.extname(file.name);
     const fileMineType = file.mimetype;
-    const fileName = generate(alphabet, 32);
+    const fileName = customAlphabet(alphabet, 32);
     const fileNameWithExt = fileName + fileExtension;
     const filePath = `${path.join(
       __dirname,
       '../../../public'
     )}/u/${fileName}${fileExtension}`;
     // Delete key is fileName the delete URL via the get request
-    const deleteKey = generate(alphabet, 32);
+    const deleteKey = customAlphabet(alphabet, 32);
 
     const size = filesize(file.size);
 

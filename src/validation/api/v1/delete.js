@@ -1,8 +1,7 @@
 const isEmpty = require('../../isEmpty');
 
 module.exports = (req, res, next) => {
-  // eslint-disable-next-line prefer-const
-  let errors = {};
+  const errors = {};
 
   const key = req.query.key !== undefined && !isEmpty(req.query.key);
 

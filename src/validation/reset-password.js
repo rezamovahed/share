@@ -4,8 +4,7 @@ const isEmpty = require('./isEmpty');
 module.exports = (req, res, next) => {
   let { password, comfirmPassword } = req.body;
 
-  // eslint-disable-next-line prefer-const
-  let errors = {};
+  const errors = {};
 
   password = !isEmpty(password) ? password : '';
   comfirmPassword = !isEmpty(comfirmPassword) ? comfirmPassword : '';

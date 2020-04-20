@@ -2,11 +2,9 @@ const Validator = require('validator');
 const isEmpty = require('../isEmpty');
 
 module.exports = (req, res, next) => {
-  // eslint-disable-next-line object-curly-newline
   let { username, email, newPassword } = req.body;
 
-  // eslint-disable-next-line prefer-const
-  let errors = {};
+  const errors = {};
 
   username = !isEmpty(username) ? username : '';
   email = !isEmpty(email) ? email : '';

@@ -1,4 +1,4 @@
-const generate = require('nanoid/generate');
+const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
 const sendgrid = require('../config/sendgrid');
 
@@ -33,7 +33,7 @@ exports.postSignup = async (req, res) => {
     });
 
     // Set the token and the expire date.
-    const token = await generate(alphabet, 24);
+    const token = await customAlphabet(alphabet, 24);
     const tokenExpire = moment().add('3', 'h');
 
     // Sets the token and expire date to the database
