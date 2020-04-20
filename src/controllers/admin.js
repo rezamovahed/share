@@ -107,7 +107,8 @@ exports.putEditUser = async (req, res) => {
 
     const user = await User.findOne({ slug: req.params.slug });
 
-    const updatedInfomation = {};
+    // eslint-disable-next-line prefer-const
+    let updatedInfomation = {};
 
     // Allow owner to edit all.
     if (req.user.role === 'owner') {
@@ -322,7 +323,8 @@ exports.getUploadListData = async (req, res) => {
         select: 'username isVerified role slug'
       });
 
-    const uploads = [];
+    // eslint-disable-next-line prefer-const
+    let uploads = [];
     let id = 0;
     // Creates uploadsData object which is used to return for the table.
     uploadsData.map(data => {

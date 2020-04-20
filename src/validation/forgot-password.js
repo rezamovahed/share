@@ -5,7 +5,8 @@ const User = require('../models/User');
 module.exports = async (req, res, next) => {
   let { email } = req.body;
 
-  const errors = {};
+  // eslint-disable-next-line prefer-const
+  let errors = {};
 
   email = !isEmpty(email) ? email : '';
 

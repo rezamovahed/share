@@ -21,7 +21,8 @@ exports.getUploadListData = async (req, res) => {
       .skip(offset)
       .select('uploaded uploadedAt fileName size type fileExtension');
 
-    const uploads = [];
+    // eslint-disable-next-line prefer-const
+    let uploads = [];
     let id = 0;
     uploadsData.map(data => {
       uploads.push({

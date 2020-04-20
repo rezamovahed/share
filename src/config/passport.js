@@ -33,7 +33,6 @@ module.exports = passport => {
           done(null, user);
         } catch (err) {
           console.log(err);
-          console.log('you hit me daddy');
           done(null, false, {
             message: 'Error'
           });

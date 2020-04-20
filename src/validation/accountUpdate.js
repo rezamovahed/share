@@ -11,7 +11,8 @@ module.exports = (req, res, next) => {
     streamerMode
   } = req.body;
 
-  const errors = {};
+  // eslint-disable-next-line prefer-const
+  let errors = {};
 
   username = !isEmpty(username) ? username : '';
   email = !isEmpty(email) ? email : '';

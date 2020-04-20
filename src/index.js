@@ -104,7 +104,8 @@ app.use(helmet());
 /**
  * Express session configuration.
  */
-const sess = {
+// eslint-disable-next-line prefer-const
+let sess = {
   resave: false,
   saveUninitialized: false,
   secret: process.env.SESSION_SECRET,
