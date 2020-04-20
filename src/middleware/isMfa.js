@@ -5,7 +5,7 @@ const isEmpty = require('./../validation/isEmpty');
 
 module.exports = async (req, res, next) => {
   try {
-    const email = req.body;
+    const { email } = req.body;
     let { mfa } = req.body;
     mfa = !isEmpty(mfa) ? mfa : '';
 
