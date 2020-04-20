@@ -2,8 +2,8 @@ const Validator = require('validator');
 const isEmpty = require('../isEmpty');
 
 module.exports = (req, res, next) => {
-  // eslint-disable-next-line prefer-const
-  let { expire, reason, expireCustom } = req.body;
+  const expire = req.body;
+  let { reason, expireCustom } = req.body;
 
   reason = !isEmpty(reason) ? reason : '';
   expireCustom = !isEmpty(expireCustom) ? expireCustom : '';

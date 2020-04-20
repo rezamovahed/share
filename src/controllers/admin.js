@@ -1,7 +1,6 @@
-/* eslint-disable indent */
 const path = require('path');
 const fs = require('fs-extra');
-const generate = require('nanoid/generate');
+const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
 
 const sendgrid = require('../config/sendgrid');
@@ -53,7 +52,7 @@ exports.postUser = async (req, res) => {
     if (sendEmail && !emailVerified) {
       // TODO send a email here
       newUser.emailVerified = false;
-      newUser.emailVerificationToken = generate(alphabet, 24);
+      newUser.emailVerificationToken = customAlphabet(alphabet, 24);
       newUser.emailVerificationTokenExpire = moment().add('3', 'h');
 
       // Setups the email which is sent to the user.
@@ -102,8 +101,9 @@ exports.postUser = async (req, res) => {
  */
 exports.putEditUser = async (req, res) => {
   try {
-    // eslint-disable-next-line object-curly-newline
-    const { username, email, role, newPassword } = req.body;
+    const {
+      username, email, role, newPassword
+    } = req.body;
 
     const user = await User.findOne({ slug: req.params.slug });
 
@@ -142,7 +142,6 @@ exports.putEditUser = async (req, res) => {
       }
       // Check if streamer mode is enabled
       // This is so it will skip if they are in streamer mode.
-
       if (!req.user.streamerMode) {
         if (user.email !== email) {
           updatedInfomation.email = email;
@@ -211,7 +210,7 @@ exports.putEmailVerified = async (req, res) => {
         },
         {
           emailVerified: false,
-          emailVerificationToken: generate(alphabet, 24),
+          emailVerificationToken: customAlphabet(alphabet, 24),
           emailVerificationTokenExpire: moment().add('3', 'h')
         },
         { $safe: true, $upsert: true }
@@ -443,8 +442,7 @@ exports.getUserListData = async (req, res) => {
         .select(userSelect);
     }
 
-    // eslint-disable-next-line prefer-const
-    let users = [];
+    const users = [];
     let id = 0;
 
     // Creates userData object to return to the table.
@@ -523,9 +521,9 @@ exports.deleteGallerySingleUpload = async (req, res) => {
         'success',
         `
         <strong>${uploadedFileName.substring(
-          0,
-          3
-        )}*********************</strong> has been deleted.`
+    0,
+    3
+  )}*********************</strong> has been deleted.`
       );
       return res.redirect('/admin/gallery');
     }
@@ -646,7 +644,6 @@ exports.putSuspend = async (req, res) => {
   try {
     const { slug } = req.params;
 
-    // eslint-disable-next-line prefer-const
     let suspendedExpire = moment();
 
     const { reason, expire, expireCustom } = req.body;

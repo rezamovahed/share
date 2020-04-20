@@ -247,7 +247,6 @@ const isSuspended = require('./middleware/isSuspended');
 const isBannedAPI = require('./middleware/api/isBanned');
 const isSuspendedAPI = require('./middleware/api/isSuspended');
 const deleteUserMFA = require('./middleware/admin/deleteUserMFA');
-// const postUser = require('./middleware/admin/postUser');
 const putBan = require('./middleware/admin/putBan');
 const putUnban = require('./middleware/admin/putUnban');
 const putSuspend = require('./middleware/admin/putSuspend');
@@ -500,8 +499,6 @@ app.use('/admin', isAdmin, adminRoutes);
 
 app.delete('/admin/all/uploads', isAdmin, adminConroller.deleteAllUploads);
 
-// app.delete('/admin/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
-
 app.get('/admin/uploads-data', isAdmin, adminConroller.getUploadListData);
 
 app.delete(
@@ -623,7 +620,6 @@ app.use('/api', apiRoutes, isBannedAPI);
 /**
  * Handle 404 errors
  */
-// eslint-disable-next-line no-unused-vars
 app.use((req, res, next) => {
   res.status(404);
 
@@ -632,7 +628,6 @@ app.use((req, res, next) => {
       .status(404)
       .json({ error: 'Whoops, this resource or route could not be found' });
   }
-  // default to plain-text. send()
   res.type('txt').send('Not found');
 });
 
