@@ -125,7 +125,7 @@ exports.putEditUser = async (req, res) => {
           user.email = email;
         }
       }
-      if (user.role !== role) {
+      if (user.role !== role && role !== undefined) {
         updatedInfomation.role = role;
         user.role = role;
       }
