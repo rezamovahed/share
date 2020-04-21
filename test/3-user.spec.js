@@ -260,6 +260,18 @@ describe('LOGGED IN (user)', () => {
         });
     });
   });
+  describe('GET /account/mfa/setup/verify', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .delete('/account/mfa')
+        .set('Cookie', userCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
 });
 
 describe('User actions', () => {
