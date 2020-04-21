@@ -1,11 +1,11 @@
-const alphabet =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const { customAlphabet } = require('nanoid/async');
 const path = require('path');
 const filesize = require('filesize');
 const moment = require('moment');
 const mineTypes = require('../../../config/mineTypes');
 
+const urlFriendyAlphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 /**
  * Load MongoDB models.
  */
@@ -18,19 +18,20 @@ const Upload = require('../../../models/Upload');
  */
 module.exports.uploadFile = async (req, res, next) => {
   try {
+    const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add vaildation file check
     // TODO add check for file or image or text and then set the type in res.locals.type
     const { file } = req.files;
     const fileExtension = path.extname(file.name);
     const fileMineType = file.mimetype;
-    const fileName = customAlphabet(alphabet, 32);
+    const fileName = await nanoid32();
     const fileNameWithExt = fileName + fileExtension;
     const filePath = `${path.join(
       __dirname,
       '../../../public'
     )}/u/${fileName}${fileExtension}`;
     // Delete key is fileName the delete URL via the get request
-    const deleteKey = customAlphabet(alphabet, 32);
+    const deleteKey = await nanoid32();
 
     const size = filesize(file.size);
 
