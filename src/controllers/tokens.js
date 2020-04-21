@@ -162,7 +162,7 @@ exports.getTokenListData = async (req, res) => {
       .sort({ createdAt: sort })
       .limit(limit)
       .skip(offset)
-      .select('id label expireAt isNever');
+      .select('id label expireAt isNever createdAt');
 
     const tokens = [];
     let id = 0;

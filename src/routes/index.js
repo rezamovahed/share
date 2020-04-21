@@ -37,19 +37,9 @@ router.get('/', async (req, res) => {
         pageName: 'uploads'
       });
     }
-    // Find user uploads
-    // Per page limit.
-    const limit = 10;
-
-    const uploads = await Upload.find({
-      uploader: req.user.id
-    })
-      .limit(limit)
-      .sort({ createdAt: -1 });
     return res.render('landing/index', {
       pageTitle: 'Welcome',
       pageDesc: process.env.DESC,
-      uploads,
       pageName: 'uploads'
     });
   }
@@ -57,11 +47,6 @@ router.get('/', async (req, res) => {
     pageTitle: 'Landing',
     pageDesc: process.env.DESC
   });
-});
-
-router.get('/sw.js', (req, res) => {
-  res.set('Content-Type', 'application/javascript');
-  res.send('sw', { siteURL: process.env.FULL_DOMAIN });
 });
 
 router.get('/manifest.json', (req, res) => {
