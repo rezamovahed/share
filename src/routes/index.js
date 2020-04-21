@@ -49,11 +49,6 @@ router.get('/', async (req, res) => {
   });
 });
 
-router.get('/sw.js', (req, res) => {
-  res.set('Content-Type', 'application/javascript');
-  res.send('sw', { siteURL: process.env.FULL_DOMAIN });
-});
-
 router.get('/manifest.json', (req, res) => {
   res.json({
     name: process.env.TITLE,
