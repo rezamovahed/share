@@ -1,7 +1,7 @@
 module.exports = async (req, res, next) => {
   try {
     const signups = process.env.SIGNUPS === 'true';
-    if (signups) {
+    if (!signups) {
       req.flash('error', 'Signups are currently disabled');
       return res.redirect('/signup');
     }

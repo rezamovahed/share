@@ -5,7 +5,7 @@ const moment = require('moment');
 
 const sendgrid = require('../config/sendgrid');
 
-const alphabet =
+const urlFriendyAlphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
@@ -50,9 +50,10 @@ exports.postUser = async (req, res) => {
       isVerified: verified
     });
     if (sendEmail && !emailVerified) {
+      const emailVerificationToken = customAlphabet(urlFriendyAlphabet, 32);
       // TODO send a email here
       newUser.emailVerified = false;
-      newUser.emailVerificationToken = customAlphabet(alphabet, 24);
+      newUser.emailVerificationToken = await emailVerificationToken();
       newUser.emailVerificationTokenExpire = moment().add('3', 'h');
 
       // Setups the email which is sent to the user.
@@ -203,6 +204,7 @@ exports.putEmailVerified = async (req, res) => {
 
     // Toggle email verifyied
     if (boolean) {
+      const emailVerificationToken = customAlphabet(urlFriendyAlphabet, 32);
       // Set the token and the expire date.
       await User.findOneAndUpdate(
         {
@@ -210,7 +212,7 @@ exports.putEmailVerified = async (req, res) => {
         },
         {
           emailVerified: false,
-          emailVerificationToken: customAlphabet(alphabet, 24),
+          emailVerificationToken: await emailVerificationToken(),
           emailVerificationTokenExpire: moment().add('3', 'h')
         },
         { $safe: true, $upsert: true }
