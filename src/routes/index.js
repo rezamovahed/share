@@ -37,19 +37,9 @@ router.get('/', async (req, res) => {
         pageName: 'uploads'
       });
     }
-    // Find user uploads
-    // Per page limit.
-    const limit = 10;
-
-    const uploads = await Upload.find({
-      uploader: req.user.id
-    })
-      .limit(limit)
-      .sort({ createdAt: -1 });
     return res.render('landing/index', {
       pageTitle: 'Welcome',
       pageDesc: process.env.DESC,
-      uploads,
       pageName: 'uploads'
     });
   }
