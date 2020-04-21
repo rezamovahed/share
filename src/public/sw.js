@@ -1,5 +1,5 @@
-var cacheName = 'share';
-var cacheRoutes = [
+const cacheName = 'share';
+const cacheRoutes = [
   '/',
   '/bower_components/jquery/dist/jquery.min.js',
   '/bower_components/moment/min/moment.min.js',
@@ -29,45 +29,37 @@ var cacheRoutes = [
   '/assets/images/logo.png',
   '/favicon.ico'
 ];
-self.addEventListener('install', function(event) {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open('cacheName').then(function(cache) {
-      return cache.addAll(cacheRoutes);
-    })
+    caches.open('cacheName').then((cache) => cache.addAll(cacheRoutes))
   );
   console.log('Service Worker Installed');
 });
-self.addEventListener('activate', function(e) {
+self.addEventListener('activate', (e) => {
   console.log('[Service Worker] Activate');
   e.waitUntil(
-    caches.keys().then(function(keyList) {
-      return Promise.all(
-        keyList.map(function(key) {
-          if (key != cacheName) {
-            console.log('Removing old cache', key);
-            return caches.delete(key);
-          }
-        })
-      );
-    })
+    caches.keys().then((keyList) => Promise.all(
+      keyList.map((key) => {
+        if (key != cacheName) {
+          console.log('Removing old cache', key);
+          return caches.delete(key);
+        }
+      })
+    ))
   );
 });
-self.addEventListener('fetch', function(event) {
-  var eventPath = event.request.url.replace(event.target.location.origin, '');
+self.addEventListener('fetch', (event) => {
+  const eventPath = event.request.url.replace(event.target.location.origin, '');
   if (event.request.method === 'GET' && cacheRoutes.indexOf(eventPath) > -1) {
     if (navigator.onLine) {
-      console.log('[Service Worker] Fetch', event.request.host);
-      caches.open(cacheName).then(function(cache) {
-        return fetch(event.request).then(function(response) {
-          cache.put(event.request, response.clone());
-          return response;
-        });
-      });
+      console.log('[Service Worker] Fetch');
+      caches.open(cacheName).then((cache) => fetch(event.request).then((response) => {
+        cache.put(event.request, response.clone());
+        return response;
+      }));
     } else {
       event.respondWith(
-        caches.match(event.request).then(function(response) {
-          return response || fetch(event.request);
-        })
+        caches.match(event.request).then((response) => response || fetch(event.request))
       );
     }
   }
