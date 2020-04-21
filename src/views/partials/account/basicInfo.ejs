@@ -1,9 +1,25 @@
-<div class="info header mt-3 mb-2">Basic Info</div>
-<div class="row pb-5">
+<script>
+  $(document).ready(() => {
+    $.ajax({
+      url: '/account/space-used',
+      type: 'get',
+      data: { _csrf: '<%= _csrf %>' },
+      success: function(response) {
+        $('#spaceUsed').html('1205 kb');
+      },
+      error: function(response) {
+        console.log(response);
+        $('#spaceUsed').html('Error loading');
+      }
+    });
+  });
+</script>
+<div class="info header mt-3">Basic Info</div>
+<div class="row mb-3">
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Limits</h5>
+        <h5 class="card-title">Limit</h5>
         <p class="card-text"><strong>15</strong> uploads per min.</p>
       </div>
     </div>
@@ -11,22 +27,36 @@
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Last Login</h5>
-        <p class="card-text"><%= moment(currentUser.lastLog).fromNow() %></p>
+        <h5 class="card-title">Used</h5>
+        <p class="card-text">
+          <span id="spaceUsed">Loading....</span>
+        </p>
       </div>
     </div>
   </div>
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Last Login Location</h5>
+        <h5 class="card-title">Last Location</h5>
         <p class="card-text d-inline">
           <a
-            href="https://whatismyipaddress.com/ip/<%= currentUser.lastLoginIP %>" target="_blank" rel="nofollow"
+            href="https://whatismyipaddress.com/ip/<%= currentUser.lastLoginIP %>"
+            target="_blank"
+            rel="nofollow"
           >
             <%= currentUser.lastLoginLocation %>
           </a>
         </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Last Login</h5>
+        <p class="card-text"><%= moment(currentUser.lastLogin).fromNow() %></p>
       </div>
     </div>
   </div>
@@ -41,32 +71,16 @@
       </div>
     </div>
   </div>
-  <% } %>
-  <div class="row pb-5">
-    <% if(currentUser.lastActivity !== undefined) { %>
-    <div class="col-sm-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Last Activity</h5>
-          <p class="card-text">
-            <%= moment(currentUser.lastActivity).format('MMM Do YYYY hh:mm A')
-            %> CST %>
-          </p>
-        </div>
+  <% } %> <% if(currentUser.passwordChanged !== undefined) { %>
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Last password change</h5>
+        <p class="card-text">
+          <%= moment(currentUser.passwordChanged).fromNow() %>
+        </p>
       </div>
     </div>
-    <% if(currentUser.passwordChanged !== undefined) { %>
-    <div class="col-sm-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Last password change</h5>
-          <p class="card-text">
-            <%= moment(currentUser.passwordChanged).fromNow() %>
-          </p>
-        </div>
-      </div>
-    </div>
-    <% } %>
   </div>
   <% } %>
 </div>
