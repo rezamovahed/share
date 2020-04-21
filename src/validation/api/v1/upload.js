@@ -1,7 +1,6 @@
 const isEmpty = require('../../isEmpty');
 
 module.exports = (req, res, next) => {
-  // eslint-disable-next-line prefer-const
   let errors = {};
 
   if (typeof req.files.file === 'undefined') {

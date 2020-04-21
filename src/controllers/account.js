@@ -3,11 +3,10 @@ const qrcode = require('qrcode');
 const path = require('path');
 const fs = require('fs-extra');
 const { authenticator } = require('otplib');
-
-const generate = require('nanoid/generate');
+const { customAlphabet } = require('nanoid/async');
 const sendgrid = require('../config/sendgrid');
 
-const alphabet =
+const urlFriendyAlphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
@@ -59,9 +58,9 @@ exports.putAccount = async (req, res, next) => {
       user.streamerMode = streamerMode;
     }
     if (!req.user.streamerMode && email !== req.user.email) {
-      const token = await generate(alphabet, 24);
+      const token = customAlphabet(urlFriendyAlphabet, 24);
       const tokenExpire = moment().add('1', 'h');
-      user.newEmailVerificationToken = token;
+      user.newEmailVerificationToken = await token();
       user.newEmailVerificationTokenExpire = tokenExpire;
       user.newEmail = email;
 
@@ -122,9 +121,9 @@ exports.resendEmailVeirfy = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
 
-    const token = await generate(alphabet, 24);
+    const token = customAlphabet(urlFriendyAlphabet, 24);
     const tokenExpire = moment().add('1', 'h');
-    user.newEmailVerificationToken = token;
+    user.newEmailVerificationToken = await token();
     user.newEmailVerificationTokenExpire = tokenExpire;
     await user.save();
 

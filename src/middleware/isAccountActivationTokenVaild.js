@@ -9,7 +9,10 @@ module.exports = async (req, res, next) => {
     }
   });
   if (!user) {
-    req.flash('error', 'Account is activated or the activation token is invaild.');
+    req.flash(
+      'error',
+      'Account is activated or the activation token is invaild.'
+    );
     return res.redirect('/user/resend-activation');
   }
   next();

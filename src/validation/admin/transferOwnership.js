@@ -2,10 +2,8 @@ const Validator = require('validator');
 const isEmpty = require('../isEmpty');
 
 module.exports = (req, res, next) => {
-  // eslint-disable-next-line object-curly-newline
   let { slug } = req.body;
 
-  // eslint-disable-next-line prefer-const
   let errors = {};
 
   slug = !isEmpty(slug) ? slug : '';

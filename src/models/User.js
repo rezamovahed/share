@@ -14,8 +14,7 @@ const userSchema = new Schema(
     slug: {
       type: String,
       lowercase: true,
-      unique: true,
-      required: true
+      unique: true
     },
     email: {
       type: String,
@@ -96,7 +95,6 @@ userSchema.pre('save', function save(next) {
     if (err) {
       return next(err);
     }
-    // eslint-disable-next-line no-shadow
     bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) {
         return next(err);

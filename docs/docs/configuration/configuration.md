@@ -3,6 +3,7 @@ layout: default
 title: Configuration
 nav_order: 2
 has_children: true
+permalink: /docs/configuration
 ---
 
 # Configuration
@@ -80,6 +81,14 @@ SIGNUPS=false
 CREDIT=false
 ```
 
+## Owner
+
+```yaml
+# Set to false to disable the /owner route for setting your self as owner.
+# Only supports true or false
+OWNER=true
+```
+
 ## Sendgrid
 [Sendgrid Help]({{ site.baseurl }}{% link docs/configuration/sendgrid.md %})
 
@@ -106,6 +115,14 @@ EMAIL_DOMAIN=example.com
 # Set rather or not to check all files uploaded if they are on the safe whitelist.
 # Files will be checked for images and or text rather or not you disable this.  This is for the gallery
 FILE_CHECK=true
+```
+
+## Upload limit
+
+```yaml
+# Set this to a limit you feel to be the max for all users to upload.
+# This is by default to 100M
+UPLOAD_LIMIT=100M
 ```
 
 ## Session Secret

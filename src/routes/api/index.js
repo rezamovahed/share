@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 const express = require('express');
 
 const router = express.Router();
@@ -14,8 +13,18 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.json({
     endpoints: [
-      { deprecated: false, removed: false, version: '1.0.0', path: '/api/v1' },
-      { deprecated: true, removed: true, version: '0.0.0', path: '/api' }
+      {
+        deprecated: false,
+        removed: false,
+        version: '1.0.0',
+        path: '/api/v1'
+      },
+      {
+        deprecated: true,
+        removed: true,
+        version: '0.0.0',
+        path: '/api'
+      }
     ],
     status: 200
   });

@@ -10,7 +10,7 @@ const settingsSchema = new mongoose.Schema(
     },
     setting: {
       type: String
-    },
+    }
   },
   { timestamps: true }
 );

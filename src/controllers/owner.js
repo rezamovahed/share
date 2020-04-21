@@ -1,9 +1,8 @@
-const generate = require('nanoid/generate');
+const { customAlphabet } = require('nanoid/async');
 
-const alphabet =
+const urlFriendyAlphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-// eslint-disable-next-line prefer-const
 let onetime = '';
 
 /**
@@ -16,7 +15,9 @@ const User = require('../models/User');
  */
 exports.getOwner = async (req, res) => {
   // Creates a onetime token.
-  onetime = generate(alphabet, 32);
+
+  const onetimeToken = customAlphabet(urlFriendyAlphabet, 32);
+  onetime = await onetimeToken();
   console.log(
     'Use this token to convert yourself to owner. (Only works once*)'
   );

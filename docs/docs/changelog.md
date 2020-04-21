@@ -5,14 +5,24 @@ nav_order: 10
 ---
 
 # Changelog
-4.0.0 (Unrelased _March 12, 2020)
+4.1.0 (pre release)
+- Fixed bug in pm2 echosystem file.
+- Fixed missing UPLOAD_LIMIT env.
+- Fixed bug where it shows dev even in prod in footer.
+- Fixed signup disabled middleware.
+- Removed the display of signup links on all pages if they are disabled.
+- You can now disable the /owner route to make it return a 404.
+
+4.0.1
+* Fixed a bug where users can still create accounts even when signups are disabled (Hotfix)
+
+4.0.0
 
 __This is a fair big of a update but this is a list "all" changes that have been made__
 
-* Made a lot of the code cleaner and easier to manage for developers
-<!-- * Added last password change IP and date. -->
-<!-- * Added last activity date.-->
-<!-- * Added last login date. -->
+* Made a lot of the code cleaner and easier to mange for developers
+* Added last login date and location
+* Added logo and favicon support
 * Added Service worker and PWA support (this is in very beta).
 * Switched to bower for frameworks (Must npm i again).
 * Added transfer ownership.

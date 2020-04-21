@@ -17,6 +17,7 @@
     "no-unused-vars": "off",
     "max-len": "off",
     "operator-linebreak": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "import/no-useless-path-segments": "off"
   }
 }

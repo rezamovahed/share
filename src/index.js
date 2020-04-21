@@ -167,13 +167,13 @@ app.use(async (req, res, next) => {
   res.locals.credit = process.env.CREDIT === 'true';
   res.locals.showVersion = process.env.SHOW_VERSION === 'true';
   res.locals.signups = process.env.SIGNUPS === 'true';
+  res.locals.owner = process.env.OWNER === 'true';
   res.locals.signupTerms = process.env.SIGNUP_TERMS === 'true';
   res.locals.version =
-    process.env.NODE_ENV !== 'development' || process.env.NODE_ENV !== 'test'
-      ? `${process.env.npm_package_version} dev`
+    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+      ? `${process.env.npm_package_version}dev`
       : process.env.npm_package_version;
   // Pass flash to locals
-
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
@@ -236,6 +236,7 @@ const isAccounActivated = require('./middleware/isAccounActivated');
 const isAdmin = require('./middleware/roleCheck/isAdmin');
 const putEmailVerified = require('./middleware/admin/putEmailVerified');
 const isOwner = require('./middleware/roleCheck/isOwner');
+const isOwnerDisabled = require('./middleware/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVaild');
 const isAccountActivationTokenVaild = require('./middleware/isAccountActivationTokenVaild');
@@ -256,12 +257,14 @@ const postUploadLogo = require('./middleware/admin/postUploadLogo');
 const deleteUploadLogo = require('./middleware/admin/deleteUploadLogo');
 const postUploadFavicon = require('./middleware/admin/postUploadFavicon');
 const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
+const isSignupsDisabled = require('./middleware/isSignupsDisabled');
 
 /**
  * Load vaildation middleware
  */
 const loginVaildation = require('./validation/login');
 const signupVaildation = require('./validation/signup');
+const adminNewUserVaildation = require('./validation/admin/newUser');
 const forgotPasswordVaildation = require('./validation/forgot-password');
 const resetPasswordVaildation = require('./validation/reset-password');
 const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
@@ -270,6 +273,7 @@ const ResendActivationEmailVaildation = require('./validation/resend-activation'
 const userUpdateVaildation = require('./validation/admin/userUpdate');
 const suspendUserVaildation = require('./validation/admin/suspendUser');
 const postOwnershipVaildation = require('./validation/admin/transferOwnership');
+
 /**
  * Primary app routes.
  */
@@ -292,9 +296,9 @@ const adminConroller = require('./controllers/admin');
 
 app.use(indexRoutes);
 
-app.get('/owner', ownerController.getOwner);
+app.get('/owner', isOwnerDisabled, ownerController.getOwner);
 
-app.get('/owner/:token', ownerController.getOwnerToken);
+app.get('/owner/:token', isOwnerDisabled, ownerController.getOwnerToken);
 
 app.get(
   '/upload-data',
@@ -314,7 +318,13 @@ app.delete(
 );
 app.use(authRoutes);
 
-app.post('/signup', signupVaildation, isAlreadyAuth, authController.postSignup);
+app.post(
+  '/signup',
+  isSignupsDisabled,
+  signupVaildation,
+  isAlreadyAuth,
+  authController.postSignup
+);
 
 app.post(
   '/login',
@@ -489,8 +499,6 @@ app.use('/admin', isAdmin, adminRoutes);
 
 app.delete('/admin/all/uploads', isAdmin, adminConroller.deleteAllUploads);
 
-// app.delete('/admin/all/tokens', isLoggedin, tokensConroller.deleteAllTokens);
-
 app.get('/admin/uploads-data', isAdmin, adminConroller.getUploadListData);
 
 app.delete(
@@ -504,6 +512,13 @@ app.delete(
   adminConroller.deleteGallerySingleUpload
 );
 app.get('/admin/users-data', isAdmin, adminConroller.getUserListData);
+
+app.post(
+  '/admin/users',
+  isAdmin,
+  adminNewUserVaildation,
+  adminConroller.postUser
+);
 
 app.put(
   '/admin/users/edit/:slug',
@@ -605,7 +620,6 @@ app.use('/api', apiRoutes, isBannedAPI);
 /**
  * Handle 404 errors
  */
-// eslint-disable-next-line no-unused-vars
 app.use((req, res, next) => {
   res.status(404);
 
@@ -614,7 +628,6 @@ app.use((req, res, next) => {
       .status(404)
       .json({ error: 'Whoops, this resource or route could not be found' });
   }
-  // default to plain-text. send()
   res.type('txt').send('Not found');
 });
 

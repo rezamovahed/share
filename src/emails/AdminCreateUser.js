@@ -1,10 +1,10 @@
 const mjml = require('mjml');
 
 /**
- *  @param token
+ *  @param password
  *  Express is the domain from the request.
  */
-module.exports = token =>
+module.exports = password =>
   mjml(`<mjml>
   <mj-head>
        <mj-attributes>
@@ -31,22 +31,9 @@ module.exports = token =>
             </mj-section>
             <mj-section>
               <mj-column>
-                <mj-text>Please click activate to finalize your account creation.</mj-text>
-                <mj-text>If you did not request this account to be made or want your data removed. Please click the delete button.</mj-text>
+                <mj-text>Temp password for your account is: ${password}</mj-text>
               </mj-column>
-            </mj-section>
-            <mj-section>
-              <mj-column>
-                <mj-button href="${process.env.FULL_DOMAIN}/user/activation/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
-                  Activate
-                </mj-button>
-              </mj-column>
-              <mj-column>
-                <mj-button href="${process.env.FULL_DOMAIN}/user/delete/${token}" font-family="Helvetica" background-color="#4f92ff" color="white">
-                  Delete Account
-                </mj-button>
-              </mj-column>
-            </mj-section>
+            </mj-section
           </mj-wrapper>
         </mj-body>
       </mjml>`);

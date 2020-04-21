@@ -1,10 +1,11 @@
-/* eslint-disable indent */
 const path = require('path');
 const fs = require('fs-extra');
-const generate = require('nanoid/generate');
+const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
 
-const alphabet =
+const sendgrid = require('../config/sendgrid');
+
+const urlFriendyAlphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
@@ -20,12 +21,90 @@ const Token = require('.././models/Token');
 const isEmpty = require('../validation/isEmpty');
 
 /**
+ * Load email templates
+ */
+const AdminCreateUserActivation = require('../emails/AdminCreateUserActivation');
+const AdminCreateUser = require('../emails/AdminCreateUser');
+
+/**
+ * Edit user Controller - Allows admins to update users accounts.
+ */
+exports.postUser = async (req, res) => {
+  try {
+    console.log(req.body);
+    const {
+      username,
+      email,
+      role,
+      password,
+      verified,
+      emailVerified,
+      sendEmail
+    } = req.body;
+
+    const newUser = await new User({
+      username,
+      email,
+      role,
+      password,
+      isVerified: verified
+    });
+    if (sendEmail && !emailVerified) {
+      const emailVerificationToken = customAlphabet(urlFriendyAlphabet, 32);
+      // TODO send a email here
+      newUser.emailVerified = false;
+      newUser.emailVerificationToken = await emailVerificationToken();
+      newUser.emailVerificationTokenExpire = moment().add('3', 'h');
+
+      // Setups the email which is sent to the user.
+      const emailTemplate = AdminCreateUserActivation(
+        newUser.emailVerificationToken,
+        password
+      );
+
+      const msg = {
+        to: newUser.email,
+        from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+        subject: `New account created on ${process.env.TITLE}`,
+        html: emailTemplate.html
+      };
+
+      // If testing mode then don't send the email.
+      if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
+    }
+
+    if (sendEmail && emailVerified) {
+      // Setups the email which is sent to the user.
+      const emailTemplate = AdminCreateUser(password);
+
+      const msg = {
+        to: newUser.email,
+        from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
+        subject: `New account created on ${process.env.TITLE}`,
+        html: emailTemplate.html
+      };
+
+      // If testing mode then don't send the email.
+      if (process.env.NODE_ENV !== 'test') await sendgrid.send(msg);
+    }
+
+    await newUser.save();
+    req.flash('success', `${newUser.username} has been created`);
+    res.redirect('/admin');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
  * Edit user Controller - Allows admins to update users accounts.
  */
 exports.putEditUser = async (req, res) => {
   try {
-    // eslint-disable-next-line object-curly-newline
-    const { username, email, role, newPassword } = req.body;
+    const {
+      username, email, role, newPassword
+    } = req.body;
 
     const user = await User.findOne({ slug: req.params.slug });
 
@@ -64,7 +143,6 @@ exports.putEditUser = async (req, res) => {
       }
       // Check if streamer mode is enabled
       // This is so it will skip if they are in streamer mode.
-
       if (!req.user.streamerMode) {
         if (user.email !== email) {
           updatedInfomation.email = email;
@@ -126,6 +204,7 @@ exports.putEmailVerified = async (req, res) => {
 
     // Toggle email verifyied
     if (boolean) {
+      const emailVerificationToken = customAlphabet(urlFriendyAlphabet, 32);
       // Set the token and the expire date.
       await User.findOneAndUpdate(
         {
@@ -133,7 +212,7 @@ exports.putEmailVerified = async (req, res) => {
         },
         {
           emailVerified: false,
-          emailVerificationToken: generate(alphabet, 24),
+          emailVerificationToken: await emailVerificationToken(),
           emailVerificationTokenExpire: moment().add('3', 'h')
         },
         { $safe: true, $upsert: true }
@@ -365,8 +444,7 @@ exports.getUserListData = async (req, res) => {
         .select(userSelect);
     }
 
-    // eslint-disable-next-line prefer-const
-    let users = [];
+    const users = [];
     let id = 0;
 
     // Creates userData object to return to the table.
@@ -445,9 +523,9 @@ exports.deleteGallerySingleUpload = async (req, res) => {
         'success',
         `
         <strong>${uploadedFileName.substring(
-          0,
-          3
-        )}*********************</strong> has been deleted.`
+    0,
+    3
+  )}*********************</strong> has been deleted.`
       );
       return res.redirect('/admin/gallery');
     }
@@ -568,7 +646,6 @@ exports.putSuspend = async (req, res) => {
   try {
     const { slug } = req.params;
 
-    // eslint-disable-next-line prefer-const
     let suspendedExpire = moment();
 
     const { reason, expire, expireCustom } = req.body;
