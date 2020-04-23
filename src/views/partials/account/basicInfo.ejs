@@ -1,16 +1,19 @@
 <script>
   $(document).ready(() => {
-    $.ajax({
-      url: '/account/space-used',
-      type: 'get',
-      data: { _csrf: '<%= _csrf %>' },
-      success: function(response) {
-        $('#spaceUsed').html('1205 kb');
-      },
-      error: function(response) {
-        console.log(response);
-        $('#spaceUsed').html('Error loading');
-      }
+    $('#spaceUsed').one('click',function() {
+      $('#spaceUsed').removeClass('btn p-0 m-0 btn-link')
+      $('#spaceUsed').html('Loading please wait....');
+      $.ajax({
+        url: '/account/space-used',
+        type: 'get',
+        success: function(response) {
+          $('#spaceUsed').html(response.data);
+        },
+        error: function(response) {
+          console.log(response);
+          $('#spaceUsed').html(response.responseJSON.message || 'Error loading');
+        }
+      });
     });
   });
 </script>
@@ -29,7 +32,7 @@
       <div class="card-body">
         <h5 class="card-title">Used</h5>
         <p class="card-text">
-          <span id="spaceUsed">Loading....</span>
+          <span class="btn p-0 m-0 btn-link" id="spaceUsed">Click to view</span>
         </p>
       </div>
     </div>

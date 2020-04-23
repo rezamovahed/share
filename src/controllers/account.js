@@ -297,12 +297,11 @@ exports.getSpaceUsed = async (req, res, next) => {
     const uploadsLength = uploads.length;
     // eslint-disable-next-line prefer-const
     let spaceUsedInBytes = 0;
-    for (let i = 0; i < uploadsLength; i++) {
-      spaceUsedInBytes += filesizeParser(uploads[i].size);
-    }
+
     uploads.map(data => {
       spaceUsedInBytes += filesizeParser(data.size);
     });
+    res.json({ data: filesize(spaceUsedInBytes), status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

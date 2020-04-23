@@ -9,7 +9,6 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 const fileUpload = require('express-fileupload');
 const MongoStore = require('connect-mongo')(session);
-const rateLimit = require('express-rate-limit');
 const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
@@ -228,6 +227,12 @@ app.use((req, res, next) => {
 });
 
 /**
+ * Limiters - this is rate limiters per API or other requests.
+ */
+const accountLimiter = require('./limiters/account')
+
+
+/**
  * Load middlewares
  */
 const isLoggedin = require('./middleware/isLoggedin');
@@ -440,6 +445,16 @@ app.delete(
   isSuspendedAPI,
   accountController.deleteMFA
 );
+
+app.get(
+  '/account/space-used',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  accountLimiter.spaceUsed,
+  accountController.getSpaceUsed
+);
+
 app.use('/tokens', isLoggedin, isBanned, isSuspended, tokensRoutes);
 
 app.get(
