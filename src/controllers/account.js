@@ -4,6 +4,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const { authenticator } = require('otplib');
 const { customAlphabet } = require('nanoid/async');
+const filesize = require('filesize');
+const filesizeParser = require('filesize-parser');
 const sendgrid = require('../config/sendgrid');
 
 const urlFriendyAlphabet =
@@ -280,6 +282,26 @@ exports.deleteAccount = async (req, res, next) => {
     req.logout();
     req.flash('success', 'Your account and all data with it has been removed');
     res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Space Used Controller - Get's the amount of spaced used by uploads.
+ */
+exports.getSpaceUsed = async (req, res, next) => {
+  try {
+    const uploads = await Upload.find({ uploader: req.user.id }).select('size');
+    const uploadsLength = uploads.length;
+    // eslint-disable-next-line prefer-const
+    let spaceUsedInBytes = 0;
+
+    uploads.map(data => {
+      spaceUsedInBytes += filesizeParser(data.size);
+    });
+    res.json({ data: filesize(spaceUsedInBytes), status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

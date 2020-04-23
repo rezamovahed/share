@@ -9,7 +9,6 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 const fileUpload = require('express-fileupload');
 const MongoStore = require('connect-mongo')(session);
-const rateLimit = require('express-rate-limit');
 const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
@@ -170,9 +169,9 @@ app.use(async (req, res, next) => {
   res.locals.owner = process.env.OWNER === 'true';
   res.locals.signupTerms = process.env.SIGNUP_TERMS === 'true';
   res.locals.version =
-    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
-      ? `${process.env.npm_package_version}dev`
-      : process.env.npm_package_version;
+    process.env.NODE_ENV === 'production'
+      ? process.env.npm_package_version
+      : `${process.env.npm_package_version}dev`;
   // Pass flash to locals
   res.locals.info = req.flash('info');
   res.locals.success = req.flash('success');
@@ -226,6 +225,12 @@ app.use((req, res, next) => {
     lusca.csrf()(req, res, next);
   }
 });
+
+/**
+ * Limiters - this is rate limiters per API or other requests.
+ */
+const accountLimiter = require('./limiters/account')
+
 
 /**
  * Load middlewares
@@ -440,6 +445,16 @@ app.delete(
   isSuspendedAPI,
   accountController.deleteMFA
 );
+
+app.get(
+  '/account/space-used',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  accountLimiter.spaceUsed,
+  accountController.getSpaceUsed
+);
+
 app.use('/tokens', isLoggedin, isBanned, isSuspended, tokensRoutes);
 
 app.get(
