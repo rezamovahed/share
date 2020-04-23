@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const supertest = require('supertest');
 const app = require('../src/index');
+const User = require('../src/models/User');
 
 let userCookie = null;
 let adminCookie = null;
@@ -100,6 +101,12 @@ describe('Removing the created users', () => {
             return done(err);
           }
           ownerCookie = res.header['set-cookie'];
+        const user = await User.findOne({
+            email: 'owner@mrdemonwolf.github.io'
+          });
+          user.role = 'user';
+          await user.save();
+
           done();
         });
     });
