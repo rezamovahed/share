@@ -242,6 +242,7 @@ const isAdmin = require('./middleware/roleCheck/isAdmin');
 const putEmailVerified = require('./middleware/admin/putEmailVerified');
 const isOwner = require('./middleware/roleCheck/isOwner');
 const isOwnerDisabled = require('./middleware/isOwner');
+const isOwnerAccountDelete =require('./middleware/account/isOwner')
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVaild');
 const isAccountActivationTokenVaild = require('./middleware/isAccountActivationTokenVaild');
@@ -394,6 +395,7 @@ app.delete(
   isLoggedin,
   isBanned,
   isSuspended,
+  isOwnerAccountDelete,
   accountController.deleteAccount
 );
 
