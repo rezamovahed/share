@@ -5,7 +5,7 @@ const User = require('../src/models/User');
 
 let userCookie = null;
 let adminCookie = null;
-let ownerCookie = null;
+const ownerCookie = null;
 
 describe('Removing the created users', () => {
   describe('LOGIN as user', () => {
@@ -100,26 +100,41 @@ describe('Removing the created users', () => {
           if (err) {
             return done(err);
           }
-          ownerCookie = res.header['set-cookie'];
-        const user = await User.findOne({
-            email: 'owner@mrdemonwolf.github.io'
-          });
-          user.role = 'user';
-          await user.save();
 
           done();
         });
     });
   });
   describe('DELETE owner', () => {
-    it('it should has status code 200', done => {
+    it('it should has status code 302', done => {
+      supertest
+        .agent(app)
+        .delete('/account')
+        .set('Cookie', ownerCookie)
+        .expect(302)
+        .expect('Location', '/account')
+        .end(async (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          const user = await User.findOne({
+            email: 'owner@mrdemonwolf.github.io'
+          });
+          user.role = 'user';
+          await user.save();
+          done();
+        });
+    });
+  });
+  describe('DELETE owner (cleanup aka the owner is user now.)', () => {
+    it('it should has status code 302', done => {
       supertest
         .agent(app)
         .delete('/account')
         .set('Cookie', ownerCookie)
         .expect(302)
         .expect('Location', '/')
-        .end((err, res) => {
+        .end(async (err, res) => {
           if (err) {
             return done(err);
           }
