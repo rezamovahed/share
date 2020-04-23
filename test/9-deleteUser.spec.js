@@ -5,7 +5,7 @@ const User = require('../src/models/User');
 
 let userCookie = null;
 let adminCookie = null;
-const ownerCookie = null;
+let ownerCookie = null;
 
 describe('Removing the created users', () => {
   describe('LOGIN as user', () => {
@@ -100,7 +100,7 @@ describe('Removing the created users', () => {
           if (err) {
             return done(err);
           }
-
+          ownerCookie = res.header['set-cookie'];
           done();
         });
     });
