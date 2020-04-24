@@ -229,8 +229,8 @@ app.use((req, res, next) => {
 /**
  * Limiters - this is rate limiters per API or other requests.
  */
-const accountLimiter = require('./limiters/account')
-
+const accountLimiter = require('./limiters/account');
+const adminLimiter = require('./limiters/admin');
 
 /**
  * Load middlewares
@@ -242,7 +242,7 @@ const isAdmin = require('./middleware/roleCheck/isAdmin');
 const putEmailVerified = require('./middleware/admin/putEmailVerified');
 const isOwner = require('./middleware/roleCheck/isOwner');
 const isOwnerDisabled = require('./middleware/isOwner');
-const isOwnerAccountDelete =require('./middleware/account/isOwner')
+const isOwnerAccountDelete = require('./middleware/account/isOwner');
 const isPasswordResetTokenVaild = require('./middleware/isPasswordResetTokenVaild');
 const isDeleteAccountTokenVaild = require('./middleware/isDeleteAccountTokenVaild');
 const isAccountActivationTokenVaild = require('./middleware/isAccountActivationTokenVaild');
@@ -296,9 +296,9 @@ const indexController = require('./controllers/index');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
-const tokensConroller = require('./controllers/tokens');
-const galleryConroller = require('./controllers/gallery');
-const adminConroller = require('./controllers/admin');
+const tokensController = require('./controllers/tokens');
+const galleryController = require('./controllers/gallery');
+const adminController = require('./controllers/admin');
 
 app.use(indexRoutes);
 
@@ -311,7 +311,6 @@ app.get(
   isLoggedin,
   isBannedAPI,
   isSuspendedAPI,
-
   indexController.getUploadListData
 );
 
@@ -322,6 +321,7 @@ app.delete(
   isSuspendedAPI,
   indexController.deleteSingleUpload
 );
+
 app.use(authRoutes);
 
 app.post(
@@ -464,10 +464,10 @@ app.get(
   isLoggedin,
   isBannedAPI,
   isSuspendedAPI,
-  tokensConroller.getTokenListData
+  tokensController.getTokenListData
 );
 
-app.post('/tokens', isLoggedin, isBannedAPI, tokensConroller.postToken);
+app.post('/tokens', isLoggedin, isBannedAPI, tokensController.postToken);
 
 app.put(
   '/tokens/:token_id',
@@ -475,7 +475,7 @@ app.put(
   isBannedAPI,
   isSuspendedAPI,
   accountRenameTokenVaildation,
-  tokensConroller.putToken
+  tokensController.putToken
 );
 
 app.delete(
@@ -483,7 +483,7 @@ app.delete(
   isLoggedin,
   isBannedAPI,
   isSuspendedAPI,
-  tokensConroller.deleteToken
+  tokensController.deleteToken
 );
 
 app.delete(
@@ -499,7 +499,7 @@ app.delete(
   isLoggedin,
   isBannedAPI,
   isSuspendedAPI,
-  tokensConroller.deleteAllTokens
+  tokensController.deleteAllTokens
 );
 app.use('/gallery', isLoggedin, isBanned, isSuspended, galleryRoutes);
 
@@ -508,33 +508,41 @@ app.delete(
   isLoggedin,
   isBannedAPI,
   isSuspendedAPI,
-  galleryConroller.deleteSingleUpload
+  galleryController.deleteSingleUpload
 );
 app.use('/config', isLoggedin, isBanned, isSuspended, configRoutes);
 
 app.use('/admin', isAdmin, adminRoutes);
 
-app.delete('/admin/all/uploads', isAdmin, adminConroller.deleteAllUploads);
+app.get(
+  '/admin/space-used',
+  isAdmin,
+  isSuspendedAPI,
+  adminLimiter.spaceUsed,
+  adminController.getSpaceUsed
+);
 
-app.get('/admin/uploads-data', isAdmin, adminConroller.getUploadListData);
+app.delete('/admin/all/uploads', isAdmin, adminController.deleteAllUploads);
+
+app.get('/admin/uploads-data', isAdmin, adminController.getUploadListData);
 
 app.delete(
   '/admin/uploads/:uploadedFile',
   isAdmin,
-  adminConroller.deleteSingleUpload
+  adminController.deleteSingleUpload
 );
 app.delete(
   '/admin/uploads/gallery/:uploadedFile',
   isAdmin,
-  adminConroller.deleteGallerySingleUpload
+  adminController.deleteGallerySingleUpload
 );
-app.get('/admin/users-data', isAdmin, adminConroller.getUserListData);
+app.get('/admin/users-data', isAdmin, adminController.getUserListData);
 
 app.post(
   '/admin/users',
   isAdmin,
   adminNewUserVaildation,
-  adminConroller.postUser
+  adminController.postUser
 );
 
 app.put(
@@ -542,87 +550,92 @@ app.put(
   isAdmin,
   putEditUser,
   userUpdateVaildation,
-  adminConroller.putEditUser
+  adminController.putEditUser
 );
+
 app.delete(
   '/admin/users/edit/:slug/mfa',
   isAdmin,
   deleteUserMFA,
-  adminConroller.deleteUserMFA
+  adminController.deleteUserMFA
 );
+
 app.put(
   '/admin/users/edit/:slug/streamer-mode/:boolean',
   isAdmin,
-  adminConroller.putStreamerMode
+  adminController.putStreamerMode
 );
+
 app.put(
   '/admin/users/edit/:slug/email-verified/:boolean',
   isAdmin,
   putEmailVerified,
-  adminConroller.putEmailVerified
+  adminController.putEmailVerified
 );
+
 app.put(
   '/admin/users/edit/:slug/verified/:boolean',
   isAdmin,
-  adminConroller.putVerified
+  adminController.putVerified
 );
-app.put('/admin/users/ban/:slug', isAdmin, putBan, adminConroller.putBan);
 
-app.put('/admin/users/unban/:slug', isAdmin, putUnban, adminConroller.putUnban);
+app.put('/admin/users/ban/:slug', isAdmin, putBan, adminController.putBan);
+
+app.put('/admin/users/unban/:slug', isAdmin, putUnban, adminController.putUnban);
 
 app.put(
   '/admin/users/suspend/:slug',
   isAdmin,
   putSuspend,
   suspendUserVaildation,
-  adminConroller.putSuspend
+  adminController.putSuspend
 );
 app.put(
   '/admin/users/unsuspend/:slug',
   isAdmin,
   putUnsuspend,
-  adminConroller.putUnsuspend
+  adminController.putUnsuspend
 );
 app.delete(
   '/admin/users/:slug',
   isAdmin,
   deleteUser,
-  adminConroller.deleteUser
+  adminController.deleteUser
 );
 
 app.post(
   '/admin/settings/ownership',
   isOwner,
   postOwnershipVaildation,
-  adminConroller.postOwnership
+  adminController.postOwnership
 );
 
 app.post(
   '/admin/settings/logo',
   isOwner,
   postUploadLogo,
-  adminConroller.postUploadLogo
+  adminController.postUploadLogo
 );
 
 app.delete(
   '/admin/settings/logo',
   isOwner,
   deleteUploadLogo,
-  adminConroller.deleteUploadLogo
+  adminController.deleteUploadLogo
 );
 
 app.post(
   '/admin/settings/favicon',
   isOwner,
   postUploadFavicon,
-  adminConroller.postUploadFavicon
+  adminController.postUploadFavicon
 );
 
 app.delete(
   '/admin/settings/favicon',
   isOwner,
   deleteUploadFavicon,
-  adminConroller.deleteUploadFavicon
+  adminController.deleteUploadFavicon
 );
 
 /**
