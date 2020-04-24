@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
+const filesize = require('filesize');
+const filesizeParser = require('filesize-parser');
 
 const sendgrid = require('../config/sendgrid');
 
@@ -897,6 +899,26 @@ exports.deleteUploadFavicon = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error', status: 500 });
+  }
+};
+
+/**
+ * Space Used Controller - Get's the amount of spaced used by uploads.
+ */
+exports.getSpaceUsed = async (req, res, next) => {
+  try {
+    const uploads = await Upload.find({}).select('size');
+    const uploadsLength = uploads.length;
+    // eslint-disable-next-line prefer-const
+    let spaceUsedInBytes = 0;
+
+    uploads.map(data => {
+      spaceUsedInBytes += filesizeParser(data.size);
+    });
+    res.json({ data: filesize(spaceUsedInBytes), status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
   }
 };
 
