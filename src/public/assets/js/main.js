@@ -16,6 +16,8 @@ $(document).ready(() => {
         .fadeOut(100);
     }
   );
+  $('.conditionize').conditionize();
+
   // hide the alert
   setInterval(() => {
     $('.alert.alert-timeout').hide();
