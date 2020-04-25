@@ -5,7 +5,7 @@ const Token = require('../../models/Token');
 module.exports = async (req, res, next) => {
   let { token } = req.body;
   if (!token) {
-    req.flash('error', 'API Token must be provided');
+    req.flash('error', 'Token must be provided');
     return res.redirect('/config');
   }
   const tokenArray = token.split(' ');
@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
   });
 
   if (!tokenVaild) {
-    req.flash('error', 'API Token is either expired or is invaild');
+    req.flash('error', 'Token is either expired or is invaild');
     return res.redirect('/config');
   }
   next();
