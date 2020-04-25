@@ -264,6 +264,7 @@ const deleteUploadLogo = require('./middleware/admin/deleteUploadLogo');
 const postUploadFavicon = require('./middleware/admin/postUploadFavicon');
 const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
 const isSignupsDisabled = require('./middleware/isSignupsDisabled');
+const isConfigTokenVaild = require('./middleware/config/isTokenVaild');
 
 /**
  * Load vaildation middleware
@@ -279,6 +280,7 @@ const ResendActivationEmailVaildation = require('./validation/resend-activation'
 const userUpdateVaildation = require('./validation/admin/userUpdate');
 const suspendUserVaildation = require('./validation/admin/suspendUser');
 const postOwnershipVaildation = require('./validation/admin/transferOwnership');
+const configVaildation = require('./validation/config');
 
 /**
  * Primary app routes.
@@ -299,6 +301,7 @@ const accountController = require('./controllers/account');
 const tokensController = require('./controllers/tokens');
 const galleryController = require('./controllers/gallery');
 const adminController = require('./controllers/admin');
+const configController = require('./controllers/config');
 
 app.use(indexRoutes);
 
@@ -512,6 +515,16 @@ app.delete(
 );
 app.use('/config', isLoggedin, isBanned, isSuspended, configRoutes);
 
+app.post(
+  '/config',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  configVaildation,
+  isConfigTokenVaild,
+  configController.postConfig
+);
+
 app.use('/admin', isAdmin, adminRoutes);
 
 app.get(
@@ -581,7 +594,12 @@ app.put(
 
 app.put('/admin/users/ban/:slug', isAdmin, putBan, adminController.putBan);
 
-app.put('/admin/users/unban/:slug', isAdmin, putUnban, adminController.putUnban);
+app.put(
+  '/admin/users/unban/:slug',
+  isAdmin,
+  putUnban,
+  adminController.putUnban
+);
 
 app.put(
   '/admin/users/suspend/:slug',
