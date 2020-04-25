@@ -16,7 +16,8 @@ module.exports = (req, res, next) => {
   switch (supportedUploader) {
     case 'sharex':
       if (sharexType === undefined) {
-        errors = 'Share Type is required.';
+        req.flash('error', 'Uploads enabled is required.');
+        return res.redirect('/config');
       }
       if (!sharexTypes.some(data => sharexType.includes(data))) {
         req.flash('error', 'Not a vaild ShareX Type');
@@ -29,9 +30,9 @@ module.exports = (req, res, next) => {
       break;
   }
 
-  if (!isEmpty(errors)) {
-    req.flash('error', errors);
-    return res.redirect('/cpmfog');
-  }
+  // if (!isEmpty(errors)) {
+  // req.flash('error', errors);
+  // return res.redirect('/cpmfog');
+  // }
   next();
 };
