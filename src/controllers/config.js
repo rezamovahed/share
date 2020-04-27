@@ -1,3 +1,5 @@
+const yaml = require('js-yaml');
+
 /**
  * Create Token Controler - Creates a API token for the user to use with sharex or other tools.
  */
@@ -12,6 +14,7 @@ exports.postConfig = async (req, res, next) => {
     } else {
       token = tokenArray.slice(1).toString();
     }
+    const fullToken = `Bearer ${token}`;
     switch (supportedUploader) {
       case 'sharex':
         res.set(
@@ -27,12 +30,26 @@ exports.postConfig = async (req, res, next) => {
             RequestMethod: 'POST',
             RequestURL: `${process.env.FULL_DOMAIN}/api/v1/upload/`,
             Headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: fullToken
             },
             Body: 'MultipartFormData',
             FileFormName: 'file',
             URL: '$json:file.url$',
             DeletionURL: '$json:file.delete$'
+          })
+        );
+        break;
+      case 'share-cli':
+        res.set(
+          'Content-Disposition',
+          `attachment; filename=${process.env.TITLE} ShareX Config.yml`
+        );
+
+        res.type('yaml');
+        res.send(
+          yaml.safeDump({
+            server: { url: process.env.FULL_DOMAIN },
+            creds: { apikey: token }
           })
         );
         break;
