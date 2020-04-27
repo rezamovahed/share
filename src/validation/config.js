@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   let errors = {};
   const { supportedUploader, sharexType } = req.body;
   const sharexTypes = ['FileUploader', 'ImageUploader', 'TextUploader'];
-  const supportedUploaders = ['sharex'];
+  const supportedUploaders = ['sharex', 'share-cli'];
 
   if (!supportedUploaders.includes(supportedUploader)) {
     req.flash('error', 'Not a vaild supported uploader.');
@@ -23,6 +23,9 @@ module.exports = (req, res, next) => {
         req.flash('error', 'Not a vaild ShareX Type');
         return res.redirect('/config');
       }
+      break;
+    case 'share-cli':
+      next();
       break;
     default:
       req.flash('error', 'Not a vaild supported uploader.');
