@@ -195,11 +195,10 @@ app.use(async (req, res, next) => {
 /**
  * Express Fileupload
  */
-
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: `${__dirname}/tmp`,
+    tempFileDir: path.join(__dirname, '../tmp'),
     safeFileNames: true,
     preserveExtension: true,
     limits: {
