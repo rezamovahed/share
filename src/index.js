@@ -198,6 +198,8 @@ app.use(async (req, res, next) => {
 
 app.use(
   fileUpload({
+    useTempFiles: true,
+    tempFileDir: `${__dirname}/tmp`,
     safeFileNames: true,
     preserveExtension: true,
     limits: {
