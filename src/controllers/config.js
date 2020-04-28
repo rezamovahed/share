@@ -50,8 +50,7 @@ exports.postConfig = async (req, res, next) => {
             {
               server: { url: process.env.FULL_DOMAIN },
               creds: { apikey: token }
-            },
-            { skipInvalid: true }
+            }
           )
         );
         break;
