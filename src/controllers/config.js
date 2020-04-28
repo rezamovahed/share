@@ -5,7 +5,6 @@ const yaml = require('js-yaml');
  */
 exports.postConfig = async (req, res, next) => {
   try {
-    console.log(req.body);
     const { supportedUploader, sharexType } = req.body;
     let { token } = req.body;
 
@@ -22,6 +21,7 @@ exports.postConfig = async (req, res, next) => {
           'Content-Disposition',
           `attachment; filename=${process.env.TITLE} ShareX Config.sxcu`
         );
+        res.type('json');
         res.send(
           JSON.stringify({
             Version: '12.4.1',
@@ -44,14 +44,12 @@ exports.postConfig = async (req, res, next) => {
           'Content-Disposition',
           `attachment; filename=${process.env.TITLE} ShareX Config.yml`
         );
-
+        res.type('yaml');
         res.send(
-          yaml.safeDump(
-            {
-              server: { url: process.env.FULL_DOMAIN },
-              creds: { apikey: token }
-            }
-          )
+          yaml.safeDump({
+            server: { url: process.env.FULL_DOMAIN },
+            creds: { apikey: token }
+          })
         );
         break;
       default:

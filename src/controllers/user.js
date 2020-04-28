@@ -42,7 +42,7 @@ exports.postPasswordForgot = async (req, res) => {
 
     // Setups the email which is sent to the user.
 
-    const emailTemplate = PasswordForgotEmail(token);
+    const emailTemplate = PasswordForgotEmail(user.passwordResetToken);
 
     const msg = {
       to: user.email,
@@ -173,7 +173,7 @@ exports.postResendActivationEmail = async (req, res) => {
     await user.save();
 
     // Setups the email which is sent to the user.
-    const emailTemplate = AccountActivationEmail(token);
+    const emailTemplate = AccountActivationEmail(user.emailVerificationToken);
 
     const msg = {
       to: user.email,

@@ -42,7 +42,7 @@ exports.postSignup = async (req, res) => {
     await user.save();
 
     // Setups the email which is sent to the user.
-    const emailTemplate = AccountActivationEmail(token);
+    const emailTemplate = AccountActivationEmail(user.emailVerificationToken);
 
     const msg = {
       to: user.email,
