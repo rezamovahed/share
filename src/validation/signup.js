@@ -29,7 +29,7 @@ module.exports = async (req, res, next) => {
   }
 
   if (!Validator.isEmpty(email) && !Validator.isEmail(email)) {
-    errors.email = 'Email is invaild.  Example (example@example.com)';
+    errors.email = 'Email is invalid.  Example (example@example.com)';
   }
 
   if (!isEmpty(errors)) {
@@ -37,10 +37,24 @@ module.exports = async (req, res, next) => {
     return res.redirect('/signup');
   }
 
-  const user = await User.find({ email });
+  username = username.toLowerCase();
+  email = email.toLowerCase();
 
-  if (user.length > 0) {
-    req.flash('error', 'Sorry but that email is already used.');
+  const user = await User.findOne({
+    $or: [{ username }, { email }]
+  });
+
+  if (user) {
+    req.flash(
+      'error',
+      `This ${
+        email === user.email
+          ? 'email'
+          : username === user.username
+            ? 'username'
+            : 'email and username'
+      } has already been used.`
+    );
     return res.redirect('/signup');
   }
   next();
