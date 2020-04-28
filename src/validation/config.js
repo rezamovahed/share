@@ -25,7 +25,6 @@ module.exports = (req, res, next) => {
       }
       break;
     case 'share-cli':
-      next();
       break;
     default:
       req.flash('error', 'Not a vaild supported uploader.');
