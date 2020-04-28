@@ -5,13 +5,22 @@ nav_order: 10
 ---
 
 # Changelog
-4.1.0 (pre release)
+4.1.0
 - Fixed bug in pm2 echosystem file.
 - Fixed missing UPLOAD_LIMIT env.
 - Fixed bug where it shows dev even in prod in footer.
 - Fixed signup disabled middleware.
 - Removed the display of signup links on all pages if they are disabled.
 - You can now disable the /owner route to make it return a 404.
+- Fixed front-end bug where it wont display the right token created date.
+- Fixed the tests bug due to not removing mfa on the test account.
+- Fixed bug where if you edited yourself in the admin panel it will make you a user.
+- Fixed bug where the last login date wont show the right one.
+- Added account space used.  WIth rate limited requests.
+- Added admin dashboard space used.  And removed the users count.
+- When logged in you can now make config files for supported uploads by pasting your token in and then picking a uploader.
+- Added tests for the config.
+- Fixed bug on check for username or email when signing up.
 
 4.0.1
 * Fixed a bug where users can still create accounts even when signups are disabled (Hotfix)
