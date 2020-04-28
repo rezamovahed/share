@@ -44,11 +44,6 @@ module.exports = async (req, res, next) => {
     $or: [{ username }, { email }]
   });
 
-  console.log(user);
-  console.log(username);
-  console.log(email);
-  console.log(username === user.username);
-  console.log(email === user.email);
   if (user) {
     req.flash(
       'error',
