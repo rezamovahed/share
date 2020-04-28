@@ -28,7 +28,10 @@ env:
     - SESSION_SECRET=thisistesting
     - JWT_SECRET=thisistesting
     - TITLE=Share
-    - FOOTER_TITLE=MrDemonWolf
+    - FULL_DOMAIN="https://www.mrdemonwolf.local"
+    - FOOTER_TEXT=MrDemonWolf
+    - FOOTER_LINK="https://www.mrdemonwolf.me"
+    - SHORT_TITLE=Share
     - DESC="Advanced uploader with web front-end for images,files,and text. Built with
       ShareX in mind. Licensed under MIT and is free to use."
     - FILE_CHECK=true
@@ -42,7 +45,9 @@ before_install:
   - echo "SESSION_SECRET=$SESSION_SECRET" >> ./.env
   - echo "JWT_SECRET=$JWT_SECRET" >> ./.env
   - echo "TITLE=$TITLE" >> ./.env
-  - echo "FOOTER_TITLE=$FOOTER_TITLE" >> ./.env
+  - echo "FULL_DOMAIN=$FULL_DOMAIN" >> ./.env
+  - echo "SHORT_TITLE=$SHORT_TITLE" >> ./.env
+  - echo "FOOTER_TEXT=$FOOTER_TEXT" >> ./.env
   - echo "FILE_CHECK=$FILE_CHECK" >> ./.env
   - echo "CREDIT=$CREDIT" >> ./.env
   - echo "SHOW_VERSION=$SHOW_VERSION" >> ./.env
