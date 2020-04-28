@@ -210,6 +210,60 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
+  describe('GET /config', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .get('/config')
+        .set('Cookie', userCookie)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+
+  describe('POST /config (sharex)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .post('/config')
+        .set('Cookie', userCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          supportedUploader: 'sharex',
+          sharexType: ['TextUploader'],
+          token: this.token.jwt
+        })
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+
+    describe('POST /config (share-cli)', () => {
+    it('it should has status code 200', done => {
+      supertest(app)
+        .post('/config')
+        .set('Cookie', userCookie)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .send({
+          supportedUploader: 'share-cli',
+          token: this.token.jwt
+        })
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            return done(err);
+          }
+          done();
+        });
+    });
+  });
+
   describe('GET /account', () => {
     it('it should has status code 200', done => {
       supertest(app)
