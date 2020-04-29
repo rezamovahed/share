@@ -27,6 +27,7 @@ const uploadSchema = new Schema({
     enum: ['file', 'image', 'text'],
     default: 'file'
   },
+  tags: [{ type: String }],
   deleteKey: {
     type: String,
     required: true

@@ -20,7 +20,7 @@ module.exports.uploadFile = async (req, res, next) => {
   try {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add vaildation file check
-    // TODO add check for file or image or text and then set the type in res.locals.type
+    let { tags } = req.body;
     const { file } = req.files;
     const fileExtension = path.extname(file.name);
     const fileMineType = file.mimetype;
@@ -42,6 +42,10 @@ module.exports.uploadFile = async (req, res, next) => {
     // Sets type based on above.
     const type = isImage ? 'image' : isText ? 'text' : 'file';
 
+    if (tags) {
+      tags = tags.split(', ');
+    }
+
     /**
      * Adds the file to the database with basic infomation plus a
      * deleteKey which allows users to remove the file with one click
@@ -52,7 +56,8 @@ module.exports.uploadFile = async (req, res, next) => {
       fileExtension,
       deleteKey,
       size,
-      type
+      type,
+      tags
     });
 
     // Log the upload in lastUpload.
@@ -71,6 +76,7 @@ module.exports.uploadFile = async (req, res, next) => {
         name: fileName,
         ext: fileExtension,
         size,
+        tags,
         url: `${process.env.FULL_DOMAIN}/u/${fileNameWithExt}`,
         delete: `${process.env.FULL_DOMAIN}/api/v1/delete?key=${deleteKey}`,
         deleteKey
