@@ -74,7 +74,7 @@ lib-cov
 pids
 logs
 results
-tmp
+tmp/*
 
 # Docs
 docs/*.gem

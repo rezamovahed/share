@@ -34,6 +34,7 @@
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "tempusdominus-bs4": "^5.1.2",
-    "bootstrap-fileinput": "^5.0.8"
+    "bootstrap-fileinput": "^5.0.8",
+    "bootstrap-tagsinput": "bootstrap-tagsinput/bootstrap-tagsinput#^0.8.0"
   }
 }

@@ -430,7 +430,9 @@ exports.getUserListData = async (req, res) => {
 
     const userSelect =
       'username slug email createdAt role emailVerified newEmail streamerMode isVerified lastLogin lastLoginIP isBanned isSuspended';
+
     let userData = [];
+
     if (search) {
       userData = await User.find({ $text: { $search: req.query.search } })
         .sort({ createdAt: sort })

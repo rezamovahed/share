@@ -306,6 +306,14 @@ const configController = require('./controllers/config');
 
 app.use(indexRoutes);
 
+app.put(
+  '/edit',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  indexController.putUpload
+);
+
 app.get('/owner', isOwnerDisabled, ownerController.getOwner);
 
 app.get('/owner/:token', isOwnerDisabled, ownerController.getOwnerToken);

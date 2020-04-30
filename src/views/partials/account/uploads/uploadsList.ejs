@@ -4,6 +4,38 @@
   role="alert"
   id="success"
 ></div>
+ <div
+    class="modal fade"
+    id="edit-upload"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="edit-upload"
+    aria-hidden="true"
+  >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit <strong id="editUploadId"></strong></h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+      <form id="editUpload">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>"/>
+    <input type="hidden" id="fileName" name="fileName"/>
+    <div class="form-group">
+      <label for="uploadTags">Tags</label>
+      <input class="form-tags" id="uploadTags" name="uploadTags" type="text" data-lpignore="true"
+>
+        </div>
+           </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary text-white" id="btn-edit-upload">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
 <div class="customTable">
   <div class="table-wrapper">
     <div class="table-title">
@@ -29,6 +61,7 @@
     data-pagination="true"
     data-id-field="id"
     data-side-pagination="server"
+    data-search="true"
     data-url="/upload-data"
     data-sort-order="desc"
     data-page-size="10"
@@ -36,15 +69,18 @@
   >
     <thead>
       <tr>
-        <!-- <th data-field="name" scope="col">Name</th> -->
         <th data-field="file" data-formatter="fileFormater" scope="col">
           File
+        </th>
+        <th data-field="tags" data-formatter="tagsFormater" scope="col">
+          Tags
         </th>
         <th data-field="size" scope="col">Size</th>
         <th
           data-field="uploadedAt"
           data-formatter="uploadedAtFormater"
           data-sortable="true"
+          data-searchable="false"
           scope="col"
         >
           Uploaded
@@ -53,8 +89,9 @@
           data-field="operate"
           data-formatter="actionsFormatter"
           data-events="actionEvents"
+          data-searchable="false"
           scope="col"
-          data-width="24px"
+          data-width="100px"
         >
           Actions
         </th>
@@ -68,6 +105,9 @@
           return 'No uploads found.';
         }
       });
+      $('#editUpload').on('submit', function(e) {
+      e.preventDefault();
+    });
     });
     var $table = $('#table');
 
@@ -84,6 +124,14 @@
         row.type === 'image' ? `/view/${value}` : `/u/${value + row.extension}`
       }" target="_blank">${value}</a>`;
     }
+
+        // Data formatters
+    function tagsFormater(value, row) {
+      if (value.length > 0) {
+        return value
+      }
+      return 'No Tags';
+    }
     function uploadedAtFormater(value, row) {
       return moment(value).fromNow();
     }
@@ -92,6 +140,9 @@
         // '<a class="link" href="javascript:void(0)" title="Copy link">',
         // '<i class="fas fa-link"></i>',
         // '</a> ',
+        '<a class="edit" href="javascript:void(0)" title="Edit">',
+        '<i class="fas fa-edit"></i>',
+        '</a> ',
         '<a class="delete" href="javascript:void(0)" title="Delete Upload">',
         ' <i class="fas fa-times-circle"></i>',
         '</a>'
@@ -117,9 +168,43 @@
             $('#error').html(response.message);
           }
         });
+      },
+      'click .edit': function(e, value, row, index) {
+        $('#uploadTags').attr('value', row.tags.toString())
+        $('#uploadTags').tagsinput({
+           unique: true,
+           minChars: 2,
+           maxChars: 10,
+           limit: 25,
+           validationPattern: new RegExp('^[a-zA-Z]+$')
+         });
+          $('#fileName').attr('value', row.file);
+
+           $('#edit-upload').modal('show');
       }
-    };
-  </script>
+    }
+      $('#btn-edit-upload').on('click', function(e) {
+      e.preventDefault();
+      const tags = $("tags").val();
+      const fileName = $('#fileName').val();
+      $.ajax({
+        url: '/edit?_method=PUT',
+        type: 'POST',
+        data: { _csrf: '<%= _csrf %>', tags: tags ,fileName: fileName},
+        success: function(response) {
+          $(':input', this).val('');
+          $('#edit-upload').modal('hide');
+          $('#success').show();
+          $('#success').html(response.message);
+        },
+        error: function(response) {
+          console.log(response);
+          $('#edit-upload-error').addClass('d-block');
+          $('#edit-upload-error').html(response.responseJSON.message);
+        }
+      });
+    });
+</script>
 
   <div
     class="modal fade"

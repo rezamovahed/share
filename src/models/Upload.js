@@ -42,4 +42,9 @@ const uploadSchema = new Schema({
   }
 });
 
+uploadSchema.index(
+  { tags: 'text', fileName: 'text' },
+  { weights: { tags: 1, fileName: 2 } }
+);
+
 module.exports = mongoose.model('Upload', uploadSchema);
