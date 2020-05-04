@@ -91,7 +91,7 @@
           data-events="actionEvents"
           data-searchable="false"
           scope="col"
-          data-width="100px"
+          data-width="175px"
         >
           Actions
         </th>
@@ -100,16 +100,21 @@
   </table>
   <script>
     $(document).ready(() => {
-      $('#table').bootstrapTable({
-        formatNoMatches: function() {
-          return 'No uploads found.';
-        }
+       $("#table").bootstrapTable({
+         formatNoMatches: function () {
+           return "No uploads found.";
+         },
+       });
+       $("#editUpload").on("submit", function (e) {
+         e.preventDefault();
+       });
+       $(".clipboard").tooltip({
+         placement: "bottom",
+         delay: 1000
+       });
       });
-      $('#editUpload').on('submit', function(e) {
-      e.preventDefault();
-    });
-    });
-    var $table = $('#table');
+    const clipboard = new ClipboardJS(".clipboard");
+    const $table = $('#table');
 
     // Data formatters
     function fileFormater(value, row) {
@@ -128,7 +133,14 @@
         // Data formatters
     function tagsFormater(value, row) {
       if (value.length > 0) {
-        return value
+        const tags = [];
+        value.map(data=>{
+          tags.push(
+             '<span class="badge badge-primary">',
+        data,
+        '</span> ',)
+        })
+        return  tags.join('');
       }
       return 'No Tags';
     }
@@ -137,13 +149,13 @@
     }
     function actionsFormatter(value, row, index) {
       return [
-        // '<a class="link" href="javascript:void(0)" title="Copy link">',
-        // '<i class="fas fa-link"></i>',
-        // '</a> ',
-        '<a class="edit" href="javascript:void(0)" title="Edit">',
+        `<a class="link clipboard" id="clip_${row.id}" href="#" data-clipboard-text="${row.type === 'image' ? `<%= siteURL %>/view/${row.file}` : `${siteURL}/u/${row.file + row.extension}`}">`,
+        '<i class="fas fa-link"></i>',
+        '</a> ',
+        '<a class="edit" href="javascript:void(0)">',
         '<i class="fas fa-edit"></i>',
         '</a> ',
-        '<a class="delete" href="javascript:void(0)" title="Delete Upload">',
+        '<a class="delete" href="javascript:void(0)">',
         ' <i class="fas fa-times-circle"></i>',
         '</a>'
       ].join('');
@@ -183,6 +195,25 @@
            $('#edit-upload').modal('show');
       }
     }
+
+       function setTooltip(message, id) {
+         $(`#${id}`)
+           .tooltip("hide")
+           .attr("data-original-title", message)
+           .tooltip("show");
+       }
+       function hideTooltip(id) {
+           $(`#${id}`)
+           .tooltip("hide")
+       }
+       clipboard.on("success", (e) => {
+         setTooltip("Copied!", e.trigger.id);
+         hideTooltip(e.trigger.id);
+       });
+       clipboard.on("error", (e) => {
+         setTooltip("Failed!");
+         hideTooltip(e.trigger.id);
+       });
       $('#btn-edit-upload').on('click', function(e) {
       e.preventDefault();
       const tags = $("tags").val();
