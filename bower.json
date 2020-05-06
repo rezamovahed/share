@@ -31,7 +31,7 @@
     "bootstrap4-toggle": "~3.6.1",
     "conditionize2.js": "rguliev/conditionize2.js#~2.0.1",
     "font-awsome": "~5.12.1",
-    "jquery": "~3.4.1",
+    "jquery": "^3.4.1",
     "moment": "~2.24.0",
     "tempusdominus-bs4": "~5.1.2",
     "bootstrap-fileinput": "~5.0.8",
