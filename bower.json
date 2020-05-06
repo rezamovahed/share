@@ -37,5 +37,8 @@
     "bootstrap-fileinput": "5.0.8",
     "bootstrap-tagsinput": "bootstrap-tagsinput/bootstrap-tagsinput#0.8.0",
     "clipboard": "2.0.6"
+  },
+  "resolutions": {
+    "jquery": "3.4.1"
   }
 }
