@@ -65,6 +65,7 @@
     data-url="/upload-data"
     data-sort-order="desc"
     data-page-size="10"
+    data-show-refresh="true"
     data-page-list="[10, 25, 50, 100, all]"
   >
     <thead>
@@ -112,6 +113,13 @@
          placement: "bottom",
          delay: 1000
        });
+      $('#uploadTags').tagsinput({
+           unique: true,
+           minChars: 2,
+           maxChars: 25,
+           limit: 10,
+           validationPattern: new RegExp('^[a-zA-Z]+$')
+        });
       });
     const clipboard = new ClipboardJS(".clipboard");
     const $table = $('#table');
@@ -182,16 +190,11 @@
         });
       },
       'click .edit': function(e, value, row, index) {
-        $('#uploadTags').attr('value', row.tags.toString())
-        $('#uploadTags').tagsinput({
-           unique: true,
-           minChars: 2,
-           maxChars: 10,
-           limit: 25,
-           validationPattern: new RegExp('^[a-zA-Z]+$')
-         });
-          $('#fileName').attr('value', row.file);
-
+        const tags = row.tags;
+        tags.map(data=>{
+          $('#uploadTags').tagsinput('add', data);
+        })
+        $('#fileName').attr('value', row.file);
            $('#edit-upload').modal('show');
       }
     }
@@ -216,13 +219,15 @@
        });
       $('#btn-edit-upload').on('click', function(e) {
       e.preventDefault();
-      const tags = $("tags").val();
+      const tags = $("#uploadTags").tagsinput('items')
       const fileName = $('#fileName').val();
       $.ajax({
         url: '/edit?_method=PUT',
         type: 'POST',
         data: { _csrf: '<%= _csrf %>', tags: tags ,fileName: fileName},
         success: function(response) {
+          $table.bootstrapTable('refresh');
+          $('#uploadTags').tagsinput('removeAll');
           $(':input', this).val('');
           $('#edit-upload').modal('hide');
           $('#success').show();
@@ -235,6 +240,11 @@
         }
       });
     });
+    $('#edit-upload').on('hide.bs.modal', function () {
+      $('#uploadTags').tagsinput('removeAll');
+      $(':input', this).val('');
+    })
+
 </script>
 
   <div
