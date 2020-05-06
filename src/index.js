@@ -297,6 +297,7 @@ const adminRoutes = require('./routes/admin');
 const configRoutes = require('./routes/config');
 const ownerController = require('./controllers/owner');
 const indexController = require('./controllers/index');
+const linkController = require('./controllers/link');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
@@ -306,6 +307,9 @@ const adminController = require('./controllers/admin');
 const configController = require('./controllers/config');
 
 app.use(indexRoutes);
+
+// app.get('/u/:image',uploadsController.getUpload)
+app.get('/l/:link', linkController.getLink);
 
 app.put(
   '/edit',

@@ -16,6 +16,12 @@ router.get('/', (req, res) => {
       {
         deprecated: false,
         removed: false,
+        version: '2.0.0',
+        path: '/api/v2'
+      },
+      {
+        deprecated: true,
+        removed: false,
         version: '1.0.0',
         path: '/api/v1'
       },
