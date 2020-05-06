@@ -59,7 +59,7 @@ exports.getUploadListData = async (req, res) => {
       });
     });
 
-    const total = uploadsData.length
+    const total = uploadsData.length;
 
     res.json({
       total,

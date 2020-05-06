@@ -244,7 +244,7 @@ describe('LOGGED IN (user)', () => {
     });
   });
 
-    describe('POST /config (share-cli)', () => {
+  describe('POST /config (share-cli)', () => {
     it('it should has status code 200', done => {
       supertest(app)
         .post('/config')
