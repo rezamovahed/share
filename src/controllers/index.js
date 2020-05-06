@@ -2,6 +2,11 @@ const path = require('path');
 const fs = require('fs-extra');
 
 /**
+ * Load vaildation middleware
+ */
+const isEmpty = require('../validation/isEmpty');
+
+/**
  * Load MongoDB models.
  */
 const Upload = require('.././models/Upload');
@@ -15,11 +20,29 @@ exports.getUploadListData = async (req, res) => {
     const sort = req.query.order === 'asc' ? 1 : -1;
     const limit = parseFloat(req.query.limit);
     const offset = parseFloat(req.query.offset);
-    const uploadsData = await Upload.find({ uploader: req.user.id })
-      .sort({ uploadedAt: sort })
-      .limit(limit)
-      .skip(offset)
-      .select('uploaded uploadedAt fileName size type fileExtension');
+
+    const search = req.query.search !== undefined && !isEmpty(req.query.search);
+
+    const uploadSelect =
+      'uploaded uploadedAt fileName size type fileExtension tags';
+    let uploadsData = [];
+
+    if (search) {
+      uploadsData = await Upload.find({
+        uploader: req.user.id,
+        $text: { $search: req.query.search }
+      })
+        .sort({ uploadedAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(uploadSelect);
+    } else {
+      uploadsData = await Upload.find({ uploader: req.user.id })
+        .sort({ uploadedAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(uploadSelect);
+    }
 
     // eslint-disable-next-line prefer-const
     let uploads = [];
@@ -31,13 +54,12 @@ exports.getUploadListData = async (req, res) => {
         extension: data.fileExtension,
         type: data.type,
         size: data.size,
-        uploadedAt: data.uploadedAt
+        uploadedAt: data.uploadedAt,
+        tags: data.tags
       });
     });
 
-    const total = await Upload.countDocuments({
-      uploader: req.user.id
-    });
+    const total = uploadsData.length;
 
     res.json({
       total,
@@ -158,6 +180,33 @@ exports.deleteAllUploads = async (req, res) => {
     });
     req.flash('success', 'All your uploads have been removed.');
     res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Edit upload Controller - Get's the amount of spaced used by uploads.
+ */
+exports.putUpload = async (req, res, next) => {
+  try {
+    const upload = await Upload.findOne({
+      uploader: req.user.id,
+      fileName: req.body.fileName
+    });
+
+    if (!upload) {
+      return res
+        .status(404)
+        .json({ message: 'Upload not found.', status: 404 });
+    }
+
+    upload.tags = req.body.tags;
+
+    await upload.save();
+
+    res.json({ message: 'You have updated the upload', status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

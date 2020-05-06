@@ -27,6 +27,7 @@ const uploadSchema = new Schema({
     enum: ['file', 'image', 'text'],
     default: 'file'
   },
+  tags: [{ type: String }],
   deleteKey: {
     type: String,
     required: true
@@ -40,5 +41,10 @@ const uploadSchema = new Schema({
     default: moment()
   }
 });
+
+uploadSchema.index(
+  { tags: 'text', fileName: 'text' },
+  { weights: { tags: 1, fileName: 2 } }
+);
 
 module.exports = mongoose.model('Upload', uploadSchema);

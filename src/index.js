@@ -282,6 +282,7 @@ const userUpdateVaildation = require('./validation/admin/userUpdate');
 const suspendUserVaildation = require('./validation/admin/suspendUser');
 const postOwnershipVaildation = require('./validation/admin/transferOwnership');
 const configVaildation = require('./validation/config');
+const putUploadVaildation = require('./validation/config');
 
 /**
  * Primary app routes.
@@ -305,6 +306,15 @@ const adminController = require('./controllers/admin');
 const configController = require('./controllers/config');
 
 app.use(indexRoutes);
+
+app.put(
+  '/edit',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  putUploadVaildation,
+  indexController.putUpload
+);
 
 app.get('/owner', isOwnerDisabled, ownerController.getOwner);
 
