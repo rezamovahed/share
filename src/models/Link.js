@@ -18,7 +18,10 @@ const linkSchema = new Schema(
       required: true,
       unique: true
     },
-    clicks: Number,
+    clicks: {
+      type: Number,
+      default: 0
+    },
     limit: Number,
     tags: [{ type: String }],
     deleteKey: {

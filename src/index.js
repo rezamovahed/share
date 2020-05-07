@@ -288,6 +288,7 @@ const putUploadVaildation = require('./validation/config');
  * Primary app routes.
  */
 const indexRoutes = require('./routes/index');
+const linksRoutes = require('./routes/links');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const accountRoutes = require('./routes/account');
@@ -297,7 +298,7 @@ const adminRoutes = require('./routes/admin');
 const configRoutes = require('./routes/config');
 const ownerController = require('./controllers/owner');
 const indexController = require('./controllers/index');
-const linkController = require('./controllers/link');
+const linksController = require('./controllers/links');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
@@ -309,7 +310,7 @@ const configController = require('./controllers/config');
 app.use(indexRoutes);
 
 // app.get('/u/:image',uploadsController.getUpload)
-app.get('/l/:link', linkController.getLink);
+app.get('/l/:link', linksController.getLink);
 
 app.put(
   '/edit',
@@ -502,6 +503,16 @@ app.delete(
   isBannedAPI,
   isSuspendedAPI,
   tokensController.deleteToken
+);
+
+app.use('/links', isLoggedin, linksRoutes);
+
+app.get(
+  '/links-data',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linksController.getLinksListData
 );
 
 app.delete(

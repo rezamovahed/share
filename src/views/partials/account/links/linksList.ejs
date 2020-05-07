@@ -1,21 +1,19 @@
- <div class="modal fade" id="create-token" tabindex="-1" role="dialog">
+ <div class="modal fade" id="create-link" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Create new token</h5>
+                  <h5 class="modal-title">Create shorted link</h5>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                  <form action="/tokens" method="POST" class="mt-2" id="token">
+                  <form action="/links" method="POST" class="mt-2" id="links">
                     <input type="hidden" name="_csrf" value="<%= _csrf %>" />
                     <div class="form-group">
-                      <label for="tokenLabel">Token Label</label>
-                      <input name="label" type="text" class="form-control" id="tokenLabel" value="Default Token Label"
-                        required>
+
                     </div>
                     <div class="form-group">
-                      <label for="tokenExpire">Expire?</label>
-                      <select name="expire" class="selectpicker" id="tokenExpire" data-style="btn-primary">
+                      <label for="linksLimit">Limit?</label>
+                      <select name="linksLimit" class="selectpicker" id="linksLimit" data-style="btn-primary">
                         <option value="0" selected>Never</option>
                         <option value="1">24 Hours</option>
                         <option value="7">A Week</option>
@@ -25,27 +23,26 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                  <button type="submit" class="btn btn-primary">Create Token</button>
+                  <button type="submit" class="btn btn-primary">Shorted Link</button>
                   </form>
                 </div>
               </div>
             </div>
         </div>
-        <div class="modal fade" id="rename-token" tabindex="-1" role="dialog" aria-labelledby="rename-token">
+        <div class="modal fade" id="edit-link" tabindex="-1" role="dialog" aria-labelledby="edit-lin">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Rename Token</h5>
+                <h5 class="modal-title">Edit link</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
                 <form action="" method="POST" class="mt-2">
                   <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-                  <input id="renameTokenLabel" name="label" type="text" class="form-control" value="renameTokenLabel">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary text-white">Rename</button>
+                <button type="submit" class="btn btn-primary text-white">Save Changes</button>
                 </form>
               </div>
             </div>
@@ -55,17 +52,17 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Remove all tokens</h5>
+                <h5 class="modal-title">Remove all links</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <form action="/all/tokens?_method=delete" method="POST" class="mt-2">
+                <form action="/links/all/?_method=delete" method="POST" class="mt-2">
                   <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-                  <p>Are you sure you want to delete all your API tokens, this procedure is irreversible.</p>
+                  <p>Are you sure you want to delete all your links, this procedure is irreversible.</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-danger btn-ok text-white">Delete all tokens</button>
+                <button type="submit" class="btn btn-danger btn-ok text-white">Delete all link</button>
                 </form>
               </div>
             </div>
@@ -80,26 +77,28 @@
     <div class="table-title">
       <div class="row">
         <div class="col-xs-12 col-md-6">
-          <h2>Your <strong>Tokens</strong
+          <h2>Your <strong>Links</strong>
           </h2>
         </div>
         <div class="col-xs-12 col-md-6">
           <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger">Delete
             All</a>
-          <a data-toggle="modal" data-target="#create-token" role="button"
-            class="btn btn-success <% if(currentUser.streamerMode){ %>disabled<%}%>"<% if(currentUser.streamerMode){ %>aria-disabled=" true"<%}%>>Create Token</a>
+          <a data-toggle="modal" data-target="#create-link" role="button"
+            class="btn btn-success">Create Link</a>
         </div>
       </div>
     </div>
   </div>
  <table class="table table-hover" id="table" data-toggle="table" data-pagination="true" data-id-field="id"
-    data-side-pagination="server" data-url="/tokens-data" data-sort-order="desc" data-page-size="10"
+    data-side-pagination="server" data-url="/links-data" data-sort-order="desc" data-page-size="10"
     data-page-list="[10, 25, 50, 100, all]">
       <thead>
         <tr>
-          <th data-field="createdAt" data-formatter="createdAtFormater" data-sortable="true"  scope="col">Created</th>
-          <th data-field="label" scope="col">Label</th>
-          <th data-field="expires" data-formatter="expiresFormater" scope="col">Expires</th>
+          <th data-field="code" data-formatter="codeFormater" scope="col">Shorten</th>
+          <th data-field="url" data-formatter="urlFormater" scope="col">Original</th>
+          <th data-field="createdAt" data-formatter="createdAtFormater" data-sortable="true" scope="col">Created</th>
+          <th data-field="clicks" data-sortable="true" scope="col">Clicks</th>
+          <th data-field="tags" data-formatter="tagsFormater" scope="col">Tags</th>
           <th data-field="actions" data-formatter="actionsFormatter" data-events="actionEvents" scope="col">Actions</th>
         </tr>
       </thead>
@@ -108,25 +107,46 @@
       $(document).ready(() => {
         $('#table').bootstrapTable({
           formatNoMatches: function () {
-            return 'No tokens found.'
+            return 'No links found.'
           }
-        })
-      })
+        });
+        $(".clipboard").tooltip({
+         placement: "bottom",
+         delay: 1000
+       });
+      });
+      const clipboard = new ClipboardJS(".clipboard");
+
       const $table = $('#table')
 
       function createdAtFormater(value, row) {
         return moment(value).format('MMM Do YYYY hh:mm A')
       }
-      function expiresFormater(value, row) {
-        if (row.isNever) {
-          return 'Never Expires'
-        }
-        return moment(value).fromNow()
+      function urlFormater(value, row) {
+        return `<a href="${value}" taget="_blank">${value}</a>`
       }
-
+      function codeFormater(value, row) {
+        return `<a href="<%= siteURL %>/${value}" taget="_blank">${value}</a>`
+      }
+      function tagsFormater(value, row) {
+        if (value.length > 0) {
+          const tags = [];
+          value.map(data=>{
+            tags.push(
+               '<span class="badge badge-primary">',
+          data,
+          '</span> ',)
+          })
+          return  tags.join('');
+        }
+        return 'No Tags';
+      }
 
       function actionsFormatter(value, row, index) {
         return [
+          `<a class="link clipboard" id="clip_${row.id}" href="#" data-clipboard-text="<%= siteURL %>/l/${row.code}">`,
+          '<i class="fas fa-link"></i>',
+          '</a> ',
           '<a class="edit" href="javascript:void(0)" title="Copy link">',
           '<i class="fas fa-edit"></i>',
           '</a> ',
@@ -138,15 +158,12 @@
       //Data events
       window.actionEvents = {
         'click .edit': function (e, value, row, index) {
-          $('#rename-token form').attr('action', `/tokens/${row._id}?_method=PUT`);
-          $("#renameTokenLabel").attr('value', row.label);
-          $("#renameTokenLabel").val(row.label);
-          $("#renameTokenLabel").attr('value', row.label);
-          $('#rename-token').modal('show');
+          $('#edit-link form').attr('action', `/edit/${row._id}?_method=PUT`);
+          $('#edit-link').modal('show');
         },
         'click .delete': function (e, value, row, index) {
           $.ajax({
-            url: `/tokens/${row._id}?_method=DELETE`,
+            url: `/links/${row._id}?_method=DELETE`,
             type: 'POST',
             data: { _csrf: '<%= _csrf %>' }, success: function (response) {
               $('#success').show(); $('#success').html(response.message); $table.bootstrapTable('remove', {
@@ -159,7 +176,25 @@
           });
         }
       }
-                  $('#rename-token').on('hide.bs.modal', function() {
+      function setTooltip(message, id) {
+        $(`#${id}`)
+           .tooltip("hide")
+           .attr("data-original-title", message)
+           .tooltip("show");
+       }
+       function hideTooltip(id) {
+           $(`#${id}`)
+           .tooltip("hide")
+       }
+       clipboard.on("success", (e) => {
+         setTooltip("Copied!", e.trigger.id);
+         hideTooltip(e.trigger.id);
+       });
+       clipboard.on("error", (e) => {
+         setTooltip("Failed!");
+         hideTooltip(e.trigger.id);
+       });
+      $('#edit-link').on('hide.bs.modal', function() {
       $(':input', this).val('');
     }); </script>
       </div>
