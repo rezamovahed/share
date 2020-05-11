@@ -51,3 +51,58 @@ module.exports.createLink = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+/**
+ * Get link Controler - Alllows a user to get the link infomation
+ */
+module.exports.getLink = async (req, res) => {
+  try {
+    const link = await Link.findOne({ code: req.params.code });
+    if (!link) {
+      return res.status(404).json({
+        success: false,
+        message: 'Not found',
+        status: 404
+      });
+    }
+    res.json({
+      success: true,
+      data: link,
+      status: 200
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Get link Controler - Alllows a user to get the link infomation
+ */
+module.exports.getLinks = async (req, res) => {
+  try {
+    const link = await Link.find({
+      creator: req.user.id
+    });
+    const total = await Link.countDocuments({
+      creator: req.user.id
+    });
+
+    if (!link) {
+      return res.status(404).json({
+        success: false,
+        message: 'No links found.',
+        status: 404
+      });
+    }
+    res.json({
+      success: true,
+      data: link,
+      total: link,
+      status: 200
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};

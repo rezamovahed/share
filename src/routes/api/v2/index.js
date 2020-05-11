@@ -12,10 +12,10 @@ const linkRoutes = require('./link');
 router.get('/', (req, res) => {
   res.json({
     endpoints: [
-      { method: 'GET', path: '/' },
+      { method: 'GET', path: '/api/v1' },
       { method: 'POST', path: '/api/v1/upload' },
-      { method: 'GET', path: '/api/v1/delete' },
-      { method: 'POST', path: '/api/v1/link' }
+      { method: 'POST', path: '/api/v1/link' },
+      { method: 'GET', path: '/api/v1/delete' }
     ],
     status: 200
   });

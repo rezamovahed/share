@@ -5,6 +5,12 @@ nav_order: 10
 ---
 
 # Changelog
+4.2.0 (pre-release)
+- Added tags to uploads which you can add when uploading and or after the fact.
+- Added tags to the API V1 in the body.
+- Fixed bug where you search for something that is not found it would spam the server.
+- Added link shorter (with features such as link click tracking and limit of clicks.) also can get the link data from the API, delete the link , and create a link.
+
 4.1.0
 - Fixed bug in pm2 echosystem file.
 - Fixed missing UPLOAD_LIMIT env.

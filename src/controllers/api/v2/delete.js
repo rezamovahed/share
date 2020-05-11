@@ -9,7 +9,7 @@ const Upload = require('../../../models/Upload');
 const Link = require('../../../models/Link');
 
 /**
- * Delete  Controler - Allows users upload a file or image or link using there API Key
+ * Delete Controler - Allows users upload a file or image or link using there API Key
  * This returns the URL where the file is hosted and a delete link.
  */
 module.exports.delete = async (req, res, next) => {
@@ -18,6 +18,9 @@ module.exports.delete = async (req, res, next) => {
       case 'upload':
         const upload = await Upload.findOne({ deleteKey: req.query.key });
 
+        if (!upload) {
+          return res.status(404).send('Not found.');
+        }
         const filePath = `${path.join(__dirname, '../../../public')}/u/${
           upload.fileName
         }${upload.fileExtension}`;
@@ -29,7 +32,13 @@ module.exports.delete = async (req, res, next) => {
         });
         break;
       case 'link':
-        const link = await Link.findOneAndRemove({ deleteKey: req.query.key });
+        const link = await Link.findOne({ deleteKey: req.query.key });
+        if (!link) {
+          return res.status(404).send('Not found.');
+        }
+
+        await link.remove();
+
         res.json({
           success: true,
           message: `Deleted link ${link.code}`

@@ -7,6 +7,8 @@ const router = express.Router();
  */
 const isTokenVaild = require('../../../middleware/api/isTokenVaild');
 const fileCheck = require('../../../middleware/api/fileCheck');
+const isBannedAPI = require('../../../middleware/api/isBanned');
+const isSuspendedAPI = require('../../../middleware/api/isSuspended');
 
 /**
  * Load Controllers
@@ -21,6 +23,8 @@ const uploadValidation = require('../../../validation/api/v1/upload');
 router.post(
   '/',
   isTokenVaild,
+  isBannedAPI,
+  isSuspendedAPI,
   uploadValidation,
   fileCheck,
   uploadController.uploadFile

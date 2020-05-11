@@ -81,7 +81,7 @@ exports.getLinksListData = async (req, res) => {
 
     await Promise.all(promises);
 
-    const total = linksData.length;
+    const total = await Link.countDocuments({ creator: req.user.id });
 
     res.json({
       total,
@@ -111,6 +111,25 @@ exports.putLink = async (req, res) => {
     await link.save();
 
     res.json({ message: 'You have updated the link', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delte link Controler- Allow the user to delete a link that was created.
+ */
+exports.deleteLink = async (req, res) => {
+  try {
+    const { code } = req.body;
+    const link = await Link.findOneAndRemove({ creator: req.user.id, code });
+
+    if (!link) {
+      return res.status(404).send('Not found.');
+    }
+
+    res.json({ message: `${code} has been deleted.`, status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

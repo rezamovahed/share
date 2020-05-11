@@ -311,7 +311,7 @@ const configController = require('./controllers/config');
 app.use(indexRoutes);
 
 // app.get('/u/:image',uploadsController.getUpload)
-app.get('/l/:link', isLimitReached ,linksController.getLink);
+app.get('/l/:link', isLimitReached, linksController.getLink);
 
 app.put(
   '/edit',
@@ -507,7 +507,22 @@ app.delete(
 );
 
 app.use('/links', isLoggedin, isBanned, isSuspended, linksRoutes);
-app.put('/links', isLoggedin, isBanned, isSuspended, linksController.putLink);
+
+app.put(
+  '/links',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linksController.putLink
+);
+
+app.delete(
+  '/links',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linksController.deleteLink
+);
 
 app.get(
   '/links-data',
@@ -691,7 +706,7 @@ app.delete(
  */
 const apiRoutes = require('./routes/api');
 
-app.use('/api', apiRoutes, isBannedAPI,isSuspendedAPI);
+app.use('/api', apiRoutes);
 
 /**
  * Handle 404 errors

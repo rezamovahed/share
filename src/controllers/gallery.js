@@ -24,7 +24,7 @@ exports.deleteSingleUpload = async (req, res) => {
     )}/u/${uploadedFile}`;
 
     // Deletes the upload from database
-    const upload = await Upload.findOneAndDelete({
+    const upload = await Upload.findOneAndRemove({
       uploader: req.user.id,
       fileName: uploadedFileName
     });

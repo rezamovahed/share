@@ -267,7 +267,7 @@ exports.deleteAccount = async (req, res, next) => {
           '../public'
         )}/u/${uploadedFileName + uploadedFileExt}`;
 
-        await Upload.findOneAndDelete({
+        await Upload.findOneAndRemove({
           fileName: uploadedFileName
         });
         await fs.remove(uploadedFilePath);
