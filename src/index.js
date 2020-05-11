@@ -266,6 +266,7 @@ const postUploadFavicon = require('./middleware/admin/postUploadFavicon');
 const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
 const isSignupsDisabled = require('./middleware/isSignupsDisabled');
 const isConfigTokenVaild = require('./middleware/config/isTokenVaild');
+const isLimitReached = require('./middleware/linkLimiter');
 
 /**
  * Load vaildation middleware
@@ -310,7 +311,7 @@ const configController = require('./controllers/config');
 app.use(indexRoutes);
 
 // app.get('/u/:image',uploadsController.getUpload)
-app.get('/l/:link', linksController.getLink);
+app.get('/l/:link', isLimitReached ,linksController.getLink);
 
 app.put(
   '/edit',
@@ -505,7 +506,8 @@ app.delete(
   tokensController.deleteToken
 );
 
-app.use('/links', isLoggedin, linksRoutes);
+app.use('/links', isLoggedin, isBanned, isSuspended, linksRoutes);
+app.put('/links', isLoggedin, isBanned, isSuspended, linksController.putLink);
 
 app.get(
   '/links-data',
@@ -689,7 +691,7 @@ app.delete(
  */
 const apiRoutes = require('./routes/api');
 
-app.use('/api', apiRoutes, isBannedAPI);
+app.use('/api', apiRoutes, isBannedAPI,isSuspendedAPI);
 
 /**
  * Handle 404 errors

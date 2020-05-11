@@ -1,9 +1,10 @@
 const Upload = require('../../models/Upload');
 
 module.exports = async (req, res, next) => {
-  const isVaildKey = await Upload.findOne({ deleteKey: req.query.key });
+  const isVaildUploadKey = await Upload.findOne({ deleteKey: req.query.key });
+  const isVaildlinkKey = await Upload.findOne({ deleteKey: req.query.key });
 
-  if (!isVaildKey) {
+  if (!isVaildUploadKey || !isVaildlinkKey) {
     return res.status(401).json({
       auth: false,
       success: false,

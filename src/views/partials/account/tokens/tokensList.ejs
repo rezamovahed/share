@@ -1,4 +1,8 @@
- <div class="modal fade" id="create-token" tabindex="-1" role="dialog">
+<div class="alert alert-danger collapse alert-timeout" role="alert" id="error">
+</div>
+<div class="alert alert-success collapse alert-timeout" role="alert" id="success">
+</div>
+<div class="modal fade" id="create-token" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -71,10 +75,6 @@
             </div>
           </div>
         </div>
-<div class="alert alert-danger collapse alert-timeout" role="alert" id="error">
-</div>
-<div class="alert alert-success collapse alert-timeout" role="alert" id="success">
-</div>
 <div class="customTable">
   <div class="table-wrapper">
     <div class="table-title">
@@ -92,7 +92,7 @@
       </div>
     </div>
   </div>
- <table class="table table-hover" id="table" data-toggle="table" data-pagination="true" data-id-field="id"
+ <table class="table table-hover" id="table" data-toggle="table" data-pagination="true"  data-id-field="id"
     data-side-pagination="server" data-url="/tokens-data" data-sort-order="desc" data-page-size="10"
     data-page-list="[10, 25, 50, 100, all]">
       <thead>

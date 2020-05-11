@@ -18,6 +18,7 @@ const linkSchema = new Schema(
       required: true,
       unique: true
     },
+    qrcode: String,
     clicks: {
       type: Number,
       default: 0
@@ -30,6 +31,11 @@ const linkSchema = new Schema(
     }
   },
   { timestamps: true }
+);
+
+linkSchema.index(
+  { tags: 'text', url: 'text' },
+  { weights: { tags: 1, url: 2 } }
 );
 
 module.exports = mongoose.model('Link', linkSchema);

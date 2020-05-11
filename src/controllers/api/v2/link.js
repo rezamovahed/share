@@ -15,23 +15,34 @@ module.exports.createLink = async (req, res) => {
   try {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
 
-    const { url, code } = req.body;
-    const newLink = new Link({
+    const { url, limit } = req.body;
+    let { code } = req.body;
+
+    if (code === undefined) {
+      const linkCode = customAlphabet(urlFriendyAlphabet, 18);
+      code = await linkCode();
+    }
+
+    const newLink = await new Link({
       creator: req.user.id,
       deleteKey: await nanoid32(),
       url,
-      code
+      code,
+      limit
     });
+
+    await newLink.save();
 
     res.json({
       auth: true,
       success: true,
       link: {
-        url,
-        code,
+        url: newLink.url,
+        code: newLink.code,
+        limit,
         newurl: `${process.env.FULL_DOMAIN}/l/${newLink.code}`,
-        delete: `${process.env.FULL_DOMAIN}/api/v1/delete?key=${newLink.deleteKey}`,
-        deleteKey: newLink.deleteKeys
+        delete: `${process.env.FULL_DOMAIN}/api/v2/delete?key=${newLink.deleteKey}&type=link`,
+        deleteKey: newLink.deleteKey
       },
       status: 200
     });

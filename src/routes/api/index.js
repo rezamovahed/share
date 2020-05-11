@@ -42,7 +42,9 @@ router.get('/', (req, res) => {
  * so you just need to do the versions
  */
 const v1Route = require('./v1');
+const v2Route = require('./v2');
 
 router.use('/v1', v1Route);
+router.use('/v2', v2Route);
 
 module.exports = router;

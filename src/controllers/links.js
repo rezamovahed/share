@@ -1,3 +1,5 @@
+const QRCode = require('qrcode');
+
 /**
  * Load vaildation middleware
  */
@@ -61,7 +63,7 @@ exports.getLinksListData = async (req, res) => {
     // eslint-disable-next-line prefer-const
     let links = [];
     let id = 0;
-    linksData.map(data => {
+    const promises = linksData.map(async data => {
       links.push({
         id: (id += 1),
         url: data.url,
@@ -70,9 +72,14 @@ exports.getLinksListData = async (req, res) => {
         limit: data.limit,
         updatedAt: data.updatedAt,
         createdAt: data.createdAt,
-        tags: data.tags
+        tags: data.tags,
+        qrCode: await QRCode.toDataURL(
+          `${process.env.FULL_DOMAIN}/l/${data.code}`
+        )
       });
     });
+
+    await Promise.all(promises);
 
     const total = linksData.length;
 
@@ -80,6 +87,30 @@ exports.getLinksListData = async (req, res) => {
       total,
       rows: links
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Edit link Controler- Allow the user to edit the created link
+ */
+exports.putLink = async (req, res) => {
+  try {
+    const { code, tags } = req.body;
+    const link = await Link.findOne({ creator: req.user.id, code });
+
+    if (!link) {
+      return res.status(404).send('Not found.');
+    }
+    if (link.code !== code && code !== undefined) {
+      link.code = code;
+    }
+    link.tags = tags;
+    await link.save();
+
+    res.json({ message: 'You have updated the link', status: 200 });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
