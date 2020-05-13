@@ -232,6 +232,7 @@ app.use((req, res, next) => {
  */
 const accountLimiter = require('./limiters/account');
 const adminLimiter = require('./limiters/admin');
+const linkLimiter = require('./limiters/link');
 
 /**
  * Load middlewares
@@ -507,6 +508,23 @@ app.delete(
 );
 
 app.use('/links', isLoggedin, isBanned, isSuspended, linksRoutes);
+
+app.get(
+  '/links/code',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linkLimiter.codeGen,
+  linksController.getLinkCode
+);
+
+app.post(
+  '/links',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  linksController.postLink
+);
 
 app.put(
   '/links',

@@ -1,7 +1,7 @@
 const rateLimit = require('express-rate-limit');
 
 /**
- * Upoloads lising mini API Controller- Takes data from lib and returns results.
+ * Space used limiter - Limits requests
  */
 exports.spaceUsed = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

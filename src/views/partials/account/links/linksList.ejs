@@ -10,7 +10,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form action="/links" method="POST" class="mt-2" id="links">
+                <form method="POST" class="mt-2" id="links">
                     <input type="hidden" name="_csrf" value="<%= _csrf %>" />
                     <div class="form-group">
                         <label for="newLinkURL">Destination URL</label>
@@ -18,7 +18,14 @@
                     </div>
                     <div class="form-group">
                         <label for="newLinkCode">Link Code</label>
-                        <input class="form-control" id="newLinkCode" name="code" type="text" maxlength="20"/>
+                        <div class="alert alert-danger collapse alert-timeout" role="alert" id="newLinkCodeError">
+                        </div>
+                        <div class="input-group">
+                          <input class="form-control" id="newLinkCode" name="code" type="text" maxlength="24" value="<%= newLinkCode %>"/>
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="button" id="btn-get-code">New Code</button>
+                          </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="newLinkCodeLimit">Link click limit (0 = unlimited)</label>
@@ -125,7 +132,7 @@
                 <div class="col-xs-12 col-md-6">
                     <a data-toggle="modal" data-target="#confirm-delete" role="button" class="btn btn-danger">Delete
                         All</a>
-                    <a data-toggle="modal" data-target="#create-link" role="button" class="btn btn-success">Create
+                    <a data-toggle="modal" data-target="#create-link" role="button" class="btn btn-success" id="btn-create-link">Create
                         Link</a>
                 </div>
             </div>
@@ -140,7 +147,7 @@
                 <th data-field="url" data-formatter="urlFormater" scope="col">Original</th>
                 <th data-field="createdAt" data-formatter="createdAtFormater" data-sortable="true" scope="col">Created
                 </th>
-                <th data-field="tags" data-formatter="tagsFormater" scope="col">Tags</th>
+                <th data-field="tags" data-formatter="tagsFormater" scope="col" data-width="250px">Tags</th>
                 <th data-field="actions" data-formatter="actionsFormatter" data-events="actionEvents" scope="col"
                     data-width="160px">Actions</th>
             </tr>
@@ -176,10 +183,16 @@
         return moment(value).fromNow();
       };
       function urlFormater(value, row) {
-        return `<a href="${value}" taget="_blank">${value}</a>`
+      if ('<%= currentUser.streamerMode %>' === 'true') {
+        return `<a href="<a href="${value}" target="_blank">${value.substring(0, 2)}********************</a>`;
+      }
+      return `<a href="${value}" taget="_blank">${value}</a>`;
       };
       function codeFormater(value, row) {
-        return `<a href="<%= siteURL %>/${value}" taget="_blank">${value}</a>`
+              if ('<%= currentUser.streamerMode %>' === 'true') {
+        return `<a href="<%= siteURL %>/l/${value}" rel="nofollow" taget="_blank">${value.substring(0, 2)}********</a>`;
+      }
+        return `<a href="<%= siteURL %>/l/${value}" rel="nofollow" taget="_blank">${value}</a>`
       };
       function tagsFormater(value, row) {
         if (value.length === null || value.length === 0) {
@@ -284,5 +297,19 @@
     $('#edit-link').on('hide.bs.modal', function () {
       $('#linkTags').tagsinput('removeAll');
       $(':input', this).val('');
-    })</script>
-      </div>
+    })
+    $('#btn-get-code').click(e=>{
+      $.ajax({
+        url: '/links/code',
+        type: 'get',
+        success: function(response) {
+          $('#newLinkCode').val(response.code)
+        },
+        error: function(response) {
+          $('#newLinkCodeError').html(response.responseJSON.message);
+          $('#newLinkCodeError').show();
+        }
+      });
+    })
+</script>
+</div>

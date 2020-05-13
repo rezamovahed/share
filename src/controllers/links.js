@@ -1,4 +1,9 @@
 const QRCode = require('qrcode');
+const { customAlphabet } = require('nanoid/async');
+const normalizeUrl = require('normalize-url');
+
+const urlFriendyAlphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 /**
  * Load vaildation middleware
@@ -15,19 +20,60 @@ const Link = require('../models/Link');
  */
 exports.getLink = async (req, res) => {
   try {
+    console.log(req.params)
     const link = await Link.findOne({ code: req.params.link });
     if (!link) {
       return res.status(404).send('Not found.');
     }
-    res.redirect(link.url);
     link.clicks += 1;
     await link.save();
+    res.redirect(link.url);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
   }
 };
 
+/**
+ * Create link shorted Controller- Creates a shorted link.
+ */
+exports.postLink = async (req, res) => {
+  try {
+    const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
+
+    const { url, code, limit } = req.body;
+    const newLink = await new Link({
+      creator: req.user.id,
+      deleteKey: await nanoid32(),
+      url: normalizeUrl(url),
+      code,
+      limit
+    });
+    await newLink.save();
+    req.flash('info', {
+      cshortenLinkode: `${process.env.FULL_DOMAIN}/l/${newLink.code}`,
+      url: newLink.url
+    });
+    res.redirect('/links');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Links lising mini API Controller- Takes data from lib and returns results.
+ */
+exports.getLinkCode = async (req, res) => {
+  try {
+    const nanoid32 = customAlphabet(urlFriendyAlphabet, 24);
+
+    res.json({ code: await nanoid32(), status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
 /**
  * Links lising mini API Controller- Takes data from lib and returns results.
  */
@@ -48,13 +94,13 @@ exports.getLinksListData = async (req, res) => {
         creator: req.user.id,
         $text: { $search: req.query.search }
       })
-        .sort({ uploadedAt: sort })
+        .sort({ createdAt: sort })
         .limit(limit)
         .skip(offset)
         .select(linksSelect);
     } else {
       linksData = await Link.find({ creator: req.user.id })
-        .sort({ uploadedAt: sort })
+        .sort({ createdAt: sort })
         .limit(limit)
         .skip(offset)
         .select(linksSelect);

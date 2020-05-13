@@ -131,7 +131,7 @@
           row.type === 'image'
             ? `/view/${value}`
             : `/u/${value + row.extension}`
-        } target="_blank"">${value.substring(0, 3)}*********************</a>`;
+        }" target="_blank"">${value.substring(0, 3)}*********************</a>`;
       }
       return `<a href="${
         row.type === 'image' ? `/view/${value}` : `/u/${value + row.extension}`
