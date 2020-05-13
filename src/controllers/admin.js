@@ -376,7 +376,7 @@ exports.deleteSingleUpload = async (req, res) => {
     )}/u/${uploadedFile}`;
 
     // Removes the file from the database
-    const upload = await Upload.findOneAndDelete({
+    const upload = await Upload.findOneAndRemove({
       fileName: uploadedFileName
     });
 
@@ -501,7 +501,7 @@ exports.deleteGallerySingleUpload = async (req, res) => {
     )}/u/${uploadedFile}`;
 
     // Removes upload from the database
-    const upload = await Upload.findOneAndDelete({
+    const upload = await Upload.findOneAndRemove({
       fileName: uploadedFileName
     });
 
@@ -567,7 +567,7 @@ exports.deleteAllUploads = async (req, res) => {
         '../public'
       )}/u/${uploadedFileName + uploadedFileExt}`;
 
-      await Upload.findOneAndDelete({
+      await Upload.findOneAndRemove({
         fileName: uploadedFileName
       });
       await fs.remove(uploadedFilePath);
@@ -750,7 +750,7 @@ exports.deleteUser = async (req, res) => {
         '../public'
       )}/u/${uploadedFileName + uploadedFileExt}`;
 
-      await Upload.findOneAndDelete({
+      await Upload.findOneAndRemove({
         fileName: uploadedFileName
       });
       await fs.remove(uploadedFilePath);

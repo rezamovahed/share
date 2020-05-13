@@ -13,12 +13,12 @@ const isSuspendedAPI = require('../../../middleware/api/isSuspended');
 /**
  * Load Controllers
  */
-const uploadController = require('../../../controllers/api/v1/upload');
+const uploadController = require('../../../controllers/api/v2/upload');
 
 /**
  * Load Validation
  */
-const uploadValidation = require('../../../validation/api/v1/upload');
+const uploadValidation = require('../../../validation/api/v2/upload');
 
 router.post(
   '/',

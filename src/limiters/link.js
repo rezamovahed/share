@@ -1,13 +1,13 @@
 const rateLimit = require('express-rate-limit');
 
 /**
- * Space used limiter - Limits requests
+ * Code gen limiter - Limits requests
  */
-exports.spaceUsed = rateLimit({
+exports.codeGen = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20,
+  max: 15,
   message: {
-    message: 'Too many reqeusts.',
+    message: 'You are requesting to many new tokens.',
     status: 429
   }
 });

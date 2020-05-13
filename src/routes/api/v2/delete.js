@@ -10,18 +10,18 @@ const isDeleteKeyVaild = require('../../../middleware/api/isDeleteKeyVaild');
 /**
  * Load Controllers
  */
-const deleteController = require('../../../controllers/api/v1/delete');
+const deleteController = require('../../../controllers/api/v2/delete');
 
 /**
  * Load Validation
  */
-const deleteValidation = require('../../../validation/api/v1/delete');
+const deleteValidation = require('../../../validation/api/v2/delete');
 
 router.get(
   '/',
   deleteValidation,
   isDeleteKeyVaild,
-  deleteController.deleteFile
+  deleteController.delete
 );
 
 module.exports = router;

@@ -1,9 +1,15 @@
+/**
+ * Load MongoDB models.
+ */
 const Upload = require('../../models/Upload');
+const Link = require('../../models/Link');
 
 module.exports = async (req, res, next) => {
-  const isVaildKey = await Upload.findOne({ deleteKey: req.query.key });
+  const isVaildUploadKey = await Upload.findOne({ deleteKey: req.query.key });
 
-  if (!isVaildKey) {
+  const isVaildlinkKey = await Link.findOne({ deleteKey: req.query.key });
+
+  if (!isVaildUploadKey && !isVaildlinkKey) {
     return res.status(401).json({
       auth: false,
       success: false,

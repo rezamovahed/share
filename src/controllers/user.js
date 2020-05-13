@@ -200,7 +200,7 @@ exports.postResendActivationEmail = async (req, res) => {
  */
 exports.deleteUser = async (req, res) => {
   try {
-    await User.findOneAndDelete({ emailVerificationToken: req.params.token });
+    await User.findOneAndRemove({ emailVerificationToken: req.params.token });
     req.flash('success', 'Your account has been deleted.');
     res.redirect('/');
   } catch (err) {

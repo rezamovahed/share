@@ -232,6 +232,7 @@ app.use((req, res, next) => {
  */
 const accountLimiter = require('./limiters/account');
 const adminLimiter = require('./limiters/admin');
+const linkLimiter = require('./limiters/link');
 
 /**
  * Load middlewares
@@ -266,6 +267,7 @@ const postUploadFavicon = require('./middleware/admin/postUploadFavicon');
 const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
 const isSignupsDisabled = require('./middleware/isSignupsDisabled');
 const isConfigTokenVaild = require('./middleware/config/isTokenVaild');
+const isLimitReached = require('./middleware/linkLimiter');
 
 /**
  * Load vaildation middleware
@@ -288,6 +290,7 @@ const putUploadVaildation = require('./validation/config');
  * Primary app routes.
  */
 const indexRoutes = require('./routes/index');
+const linksRoutes = require('./routes/links');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const accountRoutes = require('./routes/account');
@@ -297,6 +300,7 @@ const adminRoutes = require('./routes/admin');
 const configRoutes = require('./routes/config');
 const ownerController = require('./controllers/owner');
 const indexController = require('./controllers/index');
+const linksController = require('./controllers/links');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
 const accountController = require('./controllers/account');
@@ -306,6 +310,9 @@ const adminController = require('./controllers/admin');
 const configController = require('./controllers/config');
 
 app.use(indexRoutes);
+
+// app.get('/u/:image',uploadsController.getUpload)
+app.get('/l/:link', isLimitReached, linksController.getLink);
 
 app.put(
   '/edit',
@@ -500,6 +507,49 @@ app.delete(
   tokensController.deleteToken
 );
 
+app.use('/links', isLoggedin, isBanned, isSuspended, linksRoutes);
+
+app.get(
+  '/links/code',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linkLimiter.codeGen,
+  linksController.getLinkCode
+);
+
+app.post(
+  '/links',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  linksController.postLink
+);
+
+app.put(
+  '/links',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linksController.putLink
+);
+
+app.delete(
+  '/links',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linksController.deleteLink
+);
+
+app.get(
+  '/links-data',
+  isLoggedin,
+  isBannedAPI,
+  isSuspendedAPI,
+  linksController.getLinksListData
+);
+
 app.delete(
   '/all/uploads',
   isLoggedin,
@@ -674,7 +724,7 @@ app.delete(
  */
 const apiRoutes = require('./routes/api');
 
-app.use('/api', apiRoutes, isBannedAPI);
+app.use('/api', apiRoutes);
 
 /**
  * Handle 404 errors
