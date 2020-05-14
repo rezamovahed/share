@@ -59,7 +59,7 @@ aux_links:
 footer_content: 'Copyright &copy; 2020 <a href="https://www.mrdemonwolf.me">MrDemonWolf</a>'
 
 # Color scheme currently only supports "dark" or nil (default)
-color_scheme: 'dark'
+color_scheme: 'nill'
 
 # Google Analytics Tracking (optional)
 # e.g, UA-1234567-89
