@@ -98,7 +98,7 @@ module.exports.getLinks = async (req, res) => {
     res.json({
       success: true,
       data: link,
-      total: link,
+      total,
       status: 200
     });
   } catch (err) {
