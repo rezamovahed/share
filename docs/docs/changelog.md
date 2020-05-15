@@ -7,9 +7,12 @@ nav_order: 10
 # Changelog
 4.2.0 (pre-release)
 - Added tags to uploads which you can add when uploading and or after the fact.
-- Added tags to the API V1 in the body.
+- Added tags to the API v1 in the body.
 - Fixed bug where you search for something that is not found it would spam the server.
 - Added link shorter (with features such as link click tracking and limit of clicks.) also can get the link data from the API, delete the link , and create a link.
+- Added Upload file name set via editing it after and also being able to add it while uploading via the API v2.
+- v2 API will be taking over API v1 in future updates.  Would be good to move over as soon as you can.
+- View page is back for support with currently only being images.
 
 4.1.0
 - Fixed bug in pm2 echosystem file.
