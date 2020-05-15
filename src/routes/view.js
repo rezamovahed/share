@@ -8,19 +8,16 @@ const router = express.Router();
 const Upload = require('../models/Upload');
 
 /**
- * @route /
+ * @route /i/:fileName
  * @method GET
- * @description Displays landing page or
- *  users uploads if they are logged inn
- * @access Public/Private
+ * @description Displays a view of the uploaded image with few details.
+ * @access Public
  */
 router.get('/i/:fileName', async (req, res) => {
   const upload = await Upload.findOne({
     fileName: req.params.fileName,
     type: 'image'
   });
-
-  console.log(upload);
 
   if (!upload) {
     res.status(404).send('Not found');
