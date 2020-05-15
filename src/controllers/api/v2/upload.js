@@ -21,7 +21,7 @@ module.exports.uploadFile = async (req, res, next) => {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add vaildation file check
     let { tags } = req.body;
-    const { file } = req.files;
+    const { file ,name} = req.files;
     const fileExtension = path.extname(file.name);
     const fileMineType = file.mimetype;
     const fileName = await nanoid32();
@@ -50,8 +50,9 @@ module.exports.uploadFile = async (req, res, next) => {
      * Adds the file to the database with basic infomation plus a
      * deleteKey which allows users to remove the file with one click
      */
-    const upload = await new Upload({
+    const upload = new Upload({
       uploader: req.user.id,
+      name,
       fileName,
       fileExtension,
       deleteKey,

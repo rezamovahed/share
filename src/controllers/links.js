@@ -20,7 +20,6 @@ const Link = require('../models/Link');
  */
 exports.getLink = async (req, res) => {
   try {
-    console.log(req.params)
     const link = await Link.findOne({ code: req.params.link });
     if (!link) {
       return res.status(404).send('Not found.');
@@ -42,7 +41,7 @@ exports.postLink = async (req, res) => {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
 
     const { url, code, limit } = req.body;
-    const newLink = await new Link({
+    const newLink = new Link({
       creator: req.user.id,
       deleteKey: await nanoid32(),
       url: normalizeUrl(url),

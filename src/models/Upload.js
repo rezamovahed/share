@@ -9,6 +9,7 @@ const uploadSchema = new Schema({
     ref: 'User',
     required: true
   },
+  name: String,
   fileName: {
     type: String,
     required: true
@@ -43,8 +44,8 @@ const uploadSchema = new Schema({
 });
 
 uploadSchema.index(
-  { tags: 'text', fileName: 'text' },
-  { weights: { tags: 1, fileName: 2 } }
+  { tags: 'text', name: 'text', fileName: 'text' },
+  { weights: { tags: 1, name: 2, fileName: 3 } }
 );
 
 module.exports = mongoose.model('Upload', uploadSchema);

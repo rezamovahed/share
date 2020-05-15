@@ -23,7 +23,7 @@ module.exports.createLink = async (req, res) => {
       code = await linkCode();
     }
 
-    const newLink = await new Link({
+    const newLink = new Link({
       creator: req.user.id,
       deleteKey: await nanoid32(),
       url,
