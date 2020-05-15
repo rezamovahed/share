@@ -21,7 +21,7 @@ module.exports.uploadFile = async (req, res, next) => {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add vaildation file check
     let { tags } = req.body;
-    const { file ,name} = req.files;
+    const { file, name } = req.files;
     const fileExtension = path.extname(file.name);
     const fileMineType = file.mimetype;
     const fileName = await nanoid32();
