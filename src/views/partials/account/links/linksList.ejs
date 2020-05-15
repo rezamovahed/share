@@ -184,7 +184,7 @@
       };
       function urlFormater(value, row) {
       if ('<%= currentUser.streamerMode %>' === 'true') {
-        return `<a href="<a href="${value}" target="_blank">${value.substring(0, 2)}********************</a>`;
+        return `<a href="${value}" target="_blank">${value.substring(0, 2)}********************</a>`;
       }
       return `<a href="${value}" taget="_blank">${value}</a>`;
       };

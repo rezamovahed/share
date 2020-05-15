@@ -16,17 +16,21 @@ module.exports.createLink = async (req, res) => {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
 
     const { url, limit } = req.body;
-    let { code } = req.body;
+    let { code, tags } = req.body;
 
     if (code === undefined) {
       const linkCode = customAlphabet(urlFriendyAlphabet, 18);
       code = await linkCode();
+    }
+    if (tags) {
+      tags = tags.split(', ');
     }
 
     const newLink = new Link({
       creator: req.user.id,
       deleteKey: await nanoid32(),
       url,
+      tags,
       code,
       limit
     });
@@ -40,6 +44,7 @@ module.exports.createLink = async (req, res) => {
         url: newLink.url,
         code: newLink.code,
         limit,
+        tags,
         newurl: `${process.env.FULL_DOMAIN}/l/${newLink.code}`,
         delete: `${process.env.FULL_DOMAIN}/api/v2/delete?key=${newLink.deleteKey}&type=link`,
         deleteKey: newLink.deleteKey
