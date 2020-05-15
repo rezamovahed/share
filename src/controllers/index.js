@@ -24,7 +24,7 @@ exports.getUploadListData = async (req, res) => {
     const search = req.query.search !== undefined && !isEmpty(req.query.search);
 
     const uploadSelect =
-      'uploaded uploadedAt fileName size type fileExtension tags';
+      'uploaded uploadedAt name fileName size type fileExtension tags';
     let uploadsData = [];
 
     if (search) {
@@ -50,7 +50,8 @@ exports.getUploadListData = async (req, res) => {
     uploadsData.map(data => {
       uploads.push({
         id: (id += 1),
-        file: data.fileName,
+        name: data.name,
+        fileName: data.fileName,
         extension: data.fileExtension,
         type: data.type,
         size: data.size,
@@ -191,9 +192,11 @@ exports.deleteAllUploads = async (req, res) => {
  */
 exports.putUpload = async (req, res, next) => {
   try {
+    const { fileName, tags, name } = req.body;
+
     const upload = await Upload.findOne({
       uploader: req.user.id,
-      fileName: req.body.fileName
+      fileName
     });
 
     if (!upload) {
@@ -203,6 +206,7 @@ exports.putUpload = async (req, res, next) => {
     }
 
     upload.tags = req.body.tags;
+    upload.name = upload.name !== name ? name : undefined;
 
     await upload.save();
 

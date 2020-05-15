@@ -216,7 +216,6 @@
           type: 'POST',
           data: { _csrf: '<%= _csrf %>' },
           success: function(response) {
-            console.log(response);
             $('#mfa').bootstrapToggle('disable');
             $('#success').show();
             $('#success').html(response.message);

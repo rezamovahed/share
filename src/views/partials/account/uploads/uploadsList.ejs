@@ -23,10 +23,14 @@
     <input type="hidden" name="_csrf" value="<%= _csrf %>"/>
     <input type="hidden" id="fileName" name="fileName"/>
     <div class="form-group">
+      <label for="uploadName">Name</label>
+      <input class="form-control" id="uploadName" name="name" type="text" data-lpignore="true">
+    </div>
+
+    <div class="form-group">
       <label for="uploadTags">Tags</label>
-      <input class="form-tags form-control" id="uploadTags" name="uploadTags" type="text" data-lpignore="true"
->
-        </div>
+      <input class="form-tags form-control" id="uploadTags" name="tags" type="text" data-lpignore="true">
+    </div>
            </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -70,8 +74,8 @@
   >
     <thead>
       <tr>
-        <th data-field="file" data-formatter="fileFormater" scope="col">
-          File
+        <th data-field="name" data-formatter="nameFormater" scope="col">
+          Name
         </th>
         <th data-field="tags" data-formatter="tagsFormater" scope="col">
           Tags
@@ -125,17 +129,10 @@
     const $table = $('#table');
 
     // Data formatters
-    function fileFormater(value, row) {
-      if ('<%= currentUser.streamerMode %>' === 'true') {
-        return `<a href="${
-          row.type === 'image'
-            ? `/view/${value}`
-            : `/u/${value + row.extension}`
-        }" target="_blank"">${value.substring(0, 3)}*********************</a>`;
-      }
+    function nameFormater(value, row) {
       return `<a href="${
-        row.type === 'image' ? `/view/${value}` : `/u/${value + row.extension}`
-      }" target="_blank">${value}</a>`;
+        row.type === 'image' ? `/view/${row.fileName}` : `/u/${row.fileName + row.extension}`
+      }" target="_blank">${value ? value : row.fileName}</a>`;
     }
 
         // Data formatters
@@ -194,8 +191,9 @@
         tags.map(data=>{
           $('#uploadTags').tagsinput('add', data);
         })
-        $('#fileName').attr('value', row.file);
-           $('#edit-upload').modal('show');
+        $('#fileName').attr('value', row.fileName);
+        $('#uploadName').attr('value', row.fileName  ? row.fileName : row.name);
+        $('#edit-upload').modal('show');
       }
     }
 
@@ -221,15 +219,17 @@
       e.preventDefault();
       const tags = $("#uploadTags").tagsinput('items')
       const fileName = $('#fileName').val();
+      const uploadName = $('#uploadName').val();
       $.ajax({
         url: '/edit?_method=PUT',
         type: 'POST',
-        data: { _csrf: '<%= _csrf %>', tags: tags ,fileName: fileName},
+        data: { _csrf: '<%= _csrf %>', tags: tags ,fileName: fileName, name:uploadName },
         success: function(response) {
           $table.bootstrapTable('refresh');
           $('#uploadTags').tagsinput('removeAll');
-          $(':input', this).val('');
           $('#edit-upload').modal('hide');
+          $('#fileName').attr('value', '');
+          $('#uploadName').attr('value', '');
           $('#success').show();
           $('#success').html(response.message);
         },
@@ -241,8 +241,9 @@
       });
     });
     $('#edit-upload').on('hide.bs.modal', function () {
+        $('#fileName').attr('value', '');
+        $('#uploadName').attr('value', '');
       $('#uploadTags').tagsinput('removeAll');
-      $(':input', this).val('');
     })
 
 </script>
