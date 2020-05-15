@@ -296,6 +296,7 @@ const userRoutes = require('./routes/user');
 const accountRoutes = require('./routes/account');
 const tokensRoutes = require('./routes/tokens');
 const galleryRoutes = require('./routes/gallery');
+const viewRoutes = require('./routes/view');
 const adminRoutes = require('./routes/admin');
 const configRoutes = require('./routes/config');
 const ownerController = require('./controllers/owner');
@@ -311,7 +312,8 @@ const configController = require('./controllers/config');
 
 app.use(indexRoutes);
 
-// app.get('/u/:image',uploadsController.getUpload)
+app.use('/view', viewRoutes);
+
 app.get('/l/:link', isLimitReached, linksController.getLink);
 
 app.put(
@@ -518,13 +520,7 @@ app.get(
   linksController.getLinkCode
 );
 
-app.post(
-  '/links',
-  isLoggedin,
-  isBanned,
-  isSuspended,
-  linksController.postLink
-);
+app.post('/links', isLoggedin, isBanned, isSuspended, linksController.postLink);
 
 app.put(
   '/links',

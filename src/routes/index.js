@@ -3,11 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 /**
- * Load MongoDB models.
- */
-const Upload = require('../models/Upload');
-
-/**
  * @route /
  * @method GET
  * @description Displays landing page or
