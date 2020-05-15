@@ -320,7 +320,7 @@ exports.getUploadListData = async (req, res) => {
       .sort({ uploadedAt: sort })
       .limit(limit)
       .skip(offset)
-      .select('uploaded uploadedAt fileName size type fileExtension uploader')
+      .select('uploaded uploadedAt name fileName size type fileExtension uploader')
       .populate({
         path: 'uploader',
         select: 'username isVerified role slug'
@@ -333,8 +333,9 @@ exports.getUploadListData = async (req, res) => {
     uploadsData.map(data => {
       uploads.push({
         id: (id += 1),
-        file: data.fileName,
-        extension: data.fileExtension,
+        name: data.name,
+        fileName: data.fileName,
+        fileExtension: data.fileExtension,
         type: data.type,
         size: data.size,
         uploadedAt: data.uploadedAt,

@@ -52,7 +52,7 @@ exports.getUploadListData = async (req, res) => {
         id: (id += 1),
         name: data.name,
         fileName: data.fileName,
-        extension: data.fileExtension,
+        fileExtension: data.fileExtension,
         type: data.type,
         size: data.size,
         uploadedAt: data.uploadedAt,

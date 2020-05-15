@@ -45,9 +45,8 @@
   >
     <thead>
       <tr>
-        <!-- <th data-field="name" scope="col">Name</th> -->
         <th
-          data-field="file"
+          data-field="fileName"
           data-formatter="fileFormater"
           data-searchable="false"
           scope="col"
@@ -85,20 +84,25 @@
           return 'No uploads found.';
         }
       });
+      $(".clipboard").tooltip({
+         placement: "bottom",
+         delay: 1000
+       });
     });
+    const clipboard = new ClipboardJS(".clipboard");
     var $table = $('#table');
 
     // Data formatters
-    function fileFormater(value, row) {
+   function fileFormater(value, row) {
       if ('<%= currentUser.streamerMode %>' === 'true') {
         return `<a href="${
           row.type === 'image'
-            ? `/view/${value}`
-            : `/u/${value + row.extension}`
-        } target="_blank"">${value.substring(0, 3)}*********************</a>`;
+            ? `/view/i/${value}`
+            : `/u/${value + row.fileExtension}`
+        }" target="_blank"">${value.substring(0, 3)}*********************</a>`;
       }
       return `<a href="${
-        row.type === 'image' ? `/view/${value}` : `/u/${value + row.extension}`
+        row.type === 'image' ? `/view/i/${value}` : `/u/${row.fileName + row.fileExtension}`
       }" target="_blank">${value}</a>`;
     }
     function uploaderFormater(value, row) {
@@ -109,8 +113,8 @@
     }
     function actionsFormatter(value, row, index) {
       return [
-        '<a class="copy" href="javascript:void(0)" title="Copy link">',
-        '<i class="far fa-copy"></i>',
+        `<a class="link clipboard" id="clip_${row.id}" href="#" data-clipboard-text="${row.type === 'image' ? `<%= siteURL %>/view/i/${row.fileName}` : `<%= siteURL %>/u/${row.fileName + row.fileExtension}`}">`,
+        '<i class="fas fa-link"></i>',
         '</a> ',
         '<a class="delete" href="javascript:void(0)" title="Delete Upload">',
         ' <i class="fas fa-times-circle"></i>',
@@ -121,7 +125,7 @@
     window.actionEvents = {
       'click .delete': function(e, value, row, index) {
         $.ajax({
-          url: `/${row.file + row.extension}?_method=DELETE`,
+          url: `/admin/uploads/${row.fileName + row.fileExtension}?_method=DELETE`,
           type: 'POST',
           data: { _csrf: '<%= _csrf %>' },
           success: function(response) {
@@ -137,11 +141,29 @@
             $('#error').html(response.responseJSON.message);
           }
         });
-      }
+      },
       'click .edit': function(e, value, row, index) {
         $('#edit-upload').modal('show')
       }
     };
+    function setTooltip(message, id) {
+        $(`#${id}`)
+          .tooltip("hide")
+           .attr("data-original-title", message)
+           .tooltip("show");
+       }
+       function hideTooltip(id) {
+           $(`#${id}`)
+           .tooltip("hide")
+       }
+       clipboard.on("success", (e) => {
+         setTooltip("Copied!", e.trigger.id);
+         hideTooltip(e.trigger.id);
+       });
+       clipboard.on("error", (e) => {
+         setTooltip("Failed!");
+         hideTooltip(e.trigger.id);
+       });
   </script>
 
   <div
