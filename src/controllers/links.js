@@ -41,7 +41,7 @@ exports.postLink = async (req, res) => {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
 
     const { url, code, limit } = req.body;
-    const newLink = await new Link({
+    const newLink = new Link({
       creator: req.user.id,
       deleteKey: await nanoid32(),
       url: normalizeUrl(url),

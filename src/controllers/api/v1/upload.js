@@ -50,7 +50,7 @@ module.exports.uploadFile = async (req, res, next) => {
      * Adds the file to the database with basic infomation plus a
      * deleteKey which allows users to remove the file with one click
      */
-    const upload = await new Upload({
+    const upload = new Upload({
       uploader: req.user.id,
       fileName,
       fileExtension,

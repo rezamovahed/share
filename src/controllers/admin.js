@@ -43,7 +43,7 @@ exports.postUser = async (req, res) => {
       sendEmail
     } = req.body;
 
-    const newUser = await new User({
+    const newUser = new User({
       username,
       email,
       role,
