@@ -130,6 +130,13 @@
 
     // Data formatters
     function nameFormater(value, row) {
+      if ('<%= currentUser.streamerMode %>' === 'true') {
+        return `<a href="${
+          row.type === 'image'
+            ? `/view/i/${row.fileName}`
+            : `/u/${row.fileName + row.fileExtension}`
+        }" target="_blank"">${value ? value.substring(0, 3) : row.fileName.substring(0, 3)}*********************</a>`;
+      }
       return `<a href="${
         row.type === 'image' ? `/view/i/${row.fileName}` : `/u/${row.fileName + row.fileExtension}`
       }" target="_blank">${value ? value : row.fileName}</a>`;
@@ -154,7 +161,7 @@
     }
     function actionsFormatter(value, row, index) {
       return [
-        `<a class="link clipboard" id="clip_${row.id}" href="#" data-clipboard-text="${row.type === 'image' ? `<%= siteURL %>/view/l/${row.fileName}` : `${siteURL}/u/${row.fileExtension + row.fileExtension}`}">`,
+        `<a class="link clipboard" id="clip_${row.id}" href="#" data-clipboard-text="${row.type === 'image' ? `<%= siteURL %>/view/i/${row.fileName}` : `${siteURL}/u/${row.fileExtension + row.fileExtension}`}">`,
         '<i class="fas fa-link"></i>',
         '</a> ',
         '<a class="edit" href="javascript:void(0)">',
