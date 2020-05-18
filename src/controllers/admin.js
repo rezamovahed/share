@@ -16,6 +16,7 @@ const urlFriendyAlphabet =
 const User = require('.././models/User');
 const Upload = require('.././models/Upload');
 const Token = require('.././models/Token');
+const Link = require('.././models/Link');
 
 /**
  * Load vaildation middleware
@@ -320,7 +321,9 @@ exports.getUploadListData = async (req, res) => {
       .sort({ uploadedAt: sort })
       .limit(limit)
       .skip(offset)
-      .select('uploaded uploadedAt name fileName size type fileExtension uploader')
+      .select(
+        'uploaded uploadedAt name fileName size type fileExtension uploader'
+      )
       .populate({
         path: 'uploader',
         select: 'username isVerified role slug'
@@ -607,6 +610,73 @@ exports.putBan = async (req, res) => {
       }
     );
     res.json({ message: 'User has been banned.', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Links lising mini API Controller- Takes data from lib and returns results.
+ */
+exports.getLinksListData = async (req, res) => {
+  try {
+    // Simple query params used by table to sort,limit, and offet.
+    const sort = req.query.order === 'asc' ? 1 : -1;
+    const limit = parseFloat(req.query.limit);
+    const offset = parseFloat(req.query.offset);
+
+    const search = req.query.search !== undefined && !isEmpty(req.query.search);
+
+    const linksSelect =
+      'url code clicks limit tags createdAt updatedAt creator';
+    let linksData = [];
+
+    const creatorSelect = 'username isVerified role slug';
+
+    if (search) {
+      linksData = await Link.find({
+        $text: { $search: req.query.search }
+      })
+        .populate({ path: 'creator', select: creatorSelect })
+        .sort({ createdAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(linksSelect);
+    } else {
+      linksData = await Link.find({})
+        .populate({ path: 'creator', select: creatorSelect })
+        .sort({ createdAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(linksSelect);
+    }
+
+    // eslint-disable-next-line prefer-const
+    let links = [];
+    let id = 0;
+    const promises = linksData.map(async data => {
+      links.push({
+        id: (id += 1),
+        url: data.url,
+        code: data.code,
+        clicks: data.clicks,
+        limit: data.limit,
+        creator: data.creator,
+        updatedAt: data.updatedAt,
+        createdAt: data.createdAt,
+        tags: data.tags
+      });
+    });
+
+    await Promise.all(promises);
+
+    const total = await Link.countDocuments({ creator: req.user.id });
+
+    res.json({
+      total,
+      rows: links
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

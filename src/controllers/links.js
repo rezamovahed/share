@@ -73,6 +73,7 @@ exports.getLinkCode = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
 /**
  * Links lising mini API Controller- Takes data from lib and returns results.
  */
@@ -85,7 +86,9 @@ exports.getLinksListData = async (req, res) => {
 
     const search = req.query.search !== undefined && !isEmpty(req.query.search);
 
-    const linksSelect = 'url code clicks limit tags createdAt updatedAt';
+    const linksSelect =
+      'url code clicks limit tags createdAt updatedAt';
+
     let linksData = [];
 
     if (search) {

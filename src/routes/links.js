@@ -4,14 +4,9 @@ const { customAlphabet } = require('nanoid/async');
 const urlFriendyAlphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
-const router = express.Router();
-
 const nanoid32 = customAlphabet(urlFriendyAlphabet, 24);
 
-/**
- * Load MongoDB models.
- */
-const Token = require('../models/Link');
+const router = express.Router();
 
 /**
  * @route /links

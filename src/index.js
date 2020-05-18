@@ -606,6 +606,9 @@ app.delete(
   isAdmin,
   adminController.deleteGallerySingleUpload
 );
+
+app.get('/admin/links-data', isAdmin, adminController.getLinksListData);
+
 app.get('/admin/users-data', isAdmin, adminController.getUserListData);
 
 app.post(
