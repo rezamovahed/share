@@ -87,7 +87,7 @@ exports.getLinksListData = async (req, res) => {
     const search = req.query.search !== undefined && !isEmpty(req.query.search);
 
     const linksSelect =
-      'url code clicks limit tags createdAt updatedAt';
+      'url code clicks limit tags createdAt updatedAt creator';
 
     let linksData = [];
 
@@ -119,6 +119,7 @@ exports.getLinksListData = async (req, res) => {
         clicks: data.clicks,
         limit: data.limit,
         updatedAt: data.updatedAt,
+        creator: data.creator.username,
         createdAt: data.createdAt,
         tags: data.tags,
         qrCode: await QRCode.toDataURL(

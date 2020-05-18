@@ -4,6 +4,7 @@ const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
 const filesize = require('filesize');
 const filesizeParser = require('filesize-parser');
+const normalizeUrl = require('normalize-url');
 
 const sendgrid = require('../config/sendgrid');
 
@@ -632,7 +633,7 @@ exports.getLinksListData = async (req, res) => {
       'url code clicks limit tags createdAt updatedAt creator';
     let linksData = [];
 
-    const creatorSelect = 'username isVerified role slug';
+    const creatorSelect = 'username isVerified role slug -_id';
 
     if (search) {
       linksData = await Link.find({
@@ -677,6 +678,59 @@ exports.getLinksListData = async (req, res) => {
       total,
       rows: links
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Edit another users link - Lets admins edit the users link to fix and or review.
+ */
+exports.putLink = async (req, res) => {
+  try {
+    const {
+      code, tags, limit, url
+    } = req.body;
+
+    const link = await Link.findOne({ code: req.params.code });
+
+    if (!link) {
+      return res.status(404).send('Not found.');
+    }
+
+    link.code = code;
+    link.tags = tags;
+    link.limit = limit;
+    link.url = normalizeUrl(url);
+
+    await link.save();
+
+    res.json({ message: 'You have updated the link', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete links from a user - Remove one link from database.
+ */
+exports.deleteLink = async (req, res) => {
+  try {
+    const link = await Link.findOneAndRemove({ code: req.body.code});
+    res.json({ message: `${link.code} has been removed`, status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete all links for all users - Removes all links from database.
+ */
+exports.deleteLinks = async (req, res) => {
+  try {
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

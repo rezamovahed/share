@@ -187,7 +187,7 @@
         },
         'click .delete': function (e, value, row, index) {
           $.ajax({
-            url: `/links?_method=DELETE`,
+            url: `/admin/links?_method=DELETE`,
             type: 'POST',
             data: { _csrf: '<%= _csrf %>', code: row.code}, success: function (response) {
               $('#success').show(); $('#success').html(response.message); $table.bootstrapTable('remove', {
@@ -222,10 +222,18 @@
       e.preventDefault();
       const tags = $("#linkTags").tagsinput('items')
       const code = $('#linkCode').val();
+      const newCode =$('#newLinkCode').val();
+      const newURL =   $('#linkURL').val();
+      const newLimit =  $('#linkLimit').val();
+
       $.ajax({
-        url: '/links?_method=PUT',
+        url: `/admin/links/${code}?_method=PUT`,
         type: 'POST',
-        data: { _csrf: '<%= _csrf %>', tags: tags,code: code},
+        data: {_csrf: '<%= _csrf %>',
+          tags: tags,
+          code: newCode,
+          url: newURL,
+          limit: newLimit},
         success: function(response) {
           $table.bootstrapTable('refresh');
           $('#linkTags').tagsinput('removeAll');
@@ -233,6 +241,8 @@
           $('#edit-link').modal('hide');
           $('#success').show();
           $('#success').html(response.message);
+          table.
+          bootstrapTable('refresh', { silent: true });
         },
         error: function(response) {
           console.log(response);
