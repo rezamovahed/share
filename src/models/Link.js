@@ -23,7 +23,7 @@ const linkSchema = new Schema(
       type: Number,
       default: 0
     },
-    limit: Number,
+    limit: { type: Number, default: 0 },
     tags: [{ type: String }],
     deleteKey: {
       type: String,

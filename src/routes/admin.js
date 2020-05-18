@@ -1,5 +1,12 @@
 const express = require('express');
 const password = require('generate-password');
+const { customAlphabet } = require('nanoid/async');
+
+const urlFriendyAlphabet =
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+const nanoid32 = customAlphabet(urlFriendyAlphabet, 24);
+
 
 const router = express.Router();
 
@@ -68,6 +75,21 @@ router.get('/gallery', async (req, res) => {
     pageDesc: process.env.DESC,
     pageName: 'adminGallery',
     images
+  });
+});
+
+/**
+ * @route /admin/links
+ * @method GET
+ * @description Displays all the links added by the users.
+ * @access Private
+ */
+router.get('/links', async (req, res) => {
+  res.render('admin/links', {
+    pageTitle: 'Links',
+    pageDesc: process.env.DESC,
+    pageName: 'adminLinks',
+    newLinkCode: await nanoid32()
   });
 });
 

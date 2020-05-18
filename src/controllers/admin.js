@@ -4,6 +4,7 @@ const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
 const filesize = require('filesize');
 const filesizeParser = require('filesize-parser');
+const normalizeUrl = require('normalize-url');
 
 const sendgrid = require('../config/sendgrid');
 
@@ -16,6 +17,7 @@ const urlFriendyAlphabet =
 const User = require('.././models/User');
 const Upload = require('.././models/Upload');
 const Token = require('.././models/Token');
+const Link = require('.././models/Link');
 
 /**
  * Load vaildation middleware
@@ -320,7 +322,9 @@ exports.getUploadListData = async (req, res) => {
       .sort({ uploadedAt: sort })
       .limit(limit)
       .skip(offset)
-      .select('uploaded uploadedAt name fileName size type fileExtension uploader')
+      .select(
+        'uploaded uploadedAt name fileName size type fileExtension uploader'
+      )
       .populate({
         path: 'uploader',
         select: 'username isVerified role slug'
@@ -607,6 +611,126 @@ exports.putBan = async (req, res) => {
       }
     );
     res.json({ message: 'User has been banned.', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Links lising mini API Controller- Takes data from lib and returns results.
+ */
+exports.getLinksListData = async (req, res) => {
+  try {
+    // Simple query params used by table to sort,limit, and offet.
+    const sort = req.query.order === 'asc' ? 1 : -1;
+    const limit = parseFloat(req.query.limit);
+    const offset = parseFloat(req.query.offset);
+
+    const search = req.query.search !== undefined && !isEmpty(req.query.search);
+
+    const linksSelect =
+      'url code clicks limit tags createdAt updatedAt creator';
+    let linksData = [];
+
+    const creatorSelect = 'username isVerified role slug -_id';
+
+    if (search) {
+      linksData = await Link.find({
+        $text: { $search: req.query.search }
+      })
+        .populate({ path: 'creator', select: creatorSelect })
+        .sort({ createdAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(linksSelect);
+    } else {
+      linksData = await Link.find({})
+        .populate({ path: 'creator', select: creatorSelect })
+        .sort({ createdAt: sort })
+        .limit(limit)
+        .skip(offset)
+        .select(linksSelect);
+    }
+
+    // eslint-disable-next-line prefer-const
+    let links = [];
+    let id = 0;
+    const promises = linksData.map(async data => {
+      links.push({
+        id: (id += 1),
+        url: data.url,
+        code: data.code,
+        clicks: data.clicks,
+        limit: data.limit,
+        creator: data.creator,
+        updatedAt: data.updatedAt,
+        createdAt: data.createdAt,
+        tags: data.tags
+      });
+    });
+
+    await Promise.all(promises);
+
+    const total = await Link.countDocuments({ creator: req.user.id });
+
+    res.json({
+      total,
+      rows: links
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Edit another users link - Lets admins edit the users link to fix and or review.
+ */
+exports.putLink = async (req, res) => {
+  try {
+    const {
+      code, tags, limit, url
+    } = req.body;
+
+    const link = await Link.findOne({ code: req.params.code });
+
+    if (!link) {
+      return res.status(404).send('Not found.');
+    }
+
+    link.code = code;
+    link.tags = tags;
+    link.limit = limit;
+    link.url = normalizeUrl(url);
+
+    await link.save();
+
+    res.json({ message: 'You have updated the link', status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete links from a user - Remove one link from database.
+ */
+exports.deleteLink = async (req, res) => {
+  try {
+    const link = await Link.findOneAndRemove({ code: req.body.code});
+    res.json({ message: `${link.code} has been removed`, status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+/**
+ * Delete all links for all users - Removes all links from database.
+ */
+exports.deleteLinks = async (req, res) => {
+  try {
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

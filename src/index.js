@@ -606,6 +606,27 @@ app.delete(
   isAdmin,
   adminController.deleteGallerySingleUpload
 );
+
+app.put(
+  '/admin/links/:code',
+  isLoggedin,
+  isAdmin,
+  isBannedAPI,
+  isSuspendedAPI,
+  adminController.putLink
+);
+
+app.delete(
+  '/admin/links',
+  isLoggedin,
+  isAdmin,
+  isBannedAPI,
+  isSuspendedAPI,
+  adminController.deleteLink
+);
+
+app.get('/admin/links-data', isAdmin, adminController.getLinksListData);
+
 app.get('/admin/users-data', isAdmin, adminController.getUserListData);
 
 app.post(
