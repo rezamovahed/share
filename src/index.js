@@ -278,7 +278,7 @@ const adminNewUserVaildation = require('./validation/admin/newUser');
 const forgotPasswordVaildation = require('./validation/forgot-password');
 const resetPasswordVaildation = require('./validation/reset-password');
 const accountRenameTokenVaildation = require('./validation/tokens/rename-token');
-// const accountCreateTokenVaildation = require('./validation/tokens/create-token');
+const accountCreateTokenVaildation = require('./validation/tokens/create-token');
 const ResendActivationEmailVaildation = require('./validation/resend-activation');
 const userUpdateVaildation = require('./validation/admin/userUpdate');
 const suspendUserVaildation = require('./validation/admin/suspendUser');
@@ -490,7 +490,7 @@ app.get(
   tokensController.getTokenListData
 );
 
-app.post('/tokens', isLoggedin, isBannedAPI, tokensController.postToken);
+app.post('/tokens', isLoggedin, isBannedAPI, accountCreateTokenVaildation, tokensController.postToken);
 
 app.put(
   '/tokens/:token_id',
