@@ -1,4 +1,5 @@
 const moment = require('moment');
+const AdmZip = require('adm-zip');
 const qrcode = require('qrcode');
 const path = require('path');
 const fs = require('fs-extra');
@@ -16,6 +17,7 @@ const urlFriendyAlphabet =
  */
 const User = require('.././models/User');
 const Upload = require('.././models/Upload');
+const Link = require('.././models/Link');
 const Token = require('.././models/Token');
 
 /**
@@ -302,6 +304,94 @@ exports.getSpaceUsed = async (req, res, next) => {
       spaceUsedInBytes += filesizeParser(data.size);
     });
     res.json({ data: filesize(spaceUsedInBytes), status: 200 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.getExportData = async (req, res, next) => {
+  try {
+    const zip = new AdmZip();
+
+    const linksJSON = [];
+
+    const user = await User.findById(req.user.id);
+    const uploads = await Upload.find({ uploader: req.user.id });
+    const links = await Link.find({ creator: req.user.id });
+
+    links.map(data => {
+      linksJSON.push({
+        clicks: data.clicks,
+        limit: data.limit,
+        tags: data.tags,
+        deleteKey: data.deleteKey,
+        url: data.url,
+        code: data.code,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt
+      });
+    });
+
+    const userJSON = [
+      {
+        emailVerified: user.emailVerified,
+        mfa: user.mfa,
+        isBanned: user.isBanned,
+        isSuspended: user.isSuspended,
+        role: user.role,
+        isVerified: user.isVerified,
+        username: user.username,
+        email: user.email,
+        slug: user.slug,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        lastLogin: user.lastLogin,
+        lastLoginIP: user.lastLoginIP,
+        lastLoginLocation: user.lastLoginLocation,
+        passwordChanged: user.passwordChanged,
+        lastUpload: user.lastUpload
+      }
+    ];
+
+    const userJSONFile = Buffer.from(JSON.stringify(userJSON));
+    const linksJSONFile = Buffer.from(JSON.stringify(linksJSON));
+
+    const uploadsJSON = [];
+
+    const promises = uploads.map(data => {
+      uploadsJSON.push({
+        uploaded: data.uploaded,
+        type: data.type,
+        tags: data.tags,
+        uploadedAt: data.uploadedAt,
+        fileName: data.fileName,
+        deleteKey: data.deleteKey,
+        size: data.size
+      });
+      zip.addLocalFile(
+        path.join(
+          __dirname,
+          `../public/u/${data.fileName + data.fileExtension}`
+        ),
+        'uploads'
+      );
+    });
+
+    const uploadsJSONFile = Buffer.from(JSON.stringify(uploadsJSON));
+
+    await Promise.all(promises);
+
+    zip.addFile('links.json', linksJSONFile);
+    zip.addFile('uploads.json', uploadsJSONFile);
+    zip.addFile('account.json', userJSONFile);
+
+    const zipFile = zip.toBuffer();
+
+    res.set('Content-Type', 'application/zip');
+    res.set('Content-Disposition', 'attachment; filename=file.zip');
+    res.set('Content-Length', zipFile.length);
+    res.end(zipFile, 'binary');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

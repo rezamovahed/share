@@ -421,6 +421,13 @@ app.delete(
   isOwnerAccountDelete,
   accountController.deleteAccount
 );
+app.get(
+  '/account/export',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  accountController.getExportData
+);
 
 app.get(
   '/account/email-verify/:token',
