@@ -1,7 +1,7 @@
 <script>
   $(document).ready(() => {
-    $('#spaceUsed').one('click',function() {
-      $('#spaceUsed').removeClass('btn p-0 m-0 btn-link')
+    $('#spaceUsed').one('click', function() {
+      $('#spaceUsed').removeClass('btn p-0 m-0 btn-link');
       $('#spaceUsed').html('Loading please wait....');
       $.ajax({
         url: '/account/space-used',
@@ -11,7 +11,9 @@
         },
         error: function(response) {
           console.log(response);
-          $('#spaceUsed').html(response.responseJSON.message || 'Error loading');
+          $('#spaceUsed').html(
+            response.responseJSON.message || 'Error loading'
+          );
         }
       });
     });
@@ -64,17 +66,6 @@
     </div>
   </div>
   <% if(currentUser.passwordChanged !== undefined) { %>
-  <div class="col-sm-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Last password change</h5>
-        <p class="card-text">
-          <%= moment(currentUser.passwordChanged).fromNow() %>
-        </p>
-      </div>
-    </div>
-  </div>
-  <% } %> <% if(currentUser.passwordChanged !== undefined) { %>
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">

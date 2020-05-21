@@ -50,7 +50,7 @@ exports.postLink = async (req, res) => {
     });
     await newLink.save();
     req.flash('info', {
-      cshortenLinkode: `${process.env.FULL_DOMAIN}/l/${newLink.code}`,
+      shortenLink: `${process.env.FULL_DOMAIN}/l/${newLink.code}`,
       url: newLink.url
     });
     res.redirect('/links');
@@ -130,7 +130,7 @@ exports.getLinksListData = async (req, res) => {
 
     await Promise.all(promises);
 
-    const total = await Link.countDocuments({ creator: req.user.id });
+    const total = linksData.length;
 
     res.json({
       total,

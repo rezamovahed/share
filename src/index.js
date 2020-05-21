@@ -285,7 +285,7 @@ const suspendUserVaildation = require('./validation/admin/suspendUser');
 const postOwnershipVaildation = require('./validation/admin/transferOwnership');
 const configVaildation = require('./validation/config');
 const putUploadVaildation = require('./validation/uploadUpdate');
-
+const createLinkValidation = require('./validation/linkCreate');
 /**
  * Primary app routes.
  */
@@ -421,6 +421,13 @@ app.delete(
   isOwnerAccountDelete,
   accountController.deleteAccount
 );
+app.get(
+  '/account/export',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  accountController.getExportData
+);
 
 app.get(
   '/account/email-verify/:token',
@@ -490,7 +497,13 @@ app.get(
   tokensController.getTokenListData
 );
 
-app.post('/tokens', isLoggedin, isBannedAPI, accountCreateTokenVaildation, tokensController.postToken);
+app.post(
+  '/tokens',
+  isLoggedin,
+  isBannedAPI,
+  accountCreateTokenVaildation,
+  tokensController.postToken
+);
 
 app.put(
   '/tokens/:token_id',
@@ -520,7 +533,14 @@ app.get(
   linksController.getLinkCode
 );
 
-app.post('/links', isLoggedin, isBanned, isSuspended, linksController.postLink);
+app.post(
+  '/links',
+  isLoggedin,
+  isBanned,
+  isSuspended,
+  createLinkValidation,
+  linksController.postLink
+);
 
 app.put(
   '/links',

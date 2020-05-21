@@ -17,11 +17,6 @@ const deleteController = require('../../../controllers/api/v2/delete');
  */
 const deleteValidation = require('../../../validation/api/v2/delete');
 
-router.get(
-  '/',
-  deleteValidation,
-  isDeleteKeyVaild,
-  deleteController.delete
-);
+router.get('/', deleteValidation, isDeleteKeyVaild, deleteController.delete);
 
 module.exports = router;
