@@ -7,7 +7,6 @@ const urlFriendyAlphabet =
 
 const nanoid32 = customAlphabet(urlFriendyAlphabet, 24);
 
-
 const router = express.Router();
 
 /**

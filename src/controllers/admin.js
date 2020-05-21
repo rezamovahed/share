@@ -718,7 +718,7 @@ exports.putLink = async (req, res) => {
  */
 exports.deleteLink = async (req, res) => {
   try {
-    const link = await Link.findOneAndRemove({ code: req.body.code});
+    const link = await Link.findOneAndRemove({ code: req.body.code });
     res.json({ message: `${link.code} has been removed`, status: 200 });
   } catch (err) {
     console.error(err);
@@ -729,13 +729,13 @@ exports.deleteLink = async (req, res) => {
 /**
  * Delete all links for all users - Removes all links from database.
  */
-exports.deleteLinks = async (req, res) => {
-  try {
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
-  }
-};
+// exports.deleteLinks = async (req, res) => {
+//   try {
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Server error');
+//   }
+// };
 
 /**
  * Unban user Controller - Allows admins to unban users.
