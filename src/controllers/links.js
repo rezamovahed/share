@@ -50,7 +50,7 @@ exports.postLink = async (req, res) => {
     });
     await newLink.save();
     req.flash('info', {
-      shortenLinkode: `${process.env.FULL_DOMAIN}/l/${newLink.code}`,
+      shortenLink: `${process.env.FULL_DOMAIN}/l/${newLink.code}`,
       url: newLink.url
     });
     res.redirect('/links');
