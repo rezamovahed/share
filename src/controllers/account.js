@@ -254,6 +254,7 @@ exports.deleteMFA = async (req, res, next) => {
 exports.deleteAccount = async (req, res, next) => {
   try {
     await Token.deleteMany({ user: req.user.id });
+    await Link.deleteMany({ creator: req.user.id });
 
     const uploads = await Upload.find({
       uploader: req.user.id
@@ -296,7 +297,6 @@ exports.deleteAccount = async (req, res, next) => {
 exports.getSpaceUsed = async (req, res, next) => {
   try {
     const uploads = await Upload.find({ uploader: req.user.id }).select('size');
-    const uploadsLength = uploads.length;
     // eslint-disable-next-line prefer-const
     let spaceUsedInBytes = 0;
 
