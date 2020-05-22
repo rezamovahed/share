@@ -159,7 +159,13 @@
           });
         }
       }
-                  $('#rename-token').on('hide.bs.modal', function() {
+      $('#create-token').on('shown.bs.modal', function(){
+        $('#tokenLabel').focus();
+       })
+      $('#rename-token').on('shown.bs.modal', function(){
+        $('#renameTokenLabel').focus();
+       })
+      $('#rename-token').on('hide.bs.modal', function() {
       $(':input', this).val('');
     }); </script>
       </div>
