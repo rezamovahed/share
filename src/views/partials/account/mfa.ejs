@@ -28,6 +28,10 @@
       $('#enable-mfa').modal('show');
     });
 
+    $('#enable-mfa').on('shown.bs.modal', function() {
+      $('#verify-mfa-token').focus();
+    });
+
     $('#enable-mfa').on('hidden.bs.modal', function() {
       $('#mfa-secret').password('hide');
       $(':input', this).val('');

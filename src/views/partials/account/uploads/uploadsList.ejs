@@ -248,11 +248,15 @@
         }
       });
     });
+    $('#edit-upload').on('shown.bs.modal', function(){
+        $('#uploadName').focus();
+    })
     $('#edit-upload').on('hide.bs.modal', function () {
         $('#fileName').attr('value', '');
         $('#uploadName').attr('value', '');
       $('#uploadTags').tagsinput('removeAll');
     })
+
 
 </script>
 

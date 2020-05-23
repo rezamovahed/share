@@ -294,6 +294,12 @@
         }
       });
     });
+    $('#create-link').on('shown.bs.modal', function(){
+        $('#newLinkURL').focus();
+    })
+    $('#edit-link').on('shown.bs.modal', function(){
+      $('.bootstrap-tagsinput input').focus();
+    })
     $('#edit-link').on('hide.bs.modal', function () {
       $('#linkTags').tagsinput('removeAll');
       $(':input', this).val('');
