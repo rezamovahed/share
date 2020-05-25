@@ -268,6 +268,7 @@ const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
 const isSignupsDisabled = require('./middleware/isSignupsDisabled');
 const isConfigTokenVaild = require('./middleware/config/isTokenVaild');
 const isLimitReached = require('./middleware/linkLimiter');
+const isSignupTerms = require('./middleware/isSignupTerms');
 
 /**
  * Load vaildation middleware
@@ -290,6 +291,7 @@ const createLinkValidation = require('./validation/linkCreate');
  * Primary app routes.
  */
 const indexRoutes = require('./routes/index');
+const termsRoutes = require('./routes/terms');
 const linksRoutes = require('./routes/links');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
@@ -301,6 +303,7 @@ const adminRoutes = require('./routes/admin');
 const configRoutes = require('./routes/config');
 const ownerController = require('./controllers/owner');
 const indexController = require('./controllers/index');
+const termsController = require('./controllers/terms');
 const linksController = require('./controllers/links');
 const authController = require('./controllers/auth');
 const userController = require('./controllers/user');
@@ -311,6 +314,7 @@ const adminController = require('./controllers/admin');
 const configController = require('./controllers/config');
 
 app.use(indexRoutes);
+app.use('/terms',isSignupTerms, termsRoutes);
 
 app.use('/view', viewRoutes);
 
@@ -721,6 +725,7 @@ app.delete(
 
 app.post(
   '/admin/settings/ownership',
+  isLoggedin,
   isOwner,
   postOwnershipVaildation,
   adminController.postOwnership
@@ -728,6 +733,7 @@ app.post(
 
 app.post(
   '/admin/settings/logo',
+  isLoggedin,
   isOwner,
   postUploadLogo,
   adminController.postUploadLogo
@@ -735,6 +741,7 @@ app.post(
 
 app.delete(
   '/admin/settings/logo',
+  isLoggedin,
   isOwner,
   deleteUploadLogo,
   adminController.deleteUploadLogo
@@ -742,6 +749,7 @@ app.delete(
 
 app.post(
   '/admin/settings/favicon',
+  isLoggedin,
   isOwner,
   postUploadFavicon,
   adminController.postUploadFavicon
@@ -749,10 +757,13 @@ app.post(
 
 app.delete(
   '/admin/settings/favicon',
+  isLoggedin,
   isOwner,
   deleteUploadFavicon,
   adminController.deleteUploadFavicon
 );
+
+app.put('/admin/settings/terms', isLoggedin, isOwner, termsController.putTerms);
 
 /**
  * API routes.
