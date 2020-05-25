@@ -14,6 +14,7 @@ const router = express.Router();
  */
 const Upload = require('../models/Upload');
 const User = require('../models/User');
+const Term = require('../models/Term');
 
 /**
  * Load middlewares
@@ -179,11 +180,13 @@ router.get('/users/edit/:slug', async (req, res) => {
  */
 router.get('/settings', isOwner, async (req, res) => {
   const users = await User.find({ role: { $ne: 'owner' } });
+  const terms = await Term.findOne({});
   res.render('admin/settings/index', {
     pageTitle: 'Settings',
     pageDesc: process.env.DESC,
     pageName: 'adminSettings',
-    users
+    users,
+    terms
   });
 });
 

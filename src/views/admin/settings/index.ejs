@@ -36,6 +36,14 @@
     </div>
   </div>
   <hr>
+  <% if(signupTerms) { %>
+    <div class="header mb-2">Terms</div>
+    <div id="terms"></div>
+    <button id="save-terms" class="btn btn-primary mt-3 mb-3" style="color: #ffff;">
+      Update Terms
+    </button>
+    <hr>
+  <% } %>
  <button
     type="button"
     class="btn btn-primary mt-3 mb-2"
@@ -96,8 +104,8 @@
     </div>
 </div>
 </div>
-
       <script>
+  $(document).ready(() => {
         $('#logo-upload').on('fileuploaded', function(event, previewId, index, fileId) {
           $('#logo-upload').fileinput('reset');
           $('.navbar-brand img').attr('src','/assets/images/custom/logo.png')
@@ -140,8 +148,34 @@
             }
           })
         })
+  <% if(signupTerms) { %>
+     $('#terms').summernote({
+        tabsize: 2,
+        height: 350
+     })
+     <% if(terms) {%>
+       $('#terms').summernote('pasteHTML',`<%= terms.content %>`);
 
-
+     <% }%>
+   $('#save-terms').on('click',function(e){
+     const termsContent = $('#terms').summernote('code')
+          $.ajax({
+            url: '/admin/settings/terms?_method=PUT',
+            type: 'POST',
+            data: { _csrf: '<%= _csrf %>', content: termsContent},
+            success: function(response) {
+              $('#success').show();
+              $('#success').html(response.message);
+            },
+            error: function(response) {
+              console.log(response)
+              $('#error').show();
+              $('#error').html(response.responseJSON.message);
+            }
+          })
+        })
+      })
+      <% } %>
      </script>
 
 <%- include ('../../partials/footer.ejs') %>
