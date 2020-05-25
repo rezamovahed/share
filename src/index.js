@@ -268,6 +268,7 @@ const deleteUploadFavicon = require('./middleware/admin/deleteUploadFavicon');
 const isSignupsDisabled = require('./middleware/isSignupsDisabled');
 const isConfigTokenVaild = require('./middleware/config/isTokenVaild');
 const isLimitReached = require('./middleware/linkLimiter');
+const isSignupTerms = require('./middleware/isSignupTerms');
 
 /**
  * Load vaildation middleware
@@ -313,7 +314,7 @@ const adminController = require('./controllers/admin');
 const configController = require('./controllers/config');
 
 app.use(indexRoutes);
-app.use('/terms', termsRoutes);
+app.use('/terms',isSignupTerms, termsRoutes);
 
 app.use('/view', viewRoutes);
 
