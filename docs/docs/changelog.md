@@ -13,6 +13,12 @@ nav_order: 10
 - Added Upload file name set via editing it after and also being able to add it while uploading via the API v2.
 - v2 API will be taking over API v1 in future updates.  Would be good to move over as soon as you can.
 - View page is back for support with currently only being images.
+- Fixed some of the validation.
+- Added support for exporting of your data such as links,uploads, account and other data.
+- Added links to what get removed when you delete your account.
+- Added focus to the modals.
+- Removed old userlist code.
+- Added terms page editer in owner plus a page for it to be displayed if it's enabled.
 
 4.1.0
 - Fixed bug in pm2 echosystem file.
