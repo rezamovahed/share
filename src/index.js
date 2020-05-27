@@ -18,7 +18,11 @@ const moment = require('moment');
 const lusca = require('lusca');
 const fs = require('fs-extra');
 const cors = require('cors');
+const winston = require('winston');
+const expressWinston = require('express-winston');
 const User = require('./models/User');
+
+require('winston-daily-rotate-file');
 
 /**
  * Load environment variables from the .env file, where API keys and passwords are stored.
@@ -228,6 +232,32 @@ app.use((req, res, next) => {
 });
 
 /**
+ * Log
+ */
+if (process.env.LOGGER === 'true') {
+  const transport = new winston.transports.DailyRotateFile({
+    filename: 'logs/access-log%DATE%.log',
+    datePattern: 'YYYY-MM-DD-HH',
+    zippedArchive: true,
+    maxSize: '20m',
+    maxFiles: '14d'
+  });
+
+  app.use(
+    expressWinston.logger({
+      transports: [transport],
+      meta: true, // optional: control whether you want to log the meta data about the request (default to true)
+      msg: 'HTTP {{req.method}} {{req.url}}', // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+      expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
+      colorize: false, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
+      ignoreRoute(req, res) {
+        return false;
+      } // optional: allows to skip some log messages based on request and/or response
+    })
+  );
+}
+
+/**
  * Limiters - this is rate limiters per API or other requests.
  */
 const accountLimiter = require('./limiters/account');
@@ -314,7 +344,7 @@ const adminController = require('./controllers/admin');
 const configController = require('./controllers/config');
 
 app.use(indexRoutes);
-app.use('/terms',isSignupTerms, termsRoutes);
+app.use('/terms', isSignupTerms, termsRoutes);
 
 app.use('/view', viewRoutes);
 
