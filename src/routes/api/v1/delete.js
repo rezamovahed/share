@@ -6,6 +6,7 @@ const router = express.Router();
  * Load Middleware
  */
 const isDeleteKeyVaild = require('../../../middleware/api/isDeleteKeyVaild');
+const isBanned = require('../../../middleware/api/isBanned');
 
 /**
  * Load Controllers
@@ -19,6 +20,7 @@ const deleteValidation = require('../../../validation/api/v1/delete');
 
 router.get(
   '/',
+  isBanned,
   deleteValidation,
   isDeleteKeyVaild,
   deleteController.deleteFile
