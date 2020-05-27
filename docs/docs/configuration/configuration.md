@@ -109,6 +109,13 @@ SENDGRID_API_KEY=sg......
 EMAIL_DOMAIN=example.com
 ```
 
+## Logger
+
+```yaml
+# Enable or disable the logger to file.
+LOGGER=true
+```
+
 ## Filecheck
 
 ```yaml
