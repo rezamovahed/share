@@ -19,6 +19,8 @@ nav_order: 10
 - Added focus to the modals.
 - Removed old userlist code.
 - Added terms page editer in owner plus a page for it to be displayed if it's enabled.
+- Added a logger for logging the made on the app.
+- Added new env variable for LOGGER so you can enable or disable that feature.
 
 4.1.0
 - Fixed bug in pm2 echosystem file.
