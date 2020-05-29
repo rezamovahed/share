@@ -5,7 +5,7 @@ nav_order: 10
 ---
 
 # Changelog
-4.2.0 (pre-release)
+4.2.0
 - Added tags to uploads which you can add when uploading and or after the fact.
 - Added tags to the API v1 in the body.
 - Fixed bug where you search for something that is not found it would spam the server.
@@ -21,6 +21,7 @@ nav_order: 10
 - Added terms page editer in owner plus a page for it to be displayed if it's enabled.
 - Added a logger for logging the made on the app.
 - Added new env variable for LOGGER so you can enable or disable that feature.
+- Added better stableness due to try catching everything,
 
 4.1.0
 - Fixed bug in pm2 echosystem file.
