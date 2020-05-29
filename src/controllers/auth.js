@@ -70,41 +70,46 @@ exports.postSignup = async (req, res) => {
  * creates a user session then redirect to there uploads lising pagge
  */
 exports.postLogin = async (req, res) => {
-  // Gets the login IP and if it's localhost call it localhost
-  const ip =
-    req.clientIp === '::1' || req.clientIp === '127.0.0.1'
-      ? 'localhost'
-      : req.clientIp;
+  try {
+    // Gets the login IP and if it's localhost call it localhost
+    const ip =
+      req.clientIp === '::1' || req.clientIp === '127.0.0.1'
+        ? 'localhost'
+        : req.clientIp;
 
-  // Gets the Login IP location if its localhost then it's localhost
-  const location =
-    req.ipInfo.error !== undefined
-      ? 'localhost'
-      : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
+    // Gets the Login IP location if its localhost then it's localhost
+    const location =
+      req.ipInfo.error !== undefined
+        ? 'localhost'
+        : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
 
-  // Finds the user and updaes the lastLogin ip
-  await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      $set: {
-        lastLoginIP: ip,
-        lastLoginLocation: location
+    // Finds the user and updaes the lastLogin ip
+    await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $set: {
+          lastLoginIP: ip,
+          lastLoginLocation: location
+        }
+      },
+      {
+        $safe: true,
+        $upsert: true
       }
-    },
-    {
-      $safe: true,
-      $upsert: true
-    }
-  );
-  req.flash('success', `Welcome back, ${req.user.username}`);
-  res.redirect('/');
+    );
+    req.flash('success', `Welcome back, ${req.user.username}`);
+    res.redirect('/');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
 };
 
 /**
  * Logout Controler - If the user is loggin this will logged
  * them out and remove there session from there browser.
  */
-exports.getLogout = async (req, res) => {
+exports.getLogout = (req, res) => {
   // Removes the user session and logged them outs
   req.logout();
   res.redirect('/');

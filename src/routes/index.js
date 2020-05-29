@@ -14,34 +14,38 @@ router.get('/', async (req, res) => {
    * If the user is logged in this will add
    * the needed data for the logged in render
    */
-
-  if (req.isAuthenticated()) {
-    // If user is banned.
-    if (req.user.isBanned) {
-      return res.status('401').render('landing/index', {
-        pageTitle: 'Your currently banned',
+  try {
+    if (req.isAuthenticated()) {
+      // If user is banned.
+      if (req.user.isBanned) {
+        return res.status('401').render('landing/index', {
+          pageTitle: 'Your currently banned',
+          pageDesc: process.env.DESC,
+          pageName: 'uploads'
+        });
+      }
+      // If user is suspended
+      if (req.user.isSuspended) {
+        return res.status('401').render('landing/index', {
+          pageTitle: 'Your currently suspended',
+          pageDesc: process.env.DESC,
+          pageName: 'uploads'
+        });
+      }
+      return res.render('landing/index', {
+        pageTitle: 'Welcome',
         pageDesc: process.env.DESC,
         pageName: 'uploads'
       });
     }
-    // If user is suspended
-    if (req.user.isSuspended) {
-      return res.status('401').render('landing/index', {
-        pageTitle: 'Your currently suspended',
-        pageDesc: process.env.DESC,
-        pageName: 'uploads'
-      });
-    }
-    return res.render('landing/index', {
-      pageTitle: 'Welcome',
-      pageDesc: process.env.DESC,
-      pageName: 'uploads'
+    res.render('landing/index', {
+      pageTitle: 'Landing',
+      pageDesc: process.env.DESC
     });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
   }
-  res.render('landing/index', {
-    pageTitle: 'Landing',
-    pageDesc: process.env.DESC
-  });
 });
 
 router.get('/manifest.json', (req, res) => {
