@@ -389,7 +389,12 @@ exports.getExportData = async (req, res, next) => {
     const zipFile = zip.toBuffer();
 
     res.set('Content-Type', 'application/zip');
-    res.set('Content-Disposition', 'attachment; filename=file.zip');
+    res.set(
+      'Content-Disposition',
+      `attachment; filename=${process.env.TITLE}-${user.username}-${moment().format(
+        'M/D/YYYY_h:mm_A'
+      )}-export.zip`
+    );
     res.set('Content-Length', zipFile.length);
     res.end(zipFile, 'binary');
   } catch (err) {
