@@ -727,17 +727,6 @@ exports.deleteLink = async (req, res) => {
 };
 
 /**
- * Delete all links for all users - Removes all links from database.
- */
-// exports.deleteLinks = async (req, res) => {
-//   try {
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Server error');
-//   }
-// };
-
-/**
  * Unban user Controller - Allows admins to unban users.
  */
 exports.putUnban = async (req, res) => {
@@ -1047,18 +1036,3 @@ exports.getSpaceUsed = async (req, res, next) => {
     res.status(500).send('Server error');
   }
 };
-
-/**
- * Delete all uploads for all users - Removes all file from database and filesystem that users have uploaded..
- */
-// exports.deleteAllToken = async (req, res) => {
-//   try {
-//     const uploads = await Upload.find({});
-
-//     req.flash('success', 'All users uploads have been removed.');
-//     res.redirect('/');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Server error');
-//   }
-// };

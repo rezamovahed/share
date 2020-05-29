@@ -12,7 +12,6 @@ exports.putTerms = async (req, res) => {
 
     const terms = await Term.findOne({});
 
-    console.log(terms);
     if (!terms) {
       const newTerms = await new Term({
         content

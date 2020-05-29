@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
     if (Validator.isEmpty(url)) {
       errors = 'URL is required.';
     }
-    if (Validator.isURL(normalizeUrl(url))) {
+    if (!Validator.isURL(normalizeUrl(url))) {
       errors = 'Must be a URL.';
     }
     if (Validator.isEmpty(code)) {

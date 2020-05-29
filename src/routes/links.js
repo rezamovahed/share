@@ -15,12 +15,17 @@ const router = express.Router();
  * @access Private
  */
 router.get('/', async (req, res) => {
-  res.render('links/index', {
-    pageTitle: 'My links',
-    pageDesc: process.env.DESC,
-    pageName: 'links',
-    newLinkCode: await nanoid32()
-  });
+  try {
+    res.render('links/index', {
+      pageTitle: 'My links',
+      pageDesc: process.env.DESC,
+      pageName: 'links',
+      newLinkCode: await nanoid32()
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
 });
 
 module.exports = router;

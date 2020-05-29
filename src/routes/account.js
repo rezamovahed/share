@@ -8,7 +8,7 @@ const router = express.Router();
  * @description Displays a users account details
  * @access Private
  */
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
   res.render('account/index', {
     pageTitle: 'My Account',
     pageDesc: process.env.DESC,

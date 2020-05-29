@@ -14,21 +14,26 @@ const Upload = require('../models/Upload');
  * @access Public
  */
 router.get('/i/:fileName', async (req, res) => {
-  const upload = await Upload.findOne({
-    fileName: req.params.fileName,
-    type: 'image'
-  });
+  try {
+    const upload = await Upload.findOne({
+      fileName: req.params.fileName,
+      type: 'image'
+    });
 
-  if (!upload) {
-    res.status(404).send('Not found');
+    if (!upload) {
+      res.status(404).send('Not found');
+    }
+
+    res.render('view/image', {
+      pageTitle: `Viewing ${upload.name || upload.fileName}`,
+      pageDesc: process.env.DESC,
+      upload,
+      pageName: 'viewImage'
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
   }
-
-  res.render('view/image', {
-    pageTitle: `Viewing ${upload.name || upload.fileName}`,
-    pageDesc: process.env.DESC,
-    upload,
-    pageName: 'viewImage'
-  });
 });
 
 module.exports = router;

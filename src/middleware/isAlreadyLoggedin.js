@@ -1,6 +1,11 @@
 module.exports = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('back');
+  try {
+    if (req.isAuthenticated()) {
+      return res.redirect('back');
+    }
+    next();
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
   }
-  next();
 };

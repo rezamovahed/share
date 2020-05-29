@@ -7,7 +7,7 @@ const router = express.Router();
  * @description Displays a users tokens for uploading with a link to the docs
  * @access Private
  */
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
   res.render('tokens/index', {
     pageTitle: 'My Tokens',
     pageDesc: process.env.DESC,

@@ -85,12 +85,17 @@ router.get('/gallery', async (req, res) => {
  * @access Private
  */
 router.get('/links', async (req, res) => {
-  res.render('admin/links', {
-    pageTitle: 'Links',
-    pageDesc: process.env.DESC,
-    pageName: 'adminLinks',
-    newLinkCode: await nanoid32()
-  });
+  try {
+    res.render('admin/links', {
+      pageTitle: 'Links',
+      pageDesc: process.env.DESC,
+      pageName: 'adminLinks',
+      newLinkCode: await nanoid32()
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
 });
 
 /**
@@ -115,7 +120,7 @@ router.get('/users', (req, res) => {
  */
 router.get('/users/new', async (req, res) => {
   try {
-    const generatePassword = await password.generate({
+    const generatePassword = password.generate({
       length: 18,
       numbers: true,
       symbols: true,
@@ -141,16 +146,21 @@ router.get('/users/new', async (req, res) => {
  * @access Private
  */
 router.get('/users/:slug', async (req, res) => {
-  const user = await User.findOne({ slug: req.params.slug });
-  if (!user) {
-    return res.status(404).send('Not found');
+  try {
+    const user = await User.findOne({ slug: req.params.slug });
+    if (!user) {
+      return res.status(404).send('Not found');
+    }
+    res.render('admin/users/view', {
+      pageTitle: 'View User',
+      pageDesc: process.env.DESC,
+      pageName: 'adminUsersView',
+      user
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
   }
-  res.render('admin/users/view', {
-    pageTitle: 'View User',
-    pageDesc: process.env.DESC,
-    pageName: 'adminUsersView',
-    user
-  });
 });
 
 /**
@@ -160,16 +170,21 @@ router.get('/users/:slug', async (req, res) => {
  * @access Private
  */
 router.get('/users/edit/:slug', async (req, res) => {
-  const user = await User.findOne({ slug: req.params.slug });
-  if (!user) {
-    return res.status(404).send('Not found');
+  try {
+    const user = await User.findOne({ slug: req.params.slug });
+    if (!user) {
+      return res.status(404).send('Not found');
+    }
+    res.render('admin/users/edit', {
+      pageTitle: 'Edit User',
+      pageDesc: process.env.DESC,
+      pageName: 'adminUsersEdit',
+      user
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
   }
-  res.render('admin/users/edit', {
-    pageTitle: 'Edit User',
-    pageDesc: process.env.DESC,
-    pageName: 'adminUsersEdit',
-    user
-  });
 });
 
 /**
@@ -179,15 +194,20 @@ router.get('/users/edit/:slug', async (req, res) => {
  * @access Private
  */
 router.get('/settings', isOwner, async (req, res) => {
-  const users = await User.find({ role: { $ne: 'owner' } });
-  const terms = await Term.findOne({});
-  res.render('admin/settings/index', {
-    pageTitle: 'Settings',
-    pageDesc: process.env.DESC,
-    pageName: 'adminSettings',
-    users,
-    terms
-  });
+  try {
+    const users = await User.find({ role: { $ne: 'owner' } });
+    const terms = await Term.findOne({});
+    res.render('admin/settings/index', {
+      pageTitle: 'Settings',
+      pageDesc: process.env.DESC,
+      pageName: 'adminSettings',
+      users,
+      terms
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
 });
 
 module.exports = router;
