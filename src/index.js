@@ -12,7 +12,6 @@ const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
-const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
 const lusca = require('lusca');
@@ -155,6 +154,21 @@ passport.deserializeUser((id, done) => {
  * Express locals
  */
 app.use(async (req, res, next) => {
+  const ip =
+    req.clientIp === '::1' || req.clientIp === '127.0.0.1'
+      ? 'localhost'
+      : req.clientIp;
+
+  // Gets the Login IP location if its localhost then it's localhost
+  const location =
+    req.ipInfo.error !== undefined
+      ? 'localhost'
+      : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
+
+  console.log(ip);
+
+  console.log(location);
+
   // NodeJS Lib
   res.locals.moment = moment;
   // Pass req infomation to the locals
