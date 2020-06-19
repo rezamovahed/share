@@ -20,6 +20,7 @@ const cors = require('cors');
 const winston = require('winston');
 const expressWinston = require('express-winston');
 const User = require('./models/User');
+const geoip = require('geoip-lite');
 
 require('winston-daily-rotate-file');
 
@@ -70,7 +71,6 @@ app.set('views', `${__dirname}/views`);
  */
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
-app.use(expressip().getIpInfoMiddleware);
 app.use(requestIp.mw());
 app.use(flash());
 app.use(
@@ -159,11 +159,13 @@ app.use(async (req, res, next) => {
       ? 'localhost'
       : req.clientIp;
 
-  // Gets the Login IP location if its localhost then it's localhost
-  const location =
-    req.ipInfo.error !== undefined
-      ? 'localhost'
-      : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
+  // // Gets the Login IP location if its localhost then it's localhost
+  // const location =
+  //   req.ipInfo.error !== undefined
+  //     ? 'localhost'
+  //     : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
+
+  const location = geoip.lookup(req.clientIp);
 
   console.log(ip);
 
