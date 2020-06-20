@@ -12,7 +12,6 @@ const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
-const expressip = require('express-ip');
 const requestIp = require('request-ip');
 const moment = require('moment');
 const lusca = require('lusca');
@@ -71,7 +70,6 @@ app.set('views', `${__dirname}/views`);
  */
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
-app.use(expressip().getIpInfoMiddleware);
 app.use(requestIp.mw());
 app.use(flash());
 app.use(
@@ -155,6 +153,7 @@ passport.deserializeUser((id, done) => {
  * Express locals
  */
 app.use(async (req, res, next) => {
+
   // NodeJS Lib
   res.locals.moment = moment;
   // Pass req infomation to the locals

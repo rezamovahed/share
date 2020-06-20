@@ -162,7 +162,7 @@
     }
     function actionsFormatter(value, row, index) {
       return [
-        `<a class="link clipboard" id="clip_${row.id}" href="#" data-clipboard-text="${row.type === 'image' ? `<%= siteURL %>/view/i/${row.fileName}` : `${siteURL}/u/${row.fileExtension + row.fileExtension}`}">`,
+        `<a class="link clipboard" id="clip_${row.id}" href="#" data-clipboard-text="${row.type === 'image' ? `<%= siteURL %>/view/i/${row.fileName}` : `<%= siteURL %>/u/${row.fileExtension + row.fileExtension}`}">`,
         '<i class="fas fa-link"></i>',
         '</a> ',
         '<a class="edit" href="javascript:void(0)">',

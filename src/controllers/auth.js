@@ -1,5 +1,6 @@
 const { customAlphabet } = require('nanoid/async');
 const moment = require('moment');
+const geoip = require('geoip-lite');
 const sendgrid = require('../config/sendgrid');
 
 const urlFriendyAlphabet =
@@ -77,11 +78,12 @@ exports.postLogin = async (req, res) => {
         ? 'localhost'
         : req.clientIp;
 
+    const locationData = geoip.lookup(req.clientIp);
+
     // Gets the Login IP location if its localhost then it's localhost
-    const location =
-      req.ipInfo.error !== undefined
-        ? 'localhost'
-        : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
+    const location = !locationData
+      ? 'localhost'
+      : `${locationData.city}, ${locationData.region} ${locationData.country}`;
 
     // Finds the user and updaes the lastLogin ip
     await User.findByIdAndUpdate(
