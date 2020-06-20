@@ -20,7 +20,6 @@ const cors = require('cors');
 const winston = require('winston');
 const expressWinston = require('express-winston');
 const User = require('./models/User');
-const geoip = require('geoip-lite');
 
 require('winston-daily-rotate-file');
 
@@ -154,22 +153,6 @@ passport.deserializeUser((id, done) => {
  * Express locals
  */
 app.use(async (req, res, next) => {
-  const ip =
-    req.clientIp === '::1' || req.clientIp === '127.0.0.1'
-      ? 'localhost'
-      : req.clientIp;
-
-  // // Gets the Login IP location if its localhost then it's localhost
-  // const location =
-  //   req.ipInfo.error !== undefined
-  //     ? 'localhost'
-  //     : `${req.ipInfo.city}, ${req.ipInfo.region} ${req.ipInfo.country}`;
-
-  const location = geoip.lookup(req.clientIp);
-
-  console.log(ip);
-
-  console.log(location);
 
   // NodeJS Lib
   res.locals.moment = moment;
