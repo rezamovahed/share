@@ -177,7 +177,7 @@
     window.actionEvents = {
       'click .delete': function(e, value, row, index) {
         $.ajax({
-          url: `/upload-data/${row.file + row.fileExtension}?_method=DELETE`,
+          url: `/upload-data/${row.fileName + row.fileExtension}?_method=DELETE`,
           type: 'POST',
           data: { _csrf: '<%= _csrf %>' },
           success: function(response) {
