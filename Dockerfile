@@ -10,10 +10,7 @@ FROM node:10-alpine
 
 RUN npm install pm2 nodemon concurrently sass -g
 
-ARG PM2_PUBLIC_KEY
-ARG PM2_SECRET_KEY
-ENV PM2_PUBLIC_KEY=${PM2_PUBLIC_KEY}
-ENV PM2_SECRET_KEY=${PM2_SECRET_KEY}
+RUN npm install
 
 WORKDIR /usr/src/app
 
