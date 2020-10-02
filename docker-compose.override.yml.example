@@ -5,10 +5,6 @@ services:
     command: "npm run dev"
     volumes:
       - .:/usr/src/app
-    build:
-      args:
-        PM2_PUBLIC_KEY:
-        PM2_SECRET_KEY:
   mongodb:
     ports:
-      - 3307:3307
+      - 27017:27017

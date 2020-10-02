@@ -1,23 +1,39 @@
 const express = require('express');
+
 const router = express.Router();
-const Upload = require('../models/upload');
 
 /**
- * @route /view/:fileName
+ * Load MongoDB models.
+ */
+const Upload = require('../models/Upload');
+
+/**
+ * @route /i/:fileName
  * @method GET
- * @description Shows a webpage with file
- * @access Private
-*/
-router.get('/:fileName', (req, res) => {
-  const fileName = req.params.fileName;
-  const fullUrl = req.protocol + '://' + req.get('host');
-  Upload.findOne({ fileName }, (err, uploaded) => {
-    res.render('view/image', {
-      title: `${fileName}`,
-      fileName,
-      fullUrl
+ * @description Displays a view of the uploaded image with few details.
+ * @access Public
+ */
+router.get('/i/:fileName', async (req, res) => {
+  try {
+    const upload = await Upload.findOne({
+      fileName: req.params.fileName,
+      type: 'image'
     });
-  });
+
+    if (!upload) {
+      res.status(404).send('Not found');
+    }
+
+    res.render('view/image', {
+      pageTitle: `Viewing ${upload.name || upload.fileName}`,
+      pageDesc: process.env.DESC,
+      upload,
+      pageName: 'viewImage'
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
 });
 
 module.exports = router;

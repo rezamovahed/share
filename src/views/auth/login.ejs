@@ -1,64 +1,129 @@
-<!doctype html>
+<!DOCTYPE html>
 <html class="h-100" lang="en">
+  <head>
+    <title>
+      <%= pageTitle %> | <%= siteTitle %>
+    </title>
+    <!-- Basic Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="<%= favicon %>" type="image/x-icon" />
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script
+      type="text/javascript"
+      src="/bower_components/jquery/dist/jquery.min.js"
+    ></script>
+    <!-- Font Awsome-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/bower_components/font-awsome/css/all.min.css"
+    />
+    <!--Bootstrap -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/bower_components/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <!-- Custom -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />
 
-<head>
-  <title>
-    <%= title %> | <%= siteTitle %>
-  </title>
-  <!-- Basic Meta -->
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Site meta data -->
+    <meta name="og:site_name" content="<%= siteTitle %>" />
+    <meta name="twitter:title" content="<%= siteTitle %>" />
+    <meta name="twitter:description" content="<%= siteDesc %>" />
+    <meta name="description" content="<%= siteDesc %>" />
+    <meta property="og:description" content="<%= siteDesc %>" />
+    <meta name="theme-color" content="#0084da" />
+    <meta content="<%= siteURL + currentPath %>" property="og:url" />
+  </head>
 
-  <!-- Frameworks -->
-  <!-- Font Awsome-->
-  <link rel="stylesheet" type="text/css" href="/lib/font-awesome/css/all.min.css">
-  <!--Bootstrap -->
-  <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.min.css">
-  <!-- Custom -->
-  <link rel="stylesheet" type="text/css" href="/css/main.css">
-</head>
-
-<body class="auth mb-0">
-  <div class="form-auth">
-    <img class="mx-auto d-block mb-4" src="/images/logo_text.png" width="320">
-    <% errors = error && error.length > 0 %>
-    <% if (errors){ %>
-    <div class="alert alert-danger" role="alert">
-      <%- error %>
-    </div>
-    <% } %>
-    <% if (success && success.length > 0){ %>
-    <div class="alert alert-success" role="alert">
-      <%= success %>
-    </div>
-    <% } %>
-    <form action="/login" method="POST" novalidate>
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input name="email" type="email" class="form-control <% if(errors){ %>is-invalid <% } %>"
-          id="email" placeholder="Enter email">
+  <body class="auth mb-0">
+    <div class="form-auth">
+      <div class="branding text-center mb-4">
+        <img alt="<%= siteTitle %> Logo" src="<%= logo %>" height="60" /><span
+          ><%= siteTitle %></span
+        >
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input name="password" type="password"
-          class="form-control <% if(errors){ %>is-invalid <% } %>" id="password"
-          placeholder="Password">
+      <% errors = error && error.length > 0 %> <% if (error && typeof error[0]
+      === 'string'){ %>
+      <div class="alert alert-danger alert-timeout" role="alert">
+        <%= error %>
       </div>
-      <button type="submit" class="btn btn-login btn-primary btn-block">login</button>
-    </form>
-    <div class="info">
-      <a href="/user/forgot">
-        <small class=" info text">Forgot your password?</small>
-      </a>
-      <a href="/user/activation/resend">
-        <small class=" info text">Resend account activation token</small>
-      </a>
-      <a href="/signup">
-        <small class="info text">Create a account</small>
-      </a>
+      <% } %> <% if (success && typeof success[0] === 'string'){ %>
+      <div class="alert alert-success alert-timeout" role="alert">
+        <%= success %>
+      </div>
+      <% } %>
+      <form action="/login" method="POST" novalidate>
+        <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
+        <div class="form-group">
+          <input
+            name="email"
+            type="email"
+            class="form-control <% if(errors && error[0].email){ %>is-invalid <% } %>"
+            id="email"
+            placeholder="Your email"
+          />
+          <% if (errors && error[0].email) { %>
+          <small class="invalid-feedback">
+            <%= error[0].email %>
+          </small>
+          <% } %>
+        </div>
+        <div class="form-group">
+          <input
+            name="password"
+            type="password"
+            class="form-control <% if(errors && error[0].password){ %>is-invalid <% } %>"
+            id="password"
+            placeholder="Your password"
+          />
+          <% if (errors && error[0].password) { %>
+          <small class="invalid-feedback">
+            <%= error[0].password %>
+          </small>
+          <% } %>
+        </div>
+        <div class="form-group">
+          <input
+            name="mfa"
+            type="mfa"
+            class="form-control <% if(errors && error[0].mfa){ %>is-invalid <% } %>"
+            id="text"
+            placeholder="Your MFA Token"
+
+          />
+          <% if (errors && error[0].mfa) { %>
+          <small class="invalid-feedback">
+            <%= error[0].mfa %>
+          </small>
+          <% } %>
+        </div>
+        <button type="submit" class="btn btn-auth btn-primary btn-block">
+          login
+        </button>
+      </form>
+      <div class="info">
+        <a href="/user/forgot-password">
+          <small class=" info text">Forgot your password?</small>
+        </a>
+        <a href="/user/resend-activation">
+          <small class=" info text">Resend account activation token</small>
+        </a>
+        <% if(signups) { %>
+          <a href="/signup">
+            <small class="info text">Create a account</small>
+          </a>
+        <% } %>
+      </div>
     </div>
-  </div>
-</body>
-<% include ../partials/footer %>
+
+    <!-- Bootstrap Javascript -->
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom -->
+    <script src="/assets/js/main.js"></script>
+  </body>
+</html>

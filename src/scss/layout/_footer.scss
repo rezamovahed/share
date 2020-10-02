@@ -3,36 +3,38 @@
 // -----------------------------------------------------------------------------
 
 footer {
-    background-color: $footer-background;
-    padding-top: 8px;
-    padding-bottom: 8px;
+  background-color: $footer-background;
+  padding-top: 12px;
+  padding-bottom: 12px;
 
-    p {
-        font-size: 1.15em;
-        color: $footer-color;
-        padding: 10px 0;
-        margin-bottom: 0;
+  p {
+    font-size: 1em;
+    color: $footer-color;
+    margin-bottom: 0;
 
-        a {
-            color: $footer-color_link;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: lighten($footer-color_link, 15%);
-            text-decoration: none;
-        }
+    a {
+      color: $footer-link;
+      text-decoration: none;
     }
+
+    a:hover {
+      color: lighten($footer-link, 15%);
+      text-decoration: none;
+    }
+  }
+  .right {
+    text-align: right;
+  }
 }
 
-@media (max-width: 768px) {
-    footer {
-        p {
-            text-align: center;
-        }
-
-        p span {
-            display: none;
-        }
+@media (max-width: 991px) {
+  footer {
+    p {
+      text-align: center;
     }
+
+    span {
+      display: none;
+    }
+  }
 }

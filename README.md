@@ -23,7 +23,7 @@ Before installing, [download and install Node.js](https://nodejs.org/en/download
 
 If your a user then please read the setup guide here.
 
-If you want to help out development read this here.
+If you want to help out development, check out our [Contributing]() docs.
 
 <!-- Add other helps in the code base here -->
 
