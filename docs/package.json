@@ -1,19 +1,19 @@
 {
-  "name": "just-the-docs",
-  "version": "0.2.7",
-  "description": "A modern Jekyll theme for documentation",
-  "repository": "pmarsceill/just-the-docs",
-  "license": "MIT",
-  "bugs": "https://github.com/pmarsceill/just-the-docs/issues",
-  "devDependencies": {
-    "stylelint": "^10.0.1",
-    "stylelint-config-primer": "^8.0.0",
-    "stylelint-selector-no-utility": "^4.0.0"
+  "name": "share",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
-    "@primer/css": "^12.7.0"
+    "@nuxt/content-theme-docs": "^0.8.2",
+    "nuxt": "^2.14.11"
   },
-  "scripts": {
-    "test": "stylelint '**/*.scss'"
+  "devDependencies": {
+    "push-dir": "^0.4.1"
   }
 }
