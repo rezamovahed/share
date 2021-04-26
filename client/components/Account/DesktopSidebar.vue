@@ -27,14 +27,15 @@
         </div>
 
         <div
+          v-if="backto"
           class="flex flex-shrink-0 p-4 bg-gray-200 border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
         >
           <nuxt-link
-            to="/dashboard"
+            :to="backtoLink"
             class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md dark:text-white dark:hover:text-gray-900 hover:bg-gray-50 hover:text-gray-900 group"
           >
             <fa :icon="['fas', 'arrow-left']" class="w-5 h-5 mr-2 text-lg" />
-            Back to Dashboard
+            {{ backtoText }}
           </nuxt-link>
         </div>
       </div>
@@ -54,6 +55,18 @@ export default {
     links: {
       type: Array,
       required: true,
+    },
+    backto: {
+      type: Boolean,
+      default: false,
+    },
+    backtoLink: {
+      type: String,
+      default: '',
+    },
+    backtoText: {
+      type: String,
+      default: '',
     },
   },
 }

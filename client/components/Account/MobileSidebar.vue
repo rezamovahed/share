@@ -59,7 +59,7 @@
             </button>
           </div>
           <div
-            class="flex items-center flex-shrink-0 px-4 text-primary-500 dark:text-primary-300"
+            class="flex items-center flex-shrink-0 px-4 text-primary-500 dark:text-primary-100"
           >
             <Logo
               class="inline-block w-auto h-8"
@@ -82,17 +82,20 @@
               </nuxt-link>
             </nav>
           </div>
-          <div class="flex flex-shrink-0 pt-2 pl-2 border-t border-gray-200">
+          <div
+            v-if="backto"
+            class="flex flex-shrink-0 px-2 pt-2 border-t border-gray-200"
+          >
             <nuxt-link
-              to="/dashboard"
-              class="flex-shrink-0 block px-2 text-gray-600 rounded-md group dark:text-white dark:hover:text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+              :to="backtoLink"
+              class="flex-1 block px-2 text-gray-600 rounded-md group dark:text-white dark:hover:text-gray-900 hover:bg-gray-50 hover:text-gray-900"
             >
               <div class="flex items-center">
                 <fa
                   :icon="['fas', 'arrow-left']"
                   class="inline-block w-10 h-10 mr-2 text-lg"
                 />
-                <div class="ml-3">Back to Dashboard</div>
+                <div class="ml-3">{{ backtoText }}</div>
               </div>
             </nuxt-link>
           </div>
@@ -115,6 +118,18 @@ export default {
     links: {
       type: Array,
       required: true,
+    },
+    backto: {
+      type: Boolean,
+      default: false,
+    },
+    backtoLink: {
+      type: String,
+      default: '',
+    },
+    backtoText: {
+      type: String,
+      default: '',
     },
   },
 
