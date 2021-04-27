@@ -16,7 +16,7 @@
           class="sticky top-0 z-10 flex flex-shrink-0 h-16 bg-white border-b border-gray-200 dark:bg-gray-800 md:border-none"
         >
           <button
-            class="px-4 text-gray-400 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 md:hidden"
+            class="px-4 text-gray-400 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
             @click.stop="sidebarShow"
           >
             <span class="sr-only">Open sidebar</span>
