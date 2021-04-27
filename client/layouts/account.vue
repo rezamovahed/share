@@ -1,41 +1,51 @@
 <template>
-  <div style="min-height: 640px" class="bg-gray-100">
+  <div>
     <div
       class="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900"
       @keydown.escape="sidebarHide"
     >
-      <AccountMobileSidebar :links="links" />
-
-      <AccountDesktopSidebar :links="links" />
-
-      <div class="flex flex-col flex-1 w-0 overflow-hidden">
-        <div class="relative z-10 flex flex-shrink-0 h-16 bg-white">
+      <AccountMobileSidebar
+        :links="links"
+        :backto="true"
+        backto-link="/dashboard"
+        backto-text="Back to Dashboard"
+      />
+      <AccountDesktopSidebar
+        :links="links"
+        :backto="true"
+        backto-link="/dashboard"
+        backto-text="Back to Dashboard"
+      />
+      <div
+        x-init="$el.focus()"
+        class="flex-1 overflow-auto focus:outline-none"
+        tabindex="0"
+      >
+        <div
+          class="sticky top-0 z-10 flex flex-shrink-0 h-16 bg-white border border-transparent dark:bg-gray-800"
+        >
           <button
-            class="px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:bg-gray-700 dark:text-white"
+            class="px-4 text-gray-400 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 md:hidden"
             @click.stop="sidebarShow"
           >
             <span class="sr-only">Open sidebar</span>
             <HeroIconOutLineMenuAlt2 class="w-6 h-6" />
           </button>
-          <div class="flex justify-end flex-1 px-4 dark:bg-gray-800">
-            <div class="flex items-center ml-4 md:ml-6">
-              <!-- <NotificationsDropdown /> -->
-              <SharedProfileDropdown />
+          <div
+            class="flex justify-between flex-1 px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8"
+          >
+            <div class="flex items-center justify-end flex-1 ml-4 md:ml-6">
+              <SharedNavigationProfileDropdown />
             </div>
           </div>
         </div>
-
         <main
           class="relative flex-1 overflow-y-auto focus:outline-none"
           tabindex="0"
           x-data=""
           x-init="$el.focus()"
         >
-          <div class="py-6">
-            <div class="px-4 mx-auto max-w-7xl sm:px-6 md:px-8">
-              <Nuxt />
-            </div>
-          </div>
+          <Nuxt />
         </main>
       </div>
     </div>
