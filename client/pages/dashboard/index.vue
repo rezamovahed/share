@@ -174,7 +174,7 @@
                 </div>
               </div>
             </div>
-            <div class="px-5 py-3 bg-gray-50"></div>
+            <div class="py-5 px-7 bg-gray-50"></div>
           </div>
         </div>
       </div>
