@@ -9,6 +9,7 @@ const tailwindcssForms = require('@tailwindcss/forms')
 const tailwindcssTypography = require('@tailwindcss/typography')
 const tailwindcssAspectRatio = require('@tailwindcss/aspect-ratio')
 const tailwindBorderStyles = require('tailwindcss-border-styles')
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   purge: {
@@ -39,6 +40,8 @@ module.exports = {
           800: '#1b244b',
           900: '#161d3d',
         },
+        cyan: colors.cyan,
+        blueGray: colors.blueGray,
       },
       height: {
         80: '80vh',

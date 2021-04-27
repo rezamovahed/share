@@ -118,14 +118,14 @@ export default {
         this.resetPassword.errors.password = null
         this.resetPassword.errors.comfirmPassword = null
 
-        const res = await this.$axios.$post(
+        await this.$axios.$post(
           `/api/user/reset-password/${this.$route.params.token}`,
           {
             password: this.resetPassword.password,
             comfirmPassword: this.resetPassword.comfirmPassword,
           }
         )
-        this.success = res.message
+        this.success = 'Redirecting in 5 seconds to login'
 
         setTimeout(() => this.$router.push({ path: '/login' }), 1000 * 5)
       } catch (e) {
