@@ -89,7 +89,7 @@
                   <div class="relative flex-grow ml-2 focus-within:z-10">
                     <span
                       v-if="showTwoFactorSecret"
-                      class="block w-full transition duration-150 ease-in-out rounded-none form-input sm:text-sm sm:leading-5"
+                      class="block w-full transition duration-150 ease-in-out border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm sm:leading-5"
                     >
                       {{ $store.state.account.twoFactorSecret }}
                     </span>
@@ -112,7 +112,7 @@
                   :class="{
                     'border-red-500': $store.state.account.messages.error,
                   }"
-                  class="block w-full px-3 py-2 mt-1 transition duration-150 ease-in-out border border-gray-300 rounded-md shadow-sm form-input focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+                  class="block w-full px-3 py-2 mt-1 transition duration-150 ease-in-out border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
                 />
                 <span
                   v-if="$store.state.account.messages.error"

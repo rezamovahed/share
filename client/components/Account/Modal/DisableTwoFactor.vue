@@ -40,7 +40,7 @@
                   :class="{
                     'border-red-500': twoFactor.errors.code,
                   }"
-                  class="block w-full px-3 py-2 mt-1 transition duration-150 ease-in-out border border-gray-300 rounded-md shadow-sm form-input focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+                  class="block w-full px-3 py-2 mt-1 transition duration-150 ease-in-out border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
                 />
                 <span v-if="twoFactor.errors.code" class="text-red-500">{{
                   twoFactor.errors.code
