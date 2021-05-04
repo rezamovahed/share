@@ -40,6 +40,7 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
 
     res.status(200).json({ apikeys, total: totalAPIKeys });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'INTERNAL_SERVER_ERROR',
       error: 'Internal Server Error.'
@@ -109,6 +110,42 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
       api_key: apiKey
     });
   } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      code: 'INTERNAL_SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
+/**
+ * @route /apikey/:apikey_id
+ * @method PATCH
+ * @description Allows a logged in user to edit a API Key
+ */
+router.patch('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
+  try {
+    const apiKey = await APIKey.findOne({
+      _id: req.params.apikey_id,
+      user: req.user.id
+    });
+
+    if (!apiKey) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'APIKey not found.'
+      });
+    }
+
+    apiKey.label = req.body.label || apiKey.label;
+
+    await apiKey.save();
+    res.status(200).json({
+      code: 'UPDATED',
+      message: 'APIKey has been updated'
+    });
+  } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'INTERNAL_SERVER_ERROR',
       error: 'Internal Server Error.'
@@ -141,10 +178,12 @@ router.delete('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
       message: 'APIKey has been removed'
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'INTERNAL_SERVER_ERROR',
       error: 'Internal Server Error.'
     });
   }
 });
+
 module.exports = router;
