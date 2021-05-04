@@ -154,7 +154,7 @@ router.patch('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
 });
 
 /**
- * @route /apikey
+ * @route /apikey/:apikey_id
  * @method DELETE
  * @description Allows a logged in user to delete a API Key
  */
