@@ -92,3 +92,5 @@ sw.*
 # Server-side uploads
 server/public/uploads/**/*
 server/tmp/*
+
+docs/static/sw.js
