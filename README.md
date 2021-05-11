@@ -9,6 +9,9 @@
 # What is Share?
 Simple yet advanced **NodeJS**, **MongoDB** and **Express** based uploader.  Allows users to upload files,images, and text with moderation tools for admins.  Plus users can see uploads for there account and simple remove ones.  Admins can view all and remove ones that don't follow the rules. Can be used for friends and family or just for you.  Built for [ShareX](https://getsharex.com/) at the moment but more uploaders will be supported.
 
+
+### **Note version 5.0.0 is going to be the biggest update yet with a lot of improvements in both speed and stability.  But will require a complete restart of uploads to be able to move but don't worry you can use either sharex to reupload all uploads and or our drag and drop system. If any of this changes I will let you all know.**
+
 ## Getting started
 
 ### Download
