@@ -41,7 +41,6 @@ module.exports = {
           900: '#161d3d',
         },
         cyan: colors.cyan,
-        blueGray: colors.blueGray,
       },
       height: {
         80: '80vh',
