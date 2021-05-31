@@ -3,14 +3,30 @@
     <div class="bg-white shadow dark:bg-gray-600">
       <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div
-          class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200 dark:border-transparent"
+          class="
+            py-6
+            md:flex
+            md:items-center
+            md:justify-between
+            lg:border-t lg:border-gray-200
+            dark:border-transparent
+          "
         >
           <div class="flex-1 min-w-0">
             <div class="flex items-center">
               <div>
                 <div class="flex items-center">
                   <h1
-                    class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate dark:text-white"
+                    class="
+                      ml-3
+                      text-2xl
+                      font-bold
+                      leading-7
+                      text-gray-900
+                      sm:leading-9
+                      sm:truncate
+                      dark:text-white
+                    "
                   >
                     Good morning,
                     <span class="text-primary-500 dark:text-primary-100">{{
@@ -19,14 +35,36 @@
                   </h1>
                 </div>
                 <dl
-                  class="flex flex-col mt-6 sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap"
+                  class="
+                    flex flex-col
+                    mt-6
+                    sm:ml-3
+                    sm:mt-1
+                    sm:flex-row sm:flex-wrap
+                  "
                 >
                   <dt class="sr-only">Role</dt>
                   <dd
-                    class="flex items-center text-sm font-medium text-gray-500 capitalize dark:text-white sm:mr-6"
+                    class="
+                      flex
+                      items-center
+                      text-sm
+                      font-medium
+                      text-gray-500
+                      capitalize
+                      dark:text-white
+                      sm:mr-6
+                    "
                   >
                     <svg
-                      class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-100"
+                      class="
+                        flex-shrink-0
+                        mr-1.5
+                        h-5
+                        w-5
+                        text-gray-400
+                        dark:text-gray-100
+                      "
                       x-description="Heroicon name: solid/office-building"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
@@ -46,7 +84,17 @@
                   </dt>
                   <dd
                     v-if="$auth.user.isVerified"
-                    class="flex items-center mt-3 text-sm font-medium text-gray-500 capitalize sm:mr-6 sm:mt-0"
+                    class="
+                      flex
+                      items-center
+                      mt-3
+                      text-sm
+                      font-medium
+                      text-gray-500
+                      capitalize
+                      sm:mr-6
+                      sm:mt-0
+                    "
                   >
                     <svg
                       class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
@@ -70,13 +118,44 @@
           <div class="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             <button
               type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-grat-200"
+              class="
+                inline-flex
+                items-center
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-gray-700
+                bg-white
+                border border-gray-300
+                rounded-md
+                shadow-sm
+                hover:bg-gray-50
+                focus:outline-none
+                focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                dark:bg-grat-200
+              "
             >
               Quick Link
             </button>
             <button
               type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="
+                inline-flex
+                items-center
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-white
+                border border-transparent
+                rounded-md
+                shadow-sm
+                bg-primary-600
+                hover:bg-primary-700
+                focus:outline-none
+                focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+              "
             >
               Quick Upload
             </button>
@@ -128,7 +207,19 @@
       </div>
 
       <h2
-        class="max-w-6xl px-4 mx-auto mt-8 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8 dark:text-white"
+        class="
+          max-w-6xl
+          px-4
+          mx-auto
+          mt-8
+          text-lg
+          font-medium
+          leading-6
+          text-gray-900
+          sm:px-6
+          lg:px-8
+          dark:text-white
+        "
       >
         Recent activity
       </h2>
@@ -185,19 +276,54 @@
         </ul>
 
         <nav
-          class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200"
+          class="
+            flex
+            items-center
+            justify-between
+            px-4
+            py-3
+            bg-white
+            border-t border-gray-200
+          "
           aria-label="Pagination"
         >
           <div class="flex justify-between flex-1">
             <a
               href="#"
-              class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:text-gray-500"
+              class="
+                relative
+                inline-flex
+                items-center
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-gray-700
+                bg-white
+                border border-gray-300
+                rounded-md
+                hover:text-gray-500
+              "
             >
               Previous
             </a>
             <a
               href="#"
-              class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:text-gray-500"
+              class="
+                relative
+                inline-flex
+                items-center
+                px-4
+                py-2
+                ml-3
+                text-sm
+                font-medium
+                text-gray-700
+                bg-white
+                border border-gray-300
+                rounded-md
+                hover:text-gray-500
+              "
             >
               Next
             </a>
@@ -210,23 +336,56 @@
         <div class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
           <div class="flex flex-col mt-2">
             <div
-              class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg"
+              class="
+                min-w-full
+                overflow-hidden overflow-x-auto
+                align-middle
+                shadow
+                sm:rounded-lg
+              "
             >
               <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                   <tr>
                     <th
-                      class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase bg-gray-50"
+                      class="
+                        px-6
+                        py-3
+                        text-xs
+                        font-medium
+                        tracking-wider
+                        text-left text-gray-500
+                        uppercase
+                        bg-gray-50
+                      "
                     >
                       Share
                     </th>
                     <th
-                      class="px-6 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase bg-gray-50"
+                      class="
+                        px-6
+                        py-3
+                        text-xs
+                        font-medium
+                        tracking-wider
+                        text-right text-gray-500
+                        uppercase
+                        bg-gray-50
+                      "
                     >
                       Type
                     </th>
                     <th
-                      class="px-6 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase bg-gray-50"
+                      class="
+                        px-6
+                        py-3
+                        text-xs
+                        font-medium
+                        tracking-wider
+                        text-right text-gray-500
+                        uppercase
+                        bg-gray-50
+                      "
                     >
                       Created At
                     </th>
@@ -235,7 +394,14 @@
                 <tbody class="bg-white divide-y divide-gray-200" x-max="1">
                   <tr class="bg-white">
                     <td
-                      class="w-full px-6 py-4 text-sm text-gray-900 max-w-0 whitespace-nowrap"
+                      class="
+                        w-full
+                        px-6
+                        py-4
+                        text-sm text-gray-900
+                        max-w-0
+                        whitespace-nowrap
+                      "
                     >
                       <div class="flex">
                         <a
@@ -243,7 +409,13 @@
                           class="inline-flex space-x-2 text-sm truncate group"
                         >
                           <svg
-                            class="flex-shrink-0 w-5 h-5 text-gray-400 group-hover:text-gray-500"
+                            class="
+                              flex-shrink-0
+                              w-5
+                              h-5
+                              text-gray-400
+                              group-hover:text-gray-500
+                            "
                             x-description="Heroicon name: solid/cash"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
@@ -257,7 +429,11 @@
                             ></path>
                           </svg>
                           <p
-                            class="text-gray-500 truncate group-hover:text-gray-900"
+                            class="
+                              text-gray-500
+                              truncate
+                              group-hover:text-gray-900
+                            "
                           >
                             TAeSBvfAC9rn6MZq
                           </p>
@@ -265,12 +441,22 @@
                       </div>
                     </td>
                     <td
-                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                      class="
+                        px-6
+                        py-4
+                        text-sm text-right text-gray-500
+                        whitespace-nowrap
+                      "
                     >
                       <span class="font-medium text-gray-900">File</span>
                     </td>
                     <td
-                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                      class="
+                        px-6
+                        py-4
+                        text-sm text-right text-gray-500
+                        whitespace-nowrap
+                      "
                     >
                       July 11, 2020
                     </td>
@@ -278,7 +464,14 @@
 
                   <tr class="bg-white">
                     <td
-                      class="w-full px-6 py-4 text-sm text-gray-900 max-w-0 whitespace-nowrap"
+                      class="
+                        w-full
+                        px-6
+                        py-4
+                        text-sm text-gray-900
+                        max-w-0
+                        whitespace-nowrap
+                      "
                     >
                       <div class="flex">
                         <a
@@ -286,7 +479,13 @@
                           class="inline-flex space-x-2 text-sm truncate group"
                         >
                           <svg
-                            class="flex-shrink-0 w-5 h-5 text-gray-400 group-hover:text-gray-500"
+                            class="
+                              flex-shrink-0
+                              w-5
+                              h-5
+                              text-gray-400
+                              group-hover:text-gray-500
+                            "
                             x-description="Heroicon name: solid/cash"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
@@ -300,7 +499,11 @@
                             ></path>
                           </svg>
                           <p
-                            class="text-gray-500 truncate group-hover:text-gray-900"
+                            class="
+                              text-gray-500
+                              truncate
+                              group-hover:text-gray-900
+                            "
                           >
                             JPcsywd4chB654zw
                           </p>
@@ -308,12 +511,22 @@
                       </div>
                     </td>
                     <td
-                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                      class="
+                        px-6
+                        py-4
+                        text-sm text-right text-gray-500
+                        whitespace-nowrap
+                      "
                     >
                       <span class="font-medium text-gray-900">Link</span>
                     </td>
                     <td
-                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                      class="
+                        px-6
+                        py-4
+                        text-sm text-right text-gray-500
+                        whitespace-nowrap
+                      "
                     >
                       July 5, 2020
                     </td>
@@ -322,7 +535,16 @@
               </table>
               <!-- Pagination -->
               <nav
-                class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6"
+                class="
+                  flex
+                  items-center
+                  justify-between
+                  px-4
+                  py-3
+                  bg-white
+                  border-t border-gray-200
+                  sm:px-6
+                "
                 aria-label="Pagination"
               >
                 <div class="hidden sm:block">
@@ -339,13 +561,40 @@
                 <div class="flex justify-between flex-1 sm:justify-end">
                   <a
                     href="#"
-                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                    class="
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      text-sm
+                      font-medium
+                      text-gray-700
+                      bg-white
+                      border border-gray-300
+                      rounded-md
+                      hover:bg-gray-50
+                    "
                   >
                     Previous
                   </a>
                   <a
                     href="#"
-                    class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                    class="
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      ml-3
+                      text-sm
+                      font-medium
+                      text-gray-700
+                      bg-white
+                      border border-gray-300
+                      rounded-md
+                      hover:bg-gray-50
+                    "
                   >
                     Next
                   </a>
@@ -386,6 +635,12 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: 'Dashboard',
+    }
+  },
+
   mounted() {
     this.getStats()
   },
@@ -404,11 +659,6 @@ export default {
         this.loading.stats = false
       }
     },
-  },
-  head() {
-    return {
-      title: 'Dashboard',
-    }
   },
 }
 </script>

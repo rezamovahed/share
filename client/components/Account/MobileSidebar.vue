@@ -31,12 +31,31 @@
         ><div
           v-if="$store.state.account.sidebarOpen"
           x-description="Off-canvas menu, show/hide based on off-canvas menu state."
-          class="relative flex flex-col flex-1 w-full max-w-xs pt-5 pb-4 bg-white dark:bg-gray-800"
+          class="
+            relative
+            flex flex-col flex-1
+            w-full
+            max-w-xs
+            pt-5
+            pb-4
+            bg-white
+            dark:bg-gray-800
+          "
         >
           <div class="absolute top-0 right-0 pt-2 -mr-12">
             <button
               v-if="$store.state.account.sidebarOpen"
-              class="flex items-center justify-center w-10 h-10 ml-1 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              class="
+                flex
+                items-center
+                justify-center
+                w-10
+                h-10
+                ml-1
+                rounded-full
+                focus:outline-none
+                focus:ring-2 focus:ring-inset focus:ring-white
+              "
               @click="sidebarHide"
             >
               <span class="sr-only">Close sidebar</span>
@@ -59,7 +78,14 @@
             </button>
           </div>
           <div
-            class="flex items-center flex-shrink-0 px-4 text-primary-500 dark:text-primary-100"
+            class="
+              flex
+              items-center
+              flex-shrink-0
+              px-4
+              text-primary-500
+              dark:text-primary-100
+            "
           >
             <Logo
               class="inline-block w-auto h-8"
@@ -75,7 +101,21 @@
                 v-for="(link, index) in links"
                 :key="index"
                 :to="link.url"
-                class="flex items-center px-2 py-2 text-base font-medium text-gray-600 rounded-md dark:text-white dark:hover:text-gray-900 hover:bg-gray-50 hover:text-gray-900 group"
+                class="
+                  flex
+                  items-center
+                  px-2
+                  py-2
+                  text-base
+                  font-medium
+                  text-gray-600
+                  rounded-md
+                  dark:text-white
+                  dark:hover:text-gray-900
+                  hover:bg-gray-50
+                  hover:text-gray-900
+                  group
+                "
                 @click.native="sidebarHide"
               >
                 {{ link.text }}
@@ -88,7 +128,18 @@
           >
             <nuxt-link
               :to="backtoLink"
-              class="flex-1 block px-2 text-gray-600 rounded-md group dark:text-white dark:hover:text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+              class="
+                flex-1
+                block
+                px-2
+                text-gray-600
+                rounded-md
+                group
+                dark:text-white
+                dark:hover:text-gray-900
+                hover:bg-gray-50
+                hover:text-gray-900
+              "
             >
               <div class="flex items-center">
                 <fa

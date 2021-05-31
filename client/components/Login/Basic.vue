@@ -25,7 +25,21 @@
                   $store.state.login.messages.errors.email ||
                   $store.state.login.messages.error,
               }"
-              class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="
+                block
+                w-full
+                px-3
+                py-2
+                placeholder-gray-400
+                border border-gray-300
+                rounded-md
+                shadow-sm
+                appearance-none
+                focus:outline-none
+                focus:ring-indigo-500
+                focus:border-indigo-500
+                sm:text-sm
+              "
             />
             <span
               v-if="$store.state.login.messages.errors.email"
@@ -53,7 +67,21 @@
                   $store.state.login.messages.errors.password ||
                   $store.state.login.messages.error,
               }"
-              class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="
+                block
+                w-full
+                px-3
+                py-2
+                placeholder-gray-400
+                border border-gray-300
+                rounded-md
+                shadow-sm
+                appearance-none
+                focus:outline-none
+                focus:ring-indigo-500
+                focus:border-indigo-500
+                sm:text-sm
+              "
             />
           </div>
           <span
@@ -69,7 +97,14 @@
               id="remember_me"
               name="remember_me"
               type="checkbox"
-              class="w-4 h-4 border-gray-300 rounded text-primary-500 focus:ring-indigo-500"
+              class="
+                w-4
+                h-4
+                border-gray-300
+                rounded
+                text-primary-500
+                focus:ring-indigo-500
+              "
             />
             <label for="remember_me" class="block ml-2 text-sm text-gray-900">
               Remember me
@@ -89,17 +124,49 @@
         <div>
           <button
             type="submit"
-            class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="
+              flex
+              justify-center
+              w-full
+              px-4
+              py-2
+              text-sm
+              font-medium
+              text-white
+              border border-transparent
+              rounded-md
+              shadow-sm
+              bg-primary-500
+              hover:bg-primary-600
+              focus:outline-none
+              focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+            "
           >
             <span v-if="!isLoading">Sign in</span>
             <span v-else>
               <fa
                 :icon="['fas', 'circle']"
-                class="inline-block w-3 h-3 mr-2 text-white -animate-delay-1 animate-bounce"
+                class="
+                  inline-block
+                  w-3
+                  h-3
+                  mr-2
+                  text-white
+                  -animate-delay-1
+                  animate-bounce
+                "
               />
               <fa
                 :icon="['fas', 'circle']"
-                class="inline-block w-3 h-3 mr-2 text-white -animate-delay-2 animate-bounce"
+                class="
+                  inline-block
+                  w-3
+                  h-3
+                  mr-2
+                  text-white
+                  -animate-delay-2
+                  animate-bounce
+                "
               />
               <fa
                 :icon="['fas', 'circle']"

@@ -7,16 +7,36 @@
         <Logo class="w-auto h-12 mx-auto text-primary-500 dark:text-white" />
 
         <h2
-          class="mt-6 text-3xl font-extrabold text-center text-gray-900 dark:text-white font-roboto"
+          class="
+            mt-6
+            text-3xl
+            font-extrabold
+            text-center text-gray-900
+            dark:text-white
+            font-roboto
+          "
         >
           Create a account
         </h2>
         <p
-          class="mt-2 text-sm text-center text-gray-600 max-w dark:text-gray-200 font-roboto"
+          class="
+            mt-2
+            text-sm text-center text-gray-600
+            max-w
+            dark:text-gray-200
+            font-roboto
+          "
         >
           Or
           <nuxt-link
-            class="font-medium text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-roboto"
+            class="
+              font-medium
+              text-primary-500
+              hover:text-primary-600
+              dark:text-primary-400
+              dark:hover:text-primary-300
+              font-roboto
+            "
             to="/login"
           >
             sign in to your account
@@ -53,7 +73,21 @@
                       $store.state.signup.messages.errors.username ||
                       $store.state.signup.messages.error,
                   }"
-                  class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  class="
+                    block
+                    w-full
+                    px-3
+                    py-2
+                    placeholder-gray-400
+                    border border-gray-300
+                    rounded-md
+                    shadow-sm
+                    appearance-none
+                    focus:outline-none
+                    focus:ring-indigo-500
+                    focus:border-indigo-500
+                    sm:text-sm
+                  "
                 />
                 <span
                   v-if="$store.state.signup.messages.errors.username"
@@ -83,7 +117,21 @@
                       $store.state.signup.messages.errors.email ||
                       $store.state.signup.messages.error,
                   }"
-                  class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  class="
+                    block
+                    w-full
+                    px-3
+                    py-2
+                    placeholder-gray-400
+                    border border-gray-300
+                    rounded-md
+                    shadow-sm
+                    appearance-none
+                    focus:outline-none
+                    focus:ring-indigo-500
+                    focus:border-indigo-500
+                    sm:text-sm
+                  "
                 />
                 <span
                   v-if="$store.state.signup.messages.errors.email"
@@ -113,7 +161,21 @@
                     'border-red-500':
                       $store.state.signup.messages.errors.password,
                   }"
-                  class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  class="
+                    block
+                    w-full
+                    px-3
+                    py-2
+                    placeholder-gray-400
+                    border border-gray-300
+                    rounded-md
+                    shadow-sm
+                    appearance-none
+                    focus:outline-none
+                    focus:ring-indigo-500
+                    focus:border-indigo-500
+                    sm:text-sm
+                  "
                 />
               </div>
               <span
@@ -137,17 +199,49 @@
             <div>
               <button
                 type="submit"
-                class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="
+                  flex
+                  justify-center
+                  w-full
+                  px-4
+                  py-2
+                  text-sm
+                  font-medium
+                  text-white
+                  border border-transparent
+                  rounded-md
+                  shadow-sm
+                  bg-primary-500
+                  hover:bg-primary-600
+                  focus:outline-none
+                  focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                "
               >
                 <span v-if="!isLoading">Create Account</span>
                 <span v-else>
                   <fa
                     :icon="['fas', 'circle']"
-                    class="inline-block w-3 h-3 mr-2 text-white -animate-delay-1 animate-bounce"
+                    class="
+                      inline-block
+                      w-3
+                      h-3
+                      mr-2
+                      text-white
+                      -animate-delay-1
+                      animate-bounce
+                    "
                   />
                   <fa
                     :icon="['fas', 'circle']"
-                    class="inline-block w-3 h-3 mr-2 text-white -animate-delay-2 animate-bounce"
+                    class="
+                      inline-block
+                      w-3
+                      h-3
+                      mr-2
+                      text-white
+                      -animate-delay-2
+                      animate-bounce
+                    "
                   />
                   <fa
                     :icon="['fas', 'circle']"
@@ -181,6 +275,20 @@ export default {
         username: '',
         password: '',
       },
+    }
+  },
+
+  head({ $config: { title } }) {
+    return {
+      title: 'Sign Up',
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        {
+          hid: 'description',
+          name: 'description',
+          content: `Don't already have a ${title} account?  You can sign up for a account here.`,
+        },
+      ],
     }
   },
 
@@ -309,19 +417,6 @@ export default {
         }
       }
     },
-  },
-  head({ $config: { title } }) {
-    return {
-      title: 'Sign Up',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: 'description',
-          name: 'description',
-          content: `Don't already have a ${title} account?  You can sign up for a account here.`,
-        },
-      ],
-    }
   },
 }
 </script>

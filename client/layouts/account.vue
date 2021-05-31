@@ -22,17 +22,42 @@
         tabindex="0"
       >
         <div
-          class="sticky top-0 z-10 flex flex-shrink-0 h-16 bg-white border border-transparent dark:bg-gray-800"
+          class="
+            sticky
+            top-0
+            z-10
+            flex flex-shrink-0
+            h-16
+            bg-white
+            border border-transparent
+            dark:bg-gray-800
+          "
         >
           <button
-            class="px-4 text-gray-400 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+            class="
+              px-4
+              text-gray-400
+              border-r border-gray-200
+              focus:outline-none
+              focus:ring-2 focus:ring-inset focus:ring-indigo-500
+              md:hidden
+            "
             @click.stop="sidebarShow"
           >
             <span class="sr-only">Open sidebar</span>
             <HeroIconOutLineMenuAlt2 class="w-6 h-6" />
           </button>
           <div
-            class="flex justify-between flex-1 px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8"
+            class="
+              flex
+              justify-between
+              flex-1
+              px-4
+              sm:px-6
+              lg:max-w-6xl
+              lg:mx-auto
+              lg:px-8
+            "
           >
             <div class="flex items-center justify-end flex-1 ml-4 md:ml-6">
               <SharedNavigationProfileDropdown />

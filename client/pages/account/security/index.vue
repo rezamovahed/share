@@ -1,6 +1,17 @@
 <template>
   <div
-    class="container w-full px-2 mx-auto overflow-auto shadow-md md:px-8 bg-gray-50 lg:w-9/12 dark:bg-gray-200"
+    class="
+      container
+      w-full
+      px-2
+      mx-auto
+      overflow-auto
+      shadow-md
+      md:px-8
+      bg-gray-50
+      lg:w-9/12
+      dark:bg-gray-200
+    "
   >
     <div class="my-0 sm:my-5">
       <div class="mt-5 md:mt-0">
@@ -28,7 +39,24 @@
                     :class="{
                       'border-red-500': changePassword.errors.oldPassword,
                     }"
-                    class="block w-full px-3 py-2 mt-1 transition duration-150 ease-in-out border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+                    class="
+                      block
+                      w-full
+                      px-3
+                      py-2
+                      mt-1
+                      transition
+                      duration-150
+                      ease-in-out
+                      border border-gray-300
+                      rounded-md
+                      shadow-sm
+                      focus:outline-none
+                      focus:ring-blue
+                      focus:border-blue-300
+                      sm:text-sm
+                      sm:leading-5
+                    "
                   />
                   <span
                     v-if="changePassword.errors.oldPassword"
@@ -50,7 +78,24 @@
                     :class="{
                       'border-red-500': changePassword.errors.newPassword,
                     }"
-                    class="block w-full px-3 py-2 mt-1 transition duration-150 ease-in-out border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+                    class="
+                      block
+                      w-full
+                      px-3
+                      py-2
+                      mt-1
+                      transition
+                      duration-150
+                      ease-in-out
+                      border border-gray-300
+                      rounded-md
+                      shadow-sm
+                      focus:outline-none
+                      focus:ring-blue
+                      focus:border-blue-300
+                      sm:text-sm
+                      sm:leading-5
+                    "
                   />
                   <span
                     v-if="changePassword.errors.newPassword"
@@ -63,7 +108,13 @@
                   <div class="flex items-center mt-2">
                     <span class="rounded-md">
                       <div
-                        class="mb-2 text-base font-medium leading-6 text-gray-900"
+                        class="
+                          mb-2
+                          text-base
+                          font-medium
+                          leading-6
+                          text-gray-900
+                        "
                       >
                         Two Factor Authentication
                       </div>
@@ -71,7 +122,26 @@
                       <div v-if="!$auth.user.twoFactor">
                         <button
                           type="button"
-                          class="px-3 py-2 text-sm font-medium leading-4 text-green-700 transition duration-150 ease-in-out bg-green-200 border border-green-300 rounded-md hover:text-green-500 focus:outline-none focus:border-green-300 focus:ring-blue active:bg-green-50 active:text-green-800"
+                          class="
+                            px-3
+                            py-2
+                            text-sm
+                            font-medium
+                            leading-4
+                            text-green-700
+                            transition
+                            duration-150
+                            ease-in-out
+                            bg-green-200
+                            border border-green-300
+                            rounded-md
+                            hover:text-green-500
+                            focus:outline-none
+                            focus:border-green-300
+                            focus:ring-blue
+                            active:bg-green-50
+                            active:text-green-800
+                          "
                           @click.prevent="
                             toggleAccountModalEnableTwoFactorModal
                           "
@@ -82,7 +152,26 @@
                       <div v-else>
                         <button
                           type="button"
-                          class="px-3 py-2 text-sm font-medium leading-4 text-red-700 transition duration-150 ease-in-out bg-red-200 border border-red-300 rounded-md hover:text-red-500 focus:outline-none focus:border-blue-300 focus:ring-blue active:bg-gray-50 active:text-gray-800"
+                          class="
+                            px-3
+                            py-2
+                            text-sm
+                            font-medium
+                            leading-4
+                            text-red-700
+                            transition
+                            duration-150
+                            ease-in-out
+                            bg-red-200
+                            border border-red-300
+                            rounded-md
+                            hover:text-red-500
+                            focus:outline-none
+                            focus:border-blue-300
+                            focus:ring-blue
+                            active:bg-gray-50
+                            active:text-gray-800
+                          "
                           @click.prevent="
                             toggleAccountModalDisableTwoFactorModal
                           "
@@ -103,7 +192,25 @@
             <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
               <button
                 type="submit"
-                class="inline-flex justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out border border-transparent rounded-md bg-primary-600 hover:bg-primary-500 focus:outline-none focus:border-primary-700"
+                class="
+                  inline-flex
+                  justify-center
+                  px-4
+                  py-2
+                  text-sm
+                  font-medium
+                  leading-5
+                  text-white
+                  transition
+                  duration-150
+                  ease-in-out
+                  border border-transparent
+                  rounded-md
+                  bg-primary-600
+                  hover:bg-primary-500
+                  focus:outline-none
+                  focus:border-primary-700
+                "
               >
                 Save
               </button>

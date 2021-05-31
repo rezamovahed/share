@@ -3,7 +3,17 @@
     <div class="flex flex-col w-64">
       <div class="flex flex-col flex-1 h-0">
         <div
-          class="flex items-center flex-shrink-0 h-16 px-4 bg-white dark:bg-gray-800 dark:text-primary-100 text-primary-500"
+          class="
+            flex
+            items-center
+            flex-shrink-0
+            h-16
+            px-4
+            bg-white
+            dark:bg-gray-800
+            dark:text-primary-100
+            text-primary-500
+          "
         >
           <Logo
             class="inline-block w-auto h-8"
@@ -19,7 +29,21 @@
               v-for="(link, index) in links"
               :key="index"
               :to="link.url"
-              class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md dark:text-white dark:hover:text-gray-900 hover:bg-gray-50 hover:text-gray-900 group"
+              class="
+                flex
+                items-center
+                px-2
+                py-2
+                text-sm
+                font-medium
+                text-gray-600
+                rounded-md
+                dark:text-white
+                dark:hover:text-gray-900
+                hover:bg-gray-50
+                hover:text-gray-900
+                group
+              "
             >
               {{ link.text }}
             </nuxt-link>
@@ -28,11 +52,34 @@
 
         <div
           v-if="backto"
-          class="flex px-2 py-4 bg-gray-200 border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+          class="
+            flex
+            px-2
+            py-4
+            bg-gray-200
+            border-t border-gray-200
+            dark:bg-gray-700
+            dark:border-gray-600
+          "
         >
           <nuxt-link
             :to="backtoLink"
-            class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md dark:text-white dark:hover:text-gray-900 hover:bg-gray-50 hover:text-gray-900 group"
+            class="
+              flex
+              items-center
+              w-full
+              px-2
+              py-2
+              text-sm
+              font-medium
+              text-gray-600
+              rounded-md
+              dark:text-white
+              dark:hover:text-gray-900
+              hover:bg-gray-50
+              hover:text-gray-900
+              group
+            "
           >
             <fa :icon="['fas', 'arrow-left']" class="w-5 h-5 mr-2 text-lg" />
             {{ backtoText }}
