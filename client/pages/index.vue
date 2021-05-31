@@ -6,7 +6,7 @@
       min-h-screen
       overflow-hidden
       bg-gray-200
-      dark:bg-gray-900/50
+      dark:bg-gray-900
     "
   >
     <div
