@@ -224,7 +224,7 @@ router.post('/login', async (req, res) => {
       device,
       location,
       user: user.id,
-      expireAt: dayjst().add('14', 'd')
+      expireAt: dayjs().add('14', 'd')
     });
 
     await session.save();
