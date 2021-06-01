@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-const moment = require('moment');
+const dayjs = require('dayjs');
 const sha512 = require('js-sha512');
 
 const router = express.Router();
@@ -104,19 +104,19 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
 
     switch (expires) {
       case 'day':
-        expireAt = moment().add('24', 'h');
+        expireAt = dayjs().add('24', 'h');
         expiresIn = '24h';
         break;
       case 'week':
-        expireAt = moment().add('7', 'd');
+        expireAt = dayjs().add('7', 'd');
         expiresIn = '7d';
         break;
-      case 'month':
-        expireAt = moment().add('1', 'M');
+      case 'M':
+        expireAt = dayjs().add('1', 'M');
         expiresIn = '31d';
         break;
       default:
-        expireAt = moment().add('100', 'y');
+        expireAt = dayjs().add('100', 'y');
         expiresIn = '36500d';
         isNever = true;
     }

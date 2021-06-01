@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const moment = require('moment');
+const dayjs = require('dayjs');
 const qrcode = require('qrcode');
 const { authenticator } = require('otplib');
 
@@ -201,7 +201,7 @@ router.post('/change-email', requireAuth, isSessionValid, async (req, res) => {
     }
 
     user.emailVerificationToken = emailVerificationToken();
-    user.emailVerificationTokenExpire = moment().add('3', 'h');
+    user.emailVerificationTokenExpire = dayjs().add('3', 'h');
     user.newEmail = email;
 
     await user.save();
@@ -252,7 +252,7 @@ router.post(
       }
 
       user.emailVerificationToken = emailVerificationToken();
-      user.emailVerificationTokenExpire = moment().add('3', 'h');
+      user.emailVerificationTokenExpire = dayjs().add('3', 'h');
 
       await user.save();
 
@@ -298,7 +298,7 @@ router.put(
        */
       const user = await User.findOne({
         emailVerificationToken: req.params.email_token,
-        emailVerificationTokenExpire: { $gt: moment() }
+        emailVerificationTokenExpire: { $gt: dayjs() }
       });
 
       if (!user) {
@@ -312,7 +312,7 @@ router.put(
       user.emailVerificationTokenExpire = undefined;
       user.email = user.newEmail;
       user.newEmail = undefined;
-      user.emailChanged = moment();
+      user.emailChanged = dayjs();
 
       await user.save();
 

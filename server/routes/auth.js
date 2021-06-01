@@ -1,6 +1,6 @@
 const express = require('express');
 const { customAlphabet } = require('nanoid');
-const moment = require('moment');
+const dayjs = require('dayjs');
 const sha512 = require('js-sha512');
 const jwt = require('jsonwebtoken');
 const { authenticator } = require('otplib');
@@ -89,7 +89,7 @@ router.post('/register', isRegistration, async (req, res) => {
     });
 
     newUser.emailVerificationToken = emailVerificationToken();
-    newUser.emailVerificationTokenExpire = moment().add('3', 'h');
+    newUser.emailVerificationTokenExpire = dayjs().add('3', 'h');
 
     await newUser.save();
 
@@ -160,7 +160,7 @@ router.post('/login', async (req, res) => {
       const newTwoFactorToken = new TwoFactor({
         token: twoFactorToken(),
         user: user.id,
-        expiresAt: moment().add('15', 'm')
+        expiresAt: dayjs().add('15', 'm')
       });
 
       await newTwoFactorToken.save();
@@ -224,7 +224,7 @@ router.post('/login', async (req, res) => {
       device,
       location,
       user: user.id,
-      expireAt: moment().add('14', 'd')
+      expireAt: dayjst().add('14', 'd')
     });
 
     await session.save();
@@ -345,7 +345,7 @@ router.post('/two-factor', async (req, res) => {
       device,
       location,
       user: twoFactor.user.id,
-      expireAt: moment().add('14', 'd')
+      expireAt: dayjs().add('14', 'd')
     });
 
     await session.save();
@@ -440,7 +440,7 @@ router.post('/refresh', isRefreshValid, async (req, res) => {
       device,
       location,
       user: user.id,
-      expireAt: moment().add('14', 'd')
+      expireAt: dayjs().add('14', 'd')
     });
     await session.save();
     res.status(200).json({
