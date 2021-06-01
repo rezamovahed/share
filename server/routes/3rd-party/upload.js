@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const passport = require('passport');
 const path = require('path');
 
@@ -58,12 +59,14 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
     switch (stoage) {
       default:
         // eslint-disable-next-line no-case-declarations
-        const filePath = `${path.join(
-          __dirname,
-          '../../public/uploads'
-        )}/${fileName}.${extension}`;
+        const filePath = `${path.join(__dirname, '../../public/uploads')}/${
+          req.user.id
+        }`;
+        if (!fs.existsSync(filePath)) {
+          fs.mkdirSync(filePath);
+        }
         // Move the file to a public directory in u folder for express
-        await mv(filePath);
+        await mv(`${filePath}/${fileName}.${extension}`);
         break;
     }
 
@@ -84,8 +87,8 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
         size,
         tags,
         url: {
-          file: `${process.env.FULL_DOMAIN}/u/${fileName}`,
-          delete: `${process.env.FULL_DOMAIN}/u/${fileName}/delete?key=${deleteKey}`
+          file: `${process.env.WEBSITE}/u/${fileName}`,
+          delete: `${process.env.WEBSITE}/u/${fileName}/delete?key=${deleteKey}`
         },
         deleteKey
       }
