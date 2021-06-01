@@ -1,9 +1,9 @@
 const express = require('express');
-const moment = require('moment');
+const dayjs = require('dayjs');
 
 const { customAlphabet } = require('nanoid');
 
-const mailer= require('../utils/mailer');
+const mailer = require('../utils/mailer');
 
 const router = express.Router();
 
@@ -69,8 +69,8 @@ router.post('/forgot-password', async (req, res) => {
     /**
      * Last changed date
      */
-    const lastChanged = moment().diff(
-      moment(user.passwordResetTokenExpire),
+    const lastChanged = dayjs().diff(
+      dayjs(user.passwordResetTokenExpire),
       'minutes'
     );
 
@@ -83,7 +83,7 @@ router.post('/forgot-password', async (req, res) => {
     }
 
     user.passwordResetToken = passwordResetToken();
-    user.passwordResetTokenExpire = moment().add('15', 'm');
+    user.passwordResetTokenExpire = dayjs().add('15', 'm');
 
     await user.save();
 
@@ -132,7 +132,7 @@ router.post('/reset-password/:reset_token', async (req, res) => {
     const user = await User.findOne({
       passwordResetToken: req.params.reset_token,
       passwordResetTokenExpire: {
-        $gt: moment()
+        $gt: dayjs()
       }
     });
 
@@ -218,7 +218,7 @@ router.put('/activate-account/:activate_token', async (req, res) => {
     const user = await User.findOne({
       emailVerificationToken: req.params.activate_token,
       emailVerificationTokenExpire: {
-        $gt: moment()
+        $gt: dayjs()
       }
     });
 
@@ -269,7 +269,7 @@ router.post('/activate-account/resend', async (req, res) => {
     }
 
     user.emailVerificationToken = emailVerificationToken();
-    user.emailVerificationTokenExpire = moment().add('3', 'h');
+    user.emailVerificationTokenExpire = dayjs().add('3', 'hours');
 
     await user.save();
 

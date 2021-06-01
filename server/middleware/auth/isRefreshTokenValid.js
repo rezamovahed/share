@@ -1,4 +1,4 @@
-const moment = require('moment');
+const dayjs = require('dayjs');
 const sha512 = require('js-sha512');
 const Session = require('../../models/Session');
 const User = require('../../models/User');
@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
     const refreshTokenValid = await Session.findOne({
       refreshTokenHash,
       expireAt: {
-        $gt: moment()
+        $gt: dayjs()
       }
     });
 
