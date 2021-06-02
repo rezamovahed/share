@@ -189,6 +189,8 @@ export default {
     whitelist: ['dark'],
   },
 
+  serverMiddleware: [{ path: '/u/raw', handler: '~/server-middleware/u.js' }],
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
 }
