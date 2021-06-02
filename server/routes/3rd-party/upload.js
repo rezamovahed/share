@@ -72,7 +72,8 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
 
     const upload = new Upload({
       uploader: req.user.id,
-      displayName,
+      displayName: displayName || fileName,
+      fileExtension: extension,
       fileName,
       fileType: mimetype,
       deleteKey,

@@ -78,10 +78,9 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
     switch (stoage) {
       default:
         // eslint-disable-next-line no-case-declarations
-        const filePath = `${path.join(
-          __dirname,
-          '../../public/uploads'
-        )}/${fileName}.${extension}`;
+        const filePath = `${path.join(__dirname, '../../public/uploads')}/${
+          req.user.id
+        }/${fileName}${extension}`;
         // Move the file to a public directory in u folder for express
         await mv(filePath);
         break;
@@ -90,6 +89,7 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
     const upload = new Upload({
       uploader: req.user.id,
       displayName: displayName || fileName,
+      fileExtension: extension,
       fileName,
       fileType: mimetype,
       deleteKey,
@@ -110,6 +110,28 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
         deleteKey
       }
     });
+  } catch (e) {
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
+/**
+ * @route /uploads/:upload_id/raw
+ * @method GET
+ * @description Allows a logged in user to upload a file to the server
+ */
+router.get('/:upload_id/raw', async (req, res) => {
+  try {
+    const upload = await Upload.findOne({ fileName: req.params.upload_id });
+
+    const filePath = `${path.join(__dirname, '../public/uploads')}/${
+      upload.uploader
+    }/${upload.fileName}${upload.fileExtension}`;
+
+    res.sendFile(filePath);
   } catch (e) {
     res.status(500).json({
       code: 'SERVER_ERROR',

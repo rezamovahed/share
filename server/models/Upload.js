@@ -18,6 +18,10 @@ const UploadSchema = new Schema(
       type: String,
       required: true
     },
+    fileExtension: {
+      type: String,
+      required: true
+    },
     fileType: {
       type: String,
       required: true
