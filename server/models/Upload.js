@@ -22,15 +22,12 @@ const UploadSchema = new Schema(
       type: String,
       required: true
     },
-    fileType: {
-      type: String,
-      required: true
-    },
     storage: {
       type: String,
       enum: ['local'],
       default: 'local'
     },
+    storgeURL: String,
     type: {
       type: String,
       enum: ['file', 'image', 'text'],

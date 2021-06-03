@@ -119,7 +119,42 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
 });
 
 /**
- * @route /uploads/:upload_id/raw
+ * @route /upload/:upload_id
+ * @method GET
+ * @description Allows a logged in user to get basic details aboout uploaded image.
+ */
+router.get('/:upload_id', async (req, res) => {
+  try {
+    const upload = await Upload.findOne({
+      fileName: req.params.upload_id
+    })
+      .select(
+        '-_id uploader fileName fileSize fileExtension fileType storgeURL displayName'
+      )
+      .populate({
+        path: 'uploader',
+        select: 'username -_id'
+      });
+
+    if (!upload) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'Upload not found.'
+      });
+    }
+    res.status(200).json({
+      upload
+    });
+  } catch (e) {
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
+/**
+ * @route /upload/:upload_id/raw
  * @method GET
  * @description Allows a logged in user to upload a file to the server
  */
@@ -127,11 +162,18 @@ router.get('/:upload_id/raw', async (req, res) => {
   try {
     const upload = await Upload.findOne({ fileName: req.params.upload_id });
 
+    if (!upload) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'Upload not found.'
+      });
+    }
+
     const filePath = `${path.join(__dirname, '../public/uploads')}/${
       upload.uploader
     }/${upload.fileName}${upload.fileExtension}`;
 
-    res.sendFile(filePath);
+    res.status(200).sendFile(filePath);
   } catch (e) {
     res.status(500).json({
       code: 'SERVER_ERROR',
