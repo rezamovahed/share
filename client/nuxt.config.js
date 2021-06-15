@@ -24,6 +24,7 @@ export default {
     { src: '~/plugins/filters' },
     { src: '~/plugins/is-empty' },
     { src: '~/plugins/js-sha512' },
+    { src: '~/plugins/filesize' },
     { src: '~/plugins/vue-content-loader', srr: false },
     { src: '~/plugins/vue-click-outside', srr: false },
   ],
@@ -63,6 +64,7 @@ export default {
             'faFile',
             'faLink',
             'faHdd',
+            'faExternalLinkSquareAlt',
           ],
         },
       },
@@ -189,7 +191,7 @@ export default {
     whitelist: ['dark'],
   },
 
-  serverMiddleware: [{ path: '/u/raw', handler: '~/server-middleware/u.js' }],
+  serverMiddleware: [{ path: '/u/', handler: '~/server-middleware/u.js' }],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
