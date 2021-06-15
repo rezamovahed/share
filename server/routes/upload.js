@@ -129,7 +129,7 @@ router.get('/:upload_id', async (req, res) => {
       fileName: req.params.upload_id
     })
       .select(
-        '-_id uploader fileName fileSize fileExtension fileType storgeURL displayName'
+        '-_id uploader fileName fileSize fileExtension fileType storgeURL displayName createdAt'
       )
       .populate({
         path: 'uploader',
