@@ -30,6 +30,7 @@
     "filesize": "^6.3.0",
     "js-sha512": "^0.8.0",
     "nuxt": "^2.15.6",
+    "nuxt-clipboard2": "^0.2.1",
     "nuxt-user-agent": "^1.2.2",
     "portal-vue": "^2.1.7",
     "tailwindcss-border-styles": "^1.0.1",

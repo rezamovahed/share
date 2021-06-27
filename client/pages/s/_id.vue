@@ -4,22 +4,23 @@
     <div class="mx-auto py-6 sm:px-6 lg:px-8 max-w-6xl">
       <img :src="`/u/${params.id}`" class="mx-auto px-6" />
       <div class="overflow-hidden sm:rounded-lg">
-        <div class="px-4 py-5 sm:px-6">
-          <nuxt-link
-            :to="`/u/${params.id}`"
-            class="
-              text-lg
-              leading-6
-              font-medium
-              text-gray-900
-              dark:text-white
-              hover:text-gray-800
-              dark:hover:text-gray-300
-              hover:underline
-            "
-          >
-            {{ upload.displayName || upload.fileName }}
-          </nuxt-link>
+        <div
+          class="
+            px-4
+            py-5
+            sm:px-6
+            text-lg
+            leading-6
+            font-medium
+            text-gray-900
+            dark:text-white
+            hover:text-gray-800
+            dark:hover:text-gray-300
+            hover:underline
+          "
+          @click="copyURL"
+        >
+          {{ upload.displayName || upload.fileName }}
         </div>
         <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
           <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
@@ -67,9 +68,9 @@
                     focus:outline-none
                     focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
                   "
+                  @click="downloadFile"
                 >
                   Download
-                  <!-- Heroicon name: solid/mail -->
                   <svg
                     class="ml-2 -mr-1 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
@@ -97,9 +98,9 @@
 
 <script>
 export default {
-  async asyncData({ params, $axios }) {
+  async asyncData({ $route, params, $axios }) {
     const { upload } = await $axios.$get(`/api/upload/${params.id}`)
-    return { params, upload }
+    return { $route, params, upload }
   },
   head({ $config: { title } }) {
     return {
@@ -139,6 +140,41 @@ export default {
         },
       ],
     }
+  },
+  methods: {
+    async copyURL() {
+      try {
+        await this.$copyText(window.location.origin + this.$route.fullPath)
+        this.$toast.success('Share has been copied to your clipboard.', {
+          position: 'bottom-right',
+        })
+      } catch (e) {
+        return this.$toast.error(
+          'There was a error copying Share to your clipboard.',
+          {
+            position: 'bottom-right',
+          }
+        )
+      }
+    },
+    downloadFile() {
+      this.$axios({
+        url: `/u/${this.params.id}`,
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        const fileURL = window.URL.createObjectURL(new Blob([response.data]))
+        const fileLink = document.createElement('a')
+
+        fileLink.href = fileURL
+        fileLink.setAttribute(
+          'download',
+          `${this.upload.fileName}${this.upload.fileExtension}`
+        )
+        document.body.appendChild(fileLink)
+        fileLink.click()
+      })
+    },
   },
 }
 </script>

@@ -78,6 +78,8 @@ export default {
         },
       },
     ],
+    // Doc: https://github.com/Inndy/vue-clipboard2
+    'nuxt-clipboard2',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)

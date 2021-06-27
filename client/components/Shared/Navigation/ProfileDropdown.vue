@@ -10,7 +10,8 @@
           flex
           items-center
           max-w-xs
-          p-2
+          px-4
+          py-2
           text-sm
           bg-white
           rounded-md
