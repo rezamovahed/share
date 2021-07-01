@@ -38,7 +38,7 @@ const urlFriendyAlphabet =
 
 router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
   try {
-    const nanoid32 = customAlphabet(urlFriendyAlphabet, 64);
+    const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add validation file check for mineTypes and fileLimit
 
     // Get the body

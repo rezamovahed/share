@@ -62,6 +62,7 @@ export default {
             'faCircle',
             'faHome',
             'faFile',
+            'faCloudDownloadAlt',
             'faLink',
             'faHdd',
             'faExternalLinkSquareAlt',

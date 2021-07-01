@@ -57,7 +57,7 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
  */
 router.get('/', requireAuth, isSessionValid, async (req, res) => {
   try {
-    const nanoid32 = customAlphabet(urlFriendyAlphabet, 64);
+    const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add validation file check for mineTypes and fileLimit
 
     // Get the body
