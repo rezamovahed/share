@@ -67,7 +67,12 @@ module.exports = {
       },
     },
   },
-  variants: {},
+  variants: {
+    extend: {
+      // ...
+      cursor: ['hover'],
+    },
+  },
   plugins: [
     tailwindcssForms,
     tailwindcssTypography,

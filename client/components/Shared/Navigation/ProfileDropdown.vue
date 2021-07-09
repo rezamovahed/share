@@ -1,5 +1,5 @@
 <template>
-  <div class="relative ml-3">
+  <div v-if="$auth.loggedIn" class="relative ml-3">
     <div>
       <button
         id="user-menu"
@@ -10,7 +10,8 @@
           flex
           items-center
           max-w-xs
-          p-2
+          px-4
+          py-2
           text-sm
           bg-white
           rounded-md
@@ -67,7 +68,21 @@
           "
           role="menuitem"
           @click.native="hide"
-          >My Profile</nuxt-link
+          >Account</nuxt-link
+        >
+        <nuxt-link
+          to="/dashboard"
+          class="
+            block
+            px-4
+            py-2
+            text-sm text-gray-700
+            hover:bg-gray-100
+            dakr:text-white
+          "
+          role="menuitem"
+          @click.native="hide"
+          >Dashboard</nuxt-link
         >
 
         <button

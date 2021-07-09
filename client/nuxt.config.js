@@ -24,7 +24,7 @@ export default {
     { src: '~/plugins/filters' },
     { src: '~/plugins/is-empty' },
     { src: '~/plugins/js-sha512' },
-    { src: '~/plugins/vue-content-loader', srr: false },
+    { src: '~/plugins/filesize' },
     { src: '~/plugins/vue-click-outside', srr: false },
   ],
 
@@ -48,6 +48,7 @@ export default {
         icons: {
           regular: ['faMoon'],
           solid: [
+            'faClipboard',
             'faCaretDown',
             'faSun',
             'faCheck',
@@ -61,8 +62,10 @@ export default {
             'faCircle',
             'faHome',
             'faFile',
+            'faCloudDownloadAlt',
             'faLink',
             'faHdd',
+            'faExternalLinkSquareAlt',
           ],
         },
       },
@@ -76,6 +79,8 @@ export default {
         },
       },
     ],
+    // Doc: https://github.com/Inndy/vue-clipboard2
+    'nuxt-clipboard2',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -113,7 +118,7 @@ export default {
    ** dayjs configuration
    */
   dayjs: {
-    plugins: ['localizedFormat'],
+    plugins: ['localizedFormat', 'relativeTime', 'isToday'],
   },
 
   /*
@@ -189,7 +194,7 @@ export default {
     whitelist: ['dark'],
   },
 
-  serverMiddleware: [{ path: '/u/raw', handler: '~/server-middleware/u.js' }],
+  serverMiddleware: [{ path: '/u/', handler: '~/server-middleware/u.js' }],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},

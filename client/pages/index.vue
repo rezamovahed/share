@@ -112,7 +112,7 @@
           >
             <div class="flex items-center justify-between w-full md:w-auto">
               <a href="#">
-                <span class="sr-only">Workflow</span>
+                <span class="sr-only">{{ $config.title }}</span>
                 <Logo
                   class="w-auto h-8 sm:h-10 text-primary-500 dark:text-white"
                 />
@@ -129,7 +129,7 @@
                     rounded-md
                     bg-gray-50
                     hover:text-gray-500
-                    hover:bg-gray-100
+                    hover:bg-gray-100 hover:bg-opacity-75
                     focus:outline-none
                     focus:ring-2 focus:ring-inset focus:ring-primary-500
                   "
