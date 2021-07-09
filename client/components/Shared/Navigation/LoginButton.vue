@@ -1,5 +1,5 @@
 <template>
-  <div class="relative ml-3 z-10">
+  <div v-if="!$auth.loggedIn" class="relative ml-3 z-10">
     <nuxt-link
       to="/login"
       class="

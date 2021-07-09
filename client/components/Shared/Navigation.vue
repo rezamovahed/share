@@ -10,7 +10,7 @@
             />
           </div>
         </div>
-        <SharedNavigationLoginButton v-if="!$auth.loggedIn" />
+        <SharedNavigationLoginButton />
         <SharedNavigationProfileDropdown />
       </div>
     </div>

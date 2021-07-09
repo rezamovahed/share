@@ -25,7 +25,6 @@ export default {
     { src: '~/plugins/is-empty' },
     { src: '~/plugins/js-sha512' },
     { src: '~/plugins/filesize' },
-    { src: '~/plugins/vue-content-loader', srr: false },
     { src: '~/plugins/vue-click-outside', srr: false },
   ],
 
@@ -49,6 +48,7 @@ export default {
         icons: {
           regular: ['faMoon'],
           solid: [
+            'faClipboard',
             'faCaretDown',
             'faSun',
             'faCheck',
@@ -118,7 +118,7 @@ export default {
    ** dayjs configuration
    */
   dayjs: {
-    plugins: ['localizedFormat'],
+    plugins: ['localizedFormat', 'relativeTime', 'isToday'],
   },
 
   /*
