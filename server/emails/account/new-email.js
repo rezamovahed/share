@@ -36,7 +36,7 @@ module.exports = token =>
       </mj-section>
       <mj-section>
         <mj-column>
-          <mj-button href="${process.env.WEBSITE}/account/email-change/${token}" font-family="Helvetica" background-color="#486EC2" color="white">
+          <mj-button href="${process.env.WEB_URL}/account/email-change/${token}" font-family="Helvetica" background-color="#486EC2" color="white">
             Comfirm Email
           </mj-button>
         </mj-column>

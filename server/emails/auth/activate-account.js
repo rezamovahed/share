@@ -37,7 +37,7 @@ module.exports = token =>
       </mj-section>
       <mj-section>
         <mj-column>
-          <mj-button href="${process.env.WEBSITE}/activate-account/${token}" font-family="Helvetica" background-color="#486EC2" color="white">
+          <mj-button href="${process.env.WEB_URL}/activate-account/${token}" font-family="Helvetica" background-color="#486EC2" color="white">
             Activate
           </mj-button>
         </mj-column>
