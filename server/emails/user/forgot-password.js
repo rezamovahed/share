@@ -24,7 +24,7 @@ module.exports = token =>
       <mj-section>
         <mj-column>
           <mj-text>Please click on the following link to complete the process:</mj-text>
-          <mj-button href="${process.env.WEBSITE}/forgot-password/${token}" font-family="Helvetica" background-color="#486EC2" color="white">
+          <mj-button href="${process.env.WEB_URL}/forgot-password/${token}" font-family="Helvetica" background-color="#486EC2" color="white">
             Reset Password
           </mj-button>
         </mj-column>

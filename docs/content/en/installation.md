@@ -11,7 +11,7 @@ You can now download the release [here](https://github.com/MrDemonWolf/share/rel
 
 You can also fork,clone,download from github for pre release builds and development.
 
-- Clone the repo: `git clone https://github.com/MrDemonWolf/wolfpal.git`
+- Clone the repo: `git clone https://github.com/MrDemonWolf/share.git`
 - [Fork, Clone, or Download on GitHub](https://github.com/MrDemonWolf/share)
 
 ### Installation

@@ -104,8 +104,8 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
         size,
         tags,
         url: {
-          file: `${process.env.FULL_DOMAIN}/u/${fileName}`,
-          delete: `${process.env.FULL_DOMAIN}/u/${fileName}/delete?key=${deleteKey}`
+          file: `${process.env.WEB_URL}/u/${fileName}`,
+          delete: `${process.env.WEB_URL}/u/${fileName}/delete?key=${deleteKey}`
         },
         deleteKey
       }

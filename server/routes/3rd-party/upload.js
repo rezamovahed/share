@@ -88,8 +88,8 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
         size,
         tags,
         url: {
-          file: `${process.env.WEBSITE}/u/${fileName}`,
-          delete: `${process.env.WEBSITE}/u/${fileName}/delete?key=${deleteKey}`
+          file: `${process.env.WEB_URL}/u/${fileName}`,
+          delete: `${process.env.WEB_URL}/u/${fileName}/delete?key=${deleteKey}`
         },
         deleteKey
       }
