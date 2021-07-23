@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs');
+const fs = require('fs-extra');
 const passport = require('passport');
 const path = require('path');
 
@@ -15,7 +15,8 @@ const Upload = require('../../models/Upload');
 /**
  * Load middlewares
  */
-const isAPIKeyValid = require('../../middleware/isAPIKeyValid');
+const isAPIKeyValid = require('../../middleware/3rd-party/isAPIKeyValid');
+const isDeleteKeyValid = require('../../middleware/3rd-party/upload/isDeleteKeyValid');
 
 /**
  * Require authentication middleware.
@@ -30,12 +31,12 @@ const requireAuth = passport.authenticate('jwt', {
 
 const urlFriendyAlphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
 /**
  * @route /3rd-party/upload
  * @method POST
  * @description Allows a logged in user to upload using a 3rd-party client.
  */
-
 router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
   try {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
@@ -93,6 +94,60 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
         },
         deleteKey
       }
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
+/**
+ * @route /3rd-party/upload
+ * @method DELETE
+ * @description Allows a logged in user to deletes an uploaded file using a 3rd-party client.
+ */
+router.delete('/', isDeleteKeyValid, async (req, res) => {
+  try {
+    const { deleteKey } = req.body;
+
+    const upload = await Upload.findOne({ deleteKey });
+
+    if (!upload) {
+      res.status(404).json({
+        code: 'NOT_FOUND',
+        error: 'Upload not found.'
+      });
+    }
+    const filePath = `${path.join(__dirname, '../../public/uploads')}/${
+      upload.uploader
+    }`;
+
+    const file = `${filePath}/${upload.fileName}${upload.fileExtension}`;
+    try {
+      await fs.remove(file);
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({
+        code: 'SERVER_ERROR',
+        error: 'Internal Server Error.'
+      });
+    }
+    try {
+      await upload.remove();
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({
+        code: 'SERVER_ERROR',
+        error: 'Internal Server Error.'
+      });
+    }
+
+    res.status(200).json({
+      code: 'REMOVED',
+      message: `${upload.displayName} removed.`
     });
   } catch (e) {
     console.log(e);
