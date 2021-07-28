@@ -10,8 +10,9 @@
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
-    "@nuxt/content-theme-docs": "^0.8.2",
-    "nuxt": "^2.14.12"
+    "@babel/preset-env": "^7.14.8",
+    "@nuxt/content-theme-docs": "0.8.2",
+    "nuxt": "2.15.7"
   },
   "devDependencies": {
     "push-dir": "^0.4.1"

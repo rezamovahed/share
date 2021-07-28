@@ -1,7 +1,7 @@
 ---
 title: 3rd Party
 description: Simple yet advanced NodeJS, MongoDB and Express based uploader.
-position: 5
+position: 8
 category: API
 ---
 
@@ -39,8 +39,7 @@ curl --location --request POST 'https://www.example.com/api/3rd-party/upload' \
 --form 'stoage="local"' \
 --form 'tags="[\"test\", \"test\"]"' \
 --form 'displayName="test"' \
---form 'file=@"/C:/Users/mrdem/OneDrive - MrDemonWolf/Designs/Stock Photos/entrepreneur-593378_1920.jpg"'
-curl --location --request POST 'https://www.example.com/api/auth/register' \
+--form 'file=@"~/entrepreneur-593378_1920.jpg"'
 ```
 
   </code-block>
@@ -59,6 +58,50 @@ curl --location --request POST 'https://www.example.com/api/auth/register' \
     },
     "deleteKey": "Y0cujJIIppZjZU9UtP7FApD2fH7YyZ1T"
   }
+}
+```
+
+  </code-block>
+</code-group>
+
+## Delete a file
+
+Allows a logged in user to deletes an uploaded file using a 3rd-party client.
+
+#### Path
+
+`DELETE /3rd-party/upload`
+
+#### Headers
+
+| Field        | Type   | Description                       |
+| :----------- | :----- | :-------------------------------- |
+| Content-Type | string | application/x-www-form-urlencoded |
+
+#### Body
+
+| Field     | Type   | Description                                        |
+| :-------- | :----- | :------------------------------------------------- |
+| deleteKey | string | Storge location (Note this must be local for now). |
+
+#### Example
+
+<code-group>
+  <code-block label="Request" active>
+
+```sh
+curl --location --request DELETE 'https://www.example.com/api/3rd-party/upload' \
+--data-urlencode'deleteKey="Y0cujJIIppZjZU9UtP7FApD2fH7YyZ1T"'
+```
+
+  </code-block>
+  <code-block label="Response
+">
+
+```json
+{
+  "code": "REMOVED",
+  "message": "Pp1j8pY5VpBMErLBPU1MkeJ6RAr7IqEs removed."
 }
 ```
 

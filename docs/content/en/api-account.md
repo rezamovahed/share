@@ -66,10 +66,9 @@ Allows a logged in user to initiative the enable of two factor on their account.
 
 #### Headers
 
-| Field         | Type   | Description                       |
-| :------------ | :----- | :-------------------------------- |
-| Content-Type  | string | application/x-www-form-urlencoded |
-| Authorization | string | JWT access token.                 |
+| Field         | Type   | Description       |
+| :------------ | :----- | :---------------- |
+| Authorization | string | JWT access token. |
 
 #### Example
 
