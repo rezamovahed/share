@@ -114,9 +114,10 @@ router.delete(
       const session = await Session.findByIdAndDelete(req.params.session_id);
 
       if (!session) {
-        return res
-          .status(404)
-          .json({ code: 'SESSION_NOT_FOUND', error: 'Session not found.' });
+        return res.status(404).json({
+          code: 'NOT_FOUND',
+          error: 'Session not found.'
+        });
       }
 
       res.status(200).json({
