@@ -252,7 +252,7 @@ export default {
           }
         } else {
           switch (this.$store.state.account.messages.error) {
-            case 'SESSION_NOT_FOUND':
+            case 'NOT_FOUND':
               this.$toast.error('That device might be already revoked.', {
                 position: 'bottom-right',
               })
