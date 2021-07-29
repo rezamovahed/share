@@ -33,7 +33,7 @@ const urlFriendyAlphabet =
 /**
  * @route /uploads
  * @method GET
- * @description Allows a logged in user to get their current uploads
+ * @description Allows a logged in user to get all of their current uploads
  */
 router.get('/', requireAuth, isSessionValid, async (req, res) => {
   try {
@@ -55,7 +55,7 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
  * @method POST
  * @description Allows a logged in user to upload a file to the server
  */
-router.get('/', requireAuth, isSessionValid, async (req, res) => {
+router.post('/', requireAuth, isSessionValid, async (req, res) => {
   try {
     const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add validation file check for mineTypes and fileLimit
@@ -121,7 +121,7 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
 /**
  * @route /upload/:upload_id
  * @method GET
- * @description Allows a logged in user to get basic details aboout uploaded image.
+ * @description Allows a logged in user to get basic details about a single uploaded image.
  */
 router.get('/:upload_id', async (req, res) => {
   try {
@@ -133,7 +133,7 @@ router.get('/:upload_id', async (req, res) => {
       )
       .populate({
         path: 'uploader',
-        select: 'username -_id'
+        select: 'username slug role -_id'
       });
 
     if (!upload) {
@@ -156,7 +156,7 @@ router.get('/:upload_id', async (req, res) => {
 /**
  * @route /upload/:upload_id/raw
  * @method GET
- * @description Allows a logged in user to upload a file to the server
+ * @description Allows a logged in user to get the raw image data for a single uploaded image.
  */
 router.get('/:upload_id/raw', async (req, res) => {
   try {
