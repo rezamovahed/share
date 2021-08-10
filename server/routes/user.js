@@ -44,7 +44,7 @@ const activateAccountTemplate = require('../emails/auth/activate-account');
 router.post('/forgot-password', async (req, res) => {
   try {
     /**
-     * Validdate the user important for username,email,password
+     * Validdate the user input for username,email,password
      */
     const { codes, errors, isValid } = validateForgotPasswordInput(req.body);
 
@@ -118,7 +118,7 @@ router.post('/forgot-password', async (req, res) => {
 router.post('/reset-password/:reset_token', async (req, res) => {
   try {
     /**
-     * Validdate the user important for username,email,password
+     * Validdate the user input for username,email,password
      */
     const { codes, errors, isValid } = validateResetPasswordInput(req.body);
 

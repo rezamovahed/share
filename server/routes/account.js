@@ -164,7 +164,7 @@ router.delete('/sessions', requireAuth, isSessionValid, async (req, res) => {
 router.post('/change-email', requireAuth, isSessionValid, async (req, res) => {
   try {
     /**
-     * Validdate the user important for username,email,password
+     * Validdate the user input for username,email,password
      */
     const { codes, errors, isValid } = validateChangeEmailInput(req.body);
 
@@ -589,7 +589,7 @@ router.patch('/two-factor', requireAuth, isSessionValid, async (req, res) => {
     }
 
     /**
-     * Validdate the user important for username,email,password
+     * Validdate the user input for username,email,password
      */
     const { codes, errors, isValid } = validateEnableTwoFactorInput(req.body);
 
