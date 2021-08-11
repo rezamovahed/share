@@ -8,7 +8,6 @@ const router = express.Router();
 /**
  * Load MongoDB models.
  */
-const User = require('../models/User');
 const Upload = require('../models/Upload');
 
 /**
@@ -26,6 +25,7 @@ const requireAuth = passport.authenticate('jwt', {
 /**
  * Load input validators.
  */
+const validateUpdateUploadInput = require('./../validation/upload/updateUpload');
 
 const urlFriendyAlphabet =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -119,11 +119,11 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
 });
 
 /**
- * @route /upload/:upload_id
+ * @route /upload/:fileName
  * @method GET
  * @description Allows a logged in user to get basic details about a single uploaded image.
  */
-router.get('/:upload_id', async (req, res) => {
+router.get('/:fileName', async (req, res) => {
   try {
     const upload = await Upload.findOne({
       fileName: req.params.upload_id
@@ -153,6 +153,51 @@ router.get('/:upload_id', async (req, res) => {
   }
 });
 
+/**
+ * @route /upload/:fileName
+ * @method PUT
+ * @description Allows a logged in user to update the details of a single uploaded image.
+ */
+router.put('/:fileName', requireAuth, isSessionValid, async (req, res) => {
+  try {
+    const upload = await Upload.findOne({
+      fileName: req.params.fileName,
+      uploader: req.user.id
+    });
+
+    if (!upload) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'Upload not found.'
+      });
+    }
+
+    /**
+     * Validdate the user input for displayName and tags
+     */
+    const { codes, errors, isValid } = validateUpdateUploadInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json({ codes, errors });
+    }
+
+    const { displayName, tags } = req.body;
+
+    upload.displayName = displayName;
+    upload.tags = tags;
+    await upload.save();
+    res.status(200).json({
+      upload,
+      message: 'Upload updated.',
+      code: 'UPLOAD_UPDATED'
+    });
+  } catch (e) {
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
 /**
  * @route /upload/:upload_id/raw
  * @method GET

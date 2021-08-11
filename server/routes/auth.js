@@ -54,7 +54,7 @@ const activateAccountTemplate = require('../emails/auth/activate-account');
 router.post('/register', isRegistration, async (req, res) => {
   try {
     /**
-     * Validdate the user important for username,email,password
+     * Validdate the user input for username,email,password
      */
     const { codes, errors, isValid } = validateRegisterInput(req.body);
 
@@ -127,7 +127,7 @@ router.post('/register', isRegistration, async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     /**
-     * Validdate the user important for email,password.
+     * Validdate the user input for email,password.
      */
 
     const { codes, errors, isValid } = validateLoginInput(req.body);
@@ -251,7 +251,7 @@ router.post('/login', async (req, res) => {
 router.post('/two-factor', async (req, res) => {
   try {
     /**
-     * Validdate the user important for email,password.
+     * Validdate the user input for email,password.
      */
 
     const { errors, codes, isValid } = validateTwoFactorInput(req.body);
