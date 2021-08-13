@@ -107,44 +107,44 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
 /**
  * @route /3rd-party/upload
  * @method DELETE
- * @description Allows a logged in user to deletes an uploaded file using a 3rd-party client.
+ * @description Allows a user deletes an uploaded file using a 3rd-party client.
  */
 router.delete('/', isDeleteKeyValid, async (req, res) => {
   try {
     const { deleteKey } = req.body;
 
+    /**
+     * Check if uploaded file exists in database
+     */
     const upload = await Upload.findOne({ deleteKey });
 
     if (!upload) {
-      res.status(404).json({
+      return res.status(404).json({
         code: 'NOT_FOUND',
-        error: 'Upload not found.'
+        message: 'Upload not found.'
       });
     }
+
+    /**
+     * Check if uploaded file exists in public directory
+     */
     const filePath = `${path.join(__dirname, '../../public/uploads')}/${
       upload.uploader
-    }`;
+    }/${upload.fileName}${upload.fileExtension}`;
 
-    const file = `${filePath}/${upload.fileName}${upload.fileExtension}`;
-    try {
-      await fs.remove(file);
-    } catch (e) {
-      console.log(e);
-      res.status(500).json({
-        code: 'SERVER_ERROR',
-        error: 'Internal Server Error.'
+    const uploadFile = await fs.pathExists(filePath);
+
+    if (!uploadFile) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'Upload not found.'
       });
     }
-    try {
-      await upload.remove();
-    } catch (e) {
-      console.log(e);
-      res.status(500).json({
-        code: 'SERVER_ERROR',
-        error: 'Internal Server Error.'
-      });
-    }
-
+    /**
+     * If exists, delete the file
+     */
+    await fs.remove(filePath);
+    await upload.remove();
     res.status(200).json({
       code: 'REMOVED',
       message: `${upload.displayName} removed.`

@@ -244,8 +244,8 @@ router.delete('/:fileName', requireAuth, isSessionValid, async (req, res) => {
     await fs.remove(filePath);
     await upload.remove();
     res.status(200).json({
-      code: 'UPLOAD_DELETED',
-      message: 'Upload deleted.'
+      code: 'REMOVED',
+      message: `${upload.displayName} removed.`
     });
   } catch (e) {
     res.status(500).json({
