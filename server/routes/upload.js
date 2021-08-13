@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const { customAlphabet } = require('nanoid');
+const fs = require('fs-extra');
 const path = require('path');
 
 const router = express.Router();
@@ -198,6 +199,62 @@ router.put('/:fileName', requireAuth, isSessionValid, async (req, res) => {
     });
   }
 });
+
+/**
+ * @route /upload/:fileName
+ * @method DELETE
+ * @description Allows a logged in user to delete a single uploaded image.
+ */
+router.delete('/:fileName', requireAuth, isSessionValid, async (req, res) => {
+  try {
+    /**
+     * Check if uploaded file exists in database
+     */
+    const upload = await Upload.findOne({
+      uploader: req.user.id,
+      fileName: req.params.fileName
+    });
+
+    if (!upload) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'Upload not found.'
+      });
+    }
+
+    /**
+     * Check if uploaded file exists in public directory
+     */
+    const filePath = `${path.join(__dirname, '../public/uploads')}/${
+      req.user.id
+    }/${upload.fileName}${upload.fileExtension}`;
+
+    const uploadFile = await fs.pathExists(filePath);
+
+    if (!uploadFile) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'Upload not found.'
+      });
+    }
+
+    /**
+     * If exists, delete the file
+     */
+    await fs.remove(filePath);
+    await upload.remove();
+    res.status(200).json({
+      code: 'UPLOAD_DELETED',
+      message: 'Upload deleted.'
+    });
+  } catch (e) {
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
 /**
  * @route /upload/:upload_id/raw
  * @method GET
