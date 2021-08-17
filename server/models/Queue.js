@@ -13,6 +13,10 @@ const QueueSchema = new Schema({
     enum: ['delete', 'add', 'email'],
     required: true
   },
+  multi: {
+    type: Boolean,
+    default: false
+  },
   emailTemplete: {
     type: String,
     required: true
@@ -26,7 +30,10 @@ const QueueSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  desc: {
+  data: {
+    type: Schema.Types.Mixed
+  },
+  code: {
     type: String,
     required: true
   },

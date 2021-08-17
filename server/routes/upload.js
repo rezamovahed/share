@@ -10,6 +10,8 @@ const router = express.Router();
  * Load MongoDB models.
  */
 const Upload = require('../models/Upload');
+const User = require('../models/User');
+const Queue = require('../models/Queue');
 
 /**
  * Load middlewares
@@ -246,6 +248,54 @@ router.delete('/:fileName', requireAuth, isSessionValid, async (req, res) => {
     res.status(200).json({
       code: 'REMOVED',
       message: `${upload.displayName} removed.`
+    });
+  } catch (e) {
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
+/**
+ * @route /upload
+ * @method DELETE
+ * @description Allows a logged in user to delete multiple uploaded images.
+ */
+router.delete('/', requireAuth, isSessionValid, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'User not found.'
+      });
+    }
+    const isBeingProcessed = await Queue.findOne({
+      type: 'upload',
+      action: 'delete',
+      multi: { $ne: false },
+      from: req.user.id
+    });
+    if (isBeingProcessed) {
+      return res.status(400).json({
+        code: 'IN_PROGRESS',
+        message: 'Removing uploads in progress.  This may take a few mins.'
+      });
+    }
+    const newQueue = new Queue({
+      type: 'upload',
+      action: 'delete',
+      multi: true,
+      from: req.user.id,
+      code: 'REMOVE_ALL_UPLOADS'
+    });
+    await newQueue.save();
+
+    res.status(200).json({
+      code: 'REMOVE_ALL_UPLOADS',
+      message: 'Removing all uploads is in process.  This may take a few mins.'
     });
   } catch (e) {
     res.status(500).json({
