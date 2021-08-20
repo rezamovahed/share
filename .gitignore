@@ -43,6 +43,7 @@ NOTES.md
 *.iml
 modules.xml
 *.ipr
+yarn.lock
 
 # Folder config file
 Desktop.ini

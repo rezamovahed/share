@@ -10,7 +10,7 @@
   <% images.map((image, index) =>{ %>
   <%- (index % 4 == 0) ? `<div class="row ml-2 mr-2 justify-content-center">`: "" %>
   <div class="col-md-2 col-xs-12 gallery">
-    <a href="/view/<%= image.fileName %>">
+    <a href="/view/i/<%= image.fileName %>">
       <img class="img-thumbnail" src="/u/<%= image.fileName + image.fileExtension %>">
     </a>
     <form action="/admin/uploads/gallery/<%= image.fileName + image.fileExtension %>?_method=DELETE" method="POST">
