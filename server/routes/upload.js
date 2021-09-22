@@ -66,24 +66,30 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
     // Get the body
     const { stoage, displayName } = req.body;
 
-    // Get the files
     const { name, size, mimetype, mv } = req.files.file;
-
     const tags = JSON.parse(req.body.tags) || [];
+
     const extension = path.extname(name);
 
     // Create a random file name using nanoid
     const fileName = nanoid32();
-
     // Create a random delete key
     const deleteKey = nanoid32();
 
     switch (stoage) {
       default:
         // eslint-disable-next-line no-case-declarations
-        const filePath = `${path.join(__dirname, '../../public/uploads')}/${
+        const fileDirPath = `${path.join(__dirname, '../public/uploads')}/${
           req.user.id
-        }/${fileName}${extension}`;
+        }`;
+        // eslint-disable-next-line no-case-declarations
+        const exists = await fs.pathExists(fileDirPath);
+        if (!exists) {
+          fs.ensureDirSync(fileDirPath);
+        }
+
+        // eslint-disable-next-line no-case-declarations
+        const filePath = `${fileDirPath}/${fileName}${extension}`;
         // Move the file to a public directory in u folder for express
         await mv(filePath);
         break;
