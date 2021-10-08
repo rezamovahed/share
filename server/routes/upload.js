@@ -66,24 +66,30 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
     // Get the body
     const { stoage, displayName } = req.body;
 
-    // Get the files
     const { name, size, mimetype, mv } = req.files.file;
-
     const tags = JSON.parse(req.body.tags) || [];
+
     const extension = path.extname(name);
 
     // Create a random file name using nanoid
     const fileName = nanoid32();
-
     // Create a random delete key
     const deleteKey = nanoid32();
 
     switch (stoage) {
       default:
         // eslint-disable-next-line no-case-declarations
-        const filePath = `${path.join(__dirname, '../../public/uploads')}/${
+        const fileDirPath = `${path.join(__dirname, '../public/uploads')}/${
           req.user.id
-        }/${fileName}${extension}`;
+        }`;
+        // eslint-disable-next-line no-case-declarations
+        const exists = await fs.pathExists(fileDirPath);
+        if (!exists) {
+          fs.ensureDirSync(fileDirPath);
+        }
+
+        // eslint-disable-next-line no-case-declarations
+        const filePath = `${fileDirPath}/${fileName}${extension}`;
         // Move the file to a public directory in u folder for express
         await mv(filePath);
         break;
@@ -112,6 +118,54 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
         },
         deleteKey
       }
+    });
+  } catch (e) {
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
+/**
+ * @route /upload
+ * @method DELETE
+ * @description Allows a logged in user to delete multiple uploaded images.
+ */
+router.delete('/', requireAuth, isSessionValid, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        code: 'NOT_FOUND',
+        message: 'User not found.'
+      });
+    }
+    const isBeingProcessed = await Queue.findOne({
+      type: 'upload',
+      action: 'delete',
+      multi: { $ne: false },
+      from: req.user.id
+    });
+    if (isBeingProcessed) {
+      return res.status(400).json({
+        code: 'IN_PROGRESS',
+        message: 'Removing uploads in progress.  This may take a few mins.'
+      });
+    }
+    const newQueue = new Queue({
+      type: 'upload',
+      action: 'delete',
+      multi: true,
+      from: req.user.id,
+      code: 'REMOVE_ALL_UPLOADS'
+    });
+    await newQueue.save();
+
+    res.status(200).json({
+      code: 'REMOVE_ALL_UPLOADS',
+      message: 'Removing all uploads is in process.  This may take a few mins.'
     });
   } catch (e) {
     res.status(500).json({
@@ -248,54 +302,6 @@ router.delete('/:fileName', requireAuth, isSessionValid, async (req, res) => {
     res.status(200).json({
       code: 'REMOVED',
       message: `${upload.displayName} removed.`
-    });
-  } catch (e) {
-    res.status(500).json({
-      code: 'SERVER_ERROR',
-      error: 'Internal Server Error.'
-    });
-  }
-});
-
-/**
- * @route /upload
- * @method DELETE
- * @description Allows a logged in user to delete multiple uploaded images.
- */
-router.delete('/', requireAuth, isSessionValid, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(404).json({
-        code: 'NOT_FOUND',
-        message: 'User not found.'
-      });
-    }
-    const isBeingProcessed = await Queue.findOne({
-      type: 'upload',
-      action: 'delete',
-      multi: { $ne: false },
-      from: req.user.id
-    });
-    if (isBeingProcessed) {
-      return res.status(400).json({
-        code: 'IN_PROGRESS',
-        message: 'Removing uploads in progress.  This may take a few mins.'
-      });
-    }
-    const newQueue = new Queue({
-      type: 'upload',
-      action: 'delete',
-      multi: true,
-      from: req.user.id,
-      code: 'REMOVE_ALL_UPLOADS'
-    });
-    await newQueue.save();
-
-    res.status(200).json({
-      code: 'REMOVE_ALL_UPLOADS',
-      message: 'Removing all uploads is in process.  This may take a few mins.'
     });
   } catch (e) {
     res.status(500).json({
