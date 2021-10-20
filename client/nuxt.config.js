@@ -66,6 +66,8 @@ export default {
             'faLink',
             'faHdd',
             'faExternalLinkSquareAlt',
+            'faTrash',
+            'faEye',
           ],
         },
       },

@@ -40,7 +40,10 @@ const urlFriendyAlphabet =
  */
 router.get('/', requireAuth, isSessionValid, async (req, res) => {
   try {
-    const uploads = await Upload.find({ uploader: req.user.id });
+    const uploads = await Upload.find({ uploader: req.user.id }).populate({
+      path: 'uploader',
+      select: 'username'
+    });
 
     const totalUploads = uploads.length;
 
