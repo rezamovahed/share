@@ -9,6 +9,7 @@ const passport = require('passport');
 const expressip = require('express-ip');
 const userAgent = require('express-useragent');
 const fileUpload = require('express-fileupload');
+const cors = require('cors');
 const path = require('path');
 
 /**
@@ -24,10 +25,6 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useUnifiedTopology', true);
 mongoose.connect(process.env.DATABASE_URI, {
   useNewUrlParser: true
 });
@@ -49,16 +46,17 @@ app.use(compression());
 app.use(expressip().getIpInfoMiddleware);
 app.use(userAgent.express());
 
-// const corsOptions = {
-//   origin: [process.env.WEB_URI, process.env.API_URI]
-// };
-
 switch (process.env.NODE_ENV) {
   case 'production':
+    app.use(
+      cors({
+        origin: [process.env.WEB_URI, process.env.API_URI]
+      })
+    );
     app.use(logger('combined'));
-    // app.use(cors(corsOptions));
     app.enable('trust proxy');
     app.set('trust proxy', 1);
+
     break;
   case 'test':
     break;
