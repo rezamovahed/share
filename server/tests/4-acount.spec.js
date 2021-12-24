@@ -251,7 +251,7 @@ describe('💾 Account:', () => {
 
   it('should enable of two factor after initialize', done => {
     request(server)
-      .put('/account/two-factor')
+      .patch('/account/two-factor')
       .set('Authorization', `Bearer ${creds.extra.twoFactor.accessToken}`)
       .send({
         code: authenticator.generate(twoFactor.secret)

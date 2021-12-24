@@ -70,7 +70,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
     const { stoage, displayName } = req.body;
 
     const { name, size, mimetype, mv } = req.files.file;
-    const tags = JSON.parse(req.body.tags) || [];
+    const tags = req.body.tags ? JSON.parse(req.body.tags) : [];
 
     const extension = path.extname(name);
 
@@ -123,6 +123,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
       }
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'SERVER_ERROR',
       error: 'Internal Server Error.'
@@ -171,6 +172,7 @@ router.delete('/', requireAuth, isSessionValid, async (req, res) => {
       message: 'Removing all uploads is in process.  This may take a few mins.'
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'SERVER_ERROR',
       error: 'Internal Server Error.'
@@ -206,6 +208,7 @@ router.get('/:fileName', async (req, res) => {
       upload
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'SERVER_ERROR',
       error: 'Internal Server Error.'
@@ -252,6 +255,7 @@ router.put('/:fileName', requireAuth, isSessionValid, async (req, res) => {
       code: 'UPLOAD_UPDATED'
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'SERVER_ERROR',
       error: 'Internal Server Error.'
@@ -307,6 +311,7 @@ router.delete('/:fileName', requireAuth, isSessionValid, async (req, res) => {
       message: `${upload.displayName} removed.`
     });
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'SERVER_ERROR',
       error: 'Internal Server Error.'
@@ -336,6 +341,7 @@ router.get('/:upload_id/raw', async (req, res) => {
 
     res.status(200).sendFile(filePath);
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       code: 'SERVER_ERROR',
       error: 'Internal Server Error.'
