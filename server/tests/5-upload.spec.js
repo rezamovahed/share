@@ -7,7 +7,6 @@ const server = require('../index');
  * Load Configs
  */
 const testAccounts = require('./data/testAccounts.json');
-const { get } = require('../config/smtp');
 
 /**
  * Create a empty object for creds to be used later
