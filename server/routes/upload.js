@@ -187,8 +187,9 @@ router.delete('/', requireAuth, isSessionValid, async (req, res) => {
  */
 router.get('/:fileName', async (req, res) => {
   try {
+    const { fileName } = req.params;
     const upload = await Upload.findOne({
-      fileName: req.params.upload_id
+      fileName
     })
       .select(
         '-_id uploader fileName fileSize fileExtension fileType storgeURL displayName createdAt'
