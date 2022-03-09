@@ -132,7 +132,7 @@ router.post('/change-email', requireAuth, isSessionValid, async (req, res) => {
     const msg = {
       to: user.newEmail,
       from: `${process.env.EMAIL_FROM} <noreply@${process.env.EMAIL_DOMAIN}>`,
-      subject: `Veify your new email on ${process.env.SITE_TITLE}`,
+      subject: `Verify your new email on ${process.env.SITE_TITLE}`,
       html: emailTemplate.html
     };
 
@@ -321,7 +321,7 @@ router.put(
        * Device Details in a object
        */
       const device = {
-        os: req.useragent.os !== 'unknown' ? req.body.useragent.os : 'Other',
+        os: req.useragent.os !== 'unknown' ? req.useragent.os : 'Other',
         browser:
           req.useragent.browser !== 'unknown' ? req.useragent.browser : 'Other'
       };

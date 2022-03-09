@@ -204,8 +204,9 @@ router.post('/login', async (req, res) => {
           ? req.useragent.versioplatformn
           : 'unknown',
       os: req.useragent.os !== 'unknown' ? req.useragent.os : 'unknown',
-
-      isDev: req.useragent.browser === 'PostmanRuntime'
+      isDev:
+        req.useragent.browser === 'PostmanRuntime' ||
+        req.useragent.browser === 'Paw'
     };
 
     /**
@@ -315,6 +316,8 @@ router.post('/two-factor', async (req, res) => {
     /**
      * Device Details in a object
      */
+
+    console.log(isDev);
     const device = {
       browser:
         req.useragent.browser !== 'unknown' ? req.useragent.browser : 'unknown',
@@ -325,8 +328,9 @@ router.post('/two-factor', async (req, res) => {
           ? req.useragent.versioplatformn
           : 'unknown',
       os: req.useragent.os !== 'unknown' ? req.useragent.os : 'unknown',
-
-      isDev: req.useragent.browser === 'PostmanRuntime'
+      isDev:
+        req.useragent.browser === 'PostmanRuntime' ||
+        req.useragent.browser === 'Paw'
     };
 
     /**
@@ -421,7 +425,9 @@ router.post('/refresh', isRefreshValid, async (req, res) => {
           : 'unknown',
       os: req.useragent.os !== 'unknown' ? req.useragent.os : 'unknown',
 
-      isDev: req.useragent.browser === 'PostmanRuntime'
+      isDev:
+        req.useragent.browser === 'PostmanRuntime' ||
+        req.useragent.browser === 'Paw'
     };
 
     /**

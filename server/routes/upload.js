@@ -150,26 +150,35 @@ router.delete('/', requireAuth, isSessionValid, async (req, res) => {
       type: 'upload',
       action: 'delete',
       multi: { $ne: false },
-      from: req.user.id
+      to: req.user.id
     });
     if (isBeingProcessed) {
-      return res.status(400).json({
+      return res.status(202).json({
         code: 'IN_PROGRESS',
-        message: 'Removing uploads in progress.  This may take a few mins.'
+        message:
+          'Removal of all uploads is in progress.  This may tale some time.'
       });
     }
+
+    /**
+     *  TODO Create email templete for this
+     */
+    const emailTemplete = '<h1>Hello</h1>';
+
     const newQueue = new Queue({
       type: 'upload',
       action: 'delete',
       multi: true,
-      from: req.user.id,
+      emailTemplete,
+      to: req.user.id,
       code: 'REMOVE_ALL_UPLOADS'
     });
     await newQueue.save();
 
     res.status(200).json({
-      code: 'REMOVE_ALL_UPLOADS',
-      message: 'Removing all uploads is in process.  This may take a few mins.'
+      code: 'PENDING_REMOVAL',
+      message:
+        'Removal of all uploads is now in pending.  This may take a few mins.'
     });
   } catch (e) {
     console.log(e);
