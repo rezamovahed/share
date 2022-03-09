@@ -21,14 +21,10 @@ const QueueSchema = new Schema({
     type: String,
     required: true
   },
-  from: {
+  to: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  },
-  to: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
   },
   data: {
     type: Schema.Types.Mixed
