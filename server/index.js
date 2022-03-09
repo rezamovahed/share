@@ -40,7 +40,6 @@ app.use(lusca.xssProtection(true));
 lusca.referrerPolicy('same-origin');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.set('etag', false);
 app.use(helmet());
 app.use(compression());
 app.use(expressip().getIpInfoMiddleware);

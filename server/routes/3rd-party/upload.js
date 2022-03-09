@@ -60,14 +60,19 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
     switch (stoage) {
       default:
         // eslint-disable-next-line no-case-declarations
-        const filePath = `${path.join(__dirname, '../../public/uploads')}/${
+        const fileDirPath = `${path.join(__dirname, '../../public/uploads')}/${
           req.user.id
         }`;
-        if (!fs.existsSync(filePath)) {
-          fs.mkdirSync(filePath);
+
+        // eslint-disable-next-line no-case-declarations
+        const exists = await fs.pathExists(fileDirPath);
+
+        if (!exists) {
+          fs.ensureDirSync(fileDirPath);
         }
+
         // Move the file to a public directory in u folder for express
-        await mv(`${filePath}/${fileName}${extension}`);
+        await mv(`${fileDirPath}/${fileName}${extension}`);
         break;
     }
 

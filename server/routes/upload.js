@@ -87,6 +87,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
         }`;
         // eslint-disable-next-line no-case-declarations
         const exists = await fs.pathExists(fileDirPath);
+
         if (!exists) {
           fs.ensureDirSync(fileDirPath);
         }
