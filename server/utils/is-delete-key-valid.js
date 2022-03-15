@@ -3,24 +3,24 @@ const dayjs = require('dayjs');
 const Upload = require('../models/Upload');
 
 /**
- * @deleteKey String delete key for share
+ * @deleteToken String delete key for share
  * @type String valid types are 'upload' and 'link'
  */
 
-module.exports = async (deleteKey, type) => {
+module.exports = async (deleteToken, type) => {
   try {
-    let isDeleteKeyValid;
+    let isdeleteTokenValid;
 
     /**
      * Check if the delete key is valid depending on share type
      */
     if (type === 'upload') {
-      isDeleteKeyValid = await Upload.findOne({
-        deleteKey
+      isdeleteTokenValid = await Upload.findOne({
+        deleteToken
       });
     }
 
-    if (isDeleteKeyValid) {
+    if (isdeleteTokenValid) {
       return true;
     }
     return false;

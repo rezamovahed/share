@@ -34,7 +34,7 @@ const UploadSchema = new Schema(
       default: 'file'
     },
     tags: [{ type: String }],
-    deleteKey: {
+    deleteToken: {
       type: String,
       required: true
     }

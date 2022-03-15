@@ -56,7 +56,7 @@ curl --location --request POST 'https://www.example.com/api/3rd-party/upload' \
       "file": "https://www.example.com/u/Pp1j8pY5VpBMErLBPU1MkeJ6RAr7IqEs",
       "delete": "https://www.example.com/u/Pp1j8pY5VpBMErLBPU1MkeJ6RAr7IqEs/delete?key=Y0cujJIIppZjZU9UtP7FApD2fH7YyZ1T"
     },
-    "deleteKey": "Y0cujJIIppZjZU9UtP7FApD2fH7YyZ1T"
+    "deleteToken": "Y0cujJIIppZjZU9UtP7FApD2fH7YyZ1T"
   }
 }
 ```
@@ -80,9 +80,9 @@ Allows a logged in user to deletes an uploaded file using a 3rd-party client.
 
 #### Body
 
-| Field     | Type   | Description                                        |
-| :-------- | :----- | :------------------------------------------------- |
-| deleteKey | string | Storge location (Note this must be local for now). |
+| Field       | Type   | Description                                        |
+| :---------- | :----- | :------------------------------------------------- |
+| deleteToken | string | Storge location (Note this must be local for now). |
 
 #### Example
 
@@ -91,7 +91,7 @@ Allows a logged in user to deletes an uploaded file using a 3rd-party client.
 
 ```sh
 curl --location --request DELETE 'https://www.example.com/api/3rd-party/upload' \
---data-urlencode'deleteKey="Y0cujJIIppZjZU9UtP7FApD2fH7YyZ1T"'
+--data-urlencode'deleteToken="Y0cujJIIppZjZU9UtP7FApD2fH7YyZ1T"'
 ```
 
   </code-block>

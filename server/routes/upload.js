@@ -77,7 +77,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
     // Create a random file name using nanoid
     const fileName = nanoid32();
     // Create a random delete key
-    const deleteKey = nanoid32();
+    const deleteToken = nanoid32();
 
     switch (stoage) {
       default:
@@ -87,6 +87,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
         }`;
         // eslint-disable-next-line no-case-declarations
         const exists = await fs.pathExists(fileDirPath);
+
         if (!exists) {
           fs.ensureDirSync(fileDirPath);
         }
@@ -104,7 +105,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
       fileExtension: extension,
       fileName,
       fileType: mimetype,
-      deleteKey,
+      deleteToken,
       fileSize: size,
       tags
     });
@@ -117,9 +118,9 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
         tags,
         url: {
           file: `${process.env.WEB_URL}/u/${fileName}`,
-          delete: `${process.env.WEB_URL}/u/${fileName}/delete?key=${deleteKey}`
+          delete: `${process.env.WEB_URL}/u/${fileName}/delete?key=${deleteToken}`
         },
-        deleteKey
+        deleteToken
       }
     });
   } catch (e) {

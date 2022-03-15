@@ -1,12 +1,15 @@
-const isDeleteKeyValid = require('../../../utils/is-delete-key-valid');
+const isdeleteTokenValid = require('../../../utils/is-delete-key-valid');
 
 module.exports = async (req, res, next) => {
   try {
-    const deleteKeyValid = await isDeleteKeyValid(req.body.deleteKey, 'upload');
+    const deleteTokenValid = await isdeleteTokenValid(
+      req.body.deleteToken,
+      'upload'
+    );
     /**
      * If it's valid then move on.
      */
-    if (deleteKeyValid) {
+    if (deleteTokenValid) {
       return next();
     }
     res.status(401).send('Unauthorized');
