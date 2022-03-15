@@ -16,7 +16,7 @@ const Upload = require('../../models/Upload');
  * Load middlewares
  */
 const isAPIKeyValid = require('../../middleware/3rd-party/isAPIKeyValid');
-const isDeleteKeyValid = require('../../middleware/3rd-party/upload/isDeleteKeyValid');
+const isDeleteTokenValid = require('../../middleware/3rd-party/upload/isDeleteTokenValid');
 
 /**
  * Require authentication middleware.
@@ -55,7 +55,7 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
     const fileName = nanoid32();
 
     // Create a random delete key
-    const deleteKey = nanoid32();
+    const deleteToken = nanoid32();
 
     switch (stoage) {
       default:
@@ -82,7 +82,7 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
       fileExtension: extension,
       fileName,
       fileType: mimetype,
-      deleteKey,
+      deleteToken,
       fileSize: size,
       tags
     });
@@ -95,9 +95,9 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
         tags,
         url: {
           file: `${process.env.WEB_URL}/u/${fileName}`,
-          delete: `${process.env.WEB_URL}/u/${fileName}/delete?key=${deleteKey}`
+          delete: `${process.env.WEB_URL}/u/${fileName}/delete?key=${deleteToken}`
         },
-        deleteKey
+        deleteToken
       }
     });
   } catch (e) {
@@ -110,18 +110,19 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
 });
 
 /**
- * @route /3rd-party/upload
+ * @route /3rd-party/upload/upload_id
  * @method DELETE
  * @description Allows a user deletes an uploaded file using a 3rd-party client.
  */
-router.delete('/', isDeleteKeyValid, async (req, res) => {
+router.delete('/:upload_id', async (req, res) => {
   try {
-    const { deleteKey } = req.body;
-
     /**
      * Check if uploaded file exists in database
      */
-    const upload = await Upload.findOne({ deleteKey });
+    const upload = await Upload.findOne({
+      _id: req.params.upload_id,
+      deleteKey: req.body.deleteKey
+    });
 
     if (!upload) {
       return res.status(404).json({
