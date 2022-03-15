@@ -88,7 +88,7 @@ curl --location --request GET 'https://www.example.com/api/upload/SAwU6IeByvSWzt
       "file": "http://localhost:3000/u/SAwU6IeByvSWztvrqIGlvCkRtxzrtQWL",
       "delete": "http://localhost:3000/u/SAwU6IeByvSWztvrqIGlvCkRtxzrtQWL/delete?key=VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
     },
-    "deleteKey": "VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
+    "deleteToken": "VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
   }
 }
 ```
@@ -181,7 +181,7 @@ curl -X "POST" "http://localhost:8080/upload" \
       "file": "http://localhost:3000/u/SAwU6IeByvSWztvrqIGlvCkRtxzrtQWL",
       "delete": "http://localhost:3000/u/SAwU6IeByvSWztvrqIGlvCkRtxzrtQWL/delete?key=VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
     },
-    "deleteKey": "VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
+    "deleteToken": "VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
   }
 }
 ```
@@ -316,7 +316,7 @@ curl -X "PUT" "http://localhost:8080/upload" \
       "file": "http://localhost:3000/u/SAwU6IeByvSWztvrqIGlvCkRtxzrtQWL",
       "delete": "http://localhost:3000/u/SAwU6IeByvSWztvrqIGlvCkRtxzrtQWL/delete?key=VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
     },
-    "deleteKey": "VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
+    "deleteToken": "VzYzkRfRBkiGL4GPEEDIxO8oAUc3OSZT"
   },
   "message": "Upload updated.",
   "code": "UPLOAD_UPDATED"
