@@ -10,10 +10,10 @@
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.14.8",
-    "@nuxt/content-theme-docs": "0.8.2",
-    "caniuse-lite": "^1.0.30001303",
-    "nuxt": "2.15.7"
+    "@babel/preset-env": "^7.16.11",
+    "@nuxt/content-theme-docs": "0.11.1",
+    "caniuse-lite": "^1.0.30001327",
+    "nuxt": "2.15.8"
   },
   "devDependencies": {
     "push-dir": "^0.4.1"
