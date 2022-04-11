@@ -317,7 +317,6 @@ router.post('/two-factor', async (req, res) => {
      * Device Details in a object
      */
 
-    console.log(isDev);
     const device = {
       browser:
         req.useragent.browser !== 'unknown' ? req.useragent.browser : 'unknown',
