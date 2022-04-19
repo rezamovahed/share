@@ -1,5 +1,3 @@
-const dayjs = require('dayjs');
-
 const Upload = require('../models/Upload');
 
 /**

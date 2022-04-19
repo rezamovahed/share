@@ -48,7 +48,8 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
     // Get the files
     const { name, size, mimetype, mv } = req.files.file;
 
-    const tags = JSON.parse(req.body.tags) || [];
+    const tags = !req.body.tags ? [] : JSON.parse(req.body.tags);
+
     const extension = path.extname(name);
 
     // Create a random file name using nanoid
@@ -91,6 +92,7 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
     res.status(201).json({
       file: {
         name: fileName,
+        displayName: displayName || fileName,
         size,
         tags,
         url: {
@@ -114,13 +116,13 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
  * @method DELETE
  * @description Allows a user deletes an uploaded file using a 3rd-party client.
  */
-router.delete('/:upload_id', async (req, res) => {
+router.delete('/:upload_id', isDeleteTokenValid, async (req, res) => {
   try {
     /**
      * Check if uploaded file exists in database
      */
     const upload = await Upload.findOne({
-      _id: req.params.upload_id,
+      id: req.params.upload_id,
       deleteKey: req.body.deleteKey
     });
 
