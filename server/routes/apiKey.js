@@ -56,7 +56,7 @@ router.get('/', requireAuth, isSessionValid, async (req, res) => {
 router.get('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
   try {
     const apiKey = await APIKey.findOne({
-      _id: req.params.apikey_id,
+      id: req.params.apikey_id,
       user: req.user.id
     });
 
@@ -157,7 +157,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
 router.patch('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
   try {
     const apiKey = await APIKey.findOne({
-      _id: req.params.apikey_id,
+      id: req.params.apikey_id,
       user: req.user.id
     });
 
@@ -192,7 +192,7 @@ router.patch('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
 router.delete('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
   try {
     const apiKey = await APIKey.findOne({
-      _id: req.params.apikey_id,
+      id: req.params.apikey_id,
       user: req.user.id
     });
 
