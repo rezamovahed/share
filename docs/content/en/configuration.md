@@ -115,6 +115,32 @@ IP=127.0.0.1
 PORT=8080
 ```
 
+### Dev SMTP
+
+```yaml
+# Enable/Disable dev based local SMTP server
+DEV_SMTP=false
+```
+
+### Custom Dev SMTP Settings
+
+```yaml
+# Enable/Disable dev based local SMTP server
+CUSTOM_SMTP=true
+
+# Custom SMTP server
+CUSTOM_SMTP_IP=127.0.0.1
+CUSTOM_SMTP_PORT=587
+```
+
+### Mailtrap
+
+```yaml
+# Setup mailtrap.io for development emails make sure you disable the CUSTOM_SMTP env variable
+MAILTRAP_USERNAME=
+MAILTRAP_PASSWORD=
+```
+
 ## Client
 
 ### Site Title
