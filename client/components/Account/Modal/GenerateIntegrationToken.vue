@@ -27,65 +27,19 @@
       "
       @click.stop
     >
-      <form @submit.prevent="userDisableTwoFactor">
+      <form>
         <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
           <div class="sm:flex sm:items-start">
-            <div
-              class="
-                flex
-                items-center
-                justify-center
-                flex-shrink-0
-                w-12
-                h-12
-                mx-auto
-                rounded-full
-                bg-primary-100
-                sm:mx-0 sm:h-10 sm:w-10
-              "
-            >
-              <fa :icon="['fas', 'unlock']" class="w-6 h-6 text-primary-600" />
-            </div>
-            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+            <div class="my-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
               <div>
                 <h3 class="text-xl font-medium leading-6 text-primary-500">
-                  Disable Two Factor
+                  Generate a token for a 3rd party ingeration
                 </h3>
               </div>
               <div class="my-3">
-                <label
-                  for="twoFactorPassword"
+                <p
                   class="block my-2 text-sm font-medium leading-5 text-gray-700"
-                >
-                  Please verify your two factor code before two factor can be
-                  disabled
-                </label>
-                <input
-                  id="twoFactorCode"
-                  v-model="twoFactor.code"
-                  type="text"
-                  :class="{
-                    'border-red-500': twoFactor.errors.code,
-                  }"
-                  class="
-                    block
-                    w-full
-                    px-3
-                    py-2
-                    mt-1
-                    transition
-                    duration-150
-                    ease-in-out
-                    border border-gray-300
-                    rounded-md
-                    shadow-sm
-                    focus:outline-none focus:ring-blue focus:border-blue-300
-                    sm:text-sm sm:leading-5
-                  "
-                />
-                <span v-if="twoFactor.errors.code" class="text-red-500">{{
-                  twoFactor.errors.code
-                }}</span>
+                ></p>
               </div>
             </div>
           </div>
@@ -114,7 +68,7 @@
                   focus:outline-none focus:ring
                 "
               >
-                Disable
+                Comfirm
               </button>
             </span>
             <span
@@ -143,8 +97,8 @@
                   focus:outline-none focus:border-blue-300 focus:ring
                   sm:text-sm sm:leading-5
                 "
-                @click="toggleTwoFactorModal"
-                @keydown.esc="hideTwoFactorModal"
+                @click.prevent="hideGenerateIntegrationTokenModal"
+                @keydown.esc="hideGenerateIntegrationTokenModal"
               >
                 Cancel
               </button>
@@ -158,21 +112,13 @@
 
 <script>
 export default {
-  data() {
-    return {
-      twoFactor: {
-        code: '',
-        errors: {
-          code: null,
-        },
-      },
-    }
-  },
   mounted() {
+    this.popupItem = this.$refs.background
+
     const close = (e) => {
       const ESC = 27
       if (e.keyCode !== ESC) return
-      this.hideTwoFactorModal()
+      this.hideRevokeAllSessionsModal()
     }
     this.scrollPosition = window.pageYOffset
 
@@ -202,61 +148,18 @@ export default {
     })
   },
   methods: {
-    async toggleTwoFactorModal() {
-      await this.$store.dispatch('account/TOGGLE_SHOW_DISABLE_TWO_FACTOR_MODAL')
+    async toggleGenerateIntegrationTokenModal() {
+      await this.$store.dispatch(
+        'account/TOGGLE_SHOW_GENERATE_INTERGRATION_MODAL'
+      )
     },
-    async hideTwoFactorModal() {
+    async hideGenerateIntegrationTokenModal() {
       await this.$store.commit(
-        'account/SET_SHOW_DISABLE_TWO_FACTOR_MODAL',
+        'account/SET_SHOW_GENERATE_INTERGRATION_MODAL',
         false
       )
       await this.$store.commit('account/SET_MESSAGE_SUCCESS', null)
       await this.$store.commit('account/SET_MESSAGE_ERROR', null)
-    },
-    async userDisableTwoFactor() {
-      try {
-        await this.$store.dispatch(
-          'account/DISABLE_TWO_FACTOR',
-          this.twoFactor.code
-        )
-
-        if (this.$store.state.account.messages.success) {
-          await this.$auth.fetchUser()
-
-          await this.$store.commit(
-            'account/SET_SHOW_DISABLE_TWO_FACTOR_MODAL',
-            false
-          )
-
-          return this.$toast.success(
-            this.$store.state.account.messages.success,
-            {
-              position: 'bottom-right',
-            }
-          )
-        }
-
-        if (this.$store.state.account.messages.errors) {
-          if (this.$store.state.account.messages.errors.code) {
-            this.twoFactor.errors.code =
-              this.$store.state.account.messages.errors.code
-          }
-          return
-        }
-
-        if (this.$store.state.account.messages.error) {
-          return this.$toast.error(this.$store.state.account.messages.error, {
-            position: 'bottom-right',
-          })
-        }
-        this.$toast.error('Oops.. Something Went Wrong..', {
-          position: 'bottom-right',
-        })
-      } catch (e) {
-        this.$toast.error('Oops.. Something Went Wrong..', {
-          position: 'bottom-right',
-        })
-      }
     },
   },
 }

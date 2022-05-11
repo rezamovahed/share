@@ -128,10 +128,11 @@
                     text-gray-400
                     rounded-md
                     bg-gray-50
-                    hover:text-gray-500
-                    hover:bg-gray-100 hover:bg-opacity-75
+                    hover:text-gray-500 hover:bg-gray-100 hover:bg-opacity-75
                     focus:outline-none
-                    focus:ring-2 focus:ring-inset focus:ring-primary-500
+                    focus:ring-2
+                    focus:ring-inset
+                    focus:ring-primary-500
                   "
                   x-bind:aria-expanded="open"
                   aria-haspopup="true"
@@ -181,6 +182,7 @@
           >
             <span class="inline-flex rounded-md shadow">
               <nuxt-link
+                v-if="!loggedIn"
                 to="/login"
                 class="
                   inline-flex
@@ -197,6 +199,25 @@
                 "
               >
                 Log in
+              </nuxt-link>
+              <nuxt-link
+                v-else
+                to="/dashboard"
+                class="
+                  inline-flex
+                  items-center
+                  px-4
+                  py-2
+                  text-base
+                  font-medium
+                  bg-white
+                  border border-transparent
+                  rounded-md
+                  text-primary-600
+                  hover:bg-gray-50
+                "
+              >
+                Dashboard
               </nuxt-link>
             </span>
           </div>
@@ -250,10 +271,11 @@
                     text-gray-400
                     bg-white
                     rounded-md
-                    hover:text-gray-500
-                    hover:bg-gray-100
+                    hover:text-gray-500 hover:bg-gray-100
                     focus:outline-none
-                    focus:ring-2 focus:ring-inset focus:ring-primary-500
+                    focus:ring-2
+                    focus:ring-inset
+                    focus:ring-primary-500
                   "
                   type="button"
                   @click="mobileNavActive = false"
@@ -294,8 +316,7 @@
                     font-medium
                     text-gray-700
                     rounded-md
-                    hover:text-gray-900
-                    hover:bg-gray-50
+                    hover:text-gray-900 hover:bg-gray-50
                   "
                   role="menuitem"
                   >Product</a
@@ -350,9 +371,7 @@
               mt-3
               text-base text-gray-500
               sm:text-lg
-              md:mt-5
-              md:text-xl
-              md:max-w-3xl
+              md:mt-5 md:text-xl md:max-w-3xl
               dark:text-gray-200
             "
           >
@@ -361,6 +380,7 @@
           <div class="max-w-md mx-auto mt-5 sm:flex sm:justify-center md:mt-8">
             <div class="rounded-md shadow">
               <nuxt-link
+                v-if="!loggedIn"
                 to="/signup"
                 class="
                   flex
@@ -376,12 +396,31 @@
                   rounded-md
                   bg-primary-600
                   hover:bg-primary-700
-                  md:py-4
-                  md:text-lg
-                  md:px-10
+                  md:py-4 md:text-lg md:px-10
                 "
               >
                 Get started
+              </nuxt-link>
+              <nuxt-link
+                to="/dashboard"
+                class="
+                  flex
+                  items-center
+                  justify-center
+                  w-full
+                  px-8
+                  py-3
+                  text-base
+                  font-medium
+                  text-white
+                  border border-transparent
+                  rounded-md
+                  bg-primary-600
+                  hover:bg-primary-700
+                  md:py-4 md:text-lg md:px-10
+                "
+              >
+                Dashboard
               </nuxt-link>
             </div>
             <div
@@ -404,9 +443,7 @@
                   rounded-md
                   text-primary-600
                   hover:bg-gray-50
-                  md:py-4
-                  md:text-lg
-                  md:px-10
+                  md:py-4 md:text-lg md:px-10
                 "
               >
                 {{ $config.landing.button.text }}
@@ -437,9 +474,7 @@
           mx-auto
           max-w-7xl
           sm:px-6
-          md:flex
-          md:items-center
-          md:justify-between
+          md:flex md:items-center md:justify-between
           lg:px-8
         "
       >
@@ -461,10 +496,11 @@
               rounded-md
               shadow-sm
               bg-primary-100
-              hover:bg-primary-400
-              hover:text-white
+              hover:bg-primary-400 hover:text-white
               focus:outline-none
-              focus:ring-2 focus:ring-offset-2 focus:ring-primary-500
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-primary-500
             "
             @click="
               $colorMode.value === 'dark'
@@ -511,6 +547,11 @@ export default {
     links: [],
   }),
 
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.loggedIn
+    },
+  },
   methods: {
     mobileNavToggle() {
       this.mobileNavActive = !this.mobileNavActive

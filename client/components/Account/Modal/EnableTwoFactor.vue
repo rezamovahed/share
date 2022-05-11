@@ -3,15 +3,13 @@
     role="dialog"
     aria-modal="true"
     class="
+      z-20
       fixed
       inset-x-0
       bottom-0
       px-4
       pb-4
-      sm:inset-0
-      sm:flex
-      sm:items-center
-      sm:justify-center
+      sm:inset-0 sm:flex sm:items-center sm:justify-center
     "
   >
     <div class="fixed inset-0">
@@ -25,8 +23,7 @@
         bg-white
         rounded-lg
         shadow-xl
-        sm:max-w-lg
-        sm:w-full
+        sm:max-w-lg sm:w-full
       "
       @click.stop
     >
@@ -53,9 +50,7 @@
                 mx-auto
                 rounded-full
                 bg-primary-100
-                sm:mx-0
-                sm:h-10
-                sm:w-10
+                sm:mx-0 sm:h-10 sm:w-10
               "
             >
               <fa :icon="['fas', 'lock']" class="w-6 h-6 text-primary-600" />
@@ -94,12 +89,8 @@
                       overflow-hidden
                       font-semibold
                       text-center text-black
-                      sm:my-1
-                      sm:px-1
-                      sm:w-1/2
-                      md:my-1
-                      md:px-1
-                      md:w-1/2
+                      sm:my-1 sm:px-1 sm:w-1/2
+                      md:my-1 md:px-1 md:w-1/2
                       lg:w-1/2
                     "
                   >
@@ -125,11 +116,8 @@
                     rounded-md
                     shadow-sm
                     hover:text-gray-500
-                    focus:outline-none
-                    focus:border-blue-300
-                    focus:ring
-                    sm:text-sm
-                    sm:leading-5
+                    focus:outline-none focus:border-blue-300 focus:ring
+                    sm:text-sm sm:leading-5
                   "
                   @click.prevent="downloadTwoFactorBackupCodes"
                 >
@@ -168,11 +156,8 @@
                       rounded-md
                       shadow-sm
                       hover:text-gray-500
-                      focus:outline-none
-                      focus:border-blue-300
-                      focus:ring
-                      sm:text-sm
-                      sm:leading-
+                      focus:outline-none focus:border-blue-300 focus:ring
+                      sm:text-sm sm:leading-
                     "
                     @click.prevent="toggleTwoFactorSecret"
                   >
@@ -182,6 +167,7 @@
                     <span
                       v-if="showTwoFactorSecret"
                       class="
+                        py-2
                         block
                         w-full
                         transition
@@ -189,11 +175,8 @@
                         ease-in-out
                         border-gray-300
                         rounded-none
-                        focus:ring-indigo-500
-                        focus:border-indigo-500
-                        sm:max-w-xs
-                        sm:text-sm
-                        sm:leading-5
+                        focus:ring-indigo-500 focus:border-indigo-500
+                        sm:max-w-xs sm:text-sm sm:leading-5
                       "
                     >
                       {{ $store.state.account.twoFactorSecret }}
@@ -229,11 +212,8 @@
                     border border-gray-300
                     rounded-md
                     shadow-sm
-                    focus:outline-none
-                    focus:ring-blue
-                    focus:border-blue-300
-                    sm:text-sm
-                    sm:leading-5
+                    focus:outline-none focus:ring-blue focus:border-blue-300
+                    sm:text-sm sm:leading-5
                   "
                 />
                 <span
@@ -266,8 +246,7 @@
                   order-transparent
                   bg-primary-600
                   hover:bg-primary-500
-                  focus:outline-none
-                  focus:ring
+                  focus:outline-none focus:ring
                 "
               >
                 Enable
@@ -296,11 +275,8 @@
                   rounded-md
                   shadow-sm
                   hover:text-gray-500
-                  focus:outline-none
-                  focus:border-blue-300
-                  focus:ring
-                  sm:text-sm
-                  sm:leading-5
+                  focus:outline-none focus:border-blue-300 focus:ring
+                  sm:text-sm sm:leading-5
                 "
                 @click="toggleTwoFactorModal"
                 @keydown.esc="hideTwoFactorModal"

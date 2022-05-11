@@ -68,6 +68,7 @@ export default {
             'faExternalLinkSquareAlt',
             'faTrash',
             'faEye',
+            'faPlus',
           ],
         },
       },

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <portal-target name="account"></portal-target>
     <div
       class="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900"
       @keydown.escape="sidebarHide"
@@ -39,7 +40,9 @@
               text-gray-400
               border-r border-gray-200
               focus:outline-none
-              focus:ring-2 focus:ring-inset focus:ring-indigo-500
+              focus:ring-2
+              focus:ring-inset
+              focus:ring-indigo-500
               md:hidden
             "
             @click.stop="sidebarShow"
@@ -49,14 +52,13 @@
           </button>
           <div
             class="
+              z-10
               flex
               justify-between
               flex-1
               px-4
               sm:px-6
-              lg:max-w-6xl
-              lg:mx-auto
-              lg:px-8
+              lg:max-w-6xl lg:mx-auto lg:px-8
             "
           >
             <div class="flex items-center justify-end flex-1 ml-4 md:ml-6">
@@ -103,6 +105,10 @@ export default {
         {
           url: '/account/devices',
           text: 'Devices',
+        },
+        {
+          url: '/account/integration',
+          text: '3rd Party Integration',
         },
       ],
     }

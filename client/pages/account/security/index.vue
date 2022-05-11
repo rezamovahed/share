@@ -51,11 +51,8 @@
                       border border-gray-300
                       rounded-md
                       shadow-sm
-                      focus:outline-none
-                      focus:ring-blue
-                      focus:border-blue-300
-                      sm:text-sm
-                      sm:leading-5
+                      focus:outline-none focus:ring-blue focus:border-blue-300
+                      sm:text-sm sm:leading-5
                     "
                   />
                   <span
@@ -90,11 +87,8 @@
                       border border-gray-300
                       rounded-md
                       shadow-sm
-                      focus:outline-none
-                      focus:ring-blue
-                      focus:border-blue-300
-                      sm:text-sm
-                      sm:leading-5
+                      focus:outline-none focus:ring-blue focus:border-blue-300
+                      sm:text-sm sm:leading-5
                     "
                   />
                   <span
@@ -139,8 +133,7 @@
                             focus:outline-none
                             focus:border-green-300
                             focus:ring-blue
-                            active:bg-green-50
-                            active:text-green-800
+                            active:bg-green-50 active:text-green-800
                           "
                           @click.prevent="
                             toggleAccountModalEnableTwoFactorModal
@@ -169,8 +162,7 @@
                             focus:outline-none
                             focus:border-blue-300
                             focus:ring-blue
-                            active:bg-gray-50
-                            active:text-gray-800
+                            active:bg-gray-50 active:text-gray-800
                           "
                           @click.prevent="
                             toggleAccountModalDisableTwoFactorModal
@@ -208,8 +200,7 @@
                   rounded-md
                   bg-primary-600
                   hover:bg-primary-500
-                  focus:outline-none
-                  focus:border-primary-700
+                  focus:outline-none focus:border-primary-700
                 "
               >
                 Save
@@ -217,7 +208,7 @@
             </div>
           </div>
         </form>
-        <portal-target name="AccountModalEnableTwoFactor">
+        <portal to="account">
           <transition name="fade">
             <AccountModalEnableTwoFactor
               v-if="$store.state.account.showEnableTwoFactorModal"
@@ -226,7 +217,7 @@
               v-if="$store.state.account.showDisableTwoFactorModal"
             />
           </transition>
-        </portal-target>
+        </portal>
       </div>
     </div>
   </div>

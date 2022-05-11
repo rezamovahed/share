@@ -5,9 +5,7 @@
         <div
           class="
             py-6
-            md:flex
-            md:items-center
-            md:justify-between
+            md:flex md:items-center md:justify-between
             lg:border-t lg:border-gray-200
             dark:border-transparent
           "
@@ -23,8 +21,7 @@
                       font-bold
                       leading-7
                       text-gray-900
-                      sm:leading-9
-                      sm:truncate
+                      sm:leading-9 sm:truncate
                       dark:text-white
                     "
                   >
@@ -38,9 +35,7 @@
                   class="
                     flex flex-col
                     mt-6
-                    sm:ml-3
-                    sm:mt-1
-                    sm:flex-row sm:flex-wrap
+                    sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap
                   "
                 >
                   <dt class="sr-only">Role</dt>
@@ -92,8 +87,7 @@
                       font-medium
                       text-gray-500
                       capitalize
-                      sm:mr-6
-                      sm:mt-0
+                      sm:mr-6 sm:mt-0
                     "
                   >
                     <svg
@@ -132,8 +126,10 @@
                 shadow-sm
                 hover:bg-gray-50
                 focus:outline-none
-                focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-                dark:bg-grat-200
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-indigo-500
+                dark:bg-gray-200
               "
             >
               Quick Link
@@ -154,7 +150,9 @@
                 bg-primary-600
                 hover:bg-primary-700
                 focus:outline-none
-                focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-indigo-500
               "
             >
               Quick Upload

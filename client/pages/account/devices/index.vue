@@ -182,7 +182,7 @@
           </div>
         </div>
       </div>
-      <portal-target name="AccountModalRevokeAllDevices">
+      <portal-target name="destination">
         <transition name="fade">
           <AccountModalRevokeAllDevices
             v-if="$store.state.account.showRevokeAllSessionsModal"

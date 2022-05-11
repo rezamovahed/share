@@ -2,10 +2,12 @@ export const state = () => ({
   showEnableTwoFactorModal: false,
   showDisableTwoFactorModal: false,
   showRevokeAllSessionsModal: false,
+  showGenerateIntegrationTokenModal: false,
   twoFactorQrCode: null,
   twoFactorSecret: null,
   twofactorBackupCodes: [],
   sessions: [],
+  tokens: [],
   messages: {
     success: null,
     error: null,
@@ -18,7 +20,7 @@ export const state = () => ({
 
 export const actions = {
   async FETCH_SESSIONS({ commit }) {
-    const res = await this.$axios.$get('/api/account/sessions')
+    const res = await this.$axios.$get('/api/session')
     commit('SET_SESSIONS', res.sessions)
   },
   TOGGLE_SHOW_ENABLE_TWO_FACTOR_MODAL({ state, commit }) {
@@ -34,6 +36,12 @@ export const actions = {
     commit(
       'SET_SHOW_REVOKE_ALL_SESSIONS_MODAL',
       !state.showRevokeAllSessionsModal
+    )
+  },
+  TOGGLE_SHOW_GENERATE_INTERGRATION_MODAL({ state, commit }) {
+    commit(
+      'SET_SHOW_GENERATE_INTERGRATION_MODAL',
+      !state.showGenerateIntegrationTokenModal
     )
   },
   async SET_TWO_FACTOR_INITIALIZE({ commit }) {
@@ -139,6 +147,10 @@ export const actions = {
       commit('SET_MESSAGE_ERROR', e.response.data.code)
     }
   },
+  async FETCH_TOKENS({ commit }) {
+    const res = await this.$axios.$get('/api/apikey')
+    commit('SET_TOKENS', res.apiKeys)
+  },
 }
 
 export const mutations = {
@@ -153,6 +165,9 @@ export const mutations = {
   },
   SET_SHOW_REVOKE_ALL_SESSIONS_MODAL(state, status) {
     return (state.showRevokeAllSessionsModal = status)
+  },
+  SET_SHOW_GENERATE_INTERGRATION_MODAL(state, status) {
+    return (state.showGenerateIntegrationTokenModal = status)
   },
   SET_TWO_FACTOR_QR_CODE(state, qrCode) {
     return (state.twoFactorQrCode = qrCode)
@@ -171,6 +186,9 @@ export const mutations = {
   },
   SET_SIDEBAR_OPEN(state, boolean) {
     return (state.sidebarOpen = boolean)
+  },
+  SET_TOKENS(state, tokens) {
+    return (state.tokens = tokens)
   },
   SET_MESSAGE_SUCCESS: (state, success) => {
     return (state.messages.success = success)
