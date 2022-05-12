@@ -7,6 +7,8 @@ export const state = () => ({
   twoFactorSecret: null,
   twofactorBackupCodes: [],
   sessions: [],
+  newToken: null,
+  showToken: true,
   tokens: [],
   messages: {
     success: null,
@@ -151,6 +153,17 @@ export const actions = {
     const res = await this.$axios.$get('/api/apikey')
     commit('SET_TOKENS', res.apiKeys)
   },
+  async GENERATE_INTERGATION_TOKEN({ commit }) {
+    try {
+      const res = await this.$axios.$post('/api/apikey')
+      commit('SET_NEW_TOKEN', res.api_key)
+      commit('SET_MESSAGE_SUCCESS', 'Token generated successfully.')
+      commit('SET_MESSAGE_ERROR', null)
+    } catch (e) {
+      commit('SET_MESSAGE_SUCCESS', null)
+      commit('SET_MESSAGE_ERROR', e.response.data.code)
+    }
+  },
 }
 
 export const mutations = {
@@ -190,6 +203,13 @@ export const mutations = {
   SET_TOKENS(state, tokens) {
     return (state.tokens = tokens)
   },
+  SET_NEW_TOKEN(state, token) {
+    return (state.newToken = token)
+  },
+  SET_SHOW_TOKEN(state, status) {
+    return (state.showToken = status)
+  },
+
   SET_MESSAGE_SUCCESS: (state, success) => {
     return (state.messages.success = success)
   },
@@ -213,6 +233,15 @@ export const getters = {
   },
   SHOW_REVOKE_ALL_SESSIONS_MODAL: (state) => {
     return state.showRevokeAllSessionsModal
+  },
+  SHOW_GENERATE_INTERGRATION_MODAL: (state) => {
+    return state.showGenerateIntegrationTokenModal
+  },
+  SET_NEW_TOKEN: (state) => {
+    return state.newToken
+  },
+  SET_SHOW_TOKEN: (state) => {
+    return state.showToken
   },
   TWO_FACTOR_QR_CODE: (state) => {
     return state.twoFactorQrCode

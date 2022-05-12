@@ -13,8 +13,7 @@
                   font-bold
                   leading-7
                   text-white
-                  sm:text-3xl
-                  sm:truncate
+                  sm:text-3xl sm:truncate
                 "
               >
                 Manage Uploads
@@ -37,7 +36,9 @@
                   shadow-sm
                   hover:bg-gray-50
                   focus:outline-none
-                  focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-indigo-500
                   dark:bg-gray-200
                 "
               >
@@ -59,7 +60,9 @@
                   bg-primary-600
                   hover:bg-primary-700
                   focus:outline-none
-                  focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-indigo-500
                 "
               >
                 Publish
@@ -236,7 +239,7 @@
                           "
                         >
                           <fa
-                            :icon="['fas', 'external-link-square-alt']"
+                            :icon="['fas', 'arrow-up-right-from-square']"
                             class="text-lg text-white m-auto"
                           />
                         </button>
@@ -258,7 +261,9 @@
                             dark:bg-red-500
                             dark-hover:bg-red-400
                             focus:outline-none
-                            focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-red-500
                           "
                         >
                           <fa

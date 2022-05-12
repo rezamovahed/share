@@ -65,7 +65,7 @@ export default {
             'faCloudDownloadAlt',
             'faLink',
             'faHdd',
-            'faExternalLinkSquareAlt',
+            'faArrowUpRightFromSquare',
             'faTrash',
             'faEye',
             'faPlus',

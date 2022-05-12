@@ -154,7 +154,7 @@
                   sm:pl-6
                 "
               >
-                Name
+                Display Name
               </th>
               <th
                 scope="col"
@@ -168,7 +168,7 @@
                   lg:table-cell
                 "
               >
-                Title
+                Created
               </th>
               <th
                 scope="col"
@@ -182,27 +182,16 @@
                   sm:table-cell
                 "
               >
-                Email
+                Expire
               </th>
-              <th
-                scope="col"
-                class="
-                  px-3
-                  py-3.5
-                  text-left text-sm
-                  font-semibold
-                  text-gray-900
-                "
-              >
-                Role
-              </th>
+
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                 <span class="sr-only">Edit</span>
               </th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
-            <tr>
+            <tr v-for="(token, index) in tokens" :key="index">
               <td
                 class="
                   w-full
@@ -216,29 +205,67 @@
                   sm:w-auto sm:max-w-none sm:pl-6
                 "
               >
-                Lindsay Walton
+                {{ token.label }}
                 <dl class="font-normal lg:hidden">
-                  <dt class="sr-only">Title</dt>
+                  <dt class="sr-only">Created</dt>
                   <dd class="mt-1 truncate text-gray-700">
-                    Front-end Developer
+                    <time
+                      v-if="token.isNever"
+                      :datetime="$dayjs(token.createdAt).format('lll')"
+                      >{{ $dayjs(token.createdAt).format('lll') }}</time
+                    >
+                    <span v-else>Never</span>
                   </dd>
-                  <dt class="sr-only sm:hidden">Email</dt>
+                  <dt class="sr-only sm:hidden">Expire</dt>
                   <dd class="mt-1 truncate text-gray-500 sm:hidden">
-                    lindsay.walton@example.com
+                    <time :datetime="$dayjs(token.expireAt).format('lll')">{{
+                      $dayjs(token.expireAt).fromNow()
+                    }}</time>
                   </dd>
                 </dl>
               </td>
               <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                Front-end Developer
+                <time :datetime="$dayjs(token.createdAt).format('lll')">{{
+                  $dayjs(token.createdAt).format('lll')
+                }}</time>
               </td>
               <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                lindsay.walton@example.com
-              </td>
-              <td class="px-3 py-4 text-sm text-gray-500">Member</td>
-              <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                  >Edit<span class="sr-only">, Lindsay Walton</span></a
+                <time
+                  v-if="token.isNeer"
+                  :datetime="$dayjs(token.expireAt).format('lll')"
+                  >{{ $dayjs(token.expireAt).fromNow() }}</time
                 >
+                <span v-else>Never</span>
+              </td>
+              <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                <button
+                  type="button"
+                  class="
+                    inline-flex
+                    items-center
+                    px-2.5
+                    py-1.5
+                    border border-transparent
+                    text-xs
+                    font-medium
+                    rounded
+                    shadow-sm
+                    text-white
+                    bg-red-600
+                    hover:bg-red-700
+                    dark:bg-red-500
+                    dark-hover:bg-red-400
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-offset-2
+                    focus:ring-red-500
+                  "
+                >
+                  <fa
+                    :icon="['fas', 'trash']"
+                    class="text-lg text-white m-auto"
+                  />
+                </button>
               </td>
             </tr>
 
