@@ -74,13 +74,19 @@
 
               <div
                 type="text"
-                name="first-name"
-                id="first-name"
-                autocomplete="given-name"
-                class="block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md break-words"
+                name="newToken"
+                id="newToken"
+                class="block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-t-md break-words"
               >
                 {{ $store.state.account.newToken }}
               </div>
+              <button
+                @click.prevent="copyNewToken"
+                type="button"
+                class="w-full items-center px-4 py-2 border border-transparent text-sm font-medium rounded-b-sm shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Copy
+              </button>
             </div>
           </div>
 
@@ -202,17 +208,45 @@ export default {
           expires: this.expires,
         })
         if (this.$store.state.account.messages.error) {
-          return this.$toast.error(this.$store.state.account.messages.error, {
-            position: 'bottom-right',
-          })
+          return this.$toast.error(
+            this.$store.state.account.messages.error,
+            {
+              position: 'bottom-right',
+            },
+            5000
+          )
         }
         await this.$store.commit('account/SET_SHOW_TOKEN', true)
         await this.$store.dispatch('account/FETCH_TOKENS')
       } catch (e) {
         this.hideGenerateIntegrationTokenModal()
-        this.$toast.error('Oops.. Something Went Wrong..', {
-          position: 'bottom-right',
-        })
+        this.$toast.error(
+          'Oops.. Something Went Wrong..',
+          {
+            position: 'bottom-right',
+          },
+          5000
+        )
+      }
+    },
+    async copyNewToken() {
+      try {
+        await this.$copyText(this.$store.state.account.newToken)
+        await this.$toast.success(
+          'Integration Token Copied to Clipboard',
+          {
+            position: 'bottom-right',
+          },
+          5000
+        )
+      } catch (e) {
+        this.$toast.error(
+          'Oops.. Something Went Wrong..',
+          {
+            position: 'bottom-right',
+          },
+          5000
+        )
       }
     },
   },

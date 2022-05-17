@@ -111,7 +111,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
         expireAt = dayjs().add('7', 'd');
         expiresIn = '7d';
         break;
-      case 'M':
+      case 'month':
         expireAt = dayjs().add('1', 'M');
         expiresIn = '31d';
         break;

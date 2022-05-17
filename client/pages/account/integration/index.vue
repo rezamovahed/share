@@ -38,7 +38,6 @@
         </div>
       </div>
     </div>
-    <!-- This example requires Tailwind CSS v2.0+ -->
     <div v-if="tokens.length === 0" class="my-4 sm:my-6 lg:my-8 text-center">
       <h3 class="mt-2 text-sm font-medium text-gray-900">
         No integrations tokens
@@ -58,7 +57,6 @@
       </div>
     </div>
 
-    <!-- This example requires Tailwind CSS v2.0+ -->
     <div v-else class="my-4 sm:my-6 lg:my-8">
       <div
         class="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg"
@@ -149,8 +147,6 @@
                 </button>
               </td>
             </tr>
-
-            <!-- More people... -->
           </tbody>
         </table>
       </div>
@@ -178,9 +174,13 @@ export default {
     try {
       await store.dispatch('account/FETCH_TOKENS')
     } catch (e) {
-      this.$toast.error('Oops.. Something Went Wrong..', {
-        position: 'bottom-right',
-      })
+      this.$toast.error(
+        'Oops.. Something Went Wrong..',
+        {
+          position: 'bottom-right',
+        },
+        5000
+      )
     }
   },
   computed: {
@@ -210,24 +210,37 @@ export default {
         } else {
           switch (this.$store.state.account.messages.error) {
             case 'NOT_FOUND':
-              this.$toast.error('That token might be already revoked.', {
-                position: 'bottom-right',
-              })
+              this.$toast.error(
+                'That token might be already revoked.',
+                {
+                  position: 'bottom-right',
+                },
+                5000
+              )
               break
 
             default:
-              this.$toast.error('Oops.. Something Went Wrong..', {
-                position: 'bottom-right',
-              })
+              this.$toast.error(
+                'Oops.. Something Went Wrong..',
+                {
+                  position: 'bottom-right',
+                },
+                5000
+              )
               break
           }
         }
       } catch (e) {
-        this.$toast.error('Oops.. Something Went Wrong..', {
-          position: 'bottom-right',
-        })
+        this.$toast.error(
+          'Oops.. Something Went Wrong..',
+          {
+            position: 'bottom-right',
+          },
+          5000
+        )
       }
     },
+    async revokeAllTokens() {},
   },
 }
 </script>

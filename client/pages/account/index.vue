@@ -1,17 +1,6 @@
 <template>
   <div
-    class="
-      container
-      w-full
-      px-2
-      mx-auto
-      overflow-auto
-      shadow-md
-      md:px-8
-      bg-gray-50
-      lg:w-9/12
-      dark:bg-gray-200
-    "
+    class="container w-full px-2 mx-auto overflow-auto shadow-md md:px-8 bg-gray-50 lg:w-9/12 dark:bg-gray-200"
   >
     <div class="my-0 sm:my-5">
       <div class="mt-5 md:mt-0">
@@ -38,25 +27,7 @@
                   :class="{
                     'border-red-500': changeUsername.errors.username,
                   }"
-                  class="
-                    flex-1
-                    block
-                    w-full
-                    px-3
-                    py-2
-                    mt-1
-                    transition
-                    duration-150
-                    ease-in-out
-                    border border-gray-300
-                    rounded-md
-                    shadow-sm
-                    focus:outline-none
-                    focus:ring-blue
-                    focus:border-blue-300
-                    sm:text-sm
-                    sm:leading-5
-                  "
+                  class="flex-1 block w-full px-3 py-2 mt-1 transition duration-150 ease-in-out border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
                 />
               </div>
               <span
@@ -69,25 +40,7 @@
               <span class="inline-flex rounded-md shadow-sm">
                 <button
                   type="submit"
-                  class="
-                    inline-flex
-                    justify-center
-                    px-4
-                    py-2
-                    text-sm
-                    font-medium
-                    leading-5
-                    text-white
-                    transition
-                    duration-150
-                    ease-in-out
-                    border border-transparent
-                    rounded-md
-                    bg-primary-600
-                    hover:bg-primary-500
-                    focus:outline-none
-                    focus:border-primary-700
-                  "
+                  class="inline-flex justify-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out border border-transparent rounded-md bg-primary-600 hover:bg-primary-500 focus:outline-none focus:border-primary-700"
                 >
                   Save
                 </button>
@@ -133,7 +86,8 @@ export default {
                 `Your username has been changed to ${this.$auth.user.username}.`,
                 {
                   position: 'bottom-right',
-                }
+                },
+                5000
               )
               break
             default:
@@ -156,9 +110,13 @@ export default {
                     'Username must be between 3 and 28 characters long.'
                   break
                 default:
-                  this.$toast.error('Oops.. Something Went Wrong.', {
-                    position: 'bottom-right',
-                  })
+                  this.$toast.error(
+                    'Oops.. Something Went Wrong.',
+                    {
+                      position: 'bottom-right',
+                    },
+                    5000
+                  )
                   break
               }
             }
@@ -168,9 +126,13 @@ export default {
                 this.changeUsername.errors.username = `${this.changeUsername.username} is currently not available.`
                 break
               default:
-                this.$toast.error('Oops.. Something Went Wrong..', {
-                  position: 'bottom-right',
-                })
+                this.$toast.error(
+                  'Oops.. Something Went Wrong..',
+                  {
+                    position: 'bottom-right',
+                  },
+                  5000
+                )
                 break
             }
           }
