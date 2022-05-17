@@ -1,23 +1,20 @@
 <template>
   <div class="flex flex-col justify-center py-12 h-80 sm:px-6 lg:px-8">
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <SharedAlert v-if="error" type="danger" :message="error" class="mb-4" />
-      <SharedAlert
+      <SharedAlertBanner
+        v-if="error"
+        type="danger"
+        :message="error"
+        class="mb-4"
+      />
+      <SharedAlertBanner
         v-if="success"
         type="success"
         :message="success"
         class="mb-4"
       />
       <div
-        class="
-          px-4
-          py-8
-          bg-white
-          shadow
-          sm:rounded-lg
-          sm:px-10
-          dark:bg-gray-200
-        "
+        class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10 dark:bg-gray-200"
       >
         <Logo class="w-auto h-12 mx-auto text-primary-500 dark:text-white" />
 
@@ -33,14 +30,7 @@
           <div>
             <label
               for="email"
-              class="
-                block
-                text-sm
-                font-medium
-                leading-5
-                text-gray-700
-                dark:text-gray-800
-              "
+              class="block text-sm font-medium leading-5 text-gray-700 dark:text-gray-800"
             >
               Email
             </label>
@@ -52,24 +42,7 @@
                 name="email"
                 type="email"
                 :class="{ 'border-red-500': forgotPassword.errors.email }"
-                class="
-                  block
-                  w-full
-                  px-3
-                  py-2
-                  placeholder-gray-400
-                  transition
-                  duration-150
-                  ease-in-out
-                  border border-gray-300
-                  rounded-md
-                  appearance-none
-                  focus:outline-none
-                  focus:ring-blue
-                  focus:border-blue-300
-                  sm:text-sm
-                  sm:leading-5
-                "
+                class="block w-full px-3 py-2 placeholder-gray-400 transition duration-150 ease-in-out border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-blue focus:border-blue-300 sm:text-sm sm:leading-5"
                 novalidate
               />
             </div>
@@ -82,27 +55,7 @@
             <span class="block w-full rounded-md shadow-sm">
               <button
                 type="submit"
-                class="
-                  flex
-                  justify-center
-                  w-full
-                  px-4
-                  py-2
-                  text-sm
-                  font-medium
-                  text-white
-                  transition
-                  duration-150
-                  ease-in-out
-                  border border-transparent
-                  rounded-md
-                  bg-primary-600
-                  hover:bg-primary-500
-                  focus:outline-none
-                  focus:border-indigo-700
-                  focus:ring-indigo
-                  active:bg-indigo-700
-                "
+                class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white transition duration-150 ease-in-out border border-transparent rounded-md bg-primary-600 hover:bg-primary-500 focus:outline-none focus:border-indigo-700 focus:ring-indigo active:bg-indigo-700"
               >
                 Submit
               </button>
@@ -113,16 +66,7 @@
           <div class="text-sm leading-5">
             Remembered your password?
             <nuxt-link
-              class="
-                font-medium
-                transition
-                duration-150
-                ease-in-out
-                text-primary-600
-                hover:text-primary-500
-                focus:outline-none
-                focus:underline
-              "
+              class="font-medium transition duration-150 ease-in-out text-primary-600 hover:text-primary-500 focus:outline-none focus:underline"
               to="/login"
             >
               Sign in here

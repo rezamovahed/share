@@ -6,7 +6,7 @@
         novalidate
         @submit.prevent="userLoginWithTwoFactor"
       >
-        <SharedAlert
+        <SharedAlertBannerBanner
           v-if="$store.state.login.messages.error"
           type="danger"
           :message="$store.state.login.messages.error"

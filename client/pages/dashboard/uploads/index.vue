@@ -8,13 +8,7 @@
           <div class="md:flex md:items-center md:justify-between">
             <div class="flex-1 min-w-0">
               <h2
-                class="
-                  text-2xl
-                  font-bold
-                  leading-7
-                  text-white
-                  sm:text-3xl sm:truncate
-                "
+                class="text-2xl font-bold leading-7 text-white sm:text-3xl sm:truncate"
               >
                 Manage Uploads
               </h2>
@@ -22,48 +16,13 @@
             <div class="mt-4 flex md:mt-0 md:ml-4 space-x-5">
               <button
                 type="button"
-                class="
-                  inline-flex
-                  items-center
-                  px-4
-                  py-2
-                  text-sm
-                  font-medium
-                  text-gray-700
-                  bg-white
-                  border border-gray-300
-                  rounded-md
-                  shadow-sm
-                  hover:bg-gray-50
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-indigo-500
-                  dark:bg-gray-200
-                "
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-200"
               >
                 Edit
               </button>
               <button
                 type="button"
-                class="
-                  inline-flex
-                  items-center
-                  px-4
-                  py-2
-                  text-sm
-                  font-medium
-                  text-white
-                  border border-transparent
-                  rounded-md
-                  shadow-sm
-                  bg-primary-600
-                  hover:bg-primary-700
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-indigo-500
-                "
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Publish
               </button>
@@ -81,55 +40,26 @@
               class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"
             >
               <div
-                class="
-                  shadow
-                  overflow-hidden
-                  border-b border-gray-200
-                  sm:rounded-lg
-                "
+                class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
               >
                 <table class="min-w-full divide-y divide-gray-200">
                   <thead class="bg-gray-50">
                     <tr>
                       <th
                         scope="col"
-                        class="
-                          px-6
-                          py-3
-                          text-left text-xs
-                          font-medium
-                          text-gray-500
-                          uppercase
-                          tracking-wider
-                        "
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         File Name & Size
                       </th>
                       <th
                         scope="col"
-                        class="
-                          px-6
-                          py-3
-                          text-left text-xs
-                          font-medium
-                          text-gray-500
-                          uppercase
-                          tracking-wider
-                        "
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Tags
                       </th>
                       <th
                         scope="col"
-                        class="
-                          px-6
-                          py-3
-                          text-left text-xs
-                          font-medium
-                          text-gray-500
-                          uppercase
-                          tracking-wider
-                        "
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
                         Created At
                       </th>
@@ -161,7 +91,7 @@
                       </td>
                       <td class="px-6 py-4">
                         <div class="text-sm text-gray-900">
-                          <DashboardUploadsTag
+                          <DashboardUploadsTagBadge
                             v-for="tag in upload.tags"
                             :key="tag"
                             :display-name="tag"
@@ -170,47 +100,18 @@
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap">
                         <time
-                          class="
-                            px-6
-                            py-4
-                            whitespace-nowrap
-                            text-sm text-gray-500
-                          "
+                          class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                           :datetime="$dayjs(upload.updatedAt).format('lll')"
                           >{{ $dayjs(upload.createdAt).format('lll') }}</time
                         >
                       </td>
 
                       <td
-                        class="
-                          px-6
-                          py-4
-                          text-right text-sm
-                          font-medium
-                          flex flex-col
-                          space-y-2
-                        "
+                        class="px-6 py-4 text-right text-sm font-medium flex flex-col space-y-2"
                       >
                         <button
                           type="button"
-                          class="
-                            inline-flex
-                            items-center
-                            px-1
-                            py-1.5
-                            border border-transparent
-                            rounded
-                            shadow-sm
-                            text-white
-                            bg-green-600
-                            hover:bg-green-700
-                            dark:bg-green-500
-                            dark-hover:bg-green-400
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-green-500
-                          "
+                          class="inline-flex items-center px-1 py-1.5 border border-transparent rounded shadow-sm text-white bg-green-600 hover:bg-green-700 dark:bg-green-500 dark-hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                         >
                           <fa
                             :icon="['fas', 'eye']"
@@ -219,24 +120,7 @@
                         </button>
                         <button
                           type="button"
-                          class="
-                            inline-flex
-                            items-center
-                            px-2.5
-                            py-1.5
-                            border border-transparent
-                            text-xs
-                            font-medium
-                            rounded
-                            shadow-sm
-                            text-white
-                            bg-indigo-600
-                            hover:bg-indigo-700
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-indigo-500
-                          "
+                          class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                           <fa
                             :icon="['fas', 'arrow-up-right-from-square']"
@@ -245,26 +129,7 @@
                         </button>
                         <button
                           type="button"
-                          class="
-                            inline-flex
-                            items-center
-                            px-2.5
-                            py-1.5
-                            border border-transparent
-                            text-xs
-                            font-medium
-                            rounded
-                            shadow-sm
-                            text-white
-                            bg-red-600
-                            hover:bg-red-700
-                            dark:bg-red-500
-                            dark-hover:bg-red-400
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-red-500
-                          "
+                          class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 dark:bg-red-500 dark-hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                           <fa
                             :icon="['fas', 'trash']"

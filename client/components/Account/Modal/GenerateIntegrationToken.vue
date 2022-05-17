@@ -35,10 +35,10 @@
                   </label>
                   <div class="mt-1">
                     <input
+                      id="displayName"
                       v-model="displayName"
                       type="text"
                       name="displayName"
-                      id="displayName"
                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                       placeholder="Default"
                     />
@@ -73,17 +73,17 @@
               </div>
 
               <div
+                id="newToken"
                 type="text"
                 name="newToken"
-                id="newToken"
-                class="block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-t-md break-words"
+                class="block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-t-md break-words mt-2"
               >
                 {{ $store.state.account.newToken }}
               </div>
               <button
-                @click.prevent="copyNewToken"
-                type="button"
                 class="w-full items-center px-4 py-2 border border-transparent text-sm font-medium rounded-b-sm shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                type="button"
+                @click.prevent="copyNewToken"
               >
                 Copy
               </button>
@@ -123,8 +123,8 @@
               class="flex w-full mt-3 rounded-md shadow-sm sm:mt-0 sm:w-auto"
             >
               <button
-                type="button"
                 class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-primary-300 focus:ring sm:text-sm sm:leading-5"
+                type="button"
                 @click.prevent="hideGenerateIntegrationTokenModal"
                 @keydown.esc="hideGenerateIntegrationTokenModal"
               >
@@ -140,6 +140,17 @@
 
 <script>
 export default {
+  data() {
+    return {
+      displayName: 'Default Token Label',
+      expires: 'month',
+    }
+  },
+  computed: {
+    showToken() {
+      return this.$store.state.account.showToken
+    },
+  },
   mounted() {
     this.popupItem = this.$refs.background
 
@@ -174,17 +185,6 @@ export default {
 
       window.scrollTo(0, this.scrollPosition)
     })
-  },
-  computed: {
-    showToken() {
-      return this.$store.state.account.showToken
-    },
-  },
-  data() {
-    return {
-      displayName: 'Default Token Label',
-      expires: 'month',
-    }
   },
   methods: {
     async toggleGenerateIntegrationTokenModal() {

@@ -10,8 +10,8 @@
             />
           </div>
         </div>
-        <SharedNavigationLoginButton />
-        <SharedNavigationProfileDropdown />
+        <SharedNavigationBarLoginButton />
+        <SharedNavigationBarProfileDropdown />
       </div>
     </div>
   </nav>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SharedNavigation />
+    <SharedNavigationBar />
     <div class="mx-auto py-6 sm:px-6 lg:px-8 max-w-6xl">
       <img :src="`/u/${params.id}`" class="mx-auto px-4 md:px-0" />
       <div class="overflow-hidden sm:rounded-lg">
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <SharedFooter />
+    <SharedFooterSelection />
   </div>
 </template>
 

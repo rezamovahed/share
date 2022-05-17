@@ -2,7 +2,7 @@
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
     <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
       <form class="space-y-6" novalidate @submit.prevent="userLogin">
-        <SharedAlert
+        <SharedAlertBanner
           v-if="$store.state.login.messages.error"
           type="danger"
           :message="$store.state.login.messages.error"

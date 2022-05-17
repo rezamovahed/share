@@ -2,41 +2,13 @@
   <footer class="z-0 bg-white dark:bg-gray-800" aria-labelledby="footerHeading">
     <h2 id="footerHeading" class="sr-only">Footer</h2>
     <div
-      class="
-        px-4
-        py-6
-        mx-auto
-        max-w-7xl
-        sm:px-6
-        md:flex
-        md:items-center
-        md:justify-between
-        lg:px-8
-      "
+      class="px-4 py-6 mx-auto max-w-7xl sm:px-6 md:flex md:items-center md:justify-between lg:px-8"
     >
       <div class="flex justify-center space-x-6 md:order-2">
         <button
           type="button"
           aria-label="Color Theme"
-          class="
-            inline-flex
-            items-center
-            px-3
-            py-2
-            mt-4
-            text-sm
-            font-medium
-            leading-4
-            text-gray-500
-            border border-transparent
-            rounded-md
-            shadow-sm
-            bg-primary-100
-            hover:bg-primary-400
-            hover:text-white
-            focus:outline-none
-            focus:ring-2 focus:ring-offset-2 focus:ring-primary-500
-          "
+          class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium leading-4 text-gray-500 border border-transparent rounded-md shadow-sm bg-primary-100 hover:bg-primary-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
           @click="
             $colorMode.value === 'dark'
               ? ($colorMode.preference = 'light')
