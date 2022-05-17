@@ -53,7 +53,7 @@ export default {
             'faSun',
             'faCheck',
             'faSkull',
-            'faCog',
+            'faGear',
             'faLock',
             'faUnlock',
             'faMapMarkerAlt',

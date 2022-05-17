@@ -1,13 +1,6 @@
 <template>
   <div
-    class="
-      relative
-      flex flex-col
-      min-h-screen
-      overflow-hidden
-      bg-gray-200
-      dark:bg-gray-900
-    "
+    class="relative flex flex-col min-h-screen overflow-hidden bg-gray-200 dark:bg-gray-900"
   >
     <div
       class="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full"
@@ -15,13 +8,7 @@
     >
       <div class="relative h-full mx-auto max-w-7xl">
         <svg
-          class="
-            absolute
-            transform
-            right-full
-            translate-y-1/4 translate-x-1/4
-            lg:translate-x-1/2
-          "
+          class="absolute transform right-full translate-y-1/4 translate-x-1/4 lg:translate-x-1/2"
           width="404"
           height="784"
           fill="none"
@@ -53,14 +40,7 @@
           ></rect>
         </svg>
         <svg
-          class="
-            absolute
-            transform
-            left-full
-            -translate-y-3/4 -translate-x-1/4
-            md:-translate-y-1/2
-            lg:-translate-x-1/2
-          "
+          class="absolute transform left-full -translate-y-3/4 -translate-x-1/4 md:-translate-y-1/2 lg:-translate-x-1/2"
           width="404"
           height="784"
           fill="none"
@@ -97,14 +77,7 @@
     <div class="relative flex-grow pt-6 pb-16 sm:pb-24">
       <div class="px-4 mx-auto max-w-7xl sm:px-6">
         <nav
-          class="
-            relative
-            flex
-            items-center
-            justify-between
-            sm:h-10
-            md:justify-center
-          "
+          class="relative flex items-center justify-between sm:h-10 md:justify-center"
           aria-label="Global"
         >
           <div
@@ -120,20 +93,7 @@
               <div class="flex items-center -mr-2 md:hidden">
                 <button
                   id="main-menu"
-                  class="
-                    inline-flex
-                    items-center
-                    justify-center
-                    p-2
-                    text-gray-400
-                    rounded-md
-                    bg-gray-50
-                    hover:text-gray-500 hover:bg-gray-100 hover:bg-opacity-75
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-inset
-                    focus:ring-primary-500
-                  "
+                  class="inline-flex items-center justify-center p-2 text-gray-400 rounded-md bg-gray-50 hover:text-gray-500 hover:bg-gray-100 hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
                   x-bind:aria-expanded="open"
                   aria-haspopup="true"
                   type="button"
@@ -170,52 +130,20 @@
             >
           </div>
           <div
-            class="
-              hidden
-              md:absolute
-              md:flex
-              md:items-center
-              md:justify-end
-              md:inset-y-0
-              md:right-0
-            "
+            class="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0"
           >
             <span class="inline-flex rounded-md shadow">
               <nuxt-link
                 v-if="!loggedIn"
                 to="/login"
-                class="
-                  inline-flex
-                  items-center
-                  px-4
-                  py-2
-                  text-base
-                  font-medium
-                  bg-white
-                  border border-transparent
-                  rounded-md
-                  text-primary-600
-                  hover:bg-gray-50
-                "
+                class="inline-flex items-center px-4 py-2 text-base font-medium bg-white border border-transparent rounded-md text-primary-600 hover:bg-gray-50"
               >
                 Log in
               </nuxt-link>
               <nuxt-link
                 v-else
                 to="/dashboard"
-                class="
-                  inline-flex
-                  items-center
-                  px-4
-                  py-2
-                  text-base
-                  font-medium
-                  bg-white
-                  border border-transparent
-                  rounded-md
-                  text-primary-600
-                  hover:bg-gray-50
-                "
+                class="inline-flex items-center px-4 py-2 text-base font-medium bg-white border border-transparent rounded-md text-primary-600 hover:bg-gray-50"
               >
                 Dashboard
               </nuxt-link>
@@ -233,26 +161,11 @@
         leave-to-class="scale-95 opacity-0"
         ><div
           v-if="mobileNavActive"
-          class="
-            absolute
-            inset-x-0
-            top-0
-            p-2
-            transition
-            origin-top-right
-            transform
-            md:hidden
-          "
+          class="absolute inset-x-0 top-0 p-2 transition origin-top-right transform md:hidden"
           x-description="Mobile menu, show/hide based on menu open state."
         >
           <div
-            class="
-              overflow-hidden
-              bg-white
-              rounded-lg
-              shadow-md
-              ring-1 ring-black ring-opacity-5
-            "
+            class="overflow-hidden bg-white rounded-lg shadow-md ring-1 ring-black ring-opacity-5"
           >
             <div class="flex items-center justify-between px-5 pt-4">
               <div>
@@ -263,20 +176,7 @@
               </div>
               <div class="-mr-2">
                 <button
-                  class="
-                    inline-flex
-                    items-center
-                    justify-center
-                    p-2
-                    text-gray-400
-                    bg-white
-                    rounded-md
-                    hover:text-gray-500 hover:bg-gray-100
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-inset
-                    focus:ring-primary-500
-                  "
+                  class="inline-flex items-center justify-center p-2 text-gray-400 bg-white rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
                   type="button"
                   @click="mobileNavActive = false"
                 >
@@ -308,16 +208,7 @@
               <div class="px-2 pt-2 pb-3" role="none">
                 <a
                   href="#"
-                  class="
-                    block
-                    px-3
-                    py-2
-                    text-base
-                    font-medium
-                    text-gray-700
-                    rounded-md
-                    hover:text-gray-900 hover:bg-gray-50
-                  "
+                  class="block px-3 py-2 text-base font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-50"
                   role="menuitem"
                   >Product</a
                 >
@@ -325,16 +216,7 @@
               <div role="none">
                 <nuxt-link
                   to="/login"
-                  class="
-                    block
-                    w-full
-                    px-5
-                    py-3
-                    font-medium
-                    text-center text-primary-600
-                    bg-gray-50
-                    hover:bg-gray-100
-                  "
+                  class="block w-full px-5 py-3 font-medium text-center text-primary-600 bg-gray-50 hover:bg-gray-100"
                   role="menuitem"
                 >
                   Log in
@@ -348,15 +230,7 @@
       <main class="px-4 mx-auto mt-16 max-w-7xl sm:mt-24">
         <div class="text-center">
           <h1
-            class="
-              text-4xl
-              font-extrabold
-              tracking-tight
-              text-gray-900
-              dark:text-gray-200
-              sm:text-5xl
-              md:text-6xl
-            "
+            class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl md:text-6xl"
           >
             <span class="block xl:inline">Be able to</span>
             <!-- space -->
@@ -365,60 +239,23 @@
             >
           </h1>
           <p
-            class="
-              max-w-md
-              mx-auto
-              mt-3
-              text-base text-gray-500
-              sm:text-lg
-              md:mt-5 md:text-xl md:max-w-3xl
-              dark:text-gray-200
-            "
+            class="max-w-md mx-auto mt-3 text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl dark:text-gray-200"
           >
             {{ $config.landing.description }}
           </p>
           <div class="max-w-md mx-auto mt-5 sm:flex sm:justify-center md:mt-8">
             <div class="rounded-md shadow">
               <nuxt-link
-                v-if="!loggedIn"
+                v-if="!loggedIn && $config.registration"
                 to="/signup"
-                class="
-                  flex
-                  items-center
-                  justify-center
-                  w-full
-                  px-8
-                  py-3
-                  text-base
-                  font-medium
-                  text-white
-                  border border-transparent
-                  rounded-md
-                  bg-primary-600
-                  hover:bg-primary-700
-                  md:py-4 md:text-lg md:px-10
-                "
+                class="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white border border-transparent rounded-md bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10"
               >
                 Get started
               </nuxt-link>
               <nuxt-link
+                v-if="loggedIn"
                 to="/dashboard"
-                class="
-                  flex
-                  items-center
-                  justify-center
-                  w-full
-                  px-8
-                  py-3
-                  text-base
-                  font-medium
-                  text-white
-                  border border-transparent
-                  rounded-md
-                  bg-primary-600
-                  hover:bg-primary-700
-                  md:py-4 md:text-lg md:px-10
-                "
+                class="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white border border-transparent rounded-md bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10"
               >
                 Dashboard
               </nuxt-link>
@@ -429,22 +266,7 @@
             >
               <a
                 :href="$config.landing.button.url"
-                class="
-                  flex
-                  items-center
-                  justify-center
-                  w-full
-                  px-8
-                  py-3
-                  text-base
-                  font-medium
-                  bg-white
-                  border border-transparent
-                  rounded-md
-                  text-primary-600
-                  hover:bg-gray-50
-                  md:py-4 md:text-lg md:px-10
-                "
+                class="flex items-center justify-center w-full px-8 py-3 text-base font-medium bg-white border border-transparent rounded-md text-primary-600 hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
               >
                 {{ $config.landing.button.text }}
               </a>
@@ -468,40 +290,13 @@
     >
       <h2 id="footerHeading" class="sr-only">Footer</h2>
       <div
-        class="
-          px-4
-          py-6
-          mx-auto
-          max-w-7xl
-          sm:px-6
-          md:flex md:items-center md:justify-between
-          lg:px-8
-        "
+        class="px-4 py-6 mx-auto max-w-7xl sm:px-6 md:flex md:items-center md:justify-between lg:px-8"
       >
         <div class="flex justify-center space-x-6 md:order-2">
           <button
             type="button"
             aria-label="Color Theme"
-            class="
-              inline-flex
-              items-center
-              px-3
-              py-2
-              mt-4
-              text-sm
-              font-medium
-              leading-4
-              text-gray-500
-              border border-transparent
-              rounded-md
-              shadow-sm
-              bg-primary-100
-              hover:bg-primary-400 hover:text-white
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-primary-500
-            "
+            class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium leading-4 text-gray-500 border border-transparent rounded-md shadow-sm bg-primary-100 hover:bg-primary-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
             @click="
               $colorMode.value === 'dark'
                 ? ($colorMode.preference = 'light')

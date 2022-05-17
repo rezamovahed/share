@@ -1,26 +1,10 @@
 <template>
   <div
-    class="
-      container
-      w-full
-      px-2
-      mx-auto
-      overflow-auto
-      shadow-md
-      md:px-8
-      bg-gray-50
-      lg:w-9/12
-      dark:bg-gray-200
-    "
+    class="container w-full px-2 mx-auto overflow-auto shadow-md md:px-8 bg-gray-50 lg:w-9/12 dark:bg-gray-200"
   >
     <div class="my-0 sm:my-5">
       <div
-        class="
-          mt-5
-          md:mt-0 md:flex md:items-center md:justify-between
-          lg:border-t lg:border-gray-200
-          dark:border-transparent
-        "
+        class="mt-5 md:mt-0 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200 dark:border-transparent"
       >
         <div class="flex-1 min-w-0">
           <div class="flex items-center">
@@ -40,48 +24,13 @@
         >
           <button
             type="button"
-            class="
-              inline-flex
-              items-center
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-red-700
-              bg-red
-              border border-red-300
-              rounded-md
-              shadow-sm
-              hover:bg-red-50
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-red-500
-              dark:bg-red-200
-            "
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-700 bg-red border border-red-300 rounded-md shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:bg-red-200"
           >
             Revoke All
           </button>
           <button
             type="button"
-            class="
-              inline-flex
-              items-center
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-white
-              border border-transparent
-              rounded-md
-              shadow-sm
-              bg-primary-600
-              hover:bg-primary-700
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-indigo-500
-            "
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             @click.prevent="toggleGenerateIntegrationTokenModal"
           >
             Generate
@@ -100,24 +49,7 @@
       <div class="mt-6">
         <button
           type="button"
-          class="
-            inline-flex
-            items-center
-            px-4
-            py-2
-            border border-transparent
-            shadow-sm
-            text-sm
-            font-medium
-            rounded-md
-            text-white
-            bg-primary-600
-            hover:bg-primary-700
-            focus:outline-none
-            focus:ring-2
-            focus:ring-offset-2
-            focus:ring-indigo-500
-          "
+          class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click.prevent="toggleGenerateIntegrationTokenModal"
         >
           <fa :icon="['fas', 'plus']" class="-ml-1 mr-2 h-5 w-5 text-lg" />
@@ -129,58 +61,26 @@
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div v-else class="my-4 sm:my-6 lg:my-8">
       <div
-        class="
-          -mx-4
-          mt-8
-          overflow-hidden
-          shadow
-          ring-1 ring-black ring-opacity-5
-          sm:-mx-6
-          md:mx-0 md:rounded-lg
-        "
+        class="-mx-4 mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg"
       >
         <table class="min-w-full divide-y divide-gray-300">
           <thead class="bg-gray-50">
             <tr>
               <th
                 scope="col"
-                class="
-                  py-3.5
-                  pl-4
-                  pr-3
-                  text-left text-sm
-                  font-semibold
-                  text-gray-900
-                  sm:pl-6
-                "
+                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
               >
                 Display Name
               </th>
               <th
                 scope="col"
-                class="
-                  hidden
-                  px-3
-                  py-3.5
-                  text-left text-sm
-                  font-semibold
-                  text-gray-900
-                  lg:table-cell
-                "
+                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
                 Created
               </th>
               <th
                 scope="col"
-                class="
-                  hidden
-                  px-3
-                  py-3.5
-                  text-left text-sm
-                  font-semibold
-                  text-gray-900
-                  sm:table-cell
-                "
+                class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
               >
                 Expire
               </th>
@@ -193,24 +93,14 @@
           <tbody class="divide-y divide-gray-200 bg-white">
             <tr v-for="(token, index) in tokens" :key="index">
               <td
-                class="
-                  w-full
-                  max-w-0
-                  py-4
-                  pl-4
-                  pr-3
-                  text-sm
-                  font-medium
-                  text-gray-900
-                  sm:w-auto sm:max-w-none sm:pl-6
-                "
+                class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6"
               >
                 {{ token.label }}
                 <dl class="font-normal lg:hidden">
                   <dt class="sr-only">Created</dt>
                   <dd class="mt-1 truncate text-gray-700">
                     <time
-                      v-if="token.isNever"
+                      v-if="!token.isNever"
                       :datetime="$dayjs(token.createdAt).format('lll')"
                       >{{ $dayjs(token.createdAt).format('lll') }}</time
                     >
@@ -231,7 +121,7 @@
               </td>
               <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                 <time
-                  v-if="token.isNeer"
+                  v-if="!token.isNever"
                   :datetime="$dayjs(token.expireAt).format('lll')"
                   >{{ $dayjs(token.expireAt).fromNow() }}</time
                 >
@@ -240,26 +130,17 @@
               <td class="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                 <button
                   type="button"
-                  class="
-                    inline-flex
-                    items-center
-                    px-2.5
-                    py-1.5
-                    border border-transparent
-                    text-xs
-                    font-medium
-                    rounded
-                    shadow-sm
-                    text-white
-                    bg-red-600
-                    hover:bg-red-700
-                    dark:bg-red-500
-                    dark-hover:bg-red-400
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-red-500
-                  "
+                  class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark-hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <fa
+                    :icon="['fas', 'gear']"
+                    class="text-lg text-white m-auto"
+                  />
+                </button>
+                <button
+                  type="button"
+                  class="mt-2 md:mt-0 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 dark:bg-red-500 dark-hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  @click.prevent="revokeToken(index)"
                 >
                   <fa
                     :icon="['fas', 'trash']"
@@ -313,6 +194,39 @@ export default {
       await this.$store.dispatch(
         'account/TOGGLE_SHOW_GENERATE_INTERGRATION_MODAL'
       )
+    },
+    async revokeToken(index) {
+      try {
+        await this.$store.dispatch('account/REVOKE_INTERGATION_TOKEN', index)
+        if (this.$store.state.account.messages.success) {
+          switch (this.$store.state.account.messages.success) {
+            case 'REVOKED':
+              this.$toast.success('Token has been revoked.', {
+                position: 'bottom-right',
+              })
+              break
+            default:
+          }
+        } else {
+          switch (this.$store.state.account.messages.error) {
+            case 'NOT_FOUND':
+              this.$toast.error('That token might be already revoked.', {
+                position: 'bottom-right',
+              })
+              break
+
+            default:
+              this.$toast.error('Oops.. Something Went Wrong..', {
+                position: 'bottom-right',
+              })
+              break
+          }
+        }
+      } catch (e) {
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+        })
+      }
     },
   },
 }

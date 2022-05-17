@@ -2,29 +2,13 @@
   <div
     role="dialog"
     aria-modal="true"
-    class="
-      z-20
-      fixed
-      inset-x-0
-      bottom-0
-      px-4
-      pb-4
-      sm:inset-0 sm:flex sm:items-center sm:justify-center
-    "
+    class="z-20 fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
   >
     <div class="fixed inset-0">
       <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
     </div>
     <div
-      class="
-        overflow-hidden
-        transition-all
-        transform
-        bg-white
-        rounded-lg
-        shadow-xl
-        sm:max-w-lg sm:w-full
-      "
+      class="overflow-hidden transition-all transform bg-white rounded-lg shadow-xl sm:max-w-lg sm:w-full"
       @click.stop
     >
       <form @submit.prevent="accountGenerateIntegrationToken">
@@ -55,15 +39,7 @@
                       type="text"
                       name="displayName"
                       id="displayName"
-                      class="
-                        shadow-sm
-                        focus:ring-indigo-500 focus:border-indigo-500
-                        block
-                        w-full
-                        sm:text-sm
-                        border-gray-300
-                        rounded-md
-                      "
+                      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                       placeholder="Default"
                     />
                   </div>
@@ -79,20 +55,7 @@
                   id="expires"
                   v-model="expires"
                   name="expires"
-                  class="
-                    mt-1
-                    block
-                    w-full
-                    pl-3
-                    py-2
-                    text-base
-                    border-gray-300
-                    focus:outline-none
-                    focus:ring-indigo-500
-                    focus:border-primary-500
-                    sm:text-sm
-                    rounded-md
-                  "
+                  class="mt-1 block w-full pl-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-primary-500 sm:text-sm rounded-md"
                 >
                   <option value="never">never</option>
                   <option value="month" selected>one month</option>
@@ -114,15 +77,7 @@
                 name="first-name"
                 id="first-name"
                 autocomplete="given-name"
-                class="
-                  block
-                  w-full
-                  shadow-sm
-                  focus:ring-indigo-500 focus:border-indigo-500
-                  border-gray-300
-                  rounded-md
-                  break-words
-                "
+                class="block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md break-words"
               >
                 {{ $store.state.account.newToken }}
               </div>
@@ -136,26 +91,7 @@
             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
               <button
                 type="submit"
-                class="
-                  inline-flex
-                  justify-center
-                  w-full
-                  px-4
-                  py-2
-                  text-sm
-                  font-medium
-                  leading-5
-                  text-white
-                  transition
-                  duration-150
-                  ease-in-out
-                  bg-primary-600
-                  border
-                  rounded-md
-                  order-transparent
-                  hover:bg-primary-500
-                  focus:outline-none focus:ring
-                "
+                class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-primary-600 border rounded-md order-transparent hover:bg-primary-500 focus:outline-none focus:ring"
               >
                 Generate
               </button>
@@ -165,27 +101,7 @@
             >
               <button
                 type="button"
-                class="
-                  inline-flex
-                  justify-center
-                  w-full
-                  px-4
-                  py-2
-                  text-base
-                  font-medium
-                  leading-6
-                  text-gray-700
-                  transition
-                  duration-150
-                  ease-in-out
-                  bg-white
-                  border border-gray-300
-                  rounded-md
-                  shadow-sm
-                  hover:text-gray-500
-                  focus:outline-none focus:border-primary-300 focus:ring
-                  sm:text-sm sm:leading-5
-                "
+                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-primary-300 focus:ring sm:text-sm sm:leading-5"
                 @click.prevent="hideGenerateIntegrationTokenModal"
                 @keydown.esc="hideGenerateIntegrationTokenModal"
               >
@@ -202,27 +118,7 @@
             >
               <button
                 type="button"
-                class="
-                  inline-flex
-                  justify-center
-                  w-full
-                  px-4
-                  py-2
-                  text-base
-                  font-medium
-                  leading-6
-                  text-gray-700
-                  transition
-                  duration-150
-                  ease-in-out
-                  bg-white
-                  border border-gray-300
-                  rounded-md
-                  shadow-sm
-                  hover:text-gray-500
-                  focus:outline-none focus:border-primary-300 focus:ring
-                  sm:text-sm sm:leading-5
-                "
+                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:border-primary-300 focus:ring sm:text-sm sm:leading-5"
                 @click.prevent="hideGenerateIntegrationTokenModal"
                 @keydown.esc="hideGenerateIntegrationTokenModal"
               >
@@ -301,7 +197,10 @@ export default {
     },
     async accountGenerateIntegrationToken() {
       try {
-        await this.$store.dispatch('account/GENERATE_INTERGATION_TOKEN')
+        await this.$store.dispatch('account/GENERATE_INTERGATION_TOKEN', {
+          label: this.displayName,
+          expires: this.expires,
+        })
         if (this.$store.state.account.messages.error) {
           return this.$toast.error(this.$store.state.account.messages.error, {
             position: 'bottom-right',

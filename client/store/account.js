@@ -8,7 +8,7 @@ export const state = () => ({
   twofactorBackupCodes: [],
   sessions: [],
   newToken: null,
-  showToken: true,
+  showToken: false,
   tokens: [],
   messages: {
     success: null,
@@ -153,12 +153,30 @@ export const actions = {
     const res = await this.$axios.$get('/api/apikey')
     commit('SET_TOKENS', res.apiKeys)
   },
-  async GENERATE_INTERGATION_TOKEN({ commit }) {
+  async GENERATE_INTERGATION_TOKEN({ commit }, { label, expires }) {
     try {
-      const res = await this.$axios.$post('/api/apikey')
+      const res = await this.$axios.$post('/api/apikey', {
+        label,
+        expires,
+      })
       commit('SET_NEW_TOKEN', res.api_key)
       commit('SET_MESSAGE_SUCCESS', 'Token generated successfully.')
       commit('SET_MESSAGE_ERROR', null)
+    } catch (e) {
+      commit('SET_MESSAGE_SUCCESS', null)
+      commit('SET_MESSAGE_ERROR', e.response.data.code)
+    }
+  },
+  async REVOKE_INTERGATION_TOKEN({ commit, state }, index) {
+    try {
+      const res = await this.$axios.$delete(
+        `/api/apikey/${state.tokens[index]._id}`
+      )
+
+      commit('DELETE_INTERGATION_TOKEN', index)
+
+      commit('SET_MESSAGE_ERROR', null)
+      commit('SET_MESSAGE_SUCCESS', res.code)
     } catch (e) {
       commit('SET_MESSAGE_SUCCESS', null)
       commit('SET_MESSAGE_ERROR', e.response.data.code)
@@ -194,6 +212,10 @@ export const mutations = {
   DELETE_SESSION: (state, index) => {
     return state.sessions.splice(index, 1)
   },
+  DELETE_INTERGATION_TOKEN: (state, index) => {
+    return state.tokens.splice(index, 1)
+  },
+
   TOGGLE_SIDEBAR_OPEN(state) {
     return (state.sidebarOpen = !state.sidebarOpen)
   },
