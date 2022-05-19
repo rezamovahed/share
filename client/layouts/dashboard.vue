@@ -49,7 +49,7 @@
               </form>
             </div>
             <div class="flex items-center justify-end ml-4 md:ml-6">
-              <SharedNavigationBarProfileDropdown />
+              <SharedNavigationProfileDropdown />
             </div>
           </div>
         </div>

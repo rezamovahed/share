@@ -36,7 +36,7 @@
             class="z-10 flex justify-between flex-1 px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8"
           >
             <div class="flex items-center justify-end flex-1 ml-4 md:ml-6">
-              <SharedNavigationBarProfileDropdown />
+              <SharedNavigationProfileDropdown />
             </div>
           </div>
         </div>

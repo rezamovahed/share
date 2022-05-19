@@ -183,7 +183,7 @@ export default {
         process.env.LANDING_DESCRIPTION ||
         'Simple yet advanced NodeJS, MongoDB and Express based uploader.',
       button: {
-        enabled: process.env.LANDING_BUTTON,
+        enabled: process.env.LANDING_BUTTON || true,
         text: process.env.LANDING_BUTTON_TEXT || '',
         url: process.env.LANDING_BUTTON_URL || '',
       },
