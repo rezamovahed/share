@@ -276,8 +276,13 @@
         <div class="relative pt-10">
           <div class="px-4 mx-auto max-w-7xl sm:px-6">
             <img
-              class="relative rounded-lg shadow-lg"
-              src="https://tailwindui.com/img/component-images/top-nav-with-multi-column-layout-screenshot.jpg"
+              class="relative hidden dark:block rounded-lg shadow-lg"
+              src="/landing/hero-dark.png"
+              alt="App screenshot"
+            />
+            <img
+              class="relative block dark:hidden rounded-lg shadow-lg"
+              src="/landing/hero-light.png"
               alt="App screenshot"
             />
           </div>

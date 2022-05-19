@@ -3,6 +3,7 @@ export const state = () => ({
   showDisableTwoFactorModal: false,
   showRevokeAllSessionsModal: false,
   showGenerateIntegrationTokenModal: false,
+  showRevokeAllIntergrationTokensModal: false,
   twoFactorQrCode: null,
   twoFactorSecret: null,
   twofactorBackupCodes: [],
@@ -44,6 +45,12 @@ export const actions = {
     commit(
       'SET_SHOW_GENERATE_INTERGRATION_MODAL',
       !state.showGenerateIntegrationTokenModal
+    )
+  },
+  TOGGLE_SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL({ state, commit }) {
+    commit(
+      'SET_SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL',
+      !state.showRevokeAllIntergrationTokensModal
     )
   },
   async SET_TWO_FACTOR_INITIALIZE({ commit }) {
@@ -182,6 +189,17 @@ export const actions = {
       commit('SET_MESSAGE_ERROR', e.response.data.code)
     }
   },
+  async REVOKE_INTERGATION_TOKENS({ commit }) {
+    try {
+      const res = await this.$axios.$delete('/api/apikey')
+      commit('SET_TOKENS', [])
+      commit('SET_MESSAGE_ERROR', null)
+      commit('SET_MESSAGE_SUCCESS', res.code)
+    } catch (e) {
+      commit('SET_MESSAGE_SUCCESS', null)
+      commit('SET_MESSAGE_ERROR', e.response.data.code)
+    }
+  },
 }
 
 export const mutations = {
@@ -199,6 +217,9 @@ export const mutations = {
   },
   SET_SHOW_GENERATE_INTERGRATION_MODAL(state, status) {
     return (state.showGenerateIntegrationTokenModal = status)
+  },
+  SET_SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL(state, status) {
+    return (state.showRevokeAllIntergrationTokensModal = status)
   },
   SET_TWO_FACTOR_QR_CODE(state, qrCode) {
     return (state.twoFactorQrCode = qrCode)
@@ -258,6 +279,9 @@ export const getters = {
   },
   SHOW_GENERATE_INTERGRATION_MODAL: (state) => {
     return state.showGenerateIntegrationTokenModal
+  },
+  SHOW_REVOKE_INTERGRATION_MODAL: (state) => {
+    return state.showRevokeIntegrationTokenModal
   },
   SET_NEW_TOKEN: (state) => {
     return state.newToken

@@ -25,6 +25,7 @@
           <button
             type="button"
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-red-700 bg-red border border-red-300 rounded-md shadow-sm hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:bg-red-200"
+            @click.prevent="toggleRevokeAllIntegrationTokensModal"
           >
             Revoke All
           </button>
@@ -156,6 +157,9 @@
         <AccountModalGenerateIntegrationToken
           v-if="$store.state.account.showGenerateIntegrationTokenModal"
         />
+        <AccountModalRevokeAllIntergrationTokens
+          v-if="$store.state.account.showRevokeAllIntergrationTokensModal"
+        />
       </transition>
     </portal>
   </div>
@@ -240,7 +244,11 @@ export default {
         )
       }
     },
-    async revokeAllTokens() {},
+    async toggleRevokeAllIntegrationTokensModal() {
+      await this.$store.dispatch(
+        'account/TOGGLE_SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL'
+      )
+    },
   },
 }
 </script>

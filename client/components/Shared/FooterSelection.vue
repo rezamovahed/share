@@ -32,8 +32,7 @@
           &copy; {{ year }}
           <a class="font-bold" :href="$config.copyrightLink">{{
             $config.copyright
-          }}</a
-          >. All rights reserved.
+          }}</a>
         </p>
       </div>
     </div>
