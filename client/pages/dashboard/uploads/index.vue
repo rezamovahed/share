@@ -121,6 +121,7 @@
                         <button
                           type="button"
                           class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          @click.prevent="copyImageURL(index)"
                         >
                           <fa
                             :icon="['fas', 'arrow-up-right-from-square']"
@@ -162,6 +163,19 @@ export default {
   computed: {
     uploads() {
       return this.$store.state.upload.data
+    },
+  },
+  methods: {
+    copyImageURL(index) {
+      const src = `${window.location.origin}/u/${this.uploads[index].fileName}`
+      this.$copyText(src)
+      this.$toast.success(
+        `Copied image URL to clipboard: ${this.uploads[index].displayName}`,
+        {
+          position: 'bottom-right',
+        },
+        5000
+      )
     },
   },
 }

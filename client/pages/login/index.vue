@@ -26,7 +26,7 @@
             create a account
           </nuxt-link>
         </p>
-        <UsernameAndPassword />
+        <LoginUsernameAndPassword />
       </div>
       <div
         v-if="$store.state.login.twoFactorTokenRequested"
