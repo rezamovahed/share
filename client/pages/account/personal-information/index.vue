@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container w-full px-2 mx-auto overflow-auto shadow-md md:px-8 bg-gray-50 lg:w-9/12 dark:bg-gray-200"
+    class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8 overflow-auto shadow-md md:px-8 bg-gray-50 dark:bg-gray-200"
   >
     <div class="my-0 sm:my-5">
       <div class="mt-5 md:mt-0">
@@ -111,9 +111,13 @@ export default {
                   this.changeEmail.errors.email = 'Email is required.'
                   break
                 default:
-                  this.$toast.error('Oops.. Something Went Wrong..', {
-                    position: 'bottom-right',
-                  })
+                  this.$toast.error(
+                    'Oops.. Something Went Wrong..',
+                    {
+                      position: 'bottom-right',
+                    },
+                    5000
+                  )
                   break
               }
             }
@@ -128,9 +132,13 @@ export default {
                   'Email your attempting to change to is already in use.'
                 break
               default:
-                this.$toast.error('Oops.. Something Went Wrong..', {
-                  position: 'bottom-right',
-                })
+                this.$toast.error(
+                  'Oops.. Something Went Wrong..',
+                  {
+                    position: 'bottom-right',
+                  },
+                  5000
+                )
                 break
             }
           }
@@ -148,13 +156,21 @@ export default {
         })
       } catch (e) {
         if (e.response && e.response.data && e.response.data.error) {
-          return this.$toast.error(e.response.data.error, {
-            position: 'bottom-right',
-          })
+          return this.$toast.error(
+            e.response.data.error,
+            {
+              position: 'bottom-right',
+            },
+            5000
+          )
         }
-        this.$toast.error('Oops.. Something Went Wrong..', {
-          position: 'bottom-right',
-        })
+        this.$toast.error(
+          'Oops.. Something Went Wrong..',
+          {
+            position: 'bottom-right',
+          },
+          5000
+        )
       }
     },
   },

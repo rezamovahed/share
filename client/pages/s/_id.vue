@@ -5,29 +5,13 @@
       <img :src="`/u/${params.id}`" class="mx-auto px-4 md:px-0" />
       <div class="overflow-hidden sm:rounded-lg">
         <div
-          class="
-            px-4
-            py-5
-            sm:px-6
-            text-lg
-            font-bold
-            truncate
-            leading-6
-            text-gray-900
-            dark:text-white
-          "
+          class="px-4 py-5 sm:px-6 text-lg font-bold truncate leading-6 text-gray-900 dark:text-white"
         >
           {{ upload.displayName || upload.fileName }}
         </div>
 
         <div
-          class="
-            border-t border-gray-700
-            dark:border-gray-200
-            px-4
-            py-5
-            sm:px-6
-          "
+          class="border-t border-gray-700 dark:border-gray-200 px-4 py-5 sm:px-6"
         >
           <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             <div class="sm:col-span-1">
@@ -49,23 +33,7 @@
               <dd class="mt-4 text-sm text-gray-900">
                 <button
                   type="button"
-                  class="
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border border-transparent
-                    shadow-sm
-                    text-sm
-                    font-medium
-                    rounded-md
-                    text-white
-                    bg-primary-600
-                    hover:bg-primary-500
-                    focus:outline-none
-                    focus:border-primary-700
-                    focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-                  "
+                  class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-500 focus:outline-none focus:border-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   @click="downloadFile"
                 >
                   Download
@@ -76,23 +44,7 @@
                 </button>
                 <button
                   type="button"
-                  class="
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border border-transparent
-                    shadow-sm
-                    text-sm
-                    font-medium
-                    rounded-md
-                    text-white
-                    bg-primary-600
-                    hover:bg-primary-500
-                    focus:outline-none
-                    focus:border-primary-700
-                    focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-                  "
+                  class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-500 focus:outline-none focus:border-primary-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   @click="copyURL"
                 >
                   Copy Link
@@ -107,7 +59,7 @@
         </div>
       </div>
     </div>
-    <SharedFooter />
+    <SharedFooterSelection />
   </div>
 </template>
 
@@ -187,7 +139,8 @@ export default {
           'There was a error copying Share to your clipboard.',
           {
             position: 'bottom-right',
-          }
+          },
+          5000
         )
       }
     },

@@ -111,7 +111,7 @@ router.post('/', requireAuth, isSessionValid, async (req, res) => {
         expireAt = dayjs().add('7', 'd');
         expiresIn = '7d';
         break;
-      case 'M':
+      case 'month':
         expireAt = dayjs().add('1', 'M');
         expiresIn = '31d';
         break;
@@ -174,6 +174,22 @@ router.patch('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
     res.status(200).json({
       code: 'UPDATED',
       message: 'APIKey has been updated'
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
+router.delete('/', requireAuth, isSessionValid, async (req, res) => {
+  try {
+    await APIKey.deleteMany({ user: req.user.id });
+    res.status(200).json({
+      code: 'DELETED',
+      message: 'All API Keys have been deleted'
     });
   } catch (e) {
     console.log(e);

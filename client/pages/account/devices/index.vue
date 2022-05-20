@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container w-full px-2 mx-auto overflow-auto shadow-md md:px-8 bg-gray-50 lg:w-9/12 dark:bg-gray-200"
+    class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8 overflow-auto shadow-md md:px-8 bg-gray-50 dark:bg-gray-200"
   >
     <div class="my-0 sm:my-5">
       <div class="mt-5 md:mt-0">
@@ -89,7 +89,7 @@
           </div>
         </div>
       </div>
-      <portal-target name="AccountModalRevokeAllDevices">
+      <portal-target name="destination">
         <transition name="fade">
           <AccountModalRevokeAllDevices
             v-if="$store.state.account.showRevokeAllSessionsModal"
@@ -117,9 +117,13 @@ export default {
     try {
       await store.dispatch('account/FETCH_SESSIONS')
     } catch (e) {
-      this.$toast.error('Oops.. Something Went Wrong..', {
-        position: 'bottom-right',
-      })
+      this.$toast.error(
+        'Oops.. Something Went Wrong..',
+        {
+          position: 'bottom-right',
+        },
+        5000
+      )
     }
   },
 
@@ -147,31 +151,47 @@ export default {
         if (this.$store.state.account.messages.success) {
           switch (this.$store.state.account.messages.success) {
             case 'REVOKED':
-              this.$toast.success('Deivce has been revoked.', {
-                position: 'bottom-right',
-              })
+              this.$toast.success(
+                'Deivce has been revoked.',
+                {
+                  position: 'bottom-right',
+                },
+                5000
+              )
               break
             default:
           }
         } else {
           switch (this.$store.state.account.messages.error) {
             case 'NOT_FOUND':
-              this.$toast.error('That device might be already revoked.', {
-                position: 'bottom-right',
-              })
+              this.$toast.error(
+                'That device might be already revoked.',
+                {
+                  position: 'bottom-right',
+                },
+                5000
+              )
               break
 
             default:
-              this.$toast.error('Oops.. Something Went Wrong..', {
-                position: 'bottom-right',
-              })
+              this.$toast.error(
+                'Oops.. Something Went Wrong..',
+                {
+                  position: 'bottom-right',
+                },
+                5000
+              )
               break
           }
         }
       } catch (e) {
-        this.$toast.error('Oops.. Something Went Wrong..', {
-          position: 'bottom-right',
-        })
+        this.$toast.error(
+          'Oops.. Something Went Wrong..',
+          {
+            position: 'bottom-right',
+          },
+          5000
+        )
       }
     },
     async toggleRevokeAllSessionsModal() {

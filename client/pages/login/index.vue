@@ -10,43 +10,23 @@
         <Logo class="w-auto h-12 mx-auto text-primary-500 dark:text-white" />
 
         <h2
-          class="
-            mt-6
-            text-3xl
-            font-extrabold
-            text-center text-gray-900
-            dark:text-white
-            font-roboto
-          "
+          class="mt-6 text-3xl font-extrabold text-center text-gray-900 dark:text-white font-roboto"
         >
           Sign in to your account
         </h2>
         <p
           v-if="$config.registration"
-          class="
-            mt-2
-            text-sm text-center text-gray-600
-            max-w
-            dark:text-gray-200
-            font-roboto
-          "
+          class="mt-2 text-sm text-center text-gray-600 max-w dark:text-gray-200 font-roboto"
         >
           Or
           <nuxt-link
-            class="
-              font-medium
-              text-primary-500
-              hover:text-primary-600
-              dark:text-primary-400
-              dark:hover:text-primary-300
-              font-roboto
-            "
+            class="font-medium text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-roboto"
             to="/signup"
           >
             create a account
           </nuxt-link>
         </p>
-        <LoginBasic />
+        <UsernameAndPassword />
       </div>
       <div
         v-if="$store.state.login.twoFactorTokenRequested"
@@ -55,14 +35,7 @@
         <Logo class="w-auto h-12 mx-auto" />
 
         <h2
-          class="
-            mt-6
-            text-3xl
-            font-extrabold
-            text-center text-gray-900
-            dark:text-white
-            font-roboto
-          "
+          class="mt-6 text-3xl font-extrabold text-center text-gray-900 dark:text-white font-roboto"
         >
           Enter your 2FA verification token
         </h2>

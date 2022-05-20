@@ -69,8 +69,9 @@ module.exports = {
   },
   variants: {
     extend: {
-      // ...
-      cursor: ['hover'],
+      opacity: ['disabled'],
+      cursor: ['hover', 'disabled'],
+      display: ['dark'],
     },
   },
   plugins: [
