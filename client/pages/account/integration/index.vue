@@ -130,6 +130,7 @@
                 <button
                   type="button"
                   class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark-hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  @click.prevent="toggleEditIntegrationTokenModal(token)"
                 >
                   <fa
                     :icon="['fas', 'gear']"
@@ -159,6 +160,9 @@
         />
         <AccountModalRevokeAllIntergrationTokens
           v-if="$store.state.account.showRevokeAllIntergrationTokensModal"
+        />
+        <AccountModalEditIntegrationToken
+          v-if="$store.state.account.showEditIntegrationTokenModal"
         />
       </transition>
     </portal>
@@ -247,6 +251,15 @@ export default {
     async toggleRevokeAllIntegrationTokensModal() {
       await this.$store.dispatch(
         'account/TOGGLE_SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL'
+      )
+    },
+    async toggleEditIntegrationTokenModal(token) {
+      await this.$store.commit(
+        'account/SET_EDIT_INTERGRATION_TOKEN_MODAL_DATA',
+        token
+      )
+      await this.$store.dispatch(
+        'account/TOGGLE_SHOW_EDIT_INTERGRATION_TOKEN_MODAL'
       )
     },
   },

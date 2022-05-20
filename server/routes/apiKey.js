@@ -184,6 +184,22 @@ router.patch('/:apikey_id', requireAuth, isSessionValid, async (req, res) => {
   }
 });
 
+router.delete('/', requireAuth, isSessionValid, async (req, res) => {
+  try {
+    await APIKey.deleteMany({ user: req.user.id });
+    res.status(200).json({
+      code: 'DELETED',
+      message: 'All API Keys have been deleted'
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      code: 'SERVER_ERROR',
+      error: 'Internal Server Error.'
+    });
+  }
+});
+
 /**
  * @route /apikey/:apikey_id
  * @method DELETE

@@ -4,6 +4,8 @@ export const state = () => ({
   showRevokeAllSessionsModal: false,
   showGenerateIntegrationTokenModal: false,
   showRevokeAllIntergrationTokensModal: false,
+  showEditIntegrationTokenModal: false,
+  editIntegrationTokenModalData: {},
   twoFactorQrCode: null,
   twoFactorSecret: null,
   twofactorBackupCodes: [],
@@ -51,6 +53,12 @@ export const actions = {
     commit(
       'SET_SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL',
       !state.showRevokeAllIntergrationTokensModal
+    )
+  },
+  TOGGLE_SHOW_EDIT_INTERGRATION_TOKEN_MODAL({ state, commit }) {
+    commit(
+      'SET_SHOW_EDIT_INTERGRATION_TOKEN_MODAL',
+      !state.showEditIntegrationTokenModal
     )
   },
   async SET_TWO_FACTOR_INITIALIZE({ commit }) {
@@ -221,6 +229,12 @@ export const mutations = {
   SET_SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL(state, status) {
     return (state.showRevokeAllIntergrationTokensModal = status)
   },
+  SET_SHOW_EDIT_INTERGRATION_TOKEN_MODAL(state, status) {
+    return (state.showEditIntegrationTokenModal = status)
+  },
+  SET_EDIT_INTERGRATION_TOKEN_MODAL_DATA(state, data) {
+    return (state.editIntegrationTokenModalData = data)
+  },
   SET_TWO_FACTOR_QR_CODE(state, qrCode) {
     return (state.twoFactorQrCode = qrCode)
   },
@@ -282,6 +296,15 @@ export const getters = {
   },
   SHOW_REVOKE_INTERGRATION_MODAL: (state) => {
     return state.showRevokeIntegrationTokenModal
+  },
+  SHOW_REVOKE_ALL_INTERGRATION_TOKENS_MODAL: (state) => {
+    return state.showRevokeAllIntergrationTokensModal
+  },
+  SHOW_EDIT_INTERGRATION_TOKEN_MODAL: (state) => {
+    return state.showEditIntegrationTokenModal
+  },
+  EDIT_INTERGRATION_TOKEN_MODAL_DATA: (state) => {
+    return state.editIntegrationTokenModalData
   },
   SET_NEW_TOKEN: (state) => {
     return state.newToken
