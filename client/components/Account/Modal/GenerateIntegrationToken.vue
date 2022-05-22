@@ -157,7 +157,7 @@ export default {
     const close = (e) => {
       const ESC = 27
       if (e.keyCode !== ESC) return
-      this.hideRevokeAllSessionsModal()
+      this.hideGenerateIntegrationTokenModal()
     }
     this.scrollPosition = window.pageYOffset
 
@@ -208,45 +208,33 @@ export default {
           expires: this.expires,
         })
         if (this.$store.state.account.messages.error) {
-          return this.$toast.error(
-            this.$store.state.account.messages.error,
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
+          return this.$toast.error(this.$store.state.account.messages.error, {
+            position: 'bottom-right',
+            duration: 5000,
+          })
         }
         await this.$store.commit('account/SET_SHOW_TOKEN', true)
         await this.$store.dispatch('account/FETCH_TOKENS')
       } catch (e) {
         this.hideGenerateIntegrationTokenModal()
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
     async copyNewToken() {
       try {
         await this.$copyText(this.$store.state.account.newToken)
-        await this.$toast.success(
-          'Integration Token Copied to Clipboard',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        await this.$toast.success('Integration Token Copied to Clipboard', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

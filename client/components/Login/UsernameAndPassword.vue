@@ -186,25 +186,19 @@ export default {
               break
 
             default:
-              this.$toast.error(
-                'Oops.. Something Went Wrong..',
-                {
-                  position: 'bottom-right',
-                },
-                5000
-              )
+              this.$toast.error('Oops.. Something Went Wrong..', {
+                position: 'bottom-right',
+                duration: 5000,
+              })
               break
           }
           this.isLoading = false
         } else {
           this.isLoading = false
-          this.$toast.error(
-            'Oops.. Something Went Wrong..',
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
+          this.$toast.error('Oops.. Something Went Wrong..', {
+            position: 'bottom-right',
+            duration: 5000,
+          })
         }
       }
     },
@@ -214,13 +208,10 @@ export default {
         this.isLoading = false
       } catch (e) {
         this.isLoading = false
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

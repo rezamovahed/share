@@ -81,24 +81,19 @@ export default {
         const res = await this.$axios.$post('/api/account/email-change/resend')
         this.$toast.success(res.message, {
           position: 'bottom-right',
+          duration: 5000,
         })
       } catch (e) {
         if (e.response && e.response.data && e.response.data.error) {
-          return this.$toast.error(
-            e.response.data.error,
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
-        }
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
+          return this.$toast.error(e.response.data.error, {
             position: 'bottom-right',
-          },
-          5000
-        )
+            duration: 5000,
+          })
+        }
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

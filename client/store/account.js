@@ -266,7 +266,6 @@ export const mutations = {
   SET_SHOW_TOKEN(state, status) {
     return (state.showToken = status)
   },
-
   SET_MESSAGE_SUCCESS: (state, success) => {
     return (state.messages.success = success)
   },

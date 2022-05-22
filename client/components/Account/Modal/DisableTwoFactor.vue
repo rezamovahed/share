@@ -152,6 +152,7 @@ export default {
             this.$store.state.account.messages.success,
             {
               position: 'bottom-right',
+              duration: 5000,
             }
           )
         }
@@ -165,29 +166,20 @@ export default {
         }
 
         if (this.$store.state.account.messages.error) {
-          return this.$toast.error(
-            this.$store.state.account.messages.error,
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
+          return this.$toast.error(this.$store.state.account.messages.error, {
+            position: 'bottom-right',
+            duration: 5000,
+          })
         }
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
-      } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
+      } catch (error) {
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

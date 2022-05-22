@@ -94,6 +94,7 @@ export default {
                 'Please check your new email address to complate the email change.',
                 {
                   position: 'bottom-right',
+                  duration: 5000,
                 }
               )
               break
@@ -111,13 +112,10 @@ export default {
                   this.changeEmail.errors.email = 'Email is required.'
                   break
                 default:
-                  this.$toast.error(
-                    'Oops.. Something Went Wrong..',
-                    {
-                      position: 'bottom-right',
-                    },
-                    5000
-                  )
+                  this.$toast.error('Oops.. Something Went Wrong..', {
+                    position: 'bottom-right',
+                    duration: 5000,
+                  })
                   break
               }
             }
@@ -132,13 +130,10 @@ export default {
                   'Email your attempting to change to is already in use.'
                 break
               default:
-                this.$toast.error(
-                  'Oops.. Something Went Wrong..',
-                  {
-                    position: 'bottom-right',
-                  },
-                  5000
-                )
+                this.$toast.error('Oops.. Something Went Wrong..', {
+                  position: 'bottom-right',
+                  duration: 5000,
+                })
                 break
             }
           }
@@ -156,21 +151,15 @@ export default {
         })
       } catch (e) {
         if (e.response && e.response.data && e.response.data.error) {
-          return this.$toast.error(
-            e.response.data.error,
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
-        }
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
+          return this.$toast.error(e.response.data.error, {
             position: 'bottom-right',
-          },
-          5000
-        )
+            duration: 5000,
+          })
+        }
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

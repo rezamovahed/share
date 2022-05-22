@@ -117,13 +117,10 @@ export default {
     try {
       await store.dispatch('account/FETCH_SESSIONS')
     } catch (e) {
-      this.$toast.error(
-        'Oops.. Something Went Wrong..',
-        {
-          position: 'bottom-right',
-        },
-        5000
-      )
+      this.$toast.error('Oops.. Something Went Wrong..', {
+        position: 'bottom-right',
+        duration: 5000,
+      })
     }
   },
 
@@ -151,47 +148,35 @@ export default {
         if (this.$store.state.account.messages.success) {
           switch (this.$store.state.account.messages.success) {
             case 'REVOKED':
-              this.$toast.success(
-                'Deivce has been revoked.',
-                {
-                  position: 'bottom-right',
-                },
-                5000
-              )
+              this.$toast.success('Deivce has been revoked.', {
+                position: 'bottom-right',
+                duration: 5000,
+              })
               break
             default:
           }
         } else {
           switch (this.$store.state.account.messages.error) {
             case 'NOT_FOUND':
-              this.$toast.error(
-                'That device might be already revoked.',
-                {
-                  position: 'bottom-right',
-                },
-                5000
-              )
+              this.$toast.error('That device might be already revoked.', {
+                position: 'bottom-right',
+                duration: 5000,
+              })
               break
 
             default:
-              this.$toast.error(
-                'Oops.. Something Went Wrong..',
-                {
-                  position: 'bottom-right',
-                },
-                5000
-              )
+              this.$toast.error('Oops.. Something Went Wrong..', {
+                position: 'bottom-right',
+                duration: 5000,
+              })
               break
           }
         }
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
     async toggleRevokeAllSessionsModal() {

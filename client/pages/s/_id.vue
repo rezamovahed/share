@@ -139,8 +139,8 @@ export default {
           'There was a error copying Share to your clipboard.',
           {
             position: 'bottom-right',
-          },
-          5000
+            duration: 5000,
+          }
         )
       }
     },

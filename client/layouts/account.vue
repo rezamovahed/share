@@ -1,6 +1,6 @@
 <template>
   <div>
-    <portal-target name="account"></portal-target>
+    <portal-target name="account" />
     <div
       class="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900"
       @keydown.escape="sidebarHide"
@@ -93,13 +93,10 @@ export default {
       try {
         await this.$store.commit('account/SET_SIDEBAR_OPEN', false)
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
 
@@ -107,13 +104,10 @@ export default {
       try {
         await this.$store.commit('account/SET_SIDEBAR_OPEN', true)
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

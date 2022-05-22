@@ -121,10 +121,10 @@
                         <button
                           type="button"
                           class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          @click.prevent="copyImageURL(index)"
+                          @click.prevent="toggleEditUploadModal(upload)"
                         >
                           <fa
-                            :icon="['fas', 'arrow-up-right-from-square']"
+                            :icon="['fas', 'gear']"
                             class="text-lg text-white m-auto"
                           />
                         </button>
@@ -139,8 +139,6 @@
                         </button>
                       </td>
                     </tr>
-
-                    <!-- More people... -->
                   </tbody>
                 </table>
               </div>
@@ -149,6 +147,11 @@
         </div>
       </div>
     </div>
+    <portal to="dashboard">
+      <transition name="fade">
+        <DashboardModals v-if="$store.state.upload.showEditUploadModal" />
+      </transition>
+    </portal>
   </main>
 </template>
 <script>
@@ -166,16 +169,13 @@ export default {
     },
   },
   methods: {
-    copyImageURL(index) {
-      const src = `${window.location.origin}/u/${this.uploads[index].fileName}`
-      this.$copyText(src)
-      this.$toast.success(
-        `Copied image URL to clipboard: ${this.uploads[index].displayName}`,
-        {
-          position: 'bottom-right',
-        },
-        5000
-      )
+    async toggleEditUploadModal() {
+      await this.$store.dispatch('upload/TOGGLE_EDIT_UPLOAD_MODAL')
+    },
+    async hideEditUploadModal() {
+      await this.$store.commit('upload/SET_SHOW_EDIT_UPLOAD_MODAL', false)
+      await this.$store.commit('upload/SET_MESSAGE_SUCCESS', null)
+      await this.$store.commit('upload/SET_MESSAGE_ERROR', null)
     },
   },
 }

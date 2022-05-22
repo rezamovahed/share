@@ -180,13 +180,10 @@ export default {
       await this.$store.dispatch('account/SET_TWO_FACTOR_INITIALIZE')
     } catch (e) {
       this.hideTwoFactorModal()
-      return this.$toast.error(
-        'Oops.. Something Went Wrong..',
-        {
-          position: 'bottom-right',
-        },
-        5000
-      )
+      return this.$toast.error('Oops.. Something Went Wrong..', {
+        position: 'bottom-right',
+        duration: 5000,
+      })
     }
 
     this.popupItem = this.$refs.background
@@ -269,8 +266,8 @@ export default {
             this.$store.state.account.messages.success,
             {
               position: 'bottom-right',
-            },
-            5000
+              duration: 5000,
+            }
           )
         }
 
@@ -283,30 +280,21 @@ export default {
         }
 
         if (this.$store.state.account.messages.error) {
-          return this.$toast.error(
-            this.$store.state.account.messages.error,
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
+          return this.$toast.error(this.$store.state.account.messages.error, {
+            position: 'bottom-right',
+            duration: 5000,
+          })
         }
 
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
     async downloadTwoFactorBackupCodes() {
@@ -324,13 +312,10 @@ export default {
         document.body.appendChild(link)
         link.click()
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

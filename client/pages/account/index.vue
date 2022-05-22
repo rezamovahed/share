@@ -86,8 +86,8 @@ export default {
                 `Your username has been changed to ${this.$auth.user.username}.`,
                 {
                   position: 'bottom-right',
-                },
-                5000
+                  duration: 5000,
+                }
               )
               break
             default:
@@ -110,13 +110,10 @@ export default {
                     'Username must be between 3 and 28 characters long.'
                   break
                 default:
-                  this.$toast.error(
-                    'Oops.. Something Went Wrong.',
-                    {
-                      position: 'bottom-right',
-                    },
-                    5000
-                  )
+                  this.$toast.error('Oops.. Something Went Wrong.', {
+                    position: 'bottom-right',
+                    duration: 5000,
+                  })
                   break
               }
             }
@@ -126,13 +123,10 @@ export default {
                 this.changeUsername.errors.username = `${this.changeUsername.username} is currently not available.`
                 break
               default:
-                this.$toast.error(
-                  'Oops.. Something Went Wrong..',
-                  {
-                    position: 'bottom-right',
-                  },
-                  5000
-                )
+                this.$toast.error('Oops.. Something Went Wrong..', {
+                  position: 'bottom-right',
+                  duration: 5000,
+                })
                 break
             }
           }

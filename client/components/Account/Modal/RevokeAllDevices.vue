@@ -123,34 +123,25 @@ export default {
         if (this.$store.state.account.messages.success) {
           switch (this.$store.state.account.messages.success) {
             case 'ALL_SESSIONS_REVOKE':
-              this.$toast.success(
-                'All devices has been revoked.',
-                {
-                  position: 'bottom-right',
-                },
-                5000
-              )
+              this.$toast.success('All devices has been revoked.', {
+                position: 'bottom-right',
+                duration: 5000,
+              })
               break
 
             default:
           }
         } else {
-          this.$toast.error(
-            'Oops.. Something Went Wrong..',
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
+          this.$toast.error('Oops.. Something Went Wrong..', {
+            position: 'bottom-right',
+            duration: 5000,
+          })
         }
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

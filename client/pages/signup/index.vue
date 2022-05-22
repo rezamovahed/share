@@ -215,6 +215,7 @@ export default {
               'Please confirm your email address to complete the registration.',
               {
                 position: 'bottom-right',
+                duration: 5000,
               }
             )
             break
@@ -224,6 +225,7 @@ export default {
               'Your account has been created and is ready to use.',
               {
                 position: 'bottom-right',
+                duration: 5000,
               }
             )
             break
@@ -308,26 +310,20 @@ export default {
               break
 
             default:
-              this.$toast.error(
-                'Oops.. Something Went Wrong..',
-                {
-                  position: 'bottom-right',
-                },
-                5000
-              )
+              this.$toast.error('Oops.. Something Went Wrong..', {
+                position: 'bottom-right',
+                duration: 5000,
+              })
               break
           }
           this.isLoading = false
         } else {
           this.isLoading = false
 
-          this.$toast.error(
-            'Oops.. Something Went Wrong..',
-            {
-              position: 'bottom-right',
-            },
-            5000
-          )
+          this.$toast.error('Oops.. Something Went Wrong..', {
+            position: 'bottom-right',
+            duration: 5000,
+          })
         }
       }
     },

@@ -120,21 +120,15 @@ export default {
 
         await this.hideRevokeAllIntegrationTokensModal()
 
-        this.$toast.success(
-          'All 3rd party intergrations has been revoked.',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.success('All 3rd party intergrations has been revoked.', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       } catch (e) {
-        this.$toast.error(
-          'Oops.. Something Went Wrong..',
-          {
-            position: 'bottom-right',
-          },
-          5000
-        )
+        this.$toast.error('Oops.. Something Went Wrong..', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
       }
     },
   },

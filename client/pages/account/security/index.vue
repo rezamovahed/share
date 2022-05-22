@@ -161,6 +161,7 @@ export default {
                 'Your password has been changed.  Please login with your new password.',
                 {
                   position: 'bottom-right',
+                  duration: 5000,
                 }
               )
               break
@@ -201,23 +202,17 @@ export default {
                 this.changePassword.errors.oldPassword = 'Wrong old password.'
                 break
               default:
-                this.$toast.error(
-                  'Oops.. Something Went Wrong..',
-                  {
-                    position: 'bottom-right',
-                  },
-                  5000
-                )
+                this.$toast.error('Oops.. Something Went Wrong..', {
+                  position: 'bottom-right',
+                  duration: 5000,
+                })
                 break
             }
           } else {
-            this.$toast.error(
-              'Oops.. Something Went Wrong.',
-              {
-                position: 'bottom-right',
-              },
-              5000
-            )
+            this.$toast.error('Oops.. Something Went Wrong.', {
+              position: 'bottom-right',
+              duration: 5000,
+            })
           }
         }
       }
