@@ -6,7 +6,7 @@
         v-click-outside="hide"
         aria-haspopup="true"
         x-bind:aria-expanded="dropDownOpen"
-        class="flex items-center max-w-xs px-4 py-2 text-sm bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:text-primary-100 font-roboto dark:bg-gray-700"
+        class="flex items-center max-w-xs px-4 py-2 text-sm bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:text-primary-100 font-roboto dark:bg-gray-700 border border-gray-300 dark:border-gray-700"
         @keydown.esc="hide"
         @click="toggle"
       >

@@ -28,7 +28,7 @@
         </button>
       </div>
       <div class="mt-8 md:mt-0 md:order-1">
-        <p class="text-base text-center text-gray-400 dark:text-gray-200">
+        <p class="text-base text-center text-gray-900 dark:text-gray-200">
           &copy; {{ year }}
           <a class="font-bold" :href="$config.copyrightLink">{{
             $config.copyright

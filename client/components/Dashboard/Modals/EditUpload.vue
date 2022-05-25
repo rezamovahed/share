@@ -16,7 +16,7 @@
           <div class="my-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
             <div>
               <h3 class="text-xl font-medium leading-6 text-primary-500">
-                Editing <i>{{ upload.displayName }}</i> token
+                Editing <i>{{ upload.displayName }}</i> upload
               </h3>
             </div>
             <div>
@@ -36,6 +36,27 @@
                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                       placeholder="Default"
                     />
+                  </div>
+                </div>
+              </div>
+              <div class="my-3">
+                <div>
+                  <label
+                    for="newTag"
+                    class="block text-sm font-medium text-gray-700"
+                    >New Tag
+                  </label>
+                  <div class="mt-1">
+                    <input
+                      id="newTag"
+                      v-model="newTag"
+                      type="text"
+                      name="newTag"
+                      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <div v-for="(tag, index) in upload.tags" :key="index">
+                    <DashboardUploadsTagBadgeWithButton :display-name="tag" />
                   </div>
                 </div>
               </div>
@@ -75,6 +96,7 @@ export default {
   data() {
     return {
       displayName: '',
+      newTag: '',
     }
   },
   computed: {
@@ -124,7 +146,6 @@ export default {
   },
   methods: {
     async hideEditUploadModal() {
-      await this.$store.dispatch('upload/GET_DATA')
       await this.$store.commit(
         'account/SET_SHOW_EDIT_INTERGRATION_TOKEN_MODAL',
         false
@@ -132,6 +153,13 @@ export default {
       await this.$store.commit('upload/SET_SHOW_EDIT_UPLOAD_MODAL', false)
       await this.$store.commit('upload/SET_MESSAGE_SUCCESS', null)
       await this.$store.commit('upload/SET_MESSAGE_ERROR', null)
+    },
+    async editUpload() {
+      await this.$store.dispatch('upload/EDIT_UPLOAD', {
+        id: this.upload._id,
+        displayName: this.displayName,
+        tags: this.upload.tags,
+      })
     },
   },
 }
