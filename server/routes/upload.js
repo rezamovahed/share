@@ -195,7 +195,7 @@ router.delete('/', requireAuth, isSessionValid, async (req, res) => {
  * @method GET
  * @description Allows a logged in user to get basic details about a single uploaded image.
  */
-router.get('/:fileName', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { fileName } = req.params;
     const upload = await Upload.findOne({
@@ -232,10 +232,10 @@ router.get('/:fileName', async (req, res) => {
  * @method PUT
  * @description Allows a logged in user to update the details of a single uploaded image.
  */
-router.put('/:fileName', requireAuth, isSessionValid, async (req, res) => {
+router.put('/:id', requireAuth, isSessionValid, async (req, res) => {
   try {
     const upload = await Upload.findOne({
-      fileName: req.params.fileName,
+      id: req.params.id,
       uploader: req.user.id
     });
 
@@ -258,7 +258,7 @@ router.put('/:fileName', requireAuth, isSessionValid, async (req, res) => {
     const { displayName, tags } = req.body;
 
     upload.displayName = displayName;
-    upload.tags = tags;
+    upload.tags = tags || [];
     await upload.save();
     res.status(200).json({
       upload,
@@ -279,7 +279,7 @@ router.put('/:fileName', requireAuth, isSessionValid, async (req, res) => {
  * @method DELETE
  * @description Allows a logged in user to delete a single uploaded image.
  */
-router.delete('/:fileName', requireAuth, isSessionValid, async (req, res) => {
+router.delete('/:id', requireAuth, isSessionValid, async (req, res) => {
   try {
     /**
      * Check if uploaded file exists in database
@@ -331,13 +331,13 @@ router.delete('/:fileName', requireAuth, isSessionValid, async (req, res) => {
 });
 
 /**
- * @route /upload/:upload_id/raw
+ * @route /upload/:fileName/raw
  * @method GET
  * @description Allows a logged in user to get the raw image data for a single uploaded image.
  */
-router.get('/:upload_id/raw', async (req, res) => {
+router.get('/:fileName/raw', async (req, res) => {
   try {
-    const upload = await Upload.findOne({ fileName: req.params.upload_id });
+    const upload = await Upload.findOne({ fileName: req.params.fileName });
 
     if (!upload) {
       return res.status(404).json({

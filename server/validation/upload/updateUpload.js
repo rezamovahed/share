@@ -7,9 +7,8 @@ module.exports = data => {
 
   data.displayName = !isEmpty(data.displayName) ? data.displayName : '';
   data.tags = !isEmpty(data.tags) ? data.tags : [];
-  try {
-    data.tags = JSON.parse(data.tags) || [];
-  } catch (e) {
+
+  if (!Array.isArray(data.tags)) {
     codes.tags = 'INVALID';
     errors.tags = 'Tags must be valid array.';
   }

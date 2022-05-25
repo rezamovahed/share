@@ -49,7 +49,7 @@ Allows a logged in user to get basic details about a single uploaded image
 
 #### Path
 
-`GET /upload/:fileName`
+`GET /upload/:id`
 
 #### Headers
 
@@ -59,9 +59,9 @@ Allows a logged in user to get basic details about a single uploaded image
 
 #### Params
 
-| Field    | Type   | Description       |
-| :------- | :----- | :---------------- |
-| fileName | string | Database fileName |
+| Field | Type   | Description |
+| :---- | :----- | :---------- |
+| id    | string | Database ID |
 
 #### Example
 
@@ -231,7 +231,7 @@ Allows a logged in user to delete a single uploaded image.
 
 #### Path
 
-`DELETE /upload/:fileName`
+`DELETE /upload/:id`
 
 #### Headers
 
@@ -241,9 +241,9 @@ Allows a logged in user to delete a single uploaded image.
 
 #### Params
 
-| Field    | Type   | Description       |
-| :------- | :----- | :---------------- |
-| fileName | string | Database fileName |
+| Field | Type   | Description |
+| :---- | :----- | :---------- |
+| id    | string | Database ID |
 
 <code-group>
   <code-block label="Request" active>
