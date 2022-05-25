@@ -149,7 +149,9 @@
     </div>
     <portal to="dashboard">
       <transition name="fade">
-        <DashboardModals v-if="$store.state.upload.showEditUploadModal" />
+        <DashboardModalsEditUpload
+          v-if="$store.state.upload.showEditUploadModal"
+        />
       </transition>
     </portal>
   </main>
@@ -169,7 +171,8 @@ export default {
     },
   },
   methods: {
-    async toggleEditUploadModal() {
+    async toggleEditUploadModal(upload) {
+      await this.$store.commit('upload/SET_EDIT_UPLOAD_MODAL_DATA', upload)
       await this.$store.dispatch('upload/TOGGLE_EDIT_UPLOAD_MODAL')
     },
     async hideEditUploadModal() {

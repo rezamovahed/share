@@ -16,7 +16,7 @@
           <div class="my-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
             <div>
               <h3 class="text-xl font-medium leading-6 text-primary-500">
-                Editing <i>{{ uopload.label }}</i> token
+                Editing <i>{{ upload.displayName }}</i> token
               </h3>
             </div>
             <div>
@@ -42,7 +42,6 @@
             </div>
           </div>
 
-          @keydown.esc="hideGenerateIntegrationTokenModal"
           <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
               <button
@@ -80,7 +79,7 @@ export default {
   },
   computed: {
     upload() {
-      return this.$store.state.upload.editUlloadModalData
+      return this.$store.state.upload.editUploadModalData
     },
   },
   mounted() {
@@ -121,10 +120,11 @@ export default {
     /**
      * Set DisplayName to store
      */
-    this.displayName = this.token.label
+    this.displayName = this.upload.displayName
   },
   methods: {
     async hideEditUploadModal() {
+      await this.$store.dispatch('upload/GET_DATA')
       await this.$store.commit(
         'account/SET_SHOW_EDIT_INTERGRATION_TOKEN_MODAL',
         false

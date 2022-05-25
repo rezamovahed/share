@@ -1,6 +1,6 @@
 export const state = () => ({
   showEditUploadModal: false,
-  editUlloadModalData: {},
+  editUploadModalData: {},
   data: [],
   messages: {
     success: null,
@@ -35,6 +35,9 @@ export const mutations = {
   },
   SET_SHOW_EDIT_UPLOAD_MODAL: (state, show) => {
     return (state.showEditUploadModal = show)
+  },
+  SET_EDIT_UPLOAD_MODAL_DATA: (state, data) => {
+    return (state.editUploadModalData = data)
   },
 }
 
