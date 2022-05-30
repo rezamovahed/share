@@ -39,7 +39,6 @@ const urlFriendyAlphabet =
  */
 router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
   try {
-    const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
     // TODO add validation file check for mineTypes and fileLimit
 
     // Get the body
@@ -51,6 +50,8 @@ router.post('/', requireAuth, isAPIKeyValid, async (req, res) => {
     const tags = !req.body.tags ? [] : JSON.parse(req.body.tags);
 
     const extension = path.extname(name);
+
+    const nanoid32 = customAlphabet(urlFriendyAlphabet, 32);
 
     // Create a random file name using nanoid
     const fileName = nanoid32();
