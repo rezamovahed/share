@@ -11,12 +11,12 @@
       class="overflow-hidden transition-all transform bg-white rounded-lg shadow-xl sm:max-w-lg sm:w-full"
       @click.stop
     >
-      <form @submit.prevent="editUpload">
+      <form>
         <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
           <div class="my-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
             <div>
               <h3 class="text-xl font-medium leading-6 text-primary-500">
-                Editing <i>{{ upload.displayName }}</i> upload
+                Editing <i>{{ displayName }}</i> upload
               </h3>
             </div>
             <div>
@@ -52,12 +52,21 @@
                       v-model="newTag"
                       type="text"
                       name="newTag"
-                      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      :disabled="tags.length > 5"
+                      class="disabled:border-red-500 disabled:border shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                      @keydown.enter="addTag"
+                      @keydownn.space="addTag"
                     />
+                    <p v-if="tags.length > 5" class="mt-2 text-sm text-red-600">
+                      You can only have up to 5 tag per upload'
+                    </p>
                   </div>
-                  <div v-for="(tag, index) in upload.tags" :key="index">
-                    <DashboardUploadsTagBadgeWithButton :display-name="tag" />
-                  </div>
+                  <DashboardUploadsTagBadgeWithButton
+                    class="inline-flex mt-2"
+                    v-for="(tag, index) in tags"
+                    :key="index"
+                    :display-name="tag"
+                  />
                 </div>
               </div>
             </div>
@@ -66,7 +75,7 @@
           <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
             <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
               <button
-                type="submit"
+                type="button"
                 class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-primary-600 border rounded-md order-transparent hover:bg-primary-500 focus:outline-none focus:ring"
               >
                 Save Changes
@@ -95,13 +104,18 @@
 export default {
   data() {
     return {
-      displayName: '',
       newTag: '',
     }
   },
   computed: {
-    upload() {
-      return this.$store.state.upload.editUploadModalData
+    _id() {
+      return this.$store.state.upload.editUploadModalData._id
+    },
+    displayName() {
+      return this.$store.state.upload.editUploadModalData.displayName
+    },
+    tags() {
+      return this.$store.state.upload.editUploadModalData.tags
     },
   },
   mounted() {
@@ -138,27 +152,40 @@ export default {
 
       window.scrollTo(0, this.scrollPosition)
     })
-
-    /**
-     * Set DisplayName to store
-     */
-    this.displayName = this.upload.displayName
   },
   methods: {
     async hideEditUploadModal() {
-      await this.$store.commit(
-        'account/SET_SHOW_EDIT_INTERGRATION_TOKEN_MODAL',
-        false
-      )
       await this.$store.commit('upload/SET_SHOW_EDIT_UPLOAD_MODAL', false)
+
       await this.$store.commit('upload/SET_MESSAGE_SUCCESS', null)
       await this.$store.commit('upload/SET_MESSAGE_ERROR', null)
+
+      await this.$store.commit('upload/SET_EDIT_UPLOAD_MODAL_DATA', {
+        _id: '',
+        displayName: '',
+        tags: [],
+      })
+    },
+    async addTag() {
+      if (this.newTag.length === 0) return
+
+      if (this.tags.length > 5) {
+        this.$toast.error('You can only have up to 5 tags per upload', {
+          position: 'bottom-right',
+          duration: 5000,
+        })
+
+        this.newTag = ''
+
+        return await this.$store.commit('upload/SET_MESSAGE_SUCCESS', null)
+      }
+      this.$store.commit('upload/ADD_TAG', this.newTag)
     },
     async editUpload() {
       await this.$store.dispatch('upload/EDIT_UPLOAD', {
-        id: this.upload._id,
+        id: this._id,
         displayName: this.displayName,
-        tags: this.upload.tags,
+        tags: this.tags,
       })
     },
   },

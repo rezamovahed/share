@@ -72,6 +72,8 @@ module.exports = {
       opacity: ['disabled'],
       cursor: ['hover', 'disabled'],
       display: ['dark'],
+      borderColor: ['disabled'],
+      border: ['disabled'],
     },
   },
   plugins: [

@@ -1,7 +1,11 @@
 export const state = () => ({
   showEditUploadModal: false,
-  editUploadModalData: {},
   data: [],
+  editUploadModalData: {
+    _id: '',
+    displayName: '',
+    tags: [],
+  },
   messages: {
     success: null,
     error: null,
@@ -24,19 +28,33 @@ export const actions = {
       displayName: data.displayName,
       tags: data.tags,
     })
-    const oldArray = state.data
-    const newArray = oldArray.find((o, i) => {
+    const oldDataArray = state.data
+    const newDataArray = oldDataArray.find((o, i) => {
       if (o._id === data.id) {
-        oldArray[i] = res.data.upload
-        return true // stop searching
+        oldDataArray[i] = res.data.upload
+        return true
       }
-      return commit('SET_DATA', newArray)
+      return commit('SET_DATA', newDataArray)
     })
-    commit('SET_EDIT_UPLOAD_MODAL_DATA', res.data.upload)
+    commit('SET_EDIT_UPLOAD_MODAL_DATA', {
+      _id: '',
+      displayName: '',
+      tags: [],
+    })
     commit('SET_SHOW_EDIT_UPLOAD_MODAL', false)
   },
 }
 export const mutations = {
+  REMOVE_TAG(state, tag) {
+    return (state.editUploadModalData.tags =
+      state.editUploadModalData.tags.filter((t) => t !== tag))
+  },
+  ADD_TAG(state, tag) {
+    return (state.editUploadModalData.tags = [
+      ...state.editUploadModalData.tags,
+      tag,
+    ])
+  },
   SET_DATA(state, uploads) {
     return (state.data = uploads)
   },
@@ -53,13 +71,23 @@ export const mutations = {
     return (state.showEditUploadModal = show)
   },
   SET_EDIT_UPLOAD_MODAL_DATA: (state, data) => {
-    return (state.editUploadModalData = data)
+    return (state.editUploadModalData = {
+      _id: data._id,
+      displayName: data.displayName,
+      tags: data.tags,
+    })
   },
 }
 
 export const getters = {
   DATA: (state) => {
     return state.data
+  },
+  SHOW_EDIT_UPLOAD_MODAL: (state) => {
+    return state.showEditUploadModal
+  },
+  EDIT_UPLOAD_MODAL_DATA: (state) => {
+    return state.editUploadModalData
   },
   MESSAGE_SUCCESS: (state) => {
     return state.messages.success

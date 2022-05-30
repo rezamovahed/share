@@ -183,26 +183,6 @@
             </a>
           </li>
         </ul>
-
-        <nav
-          class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200"
-          aria-label="Pagination"
-        >
-          <div class="flex justify-between flex-1">
-            <a
-              href="#"
-              class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:text-gray-500"
-            >
-              Previous
-            </a>
-            <a
-              href="#"
-              class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:text-gray-500"
-            >
-              Next
-            </a>
-          </div>
-        </nav>
       </div>
 
       <!-- Activity table (small breakopoint and up) -->
@@ -233,6 +213,133 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200" x-max="1">
+                  <tr class="bg-white">
+                    <td
+                      class="w-full px-6 py-4 text-sm text-gray-900 max-w-0 whitespace-nowrap"
+                    >
+                      <div class="flex">
+                        <a
+                          href="#"
+                          class="inline-flex space-x-2 text-sm truncate group"
+                        >
+                          <svg
+                            class="flex-shrink-0 w-5 h-5 text-gray-400 group-hover:text-gray-500"
+                            x-description="Heroicon name: solid/cash"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <p
+                            class="text-gray-500 truncate group-hover:text-gray-900"
+                          >
+                            TAeSBvfAC9rn6MZq
+                          </p>
+                        </a>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                    >
+                      <span class="font-medium text-gray-900">File</span>
+                    </td>
+                    <td
+                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                    >
+                      July 11, 2020
+                    </td>
+                  </tr>
+                  <tr class="bg-white">
+                    <td
+                      class="w-full px-6 py-4 text-sm text-gray-900 max-w-0 whitespace-nowrap"
+                    >
+                      <div class="flex">
+                        <a
+                          href="#"
+                          class="inline-flex space-x-2 text-sm truncate group"
+                        >
+                          <svg
+                            class="flex-shrink-0 w-5 h-5 text-gray-400 group-hover:text-gray-500"
+                            x-description="Heroicon name: solid/cash"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <p
+                            class="text-gray-500 truncate group-hover:text-gray-900"
+                          >
+                            TAeSBvfAC9rn6MZq
+                          </p>
+                        </a>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                    >
+                      <span class="font-medium text-gray-900">File</span>
+                    </td>
+                    <td
+                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                    >
+                      July 11, 2020
+                    </td>
+                  </tr>
+                  <tr class="bg-white">
+                    <td
+                      class="w-full px-6 py-4 text-sm text-gray-900 max-w-0 whitespace-nowrap"
+                    >
+                      <div class="flex">
+                        <a
+                          href="#"
+                          class="inline-flex space-x-2 text-sm truncate group"
+                        >
+                          <svg
+                            class="flex-shrink-0 w-5 h-5 text-gray-400 group-hover:text-gray-500"
+                            x-description="Heroicon name: solid/cash"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <p
+                            class="text-gray-500 truncate group-hover:text-gray-900"
+                          >
+                            TAeSBvfAC9rn6MZq
+                          </p>
+                        </a>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                    >
+                      <span class="font-medium text-gray-900">File</span>
+                    </td>
+                    <td
+                      class="px-6 py-4 text-sm text-right text-gray-500 whitespace-nowrap"
+                    >
+                      July 11, 2020
+                    </td>
+                  </tr>
+
                   <tr class="bg-white">
                     <td
                       class="w-full px-6 py-4 text-sm text-gray-900 max-w-0 whitespace-nowrap"
@@ -320,37 +427,6 @@
                   </tr>
                 </tbody>
               </table>
-              <!-- Pagination -->
-              <nav
-                class="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6"
-                aria-label="Pagination"
-              >
-                <div class="hidden sm:block">
-                  <p class="text-sm text-gray-700">
-                    Showing
-                    <span class="font-medium">1</span>
-                    to
-                    <span class="font-medium">10</span>
-                    of
-                    <span class="font-medium">20</span>
-                    results
-                  </p>
-                </div>
-                <div class="flex justify-between flex-1 sm:justify-end">
-                  <a
-                    href="#"
-                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    Previous
-                  </a>
-                  <a
-                    href="#"
-                    class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    Next
-                  </a>
-                </div>
-              </nav>
             </div>
           </div>
         </div>

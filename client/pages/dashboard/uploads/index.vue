@@ -33,7 +33,18 @@
     </div>
 
     <div class="mt-8">
-      <div class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
+      <div
+        v-if="uploads.length === 0"
+        class="max-w-6xl p-4 mx-auto sm:p-6 lg:p-8 overflow-auto shadow-md md:p-8 bg-gray-50 dark:bg-gray-200 text-center"
+      >
+        <h3 class="mt-2 text-xl font-medium text-gray-900">
+          You have not uploaded anything yet?
+        </h3>
+        <p class="mt-1 text-md text-gray-600">
+          Get started by uploading a file.
+        </p>
+      </div>
+      <div v-else class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
         <div class="flex flex-col mt-2">
           <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div
@@ -92,8 +103,8 @@
                       <td class="px-6 py-4">
                         <div class="text-sm text-gray-900">
                           <DashboardUploadsTagBadge
-                            v-for="tag in upload.tags"
-                            :key="tag"
+                            v-for="(tag, index) in upload.tags"
+                            :key="index"
                             :display-name="tag"
                           />
                         </div>
@@ -172,13 +183,12 @@ export default {
   },
   methods: {
     async toggleEditUploadModal(upload) {
-      await this.$store.commit('upload/SET_EDIT_UPLOAD_MODAL_DATA', upload)
+      this.$store.commit('upload/SET_EDIT_UPLOAD_MODAL_DATA', {
+        _id: upload._id,
+        displayName: upload.displayName,
+        tags: upload.tags,
+      })
       await this.$store.dispatch('upload/TOGGLE_EDIT_UPLOAD_MODAL')
-    },
-    async hideEditUploadModal() {
-      await this.$store.commit('upload/SET_SHOW_EDIT_UPLOAD_MODAL', false)
-      await this.$store.commit('upload/SET_MESSAGE_SUCCESS', null)
-      await this.$store.commit('upload/SET_MESSAGE_ERROR', null)
     },
   },
 }

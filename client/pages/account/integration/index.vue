@@ -3,9 +3,7 @@
     class="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8 overflow-auto shadow-md md:px-8 bg-gray-50 dark:bg-gray-200"
   >
     <div class="my-0 sm:my-5">
-      <div
-        class="mt-5 md:mt-0 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200 dark:border-transparent"
-      >
+      <div class="mt-5 md:mt-0 md:flex md:items-center md:justify-between">
         <div class="flex-1 min-w-0">
           <div class="flex items-center">
             <div>

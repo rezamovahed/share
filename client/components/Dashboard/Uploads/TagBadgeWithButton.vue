@@ -8,7 +8,9 @@
       >{{ displayName }}</span
     >
     <button
-      class="w-6 h-8 inline-block align-middle text-primary-800 bg-primary-50 dark:bg-primary-200 focus:outline-none"
+      type="button"
+      class="w-6 h-8 inline-block align-middle text-primary-800 bg-gray-100 dark:bg-primary-200 focus:outline-none"
+      @click.prevent="removeTag"
     >
       <svg
         class="w-6 h-6 fill-current mx-auto"
@@ -30,6 +32,11 @@ export default {
     displayName: {
       type: String,
       required: true,
+    },
+  },
+  methods: {
+    async removeTag() {
+      await this.$store.commit('upload/REMOVE_TAG', this.displayName)
     },
   },
 }
